@@ -2,6 +2,7 @@
 
 ## Sisukord
 
+- [Päevik, ehk protsessi kirjeldus](content/logbook/logbook.md)
 - [UX](content/ux/ux.md)
-- Front-end
-- Back-end
+- [Front-end](content/frontend/frontend.md)
+- [Back-end](content/backend/backend.md)
