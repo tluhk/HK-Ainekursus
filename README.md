@@ -8,3 +8,5 @@ Okstega mässamiseks juhend [siin](https://www.varonis.com/blog/git-branching):
 ## Valikpraktika I grupp
 
 Tiina, Kristi, Krister, Juho, Kalev
+
+## Rakenduse dokumentatsioon ja tegevuste kirjeldus asub kaustas [docs](docs/README.md)
