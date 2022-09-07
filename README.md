@@ -1,4 +1,4 @@
 # Valikpraktika
 
-Valikpraktika I grupp  
+## Valikpraktika I grupp  
 Tiina, Kristi, Krister, Juho, Kalev
