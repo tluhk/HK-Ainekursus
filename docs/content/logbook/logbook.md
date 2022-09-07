@@ -1,4 +1,6 @@
-# Siia tekib UX-i osa
+# Siia tekib logiraamat
+
+KIrjtame siia kõik selle, mil moel asi valmis. Ka juhised jms.
 
 [<Tagasi](../../README.md)  
 Siia vahele sisu  

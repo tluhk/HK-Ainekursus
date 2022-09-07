@@ -1,4 +1,4 @@
-# Siia tekib Front-edi sisu
+# Siia tekib Front-endi sisu
 
 [<Tagasi](../../README.md)  
 Siia vahele sisu  
