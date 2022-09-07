@@ -2,6 +2,6 @@
 
 ## Sisukord
 
-- [UX](ux.md)
+- [UX](content/ux/ux.md)
 - Front-end
 - Back-end
