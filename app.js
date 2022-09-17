@@ -23,11 +23,14 @@ app.get('/', (req, res) => {
       const resultsMarkdown = markdown.render(results);
       res.render('home', { readme: resultsMarkdown });
 
+      // Trying to split by markdown headings and render each part individually:
+
       // const resultsSplit = results.match(/^#+ [^#]*(?:#(?!#)[^#]*)*/gm);
       /* resultsSplit.forEach(element => {
       });
       console.log(resultsSplit);
-      console.log(resultsSplit.length); */
+      console.log(resultsSplit.length);
+      res.render('home', { readme: resultsSplit, markdown }); */
     })
     .catch((error) => {
       console.log(error);
