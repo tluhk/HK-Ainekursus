@@ -1,5 +1,11 @@
 # Siia tekib Backendi sisu
 
 [<Tagasi](../../README.md)  
-Siia vahele sisu  
+
+## Used tools for app setup:
+- nodemons
+- eslint
+- express
+- express-handlebars
+
 [<Tagasi](../../README.md)
