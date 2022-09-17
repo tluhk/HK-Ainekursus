@@ -7,16 +7,20 @@
 - [Front-end](content/frontend/frontend.md)
 - [Back-end](content/backend/backend.md)
 
-## Install
+## Install and run program
+Clone project to local directory:
 ```
 mkdir Valikpraktika
 cd Valikpraktika
 git clone https://github.com/tluhk/rif20-valikpraktika-1.git
 ```
-
-## Setup
+Install dependencies:
 ```
 npm install
+```
+Run program:
+```
 npm start
+
 ```
 Program runs at http://localhost:3000/
