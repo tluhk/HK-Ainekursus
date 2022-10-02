@@ -23,12 +23,15 @@
   "homepage": "https://github.com/tluhk/rif20-valikpraktika-1#readme",
   "dependencies": {
     "axios": "^0.27.2",
+    "base-64": "^1.0.0",
     "bootstrap": "^5.2.1",
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
+    "js-base64": "^3.7.2",
     "markdown-it": "^13.0.1",
     "md-block": "^0.0.1",
-    "read-markdown": "^1.0.2"
+    "read-markdown": "^1.0.2",
+    "utf8": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^8.23.1",
