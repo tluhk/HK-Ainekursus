@@ -4,6 +4,7 @@ const {
 } = require('express-handlebars');
 const axios = require('axios').default;
 const MarkdownIt = require('markdown-it');
+
 const markdown = new MarkdownIt();
 
 const app = express();
@@ -17,29 +18,25 @@ app.get('/', (req, res) => {
   res.render('menulist');
 });
 
-/*
-app.get('/', (req, res) => {
+app.get('/readme', (req, res) => {
   axios.get('https://raw.githubusercontent.com/tluhk/Riistvara-ja-operatsioonisysteemide-alused-HKI5085.HK/main/README.md')
     .then((response) => {
       const results = response.data;
-      console.log(results);
 
       const resultsMarkdown = markdown.render(results);
-      res.render('home', { readme: resultsMarkdown });
+      res.render('readme', { readme: resultsMarkdown });
 
       // Trying to split by markdown headings and render each part individually:
+      // const resultsSplit = results.match(/^#+ [^#]*(?:#(?!#)[^#]*)*/gm);
 
-      // const resultsSplit = results.match(/^#+ [^#]*(?:#(?!#)[^#]*)*\/gm);
-      /* resultsSplit.forEach(element => {
-      });
-      console.log(resultsSplit);
+    /* console.log(resultsSplit);
       console.log(resultsSplit.length);
-      res.render('home', { readme: resultsSplit, markdown });
+      res.render('home', { readme: resultsSplit, markdown }); */
     })
     .catch((error) => {
       console.log(error);
     });
-}); */
+});
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
