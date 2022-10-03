@@ -9,7 +9,7 @@ Arvutite kontekstis võib jagada andmekandjad kaheks:
 - sisemised andmekandjad
 - välised andmekandjad
 
-![SATA liidesega 3,5" kõvaketas. Taimo Tammiku foto.](Teemad/Andmekandjad/Pildid/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
+![SATA liidesega 3,5" kõvaketas. Taimo Tammiku foto.](./pictures/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
 
 SATA liidesega 3,5" kõvaketas. Taimo Tammiku foto.
 
@@ -112,8 +112,7 @@ andmevahetuskiirus suurenevad, siis on vaja ka kiiremaid ühendusi.
 
 | PATA | SATA | M.2. | SATA kaabel | PATA kaabel |
 | --- | --- | --- | --- | --- |
-
-| ![alt text](carte_mre_port_ide.jpg) | ![alt text](Asus_P8H61-MX_USB3_-_4_SATA3G_connectors-6521.jpg) | ![alt text](M.2_connector_on_a_computer_motherboard.jpg) | ![alt text](SATA_kaabel_Taimo_Tammiku_foto.jpg) | ![alt text](PATA_kaabel_Taimo_Tammiku_foto.jpg) |
+| ![image](./pictures/carte_mre_port_ide.jpg) | ![image](./pictures/Asus_P8H61-MX_USB3_-_4_SATA3G_connectors-6521.jpg) | ![image](./pictures/M.2_connector_on_a_computer_motherboard.jpg) | ![image](./pictures/SATA_kaabel_Taimo_Tammiku_foto.jpg) | ![image](./pictures/PATA_kaabel_Taimo_Tammiku_foto.jpg) |
 | [Allikas](http://a51.idata.over-blog.com/0/16/29/65/carte_mre_port_ide.jpg) | [Allikas](https://upload.wikimedia.org/wikipedia/commons/4/4a/Asus_P8H61-MX_USB3_-_4_SATA3G_connectors-6521.jpg) | [Allikas](https://upload.wikimedia.org/wikipedia/commons/c/c2/M.2_connector_on_a_computer_motherboard.jpg) | Taimo Tammiku foto | Taimo Tammiku foto|
 
 ### RAID (Redundant Array Of Independent Disks)
@@ -122,12 +121,12 @@ Salvestustehnoloogia, mis ühendab mitu ketast või kettasektsiooni üheks loogi
 
 [Allikas](https://akit.cyber.ee/term/1037-raid)
 
-![alt text](RAID_kettamassiiv.jpg)
+![image](./pictures/RAID_kettamassiiv.jpg)
 
 [Allikas](https://live.staticflickr.com/7344/10629876605_e9f9061b34_b.jpg)
 
 RAID erinevad konfiguratsioonid ja omadused:
 
-[alt text](SIO_RAIDCompare2.png)
+![image](./pictures/SIO_RAIDCompare2.png)
 
 [Allikas](https://storageio.com/images/SIO_RAIDCompare2.png)
