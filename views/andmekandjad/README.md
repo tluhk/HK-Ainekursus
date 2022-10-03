@@ -203,10 +203,10 @@ Hästi illustreerib defragmenteerimise tulemust järgmine pilt:
 
 #### Allikad:
 
-[SSD vs. HDD: Which Is Best for You?](https://www.intel.com/content/www/us/en/products/docs/memory-storage/solid-state-drives/ssd-vs-hdd.html)
-[Scott Hanselman SSD fragmenteerumisest](http://www.hanselman.com/blog/the-real-and-complete-story-does-windows-defragment-your-ssd)
-[M.2 vs. PCIe (NVMe) vs. SATA SSDs: What’s the Difference?](https://www.performance-computer.com/learn/ssds-compared/)
-[Video: What is Disk Fragmentation? Disk Fragmentation and Defragmentation Explained.](https://www.youtube.com/watch?v=BKsVM89ZhRk)
+- [SSD vs. HDD: Which Is Best for You?](https://www.intel.com/content/www/us/en/products/docs/memory-storage/solid-state-drives/ssd-vs-hdd.html)
+- [Scott Hanselman SSD fragmenteerumisest](http://www.hanselman.com/blog/the-real-and-complete-story-does-windows-defragment-your-ssd)
+- [M.2 vs. PCIe (NVMe) vs. SATA SSDs: What’s the Difference?](https://www.performance-computer.com/learn/ssds-compared/)
+- [Video: What is Disk Fragmentation? Disk Fragmentation and Defragmentation Explained.](https://www.youtube.com/watch?v=BKsVM89ZhRk)
 
 
 ## Õpiobjekti algfailid
