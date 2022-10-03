@@ -27,6 +27,7 @@ eelised)
 ### Andmekandjaid iseloomustavad parameetrid
 
 Tüüpiliselt saab andmekandjaid iseloomustada järgmiste parameetritega:
+
 - **Füüsiline suurus**
     -  Sisemiste andmekandjate puhul (HDD ja ka osad SSD-d) suurus tollides (3.5", 2.5")
   - M.2. sisemiste SSD-de puhul suurus millimeetrites (laius ja pikkus kokku kirjutatult) nt 2280 - 22mm lai ja 80mm pikk
@@ -55,10 +56,12 @@ Kõige levinumad sisemised andmekandjad on:
 Lisaks on olemas veel hübriidandmekandjad, milles on kokku pandud nii kõvaketas kui välkmäluketas.
 
 ### Valik sisemisi andmekandjaid:
+
 [https://sisuloome.e-koolikott.ee/h5p/3100/embed](https://sisuloome.e-koolikott.ee/h5p/3100/embed)
 
 ### Kõvaketas (kõvakettaajam)
 **Kõvaketas** on jäigast materjalist ketas, mis on kaetud magnetiseeruva materjali kihiga, mis omakorda annab võimaluse kõvakettale andmeid salvestada.
+
 **Kõvakettaajam** on seade, mille sees on kõvakettad, neid ringi ajav mootor ja andmete salvestamiseks/lugemiseks mõeldud lugemispead koos elektroonikaga. Tavaliselt mõtleme kõvakettast rääkides just kõvakettaajamit, kuna kõvakettad on kõvakettaajami sisse monteeritud ja neid tavakasutaja vahetada ei saa.
 Kõvakettaid on tavaliselt kahes suuruses:
 - 3,5" (tolli) - mõeldud tavaliselt lauaarvutitele ja serveritele
@@ -84,6 +87,7 @@ On ka teistsuguse suurusega kõvakettaid, kuid need ei ole väga levinud.
 
 ### Välkmäluketas (SSD)
 **SSD**, ehk *Solid State Drive* on mälukiipidest ehitatud andmekandja, millel ei ole liikuvaid osi. Kui traditsiooniline kõvaketas on olnud pikka aega arvuti arengus "piduriks", sest kõvaketta lugemiskiirust on raske suurendada tänu liikuvatele osadele, siis SSD-l seda probleemi enam ei ole. SSD kiirused on palju suuremad, kui kõvaketastel.
+
 Veel mõni aeg tagasi olid välkmälukettad oluliselt kallimad, kui kõvakettad, kuid viimase paari aastaga on olukord selles suhtes palju muutunud. Praegusel hetkel on enamus uutest arvutitest varustatud juba just välkmäluseadmega. Kuigi välkmäluseadmed on hinna ja mahu poolest veel kõvaketastega võrreldes kallimad, ei ole vahe enam nii suur ja muud omadused (füüsiline suurus, kiirus, põrutuskindlus) kaaluvad hinnavahe juba üles.
 
 ### Kõvaketas vs SSD
@@ -130,3 +134,81 @@ RAID erinevad konfiguratsioonid ja omadused:
 ![image](./pictures/SIO_RAIDCompare2.png)
 
 [Allikas](https://storageio.com/images/SIO_RAIDCompare2.png)
+
+
+## Välised andmekandjad
+
+### Kuidas väliseid andmekandjaid loetakse?
+
+Tänapäeval on USB välkmälud, välised kõvakettad ja kiire internet disketid, optilised kettad ja magnetlindid praktiliselt kasutusest välja tõrjunud. Siiski leidub hetkel veel piisavalt CD/DVD plaate ja vahel harva ka diskette, mida on vaja lugeda. Selleks on vaja eraldi seadet.
+
+#### Valik väliseid seadmeid väliste andmekandjate lugemiseks
+
+| 1,44" Floppy lugeja | Sisemine CD/DVD lugeja | Väline CD/DVD lugeja |
+| --- | --- | --- |
+| ![image](./pictures/floppy_seade.jpg) | ![image](./pictures/Sisemine_DVD.jpg) | ![image](./pictures/LG_Super_Multi_GSA-E40N-3432.jpg) |
+| Taimo Tammiku foto | Taimo Tammiku foto | [Allikas](https://upload.wikimedia.org/wikipedia/commons/2/21/LG_Super_Multi_GSA-E40N-3432.jpg) |
+
+
+#### Milline näeb üks CD/DVD-lugeja välja seestpoolt?
+
+![image](./pictures/DVD-seade_lahtine.jpg)
+
+Taimo Tammiku foto
+
+### Välised andmekandjad
+
+Välised andmekandjad on andmekandjad, mis tavapäraselt ei asu arvuti sees ja mida on lihtne transportida. Väliseid andmekandjaid kasutataks andmete transportimiseks, säilitamiseks ja varukoopiate tegemiseks.
+
+Välised andmekandjad on näiteks:
+- Floppy disk
+- Optilised andmekandjad (CD-ROM, DVD-ROM, Blu-ray, magnetoptiline ketas)
+- Välkmälud
+- Lindiseadmed
+-  ...
+
+### Valik väliseid andmekandjaid 
+
+[https://sisuloome.e-koolikott.ee/h5p/3103/embed](https://sisuloome.e-koolikott.ee/h5p/3103/embed)
+
+## Fragmenteerumine
+
+Kui tühjale andmekandjale salvestada andmeid, siis võime ette kujutada, et andmeid salvestatakse sarnaselt, kui me kirjutame paberile sõnu. Kõik failid on kenasti salvestatud üksteise järel ja ühes tükis. Mis aga juhtub, kui me võtame olemasoleva faili, täiendame seda ja salvestame uuesti? Siis ei mahu see fail enam vanasse kohta, kuna fail on nüüd juba suurem. Samasugune oleks olukord, kui üritaksime pikemaks kirjutada juba paberile kirja pandud sõnu. Mida arvuti sellises olukorras teeb on see, et osa failist (nii palju kui mahub) jäetakse vanasse kohta ja see osa, mis vanasse kohta enam ei mahu, kirjutatakse kuhugi, kus on ruumi. Samas võib see vaba ruum olla näiteks kohas, mis on jäänud mõne faili kustutamisest ja kõik ei pruugi ka sinna ära mahtuda. Sellisel juhul kirjutatakse sellesse kohta taas nii palju kui mahub ja ülejäänud kuhugi mujale. Kui seda tegevust võrrelda nüüd paberile kirjutatud sõnadega, siis võime ette kujutada, et sellise kirjatüki lugemine läheks üsna keeruliseks. Küll on olemas meil selle kohta info või juhend, kuidas sõnad ja sõnade osad omavahel seotud ja ühenduses on (andmekandjatel on selle jaoks failisüsteem), kuid siiski võtab nende sõnade kokkupanemine ilmselgelt rohkem aega, kui nende lugemine siis kui need oleksid ühes tükis. Seda "jupitamise" protsessi nimetatakse fragmenteerumiseks. Selle tagajärjel muutub arvutil info lugemine andmekandjalt rohkem aeganõudvamaks ja seetõttu muutub ka arvuti töö aeglasemaks.
+
+Selleks, et arvutil oleks "lihtsam" andmekandjalt andmeid lugeda, saab failid jälle üksteise järel "ritta" panna. Seda protsessi nimetatakse defragmentimiseks ja põhimõtteliselt teeb see seda, et korjab faili tükid kokku ja salvestab need nii, et fail on tervenisti ühes kohas.
+
+Hästi illustreerib defragmenteerimise tulemust järgmine pilt:
+
+![image](./pictures/defragmenteeritud_sebra.jpg)
+  
+[Allikas](https://img.devrant.com/devrant/rant/r_1903370_mo4VZ.jpg)
+ 
+## Harjutused
+
+### Harjutus 1
+
+[https://sisuloome.e-koolikott.ee/h5p/3120/embed](https://sisuloome.e-koolikott.ee/h5p/3120/embed)
+
+### Harjutus 2
+
+[https://sisuloome.e-koolikott.ee/h5p/3121/embed](https://sisuloome.e-koolikott.ee/h5p/3121/embed)
+
+
+### Harjutus 3
+
+- Kui oluline on Sinu arvates arvuti puhul andmekandja suurus ja kiirus?
+- Milliste nippidega saaks vältida andmete fragmenteerumist?
+  
+## Allikad ja lisalugemine
+
+#### Allikad:
+
+[SSD vs. HDD: Which Is Best for You?](https://www.intel.com/content/www/us/en/products/docs/memory-storage/solid-state-drives/ssd-vs-hdd.html)
+[Scott Hanselman SSD fragmenteerumisest](http://www.hanselman.com/blog/the-real-and-complete-story-does-windows-defragment-your-ssd)
+[M.2 vs. PCIe (NVMe) vs. SATA SSDs: What’s the Difference?](https://www.performance-computer.com/learn/ssds-compared/)
+[Video: What is Disk Fragmentation? Disk Fragmentation and Defragmentation Explained.](https://www.youtube.com/watch?v=BKsVM89ZhRk)
+
+
+## Õpiobjekti algfailid
+
+[Õpiobjekti algfailid on saadaval siin.](https://github.com/mrtrvl/Riistvara_ja_operatsioonisysteemide_alused)
