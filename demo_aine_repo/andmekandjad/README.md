@@ -9,7 +9,7 @@ Arvutite kontekstis võib jagada andmekandjad kaheks:
 - sisemised andmekandjad
 - välised andmekandjad
 
-![SATA liidesega 3,5" kõvaketas. Taimo Tammiku foto.](./pictures/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
+![SATA liidesega 3,5" kõvaketas. Taimo Tammiku foto.](../images/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
 
 SATA liidesega 3,5" kõvaketas. Taimo Tammiku foto.
 
@@ -116,7 +116,7 @@ andmevahetuskiirus suurenevad, siis on vaja ka kiiremaid ühendusi.
 
 | PATA | SATA | M.2. | SATA kaabel | PATA kaabel |
 | --- | --- | --- | --- | --- |
-| ![image](./pictures/carte_mre_port_ide.jpg) | ![image](./pictures/Asus_P8H61-MX_USB3_-_4_SATA3G_connectors-6521.jpg) | ![image](./pictures/M.2_connector_on_a_computer_motherboard.jpg) | ![image](./pictures/SATA_kaabel_Taimo_Tammiku_foto.jpg) | ![image](./pictures/PATA_kaabel_Taimo_Tammiku_foto.jpg) |
+| ![image](../images/carte_mre_port_ide.jpg) | ![image](../images/Asus_P8H61-MX_USB3_-_4_SATA3G_connectors-6521.jpg) | ![image](../images/M.2_connector_on_a_computer_motherboard.jpg) | ![image](../images/SATA_kaabel_Taimo_Tammiku_foto.jpg) | ![image](../images/PATA_kaabel_Taimo_Tammiku_foto.jpg) |
 | [Allikas](http://a51.idata.over-blog.com/0/16/29/65/carte_mre_port_ide.jpg) | [Allikas](https://upload.wikimedia.org/wikipedia/commons/4/4a/Asus_P8H61-MX_USB3_-_4_SATA3G_connectors-6521.jpg) | [Allikas](https://upload.wikimedia.org/wikipedia/commons/c/c2/M.2_connector_on_a_computer_motherboard.jpg) | Taimo Tammiku foto | Taimo Tammiku foto|
 
 ### RAID (Redundant Array Of Independent Disks)
@@ -125,13 +125,13 @@ Salvestustehnoloogia, mis ühendab mitu ketast või kettasektsiooni üheks loogi
 
 [Allikas](https://akit.cyber.ee/term/1037-raid)
 
-![image](./pictures/RAID_kettamassiiv.jpg)
+![image](../images/RAID_kettamassiiv.jpg)
 
 [Allikas](https://live.staticflickr.com/7344/10629876605_e9f9061b34_b.jpg)
 
 RAID erinevad konfiguratsioonid ja omadused:
 
-![image](./pictures/SIO_RAIDCompare2.png)
+![image](../images/SIO_RAIDCompare2.png)
 
 [Allikas](https://storageio.com/images/SIO_RAIDCompare2.png)
 
@@ -146,13 +146,13 @@ Tänapäeval on USB välkmälud, välised kõvakettad ja kiire internet di
 
 | 1,44" Floppy lugeja | Sisemine CD/DVD lugeja | Väline CD/DVD lugeja |
 | --- | --- | --- |
-| ![image](./pictures/floppy_seade.jpg) | ![image](./pictures/Sisemine_DVD.jpg) | ![image](./pictures/LG_Super_Multi_GSA-E40N-3432.jpg) |
+| ![image](../images/floppy_seade.jpg) | ![image](../images/Sisemine_DVD.jpg) | ![image](../images/LG_Super_Multi_GSA-E40N-3432.jpg) |
 | Taimo Tammiku foto | Taimo Tammiku foto | [Allikas](https://upload.wikimedia.org/wikipedia/commons/2/21/LG_Super_Multi_GSA-E40N-3432.jpg) |
 
 
 #### Milline näeb üks CD/DVD-lugeja välja seestpoolt?
 
-![image](./pictures/DVD-seade_lahtine.jpg)
+![image](../images/DVD-seade_lahtine.jpg)
 
 Taimo Tammiku foto
 
@@ -179,7 +179,7 @@ Selleks, et arvutil oleks "lihtsam" andmekandjalt andmeid lugeda, saab failid ja
 
 Hästi illustreerib defragmenteerimise tulemust järgmine pilt:
 
-![image](./pictures/defragmenteeritud_sebra.jpg)
+![image](../images/defragmenteeritud_sebra.jpg)
   
 [Allikas](https://img.devrant.com/devrant/rant/r_1903370_mo4VZ.jpg)
  
