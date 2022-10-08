@@ -1,0 +1,22 @@
+[
+  {
+    "url": "https://www.intel.com/content/www/us/en/products/docs/memory-storage/solid-state-drives/ssd-vs-hdd.html",
+    "description": "SSD vs. HDD: Which Is Best for You"
+  },
+  {
+    "url": "http://www.hanselman.com/blog/the-real-and-complete-story-does-windows-defragment-your-ssd",
+    "description": "Scott Hanselman SSD fragmenteerumisest"
+  },
+  {
+    "url": "https://www.performance-computer.com/learn/ssds-compared/",
+    "description": "M.2 vs. PCIe (NVMe) vs. SATA SSDs: What’s the Difference?"
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=BKsVM89ZhRk",
+    "description": "Video: What is Disk Fragmentation? Disk Fragmentation and Defragmentation Explained."
+  },
+  {
+    "url": "https://github.com/mrtrvl/Riistvara_ja_operatsioonisysteemide_alused",
+    "description": "Õpiobjekti algfailid"
+  }
+]
