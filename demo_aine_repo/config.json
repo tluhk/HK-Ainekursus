@@ -6,7 +6,7 @@
   "concepts": [
     {
       "uuid": "c8340cc0-3549-4e94-a89a-3ec1a67434ff",
-      "slug": "arvusüsteemid",
+      "slug": "arvususteemid",
       "name": "Arvusüsteemid"
     },
     {
@@ -33,7 +33,6 @@
       "uuid": "5fd03b36-cdc3-40f0-8c70-8c3de96facf9",
       "slug": "protsessorid",
       "name": "Protsessorid"
-    },
-
+    }
   ]
-};
+}
