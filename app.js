@@ -88,6 +88,23 @@ app.get('/hindamine', (req, res) => {
     });
 });
 
+app.get('/arvususteemid', (req, res) => {
+  axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/concepts/arvususteemid/about.md`, authToken)
+    .then((response) => {
+      const results = response.data;
+      console.log('results:', results);
+
+      const contentDecoded = base64.decode(results.content);
+      const contentDecodedUtf8 = utf8.decode(contentDecoded);
+      const contentMarkdown = markdown.render(contentDecodedUtf8);
+      res.render('readme', { readme: contentMarkdown });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+/*
 config.concepts.forEach((elem) => {
   console.log('elem.slug:', elem.slug);
 
