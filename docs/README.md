@@ -2,6 +2,8 @@
 
 ## Sisukord
 
+### Siin on algne sisukord, mis hetkl ei päde.
+
 - [Päevik, ehk protsessi kirjeldus](https://github.com/tluhk/rif20-valikpraktika-1/issues)
 - [UX](content/ux/ux.md)
 - [Front-end](content/frontend/frontend.md)
