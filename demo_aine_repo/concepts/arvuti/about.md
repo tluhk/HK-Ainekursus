@@ -62,10 +62,10 @@ Tavapäraselt on arvuti töötamiseks vaja vähemalt järgmised komponendid
 - protsessor - miski peab arvutis arvutusi tegema ja seadmeid juhtima
 
 ![Protsessor](../../images/Protsessor_Martti_Raaveli_foto.jpg)
-ffff
-<img src="../../images/Protsessor_Martti_Raaveli_foto.jpg" alt="Protsessor">
 
-Protsessor. Martti Raaveli foto. Random.
+<img src="../../images/Protsessor_Martti_Raaveli_foto.jpg" alt="Protsessor" width="400" />
+
+Protsessor. Martti Raaveli foto.
 
 - emaplaat - erinevate komponentide "kokku sidumiseks"
 
