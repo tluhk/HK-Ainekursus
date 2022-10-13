@@ -126,6 +126,16 @@
               <li><a href="/readme">Readme</a></li>
             </ul>
           </div>
+          <div class="sidebar-readme pt-3" id="sidebar-readme">
+            <h5>Riistvara lingid</h5>
+            <ul style="list-style-type: none">
+              <li><a href="/kursusest">Kursusest</a></li>
+              <li><a href="/hindamine">Hindamine</a></li>
+              {{#each concepts}}
+                <li><a href="/{{this.slug}}">{{this.name}}</a></li>
+              {{/each}}
+          </ul>
+          </div>
         </div>
       </div>
       
