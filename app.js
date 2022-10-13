@@ -88,6 +88,7 @@ app.get('/hindamine', (req, res) => {
     });
 });
 
+/*
 app.get('/arvususteemid', (req, res) => {
   axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/concepts/arvususteemid/about.md`, authToken)
     .then((response) => {
@@ -102,9 +103,8 @@ app.get('/arvususteemid', (req, res) => {
     .catch((error) => {
       console.log(error);
     });
-});
+}); */
 
-/*
 config.concepts.forEach((elem) => {
   console.log('elem.slug:', elem.slug);
 
