@@ -147,8 +147,7 @@
               <br>
               <strong>Teemad loengu kaupa</strong>
               {{#each loengud}}
-                <li>{{this.name}}</li>
-                <li><a href="/{{this.docs}}">{{this.name}}</a></li>
+                <li><a href="/{{this.slug}}">{{this.name}}</a></li>
 
                   <ul style="list-style-type: none">
                     {{#each this.concepts}}
