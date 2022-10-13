@@ -18,10 +18,14 @@
   "loengud": [
     {
       "name": "Loeng 1",
+      "blurb": "",
+      "slug": "loeng_01",
       "concepts": ["arvususteemid", "arvuti", "emaplaadid"]
     },
     {
       "name": "Loeng 2",
+      "blurb": "",
+      "slug": "loeng_02",
       "concepts": ["mahuuhikud", "malud", "protsessorid"]
     }
   ],
