@@ -7,7 +7,11 @@
   {
     "owner": "tluhk",
     "name": "rif20-valikpraktika-1",
-    "path": "contents/demo_aine_repo"
+    "mainPath": "contents/demo_aine_repo",
+    "subPath": {
+      "docs": "docs",
+      "concepts": "concepts"
+    }
   }
 
 ]

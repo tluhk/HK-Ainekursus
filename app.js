@@ -33,7 +33,11 @@ app.set('view engine', 'handlebars');
 app.set('views', './views');
 
 app.get('/', (req, res) => {
-  res.render('menulist', { concepts: config.concepts });
+  res.render('menulist', {
+    docs: config.docs,
+    concepts: config.concepts,
+    loengud: config.loengud,
+  });
 });
 
 app.get('/readme', (req, res) => {
@@ -56,6 +60,7 @@ app.get('/readme', (req, res) => {
     });
 });
 
+/*
 app.get('/kursusest', (req, res) => {
   axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/docs/about.md`, authToken)
     .then((response) => {
@@ -86,30 +91,33 @@ app.get('/hindamine', (req, res) => {
     .catch((error) => {
       console.log(error);
     });
-});
-
-/*
-app.get('/arvususteemid', (req, res) => {
-  axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/concepts/arvususteemid/about.md`, authToken)
-    .then((response) => {
-      const results = response.data;
-      console.log('results:', results);
-
-      const contentDecoded = base64.decode(results.content);
-      const contentDecodedUtf8 = utf8.decode(contentDecoded);
-      const contentMarkdown = markdown.render(contentDecodedUtf8);
-      res.render('readme', { readme: contentMarkdown });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
 }); */
+
+config.docs.forEach((elem) => {
+  console.log('elem.slug:', elem.slug);
+
+  app.get(`/${elem.slug}`, (req, res) => {
+    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}.md`, authToken)
+      .then((response) => {
+        const results = response.data;
+        console.log('results:', results);
+
+        const contentDecoded = base64.decode(results.content);
+        const contentDecodedUtf8 = utf8.decode(contentDecoded);
+        const contentMarkdown = markdown.render(contentDecodedUtf8);
+        res.render('readme', { readme: contentMarkdown });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+});
 
 config.concepts.forEach((elem) => {
   console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/concepts/${elem.slug}/about.md`, authToken)
+    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md`, authToken)
       .then((response) => {
         const results = response.data;
         console.log('results:', results);

@@ -3,6 +3,28 @@
   "slug": "riistvara",
   "active": true,
   "blurb": "Riistvara aine loob eeldused teadmiste omandamiseks arvuti ülesehitusest, komponentidest ning riistvarast. Annab ülevaate operatsioonisüsteemide ülesehitusest ja tööpõhimõtetest.",
+  "docs": [
+    {
+      "uuid": "fc0d8c71-712f-49df-9324-58784b3839e4",
+      "slug": "about",
+      "name": "Ainekursusest"
+    },
+    {
+      "uuid": "93866138-1253-4c43-84be-ea06c056316a",
+      "slug": "hindamine",
+      "name": "Hindamine"
+    }
+  ],
+  "loengud": [
+    {
+      "name": "Loeng 1",
+      "concepts": ["arvususteemid", "arvuti", "emaplaadid"]
+    },
+    {
+      "name": "Loeng 2",
+      "concepts": ["mahuuhikud", "malud", "protsessorid"]
+    }
+  ],
   "concepts": [
     {
       "uuid": "c8340cc0-3549-4e94-a89a-3ec1a67434ff",
