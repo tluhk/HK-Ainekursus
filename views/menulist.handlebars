@@ -132,24 +132,30 @@
               {{#each docs}}
                 <li><a href="/{{this.slug}}">{{this.name}}</a></li>
               {{/each}}
-
+              
+              <br>
+              <strong>Teemad järjestikku</strong>
               {{#each concepts}}
                 <li><a href="/{{this.slug}}">{{this.name}}</a></li>
               {{/each}}
 
+              <br>
+              <strong>Teemad loengu kaupa</strong>
               {{#each loengud}}
-                <li>{{this.name}}
+                <li>{{this.name}}</li>
+
                   <ul style="list-style-type: none">
                     {{#each this.concepts}}
-                      <li>{{this}}</li>
-                      
-                        {{#if (concepts.slug)}}
-                          <li><a href="/{{concepts.slug}}">{{concepts.name}}</a></li>
-                        {{/if}}
+                      <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
+                        {{#each ../../concepts}}
+                          {{#if_equal this.slug ../this }}
+                            <li><a href="/{{../this.slug}}">{{../this.name}}</a></li>
+                          {{/if_equal}}
+
+                        {{/each}}
 
                     {{/each}}
                   </ul>
-                </li>
               {{/each}}
           </ul>
           </div>
@@ -188,4 +194,5 @@
     
   </div>
 </div>
+
 

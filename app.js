@@ -1,7 +1,6 @@
 const express = require('express');
-const {
-  engine,
-} = require('express-handlebars');
+const exphbs = require('express-handlebars');
+
 const axios = require('axios').default;
 const MarkdownIt = require('markdown-it');
 
@@ -12,6 +11,9 @@ const port = 3000;
 
 const base64 = require('base-64');
 const utf8 = require('utf8');
+
+// https://stackoverflow.com/a/32707476
+const handlebars = require('./helpers/handlebars')(exphbs);
 
 const authToken = {
   headers: {
@@ -28,7 +30,7 @@ const repo = require('./repos.json');
 const repoRiistvara = repo[0];
 const repoDemo = repo[1];
 
-app.engine('handlebars', engine());
+app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
