@@ -1,113 +1,74 @@
+/* eslint-disable max-len */
+/* eslint-disable import/newline-after-import */
+require('dotenv').config();
+const path = require('path');
+
+const auth = process.env.AUTH;
 const express = require('express');
 const exphbs = require('express-handlebars');
-
-const axios = require('axios').default;
-const MarkdownIt = require('markdown-it');
-
-const markdown = new MarkdownIt();
-
 const app = express();
 const port = 3000;
 
+const axios = require('axios').default;
+
+// Markdown faili lugemiseks ja dekodeerimiseks
+const MarkdownIt = require('markdown-it');
+const markdown = new MarkdownIt();
 const base64 = require('base-64');
 const utf8 = require('utf8');
 
-// https://stackoverflow.com/a/32707476
+// add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
 
 const authToken = {
   headers: {
     Accept: 'application/vnd.github+json',
-    Authorization: 'Bearer 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',
+    Authorization: auth,
   },
 };
 
-const config = require('./demo_aine_repo/config.json');
-
 const baseUrl = 'https://api.github.com';
-const repo = require('./repos.json');
-
-const repoRiistvara = repo[0];
-const repoDemo = repo[1];
+// Loen sisse repos.json faili, mis loeb demo_aine_repo asukohta githubis. Sinna on võimalik lisada ka teisi reposid.
+const repos = require('./repos.json');
+// Loen demo_aine_repo kausta rif20-valikpraktika-1 repost
+const repoDemo = repos[0];
+// Loen config.json faili, mis kirjeldab demo_aine_repo struktuuri
+const config = require('./demo_aine_repo/config.json');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('views', './views');
+app.set('views', (path.join(__dirname, '/views')));
 
+app.use(express.static(path.join(__dirname, '/public')));
+
+// localhost:3000/ endpoint; renderdab "home" faili ja saadab kaasa "docs", "concepts" ja "loengud" optionid, mis pärinevad config.json failist
 app.get('/', (req, res) => {
-  res.render('menulist', {
+  res.render('home', {
     docs: config.docs,
     concepts: config.concepts,
     loengud: config.loengud,
   });
 });
 
-app.get('/readme', (req, res) => {
-  axios.get(`https://api.github.com/repos/${repoRiistvara.owner}/${repoRiistvara.name}/${repoRiistvara.path}`, authToken)
-    // https://api.github.com/repos/tluhk/rif20-valikpraktika-1/readme/docs
-    .then((response) => {
-      const results = response.data;
-
-      // Decode API response and convert to Utf8. Docs: https://www.npmjs.com/package/base-64
-      const contentDecoded = base64.decode(results.content);
-      const contentDecodedUtf8 = utf8.decode(contentDecoded);
-
-      console.log(contentDecodedUtf8);
-
-      const contentMarkdown = markdown.render(contentDecodedUtf8);
-      res.render('readme', { readme: contentMarkdown });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
-
-/*
-app.get('/kursusest', (req, res) => {
-  axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/docs/about.md`, authToken)
-    .then((response) => {
-      const results = response.data;
-      console.log('results:', results);
-
-      const contentDecoded = base64.decode(results.content);
-      const contentDecodedUtf8 = utf8.decode(contentDecoded);
-      const contentMarkdown = markdown.render(contentDecodedUtf8);
-      res.render('readme', { readme: contentMarkdown });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
-
-app.get('/hindamine', (req, res) => {
-  axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.path}/docs/hindamine.md`, authToken)
-    .then((response) => {
-      const results = response.data;
-      console.log('results:', results);
-
-      const contentDecoded = base64.decode(results.content);
-      const contentDecodedUtf8 = utf8.decode(contentDecoded);
-      const contentMarkdown = markdown.render(contentDecodedUtf8);
-      res.render('readme', { readme: contentMarkdown });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}); */
-
+// Ainekursusest ja Hindamine endpointid
 config.docs.forEach((elem) => {
-  console.log('elem.slug:', elem.slug);
+  // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
     axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}.md`, authToken)
       .then((response) => {
         const results = response.data;
-        console.log('results:', results);
+        // console.log('results:', results);
 
         const contentDecoded = base64.decode(results.content);
         const contentDecodedUtf8 = utf8.decode(contentDecoded);
         const contentMarkdown = markdown.render(contentDecodedUtf8);
-        res.render('readme', { readme: contentMarkdown });
+        res.render('home', {
+          content: contentMarkdown,
+          docs: config.docs,
+          concepts: config.concepts,
+          loengud: config.loengud,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -115,19 +76,25 @@ config.docs.forEach((elem) => {
   });
 });
 
+// Loengute endpointid
 config.loengud.forEach((elem) => {
-  console.log('elem.slug:', elem.slug);
+  // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
     axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}/about.md`, authToken)
       .then((response) => {
         const results = response.data;
-        console.log('results:', results);
+        // console.log('results:', results);
 
         const contentDecoded = base64.decode(results.content);
         const contentDecodedUtf8 = utf8.decode(contentDecoded);
         const contentMarkdown = markdown.render(contentDecodedUtf8);
-        res.render('readme', { readme: contentMarkdown });
+        res.render('home', {
+          content: contentMarkdown,
+          docs: config.docs,
+          concepts: config.concepts,
+          loengud: config.loengud,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -135,33 +102,31 @@ config.loengud.forEach((elem) => {
   });
 });
 
+// Teemade endpointid
 config.concepts.forEach((elem) => {
-  console.log('elem.slug:', elem.slug);
+  // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
     axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md`, authToken)
       .then((response) => {
         const results = response.data;
-        console.log('results:', results);
+        // console.log('results:', results);
 
         const contentDecoded = base64.decode(results.content);
         const contentDecodedUtf8 = utf8.decode(contentDecoded);
         const contentMarkdown = markdown.render(contentDecodedUtf8);
-        res.render('readme', { readme: contentMarkdown });
+        res.render('home', {
+          content: contentMarkdown,
+          docs: config.docs,
+          concepts: config.concepts,
+          loengud: config.loengud,
+        });
       })
       .catch((error) => {
         console.log(error);
       });
   });
 });
-
-/*
-app.get('/andmekandjad', (req, res) => {
-  console.log(andmekandjad);
-
-  const contentMarkdown = markdown.render(andmekandjad);
-  res.render('andmekandjad', { readme: contentMarkdown });
-}); */
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

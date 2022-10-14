@@ -1,0 +1,31 @@
+<div class="sidebar-readme" id="sidebar-readme">
+  <h3>Sidebar</h3>
+  
+  <ul>
+    <li><a href="/">Tühi avaleht</a></li>
+
+    <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
+
+    <!-- Ainekursusest ja Hindamine lingid -->
+    {{#each docs}}
+      <li><a href="/{{this.slug}}">{{this.name}}</a></li>
+    {{/each}} <br>
+
+    <!-- Loengute ja teemade lingid -->
+    {{#each loengud}}
+      <li><a href="/{{this.slug}}">{{this.name}}</a></li>
+
+        <ul>
+          {{#each this.concepts}}
+            <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
+              {{#each ../../concepts}}
+                {{#if_equal this.slug ../this }}
+                  <li><a href="/{{../this.slug}}">{{../this.name}}</a></li>
+                {{/if_equal}}
+              {{/each}}
+          {{/each}}
+        </ul>
+    {{/each}}
+
+  </ul>
+</div>
