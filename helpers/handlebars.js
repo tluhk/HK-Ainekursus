@@ -3,6 +3,9 @@
 
 const path = require('path');
 
+// Siin saab defineerida handlebarsiga seotud detaile.
+// Helpers objekti alla saab lisada funktsioone, mida kasutada lisaks built-in helpersitele
+
 // handlebar options: https://stackoverflow.com/a/40898191
 module.exports = function hbsHelpers(hbs) {
   return hbs.create({
