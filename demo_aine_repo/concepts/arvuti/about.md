@@ -65,6 +65,8 @@ Tavapäraselt on arvuti töötamiseks vaja vähemalt järgmised komponendid
 
 <img src="../../images/Protsessor_Martti_Raaveli_foto.jpg" alt="Protsessor" width="400" />
 
+<img src="../../images/Protsessor_Martti_Raaveli_foto.jpg" alt="Protsessor" width="400" >
+
 Protsessor. Martti Raaveli foto.
 
 - emaplaat - erinevate komponentide "kokku sidumiseks"
@@ -105,6 +107,8 @@ Järgnevalt on välja toodud loetelu erinevatest komponentidest ja lisaseadmet
 ### Harjutus 1
 
 [https://sisuloome.e-koolikott.ee/h5p/1985/embed](https://sisuloome.e-koolikott.ee/h5p/1985/embed)
+
+https://sisuloome.e-koolikott.ee/h5p/1985/embed
 
 ### Harjutus 2
 

@@ -12,7 +12,12 @@ const port = 3000;
 const axios = require('axios').default;
 
 // Markdown faili lugemiseks ja dekodeerimiseks
-const MarkdownIt = require('markdown-it');
+const MarkdownIt = require('markdown-it', {
+  html: true, // Enable HTML tags in source
+  linkify: true, // Autoconvert URL-like text to links
+  typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
+});
+
 const markdown = new MarkdownIt();
 const base64 = require('base-64');
 const utf8 = require('utf8');
