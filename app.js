@@ -11,16 +11,26 @@ const port = 3000;
 
 const axios = require('axios').default;
 
+const base64 = require('base-64');
+const utf8 = require('utf8');
+
 // Markdown faili lugemiseks ja dekodeerimiseks
-const MarkdownIt = require('markdown-it', {
+const MarkdownIt = require('markdown-it')({
   html: true, // Enable HTML tags in source
+  xhtmlOut: true, // Use '/' to close single tags (<br />).
   linkify: true, // Autoconvert URL-like text to links
   typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
 });
 
-const markdown = new MarkdownIt();
-const base64 = require('base-64');
-const utf8 = require('utf8');
+// render images from Markdown
+// https://www.npmjs.com/package/markdown-it-image-figures
+const implicitFigures = require('markdown-it-image-figures');
+MarkdownIt.use(implicitFigures, {
+  lazy: true,
+  removeSrc: true,
+  async: true,
+  classes: 'lazy',
+});
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
@@ -67,7 +77,7 @@ config.docs.forEach((elem) => {
 
         const contentDecoded = base64.decode(results.content);
         const contentDecodedUtf8 = utf8.decode(contentDecoded);
-        const contentMarkdown = markdown.render(contentDecodedUtf8);
+        const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
         res.render('home', {
           content: contentMarkdown,
           docs: config.docs,
@@ -93,7 +103,7 @@ config.loengud.forEach((elem) => {
 
         const contentDecoded = base64.decode(results.content);
         const contentDecodedUtf8 = utf8.decode(contentDecoded);
-        const contentMarkdown = markdown.render(contentDecodedUtf8);
+        const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
         res.render('home', {
           content: contentMarkdown,
           docs: config.docs,
@@ -112,14 +122,16 @@ config.concepts.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md`, authToken)
+    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md?ref=krister`, authToken)
       .then((response) => {
         const results = response.data;
         // console.log('results:', results);
 
         const contentDecoded = base64.decode(results.content);
         const contentDecodedUtf8 = utf8.decode(contentDecoded);
-        const contentMarkdown = markdown.render(contentDecodedUtf8);
+        const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
+        console.log('contentMarkdown:', contentMarkdown);
+
         res.render('home', {
           content: contentMarkdown,
           docs: config.docs,
