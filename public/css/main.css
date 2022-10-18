@@ -1,6 +1,6 @@
-/* Piltide stiil concepts lehtedel. Hetkel ei mõjuta midagi, kuna markdown ei renderda pilte õigesti */
-img[alt=image] { 
-  width: 200px; 
+img {
+  width: 400px;
+  height: 300px
 }
 
 /* Listide stiil */
