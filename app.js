@@ -20,21 +20,24 @@ const MarkdownIt = require('markdown-it')({
   xhtmlOut: true, // Use '/' to close single tags (<br />).
   linkify: true, // Autoconvert URL-like text to links
   typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
-});
+}).enable('image');
 
-// render images from Markdown
+// render images from Markdown - NOT WORKING ON BROWSER
 // https://www.npmjs.com/package/markdown-it-image-figures
 const implicitFigures = require('markdown-it-image-figures');
+
 MarkdownIt.use(implicitFigures, {
-  lazy: true,
-  removeSrc: true,
-  async: true,
-  classes: 'lazy',
+  removeSrc: false,
+  async: false,
 });
+
+// Import request functions for Axios
+const { requestDocs, requestLoengud, requestConcepts } = require('./functions/repoFunctions');
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
 
+// Github API token
 const authToken = {
   headers: {
     Accept: 'application/vnd.github+json',
@@ -42,11 +45,6 @@ const authToken = {
   },
 };
 
-const baseUrl = 'https://api.github.com';
-// Loen sisse repos.json faili, mis loeb demo_aine_repo asukohta githubis. Sinna on võimalik lisada ka teisi reposid.
-const repos = require('./repos.json');
-// Loen demo_aine_repo kausta rif20-valikpraktika-1 repost
-const repoDemo = repos[0];
 // Loen config.json faili, mis kirjeldab demo_aine_repo struktuuri
 const config = require('./demo_aine_repo/config.json');
 
@@ -65,25 +63,28 @@ app.get('/', (req, res) => {
   });
 });
 
+// Define what to do with Axios Response, how it is rendered
+function responseAction(axiosResponse, res) {
+  const results = axiosResponse.data;
+  const contentDecoded = base64.decode(results.content);
+  const contentDecodedUtf8 = utf8.decode(contentDecoded);
+  const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
+  res.render('home', {
+    content: contentMarkdown,
+    docs: config.docs,
+    concepts: config.concepts,
+    loengud: config.loengud,
+  });
+}
+
 // Ainekursusest ja Hindamine endpointid
 config.docs.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}.md?${repoDemo.branch}`, authToken)
+    axios.get(requestDocs(`${elem.slug}`), authToken)
       .then((response) => {
-        const results = response.data;
-        // console.log('results:', results);
-
-        const contentDecoded = base64.decode(results.content);
-        const contentDecodedUtf8 = utf8.decode(contentDecoded);
-        const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
-        res.render('home', {
-          content: contentMarkdown,
-          docs: config.docs,
-          concepts: config.concepts,
-          loengud: config.loengud,
-        });
+        responseAction(response, res);
       })
       .catch((error) => {
         console.log(error);
@@ -96,20 +97,9 @@ config.loengud.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}/about.md?${repoDemo.branch}`, authToken)
+    axios.get(requestLoengud(`${elem.slug}`), authToken)
       .then((response) => {
-        const results = response.data;
-        // console.log('results:', results);
-
-        const contentDecoded = base64.decode(results.content);
-        const contentDecodedUtf8 = utf8.decode(contentDecoded);
-        const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
-        res.render('home', {
-          content: contentMarkdown,
-          docs: config.docs,
-          concepts: config.concepts,
-          loengud: config.loengud,
-        });
+        responseAction(response, res);
       })
       .catch((error) => {
         console.log(error);
@@ -122,22 +112,9 @@ config.concepts.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md?${repoDemo.branch}`, authToken)
+    axios.get(requestConcepts(`${elem.slug}`), authToken)
       .then((response) => {
-        const results = response.data;
-        // console.log('results:', results);
-
-        const contentDecoded = base64.decode(results.content);
-        const contentDecodedUtf8 = utf8.decode(contentDecoded);
-        const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
-        console.log('contentMarkdown:', contentMarkdown);
-
-        res.render('home', {
-          content: contentMarkdown,
-          docs: config.docs,
-          concepts: config.concepts,
-          loengud: config.loengud,
-        });
+        responseAction(response, res);
       })
       .catch((error) => {
         console.log(error);
