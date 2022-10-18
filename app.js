@@ -31,9 +31,6 @@ MarkdownIt.use(implicitFigures, {
   async: false,
 });
 
-// Import request functions for Axios
-const { requestDocs, requestLoengud, requestConcepts } = require('./functions/repoFunctions');
-
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
 
@@ -54,14 +51,8 @@ app.set('views', (path.join(__dirname, '/views')));
 
 app.use(express.static(path.join(__dirname, '/public')));
 
-// localhost:3000/ endpoint; renderdab "home" faili ja saadab kaasa "docs", "concepts" ja "loengud" optionid, mis pärinevad config.json failist
-app.get('/', (req, res) => {
-  res.render('home', {
-    docs: config.docs,
-    concepts: config.concepts,
-    loengud: config.loengud,
-  });
-});
+// Import request functions for Axios
+const { requestDocs, requestLoengud, requestConcepts } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
 function responseAction(axiosResponse, res) {
@@ -76,6 +67,17 @@ function responseAction(axiosResponse, res) {
     loengud: config.loengud,
   });
 }
+
+// *** ENDPOINTS ***
+
+// localhost:3000/ endpoint; renderdab "home" faili ja saadab kaasa "docs", "concepts" ja "loengud" optionid, mis pärinevad config.json failist
+app.get('/', (req, res) => {
+  res.render('home', {
+    docs: config.docs,
+    concepts: config.concepts,
+    loengud: config.loengud,
+  });
+});
 
 // Ainekursusest ja Hindamine endpointid
 config.docs.forEach((elem) => {
