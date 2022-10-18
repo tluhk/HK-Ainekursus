@@ -6,6 +6,7 @@
     "subPath": {
       "docs": "docs",
       "concepts": "concepts"
-    }
+    },
+    "branch": "ref=krister"
   }
 ]
