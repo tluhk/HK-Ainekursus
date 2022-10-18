@@ -70,7 +70,7 @@ config.docs.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}.md?${elem.branch}`, authToken)
+    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}.md?${repoDemo.branch}`, authToken)
       .then((response) => {
         const results = response.data;
         // console.log('results:', results);
@@ -96,7 +96,7 @@ config.loengud.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}/about.md?${elem.branch}`, authToken)
+    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${elem.slug}/about.md?${repoDemo.branch}`, authToken)
       .then((response) => {
         const results = response.data;
         // console.log('results:', results);
@@ -122,7 +122,7 @@ config.concepts.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md?${elem.branch}`, authToken)
+    axios.get(`${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${elem.slug}/about.md?${repoDemo.branch}`, authToken)
       .then((response) => {
         const results = response.data;
         // console.log('results:', results);
