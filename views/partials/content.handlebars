@@ -3,13 +3,16 @@
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   {{{ content }}}
 
-  <div class="sources">
-    <h6>Allikad:</h6>
-    <ul>
-      {{#each sources}}
-        <li><a href="{{this.url}}">{{this.description}}</a></li>
-      {{/each }}
-    </ul>
-  </div>
+  <!-- NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad"" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed. -->
+  {{#if sources }}
+    <div class="sources">
+      <h6>Allikad:</h6>
+      <ul>
+        {{#each sources }}
+          <li><a href="{{this.url}}">{{this.description}}</a></li>
+        {{/each }}
+      </ul>
+    </div>
+  {{/if }}
 
 </div>

@@ -57,16 +57,22 @@ const {
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
-function responseAction(resConcepts, resSources, res) {
+function responseAction(resConcepts, res, ...options) {
   const concepts = resConcepts.data;
   const conceptsDecoded = base64.decode(concepts.content);
   const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded);
   const conceptsMarkdown = MarkdownIt.render(conceptsDecodedUtf8);
 
-  const sources = resSources.data;
-  const sourcesDecoded = base64.decode(sources.content);
-  const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
-  const sourcesJSON = JSON.parse(sourcesDecodedUtf8);
+  const resSources = options[0];
+  // define sources as NULL by default.
+  let sourcesJSON = null;
+  // NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed.
+  if (resSources) {
+    const sources = resSources.data;
+    const sourcesDecoded = base64.decode(sources.content);
+    const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
+    sourcesJSON = JSON.parse(sourcesDecodedUtf8);
+  }
 
   res.render('home', {
     content: conceptsMarkdown,
@@ -132,7 +138,7 @@ config.concepts.forEach((elem) => {
         const resSources = responses[1];
 
         // console.log('resSources', resSources);
-        responseAction(resConcepts, resSources, res);
+        responseAction(resConcepts, res, resSources);
       }))
     /* axios.get(requestConcepts(`${elem.slug}`), authToken)
       .then((response) => {

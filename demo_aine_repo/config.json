@@ -20,13 +20,33 @@
       "name": "Loeng 1",
       "blurb": "",
       "slug": "loeng_01",
-      "concepts": ["arvususteemid", "arvuti", "emaplaadid"]
+      "concepts": ["arvususteemid", "arvuti", "emaplaadid"],
+      "files": [
+        {
+          "filename": "1. loeng.pdf",
+          "description": "1. loengu pdf slaidid"
+        },
+        {
+          "filename": "1. loeng.pptx",
+          "description": "1. loengu Powerpoint slaidid"
+        }
+      ]
     },
     {
       "name": "Loeng 2",
       "blurb": "",
       "slug": "loeng_02",
-      "concepts": ["mahuuhikud", "malud", "protsessorid"]
+      "concepts": ["mahuuhikud", "malud", "protsessorid"],
+      "files": [
+        {
+          "filename": "2. loeng.pdf",
+          "description": "2. loengu pdf slaidid"
+        },
+        {
+          "filename": "2. loeng.pptx",
+          "description": "2. loengu Powerpoint slaidid"
+        }
+      ]
     }
   ],
   "concepts": [
