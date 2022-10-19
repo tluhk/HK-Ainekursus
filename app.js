@@ -16,7 +16,14 @@ const utf8 = require('utf8');
 
 const livereload = require('livereload');
 const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, '/views'));
 liveReloadServer.watch(path.join(__dirname, 'public'));
+
+liveReloadServer.server.once('connection', () => {
+  setTimeout(() => {
+    liveReloadServer.refresh('/');
+  }, 100);
+});
 
 const connectLivereload = require('connect-livereload');
 
