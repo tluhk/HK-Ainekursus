@@ -17,4 +17,7 @@ module.exports = {
   requestConcepts: (
     (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/about.md?${repoDemo.branch}`
   ),
+  requestSources: (
+    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/sources.json?${repoDemo.branch}`
+  ),
 };

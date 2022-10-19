@@ -12,6 +12,10 @@ ul ul {
   padding-left: 20px;
 }
 
+.sources {
+  padding-top: 5;
+}
+
 /* Header */
 .fixednav {
   display: flex;

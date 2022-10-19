@@ -52,19 +52,28 @@ app.set('views', (path.join(__dirname, '/views')));
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Import request functions for Axios
-const { requestDocs, requestLoengud, requestConcepts } = require('./functions/repoFunctions');
+const {
+  requestDocs, requestLoengud, requestConcepts, requestSources,
+} = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
-function responseAction(axiosResponse, res) {
-  const results = axiosResponse.data;
-  const contentDecoded = base64.decode(results.content);
-  const contentDecodedUtf8 = utf8.decode(contentDecoded);
-  const contentMarkdown = MarkdownIt.render(contentDecodedUtf8);
+function responseAction(resConcepts, resSources, res) {
+  const concepts = resConcepts.data;
+  const conceptsDecoded = base64.decode(concepts.content);
+  const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded);
+  const conceptsMarkdown = MarkdownIt.render(conceptsDecodedUtf8);
+
+  const sources = resSources.data;
+  const sourcesDecoded = base64.decode(sources.content);
+  const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
+  const sourcesJSON = JSON.parse(sourcesDecodedUtf8);
+
   res.render('home', {
-    content: contentMarkdown,
+    content: conceptsMarkdown,
     docs: config.docs,
     concepts: config.concepts,
     loengud: config.loengud,
+    sources: sourcesJSON,
   });
 }
 
@@ -114,10 +123,21 @@ config.concepts.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(requestConcepts(`${elem.slug}`), authToken)
+    const concepts = axios.get(requestConcepts(`${elem.slug}`), authToken);
+    const sources = axios.get(requestSources(`${elem.slug}`), authToken);
+
+    axios.all([concepts, sources])
+      .then(axios.spread((...responses) => {
+        const resConcepts = responses[0];
+        const resSources = responses[1];
+
+        // console.log('resSources', resSources);
+        responseAction(resConcepts, resSources, res);
+      }))
+    /* axios.get(requestConcepts(`${elem.slug}`), authToken)
       .then((response) => {
         responseAction(response, res);
-      })
+      }) */
       .catch((error) => {
         console.log(error);
       });
