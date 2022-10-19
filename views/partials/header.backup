@@ -1,11 +1,11 @@
 <!-- Siia võid tavapäraselt headerit ehitada. CSS lisa /public/css/main.css faili -->
 
 <header>
-  <nav>
-    <div>
-      <logo class='text-primary bg-secondary p-6'>Logo</logo>
+  <nav class='fixednav'>
+    <div class='leftnav'>
+      <h1>Logo</h1>
     </div>
-    <div>
+    <div class='rightnav'>
       <li>Home</li>
       <li>About</li>
       <li>Contact</li>
