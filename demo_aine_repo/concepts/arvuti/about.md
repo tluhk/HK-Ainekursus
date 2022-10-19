@@ -119,7 +119,3 @@ https://sisuloome.e-koolikott.ee/h5p/1985/embed
 
 
  *Litsenseeritud: [Creative Commons Attribution Share Alike License 4.0](http://creativecommons.org/licenses/by-sa/4.0/)*
-
-
-
- Random text here

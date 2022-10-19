@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://www.google.com/",
+    "description": "Google koduleht"
+  },
+  {
+    "url": "https://www.neti.ee/",
+    "description": "Neti.ee koduleht"
+  },
+  {
+    "url": "https://www.postimees.ee/",
+    "description": "Postimees avaleht"
+  }
+]
