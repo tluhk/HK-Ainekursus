@@ -5,7 +5,8 @@
     "mainPath": "contents/demo_aine_repo",
     "subPath": {
       "docs": "docs",
-      "concepts": "concepts"
+      "concepts": "concepts",
+      "files": "files"
     },
     "branch": "ref=krister"
   }
