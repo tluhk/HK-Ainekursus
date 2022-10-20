@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "nodemon --ext js,mjs,json,css,handlebars app.js",
     "lint": "eslint"
   },
   "repository": {
@@ -22,14 +22,18 @@
   },
   "homepage": "https://github.com/tluhk/rif20-valikpraktika-1#readme",
   "dependencies": {
+    "-": "^0.0.1",
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
     "bootstrap": "^5.2.1",
+    "connect": "^3.7.0",
+    "connect-livereload": "^0.6.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
     "js-base64": "^3.7.2",
     "json": "^11.0.0",
+    "livereload": "^0.9.3",
     "markdown-it": "^13.0.1",
     "markdown-it-image-figures": "^2.1.0",
     "md-block": "^0.0.1",

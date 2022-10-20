@@ -1,0 +1,14 @@
+<!-- Siia võid tavapäraselt headerit ehitada. CSS lisa /public/css/main.css faili -->
+
+<header>
+  <nav class='fixednav'>
+    <div class='leftnav'>
+      <h1>Logo</h1>
+    </div>
+    <div class='rightnav'>
+      <li>Home</li>
+      <li>About</li>
+      <li>Contact</li>
+    </div>
+  </nav>
+</header>

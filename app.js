@@ -14,6 +14,19 @@ const axios = require('axios').default;
 const base64 = require('base-64');
 const utf8 = require('utf8');
 
+const livereload = require('livereload');
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, '/views'));
+liveReloadServer.watch(path.join(__dirname, 'public'));
+
+liveReloadServer.server.once('connection', () => {
+  setTimeout(() => {
+    liveReloadServer.refresh('/');
+  }, 100);
+});
+
+const connectLivereload = require('connect-livereload');
+
 // Markdown faili lugemiseks ja dekodeerimiseks
 const MarkdownIt = require('markdown-it')({
   html: true, // Enable HTML tags in source
@@ -47,13 +60,17 @@ const config = require('./demo_aine_repo/config.json');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('views', (path.join(__dirname, '/views')));
+app.set('views', path.join(__dirname, '/views'));
 
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(connectLivereload());
 
 // Import request functions for Axios
 const {
-  requestDocs, requestLoengud, requestConcepts, requestSources,
+  requestDocs,
+  requestLoengud,
+  requestConcepts,
+  requestSources,
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
@@ -99,7 +116,8 @@ config.docs.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(requestDocs(`${elem.slug}`), authToken)
+    axios
+      .get(requestDocs(`${elem.slug}`), authToken)
       .then((response) => {
         responseAction(response, res);
       })
@@ -114,7 +132,8 @@ config.loengud.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
   app.get(`/${elem.slug}`, (req, res) => {
-    axios.get(requestLoengud(`${elem.slug}`), authToken)
+    axios
+      .get(requestLoengud(`${elem.slug}`), authToken)
       .then((response) => {
         responseAction(response, res);
       })
@@ -132,15 +151,18 @@ config.concepts.forEach((elem) => {
     const concepts = axios.get(requestConcepts(`${elem.slug}`), authToken);
     const sources = axios.get(requestSources(`${elem.slug}`), authToken);
 
-    axios.all([concepts, sources])
-      .then(axios.spread((...responses) => {
-        const resConcepts = responses[0];
-        const resSources = responses[1];
+    axios
+      .all([concepts, sources])
+      .then(
+        axios.spread((...responses) => {
+          const resConcepts = responses[0];
+          const resSources = responses[1];
 
-        // console.log('resSources', resSources);
-        responseAction(resConcepts, res, resSources);
-      }))
-    /* axios.get(requestConcepts(`${elem.slug}`), authToken)
+          // console.log('resSources', resSources);
+          responseAction(resConcepts, res, resSources);
+        })
+      )
+      /* axios.get(requestConcepts(`${elem.slug}`), authToken)
       .then((response) => {
         responseAction(response, res);
       }) */
