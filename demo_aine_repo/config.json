@@ -23,11 +23,11 @@
       "concepts": ["arvususteemid", "arvuti", "emaplaadid"],
       "files": [
         {
-          "filename": "1. loeng.pdf",
+          "filename": "1.loeng.pdf",
           "description": "1. loengu pdf slaidid"
         },
         {
-          "filename": "1. loeng.pptx",
+          "filename": "1.loeng.pptx",
           "description": "1. loengu Powerpoint slaidid"
         }
       ]
@@ -39,11 +39,11 @@
       "concepts": ["mahuuhikud", "malud", "protsessorid"],
       "files": [
         {
-          "filename": "2. loeng.pdf",
+          "filename": "2.loeng.pdf",
           "description": "2. loengu pdf slaidid"
         },
         {
-          "filename": "2. loeng.pptx",
+          "filename": "2.loeng.pptx",
           "description": "2. loengu Powerpoint slaidid"
         }
       ]

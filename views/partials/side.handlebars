@@ -25,6 +25,11 @@
               {{/each}}
           {{/each}}
         </ul>
+        <ul>
+          {{#each this.files}}
+              <li><a href="https://github.com/tluhk/rif20-valikpraktika-1/tree/main/demo_aine_repo/files/{{this.filename}}">{{this.description}}</a></li>
+          {{/each}}
+        </ul>
     {{/each}}
 
   </ul>

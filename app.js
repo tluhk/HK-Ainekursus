@@ -54,6 +54,12 @@ const authToken = {
     Authorization: auth,
   },
 };
+const authTokenFiles = {
+  headers: {
+    Accept: 'application/vnd.github.v3.raw',
+    Authorization: auth,
+  },
+};
 
 // Loen config.json faili, mis kirjeldab demo_aine_repo struktuuri
 const config = require('./demo_aine_repo/config.json');
@@ -71,6 +77,7 @@ const {
   requestLoengud,
   requestConcepts,
   requestSources,
+  requestFiles,
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
@@ -131,6 +138,17 @@ config.docs.forEach((elem) => {
 config.loengud.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
+  elem.files.forEach((file) => {
+    axios
+      .get(requestFiles(file.filename, authTokenFiles))
+      .then((response) => {
+        console.log('response', response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
   app.get(`/${elem.slug}`, (req, res) => {
     axios
       .get(requestLoengud(`${elem.slug}`), authToken)
@@ -160,7 +178,7 @@ config.concepts.forEach((elem) => {
 
           // console.log('resSources', resSources);
           responseAction(resConcepts, res, resSources);
-        })
+        }),
       )
       /* axios.get(requestConcepts(`${elem.slug}`), authToken)
       .then((response) => {
