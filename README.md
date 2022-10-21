@@ -28,6 +28,11 @@ npm install
 
 ### Käivitamine
 
+Githubiga ühenduse loomiseks on tarviline Githubi tokeni loomine ja selle lisamine juurkataloogi .env faili.
+faili sisuks `AUTH = 'Bearer ghp_SINUGITHUBITOKEN'`
+
+Seejärel võib rakenduse käivitada:
+
 ```bash
 npm start
 ```
