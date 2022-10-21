@@ -8,10 +8,10 @@ Tegemist on rakenduse I faasiga. Ülesandeks oli eeltööga selgitada välja kur
 
 Eesmärgiks oli luua rakendus, mis on täielikult haldajate kontrolli all, mille sisu on võimalik ristkasutada ning kasutajasõbralikul moel kätte saada, kuvada ja töödelda.  
 Rakenduse sisuhaldus asub Githubis. Githubi api kaudu saab sisu jagada ja kuvada.  
-Esimeses vaasis luuakse sisu git'i käskluste baasil. Eraldi kasutajaliidest pole.
+Esimeses faasis luuakse sisu git'i käskluste baasil. Eraldi kasutajaliidest pole.
 
 Lõppkasutajale on loodud kaasaegne kasutajaliides, mis on kasutatav nii mobiilis kui desktopis.  
-Kasutatud on Handlebar tepmliitimiskeelt ning Taolwind CSS-raamistikku.
+Kasutatud on Handlebar tepmliitimiskeelt ning Tailwind CSS-raamistikku.
 Sisumootoriks on Node + Express.js
 
 ## Rakenduse kasutamine ja käivitamine
