@@ -1,6 +1,7 @@
 # RIF20 Valikpraktika-1 kood – online kursuse rakendus
 
-TLU HK RIF20 Valikpraktika raames koostatud rakendus
+TLU HK RIF20 Valikpraktika raames koostatud rakendus  
+![Kursuse rakendus](thumb.jpg)
 
 ## Töö sisu
 
