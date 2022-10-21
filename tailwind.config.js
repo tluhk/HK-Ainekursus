@@ -5,14 +5,42 @@ module.exports = {
   theme: {
     colors: {
       brand_red: '#b71234',
-      on_red: '#fff',
+      brand_black: '#282627',
+      brand_grey: '545153',
+      on_brand: '#fff',
     },
     extend: {},
   },
   plugins: [
-    plugin(({ addBase }) => {
+    plugin(({ addBase, theme }) => {
       addBase({
         html: { fontSize: '18px' },
+        h1: {
+          fontSize: theme('fontSize.5xl'),
+          fontWeight: '500',
+          fontStyle: 'italic',
+          fontFamily: 'serif',
+          lineHeight: '3rem',
+        },
+        h2: {
+          fontSize: theme('fontSize.4xl'),
+          fontWeight: '500',
+          fontStyle: 'italic',
+          fontFamily: 'serif',
+          lineHeight: '2.25rem',
+          marginBottom: '1.25rem',
+          marginTop: '1.25rem',
+        },
+        h3: {
+          fontSize: theme('fontSize.3xl'),
+          fontWeight: '500',
+          fontStyle: 'italic',
+          fontFamily: 'serif',
+        },
+        p: {
+          marginBottom: '1.25rem',
+          marginTop: '1.25rem',
+        },
       });
     }),
   ],

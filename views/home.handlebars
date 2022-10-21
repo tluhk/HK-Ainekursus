@@ -1,17 +1,20 @@
 <!-- Viitab header.handlebars failile /partials kaustas -->
-<header class='py-16 text-center'>
+<header class='bg-brand_black text-on_brand text-center'>
   {{> header }}
 </header>
-<div class="container mx-auto flex">
-  <aside class="w-full sm:w-1/3 md:w-1/4 px-2">
+<div class="flex-1 flex ">
+  <aside class="bg-brand_red text-on_brand p-8 w-full flex justify-end sm:w-1/3 md:w-1/4">
     <!-- Viitab side.handlebars failile /partials kaustas -->
     {{> side }}
   </aside>
 
-  <main class="w-full sm:w-2/3 md:w-3/4 pt-1 px-2">
+  <main class="p-16 w-full sm:w-2/3 md:w-3/4">
     <!-- Viitab content.handlebars failile /partials kaustas -->
     {{> content }}
+  </main>
 </div>
 
 <!-- Viitab footer.handlebars failile /partials kaustas -->
-{{> footer }}
+<footer class="p-8 bg-brand_grey text-on_brand flex justify-center">
+  {{> footer }}
+</footer>
