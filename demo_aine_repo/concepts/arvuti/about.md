@@ -50,7 +50,7 @@ Seda, kui hea on arvuti ja milleks see on võimeline, kirjeldatakse läbi arvu
 
 ### Tüüpiline personaalarvuti ja selle komponendid 
 
-https://sisuloome.e-koolikott.ee/h5p/5288/embed
+[https://sisuloome.e-koolikott.ee/h5p/31528800/embed](https://sisuloome.e-koolikott.ee/h5p/5288/embed)
 
 ## Millised komponendid on arvuti tööks hädavajalikud?
 
@@ -81,13 +81,13 @@ DDR3 mälu. Martti Raaveli foto.
 
 ![SATA kõvaketas](SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
 
-SATA kõvaketas.Taimo Tammiku foto.
+SATA kõvaketas. Taimo Tammiku foto.
 
 - toiteallikat - ilma vooluta elektroonika ei tööta
 
 ![ATX toiteplokk](ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
 
-ATX toiteplokk.Taimo Tammiku foto.
+ATX toiteplokk. Taimo Tammiku foto.
 
 Võib ka olla, et tingimata ei ole andmekandjat vaja, kui arvuti laeb operatsioonisüsteemi ja muu käivitamiseks vajaliku info läbi arvutivõrgu - sel juhul on vajalik omakorda võrgukaardi olemasolu.
 
@@ -102,11 +102,11 @@ Järgnevalt on välja toodud loetelu erinevatest komponentidest ja lisaseadmet
 
 ### Harjutus 1
 
-https://sisuloome.e-koolikott.ee/h5p/1985/embed
+[https://sisuloome.e-koolikott.ee/h5p/1985/embed](https://sisuloome.e-koolikott.ee/h5p/1985/embed)
 
 ### Harjutus 2
 
-https://sisuloome.e-koolikott.ee/h5p/3027/embed
+[https://sisuloome.e-koolikott.ee/h5p/3027/embed](https://sisuloome.e-koolikott.ee/h5p/3027/embed)
 
 ### Harjutus 3
 

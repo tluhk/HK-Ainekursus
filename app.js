@@ -35,6 +35,7 @@ const MarkdownIt = require('markdown-it')({
   typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
 }).enable('image');
 
+/*
 // render images from Markdown - NOT WORKING ON BROWSER
 // https://www.npmjs.com/package/markdown-it-image-figures
 const implicitFigures = require('markdown-it-image-figures');
@@ -42,7 +43,7 @@ const implicitFigures = require('markdown-it-image-figures');
 MarkdownIt.use(implicitFigures, {
   removeSrc: false,
   async: false,
-});
+}); */
 
 const repos = require('./repos.json');
 const repoDemo = repos[0];
