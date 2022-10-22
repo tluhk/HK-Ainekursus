@@ -61,31 +61,33 @@ Kui me mõtleme mingi masina või organismi peale, siis me ilmselt saame aru, 
 Tavapäraselt on arvuti töötamiseks vaja vähemalt järgmised komponendid:
 - protsessor - miski peab arvutis arvutusi tegema ja seadmeid juhtima
 
+![Protsessor](../../images/Protsessor_Martti_Raaveli_foto.jpg)
+
 ![Protsessor](Protsessor_Martti_Raaveli_foto.jpg)
 
 Protsessor. Martti Raaveli foto.
 
 - emaplaat - erinevate komponentide "kokku sidumiseks"
 
-![Emaplaat](Emaplaat_horisontaalne_Taimo_Tammiku_foto.jpg)
+![Emaplaat](../../images/Emaplaat_horisontaalne_Taimo_Tammiku_foto.jpg)
 
-Emaplaat.Taimo Tammiku foto.
+Emaplaat. Taimo Tammiku foto.
 
 - operatiivmälu - andmeid on vaja töö käigus kusagil hoida ja kusagilt lugeda
 
-![DDR3 mälu](DDR3_mälu_Martti_Raaveli_foto.jpg)
+![DDR3 mälu](../../images/DDR3_mälu_Martti_Raaveli_foto.jpg)
 
 DDR3 mälu. Martti Raaveli foto.
 
 - mingit andmekandjat - kusagilt peab olema võimalik lugeda vähemalt operatsioonisüsteem
 
-![SATA kõvaketas](SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
+![SATA kõvaketas](../../images/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
 
 SATA kõvaketas.Taimo Tammiku foto.
 
 - toiteallikat - ilma vooluta elektroonika ei tööta
 
-![ATX toiteplokk](ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
+![ATX toiteplokk](../../images/ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
 
 ATX toiteplokk.Taimo Tammiku foto.
 

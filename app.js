@@ -44,7 +44,8 @@ MarkdownIt.use(implicitFigures, {
   async: false,
 });
 
-const fs = require('fs');
+const repos = require('./repos.json');
+const repoDemo = repos[0];
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
@@ -71,7 +72,9 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
+// define images folders. One for general images, one for demo_aine_repo images
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, `/${repoDemo.images}`)));
 
 app.use(connectLivereload());
 
