@@ -44,6 +44,8 @@ MarkdownIt.use(implicitFigures, {
   async: false,
 });
 
+const fs = require('fs');
+
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
 
@@ -70,6 +72,7 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
 app.use(express.static(path.join(__dirname, '/public')));
+
 app.use(connectLivereload());
 
 // Import request functions for Axios
