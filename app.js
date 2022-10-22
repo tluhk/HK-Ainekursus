@@ -73,9 +73,10 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
-// define images folders. One for general images, one for demo_aine_repo images
+// define application static folder:
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.static(path.join(__dirname, `/${repoDemo.images}`)));
+// define folder for demo_aine_repo static files:
+app.use(express.static(path.join(__dirname, `/${repoDemo.public}`)));
 
 app.use(connectLivereload());
 
