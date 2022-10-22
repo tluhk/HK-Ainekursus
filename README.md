@@ -2,7 +2,7 @@
 
 TLU HK RIF20 Valikpraktika raames koostatud rakendus
 
-![Kursuse rakendus](thumb.jpg)
+![Kursuse rakendus](thumb-2.jpg)
 
 ## Töö sisu
 
