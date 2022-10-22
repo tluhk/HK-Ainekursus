@@ -27,5 +27,3 @@ Peale loengut oskab õpilane:
 - Kirjeldada, mis on emaplaat ja milleks seda vaja on
 - Loetleda mälude olulisemaid parameetreid
 - Tunda arvutikomponentide hulgast ära protsessori, mälu ja emaplaadi
-
-Random text here

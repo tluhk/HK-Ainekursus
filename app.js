@@ -35,6 +35,7 @@ const MarkdownIt = require('markdown-it')({
   typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
 }).enable('image');
 
+/*
 // render images from Markdown - NOT WORKING ON BROWSER
 // https://www.npmjs.com/package/markdown-it-image-figures
 const implicitFigures = require('markdown-it-image-figures');
@@ -42,7 +43,10 @@ const implicitFigures = require('markdown-it-image-figures');
 MarkdownIt.use(implicitFigures, {
   removeSrc: false,
   async: false,
-});
+}); */
+
+const repos = require('./repos.json');
+const repoDemo = repos[0];
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
@@ -56,7 +60,8 @@ const authToken = {
 };
 const authTokenFiles = {
   headers: {
-    Accept: 'application/vnd.github.v3.raw',
+    // https://docs.github.com/en/rest/overview/media-types
+    Accept: 'application/vnd.github.raw',
     Authorization: auth,
   },
 };
@@ -68,7 +73,11 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
+// define application static folder:
 app.use(express.static(path.join(__dirname, '/public')));
+// define folder for demo_aine_repo static files:
+app.use(express.static(path.join(__dirname, `/${repoDemo.public}`)));
+
 app.use(connectLivereload());
 
 // Import request functions for Axios
@@ -79,6 +88,19 @@ const {
   requestSources,
   requestFiles,
 } = require('./functions/repoFunctions');
+
+// const { response } = require('express');
+function fileFunc() {
+  console.log('filename');
+/*  if (filename) {
+    axios
+      .get(requestFiles(filename), authTokenFiles);
+  } */
+}
+
+/*
+<!-- <li><onclick="javascript:fileFunc({{this.filename}});">{{this.description}}</li> -->
+*/
 
 // Define what to do with Axios Response, how it is rendered
 function responseAction(resConcepts, res, ...options) {
@@ -97,7 +119,6 @@ function responseAction(resConcepts, res, ...options) {
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
-
   res.render('home', {
     content: conceptsMarkdown,
     docs: config.docs,
@@ -106,6 +127,10 @@ function responseAction(resConcepts, res, ...options) {
     sources: sourcesJSON,
   });
 }
+
+/* function responseActionFiles(resFiles) {
+
+}  */
 
 // *** ENDPOINTS ***
 
@@ -138,17 +163,6 @@ config.docs.forEach((elem) => {
 config.loengud.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
-  elem.files.forEach((file) => {
-    axios
-      .get(requestFiles(file.filename, authTokenFiles))
-      .then((response) => {
-        console.log('response', response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-
   app.get(`/${elem.slug}`, (req, res) => {
     axios
       .get(requestLoengud(`${elem.slug}`), authToken)
@@ -160,6 +174,38 @@ config.loengud.forEach((elem) => {
       });
   });
 });
+
+/*
+// Failide endpointid
+config.loengud.forEach((elem) => {
+  // console.log('elem.slug:', elem.slug);
+  const fileResponses = [];
+
+  elem.files.forEach((file) => {
+    axios
+      .get(requestFiles(file.filename), authTokenFiles)
+      .then((response) => {
+        console.log('response', response);
+
+        fileResponses.push(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  console.log('fileResponses', fileResponses);
+//  responseActionFiles(fileResponses);
+});
+
+/*
+    )
+    .then((fileResponses) => {
+      responseAction(fileResponses);
+    })
+    .catch((error) => {
+      console.log(error);
+    });  */
 
 // Teemade endpointid
 config.concepts.forEach((elem) => {

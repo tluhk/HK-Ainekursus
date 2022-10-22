@@ -18,7 +18,11 @@ module.exports = function hbsHelpers(hbs) {
           return opts.fn(this);
         } return opts.inverse(this);
       },
-      block: (options) => options.fn(this),
+      hello: (opt) => {
+        // const newstring = new hbs.SafeString(opt);
+
+        console.log('opt:', opt);
+      },
       // More helpers...
     },
   });

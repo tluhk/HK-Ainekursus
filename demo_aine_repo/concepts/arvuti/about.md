@@ -61,35 +61,33 @@ Kui me mõtleme mingi masina või organismi peale, siis me ilmselt saame aru, 
 Tavapäraselt on arvuti töötamiseks vaja vähemalt järgmised komponendid:
 - protsessor - miski peab arvutis arvutusi tegema ja seadmeid juhtima
 
-![Protsessor](../../images/Protsessor_Martti_Raaveli_foto.jpg)
-
-<img src="../../images/Protsessor_Martti_Raaveli_foto.jpg" alt="Protsessor" width="400" />
+![Protsessor](images/Protsessor_Martti_Raaveli_foto.jpg)
 
 Protsessor. Martti Raaveli foto.
 
 - emaplaat - erinevate komponentide "kokku sidumiseks"
 
-![Emaplaat](../../images/Emaplaat_horisontaalne_Taimo_Tammiku_foto.jpg)
+![Emaplaat](images/Emaplaat_horisontaalne_Taimo_Tammiku_foto.jpg)
 
-Emaplaat.Taimo Tammiku foto.
+Emaplaat. Taimo Tammiku foto.
 
 - operatiivmälu - andmeid on vaja töö käigus kusagil hoida ja kusagilt lugeda
 
-![DDR3 mälu](../../images/DDR3_mälu_Martti_Raaveli_foto.jpg)
+![DDR3 mälu](images/DDR3_mälu_Martti_Raaveli_foto.jpg)
 
 DDR3 mälu. Martti Raaveli foto.
 
 - mingit andmekandjat - kusagilt peab olema võimalik lugeda vähemalt operatsioonisüsteem
 
-![SATA kõvaketas](../../images/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
+![SATA kõvaketas](images/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
 
-SATA kõvaketas.Taimo Tammiku foto.
+SATA kõvaketas. Taimo Tammiku foto.
 
 - toiteallikat - ilma vooluta elektroonika ei tööta
 
-![ATX toiteplokk](../../images/ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
+![ATX toiteplokk](images/ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
 
-ATX toiteplokk.Taimo Tammiku foto.
+ATX toiteplokk. Taimo Tammiku foto.
 
 Võib ka olla, et tingimata ei ole andmekandjat vaja, kui arvuti laeb operatsioonisüsteemi ja muu käivitamiseks vajaliku info läbi arvutivõrgu - sel juhul on vajalik omakorda võrgukaardi olemasolu.
 
@@ -105,8 +103,6 @@ Järgnevalt on välja toodud loetelu erinevatest komponentidest ja lisaseadmet
 ### Harjutus 1
 
 [https://sisuloome.e-koolikott.ee/h5p/1985/embed](https://sisuloome.e-koolikott.ee/h5p/1985/embed)
-
-https://sisuloome.e-koolikott.ee/h5p/1985/embed
 
 ### Harjutus 2
 
