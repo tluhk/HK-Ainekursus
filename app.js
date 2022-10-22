@@ -56,7 +56,8 @@ const authToken = {
 };
 const authTokenFiles = {
   headers: {
-    Accept: 'application/vnd.github.v3.raw',
+    // https://docs.github.com/en/rest/overview/media-types
+    Accept: 'application/vnd.github.raw',
     Authorization: auth,
   },
 };
@@ -80,6 +81,19 @@ const {
   requestFiles,
 } = require('./functions/repoFunctions');
 
+// const { response } = require('express');
+function fileFunc() {
+  console.log('filename');
+/*  if (filename) {
+    axios
+      .get(requestFiles(filename), authTokenFiles);
+  } */
+}
+
+/*
+<!-- <li><onclick="javascript:fileFunc({{this.filename}});">{{this.description}}</li> -->
+*/
+
 // Define what to do with Axios Response, how it is rendered
 function responseAction(resConcepts, res, ...options) {
   const concepts = resConcepts.data;
@@ -97,7 +111,6 @@ function responseAction(resConcepts, res, ...options) {
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
-
   res.render('home', {
     content: conceptsMarkdown,
     docs: config.docs,
@@ -106,6 +119,10 @@ function responseAction(resConcepts, res, ...options) {
     sources: sourcesJSON,
   });
 }
+
+/* function responseActionFiles(resFiles) {
+
+}  */
 
 // *** ENDPOINTS ***
 
@@ -138,17 +155,6 @@ config.docs.forEach((elem) => {
 config.loengud.forEach((elem) => {
   // console.log('elem.slug:', elem.slug);
 
-  elem.files.forEach((file) => {
-    axios
-      .get(requestFiles(file.filename, authTokenFiles))
-      .then((response) => {
-        console.log('response', response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-
   app.get(`/${elem.slug}`, (req, res) => {
     axios
       .get(requestLoengud(`${elem.slug}`), authToken)
@@ -160,6 +166,38 @@ config.loengud.forEach((elem) => {
       });
   });
 });
+
+/*
+// Failide endpointid
+config.loengud.forEach((elem) => {
+  // console.log('elem.slug:', elem.slug);
+  const fileResponses = [];
+
+  elem.files.forEach((file) => {
+    axios
+      .get(requestFiles(file.filename), authTokenFiles)
+      .then((response) => {
+        console.log('response', response);
+
+        fileResponses.push(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  console.log('fileResponses', fileResponses);
+//  responseActionFiles(fileResponses);
+});
+
+/*
+    )
+    .then((fileResponses) => {
+      responseAction(fileResponses);
+    })
+    .catch((error) => {
+      console.log(error);
+    });  */
 
 // Teemade endpointid
 config.concepts.forEach((elem) => {

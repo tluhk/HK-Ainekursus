@@ -27,6 +27,5 @@ module.exports = {
 
 // https://api.github.com/repos/owner/repo/contents/path
 
-
 // https://github.com/tluhk/rif20-valikpraktika-1/raw/krister/demo_aine_repo/files/1.loeng.pptx
 // (opt) => `${baseUrl}/${repoDemo.owner}/${repoDemo.name}/raw/${repoDemo.branch}/demo_aine_repo/${repoDemo.subPath.files}/${opt}`
