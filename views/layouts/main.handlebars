@@ -3,13 +3,7 @@
     <meta charset='UTF-8' />
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <script src='https://cdn.tailwindcss.com'></script>
-    <!-- Tailwind conf in case of CDN use -->
-    <script>
-      tailwind.config = { theme: { extend: { colors: { clifford: '#da373d', } },
-      fontSize: { sm: ['14px', '20px'], base: ['22px', '24px'], lg: ['20px',
-      '28px'], xl: ['24px', '32px'], } } }
-    </script>
+
     <!-- Static faile hoiatakse /public kaustas.  -->
 
     <link rel='stylesheet' href='/css/main.css' />
@@ -17,12 +11,11 @@
     <title>Demo kursus</title>
 
   </head>
-  <body class='p-4'>
-    <div>
-      <!-- järgmine body kuvab /views kaustast ükskõik millist, hetkel ainult home.handlebars. 
+  <body class='min-h-screen flex flex-col justify-between'>
+
+    <!-- järgmine body kuvab /views kaustast ükskõik millist, hetkel ainult home.handlebars. 
     /views kausta võib lisada ka teistsuguse struktuuriga faile, mis erinevad home.handlebars vaatest. Nt kui mõnel lehevaatel ei taha näidata headerit/footerit, sidebari või midagi kolmandat, siis saab teha /views kausta uue .handlebars faili. -->
-      {{{body}}}
-    </div>
+    {{{body}}}
 
   </body>
 </html>

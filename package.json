@@ -9,6 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --ext js,mjs,json,css,handlebars app.js",
+    "build-css": "tailwindcss -i ./src/main.css -o ./public/css/main.css",
     "lint": "eslint"
   },
   "repository": {
@@ -39,12 +40,16 @@
     "md-block": "^0.0.1",
     "read-markdown": "^1.0.2",
     "use": "^3.1.1",
-    "utf8": "^3.0.0"
+    "utf8": "^3.0.0",
+    "tailwindcss": "^3.2.1"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.12",
     "eslint": "^8.23.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "postcss": "^8.4.18",
+    "postcss-import": "^15.0.0"
   }
 }

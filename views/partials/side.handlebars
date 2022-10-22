@@ -1,36 +1,37 @@
-<nav class="sidebar" id="sidebar">
-  <h3>Sidebar</h3>
+<nav class="font-serif italic font-normal text-lg" id="sidebar">
+  <h3>Kursus</h3>
   
   <ul>
-    <li><a href="/">Tühi avaleht</a></li>
-
+    <li class="hover:underline">
+      <a href="/">Tühi avaleht</a>
+    </li>
     <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
-
     <!-- Ainekursusest ja Hindamine lingid -->
     {{#each docs}}
-      <li><a href="/{{this.slug}}">{{this.name}}</a></li>
+    <li class="hover:underline">
+      <a href="/{{this.slug}}">{{this.name}}</a>
+      </li>
     {{/each}} <br>
-
     <!-- Loengute ja teemade lingid -->
     {{#each loengud}}
-      <li><a href="/{{this.slug}}">{{this.name}}</a></li>
-
-        <ul>
-          {{#each this.concepts}}
-            <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
-              {{#each ../../concepts}}
-                {{#if_equal this.slug ../this }}
-                  <li><a href="/{{../this.slug}}">{{../this.name}}</a></li>
-                {{/if_equal}}
-              {{/each}}
-          {{/each}}
-        </ul>
-        <ul>
-          {{#each this.files}}
-              <li><a href="https://github.com/tluhk/rif20-valikpraktika-1/tree/main/demo_aine_repo/files/{{this.filename}}">{{this.description}}</a></li>
-          {{/each}}
-        </ul>
+    <li class="hover:underline">
+      <a href="/{{this.slug}}">{{this.name}}</a>
+    </li>
+    {{#each this.concepts}}
+    <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
+    {{#each ../../concepts}}
+    {{#if_equal this.slug ../this }}
+    <li class="hover:underline">
+      <a href="/{{../this.slug}}">{{../this.name}}</a>
+    </li>
+    {{/if_equal}}
     {{/each}}
-
+    {{/each}}
+    {{#each this.files}}
+    <li class="hover:underline">
+      <a href="https://github.com/tluhk/rif20-valikpraktika-1/tree/main/demo_aine_repo/files/{{this.filename}}">{{this.description}}</a>
+    </li>
+    {{/each}}
+    {{/each}}
   </ul>
 </nav>
