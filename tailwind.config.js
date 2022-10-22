@@ -36,6 +36,8 @@ module.exports = {
           fontWeight: '500',
           fontStyle: 'italic',
           fontFamily: 'serif',
+          marginBottom: '1.25rem',
+          marginTop: '1.25rem',
         },
         p: {
           marginBottom: '1.25rem',
