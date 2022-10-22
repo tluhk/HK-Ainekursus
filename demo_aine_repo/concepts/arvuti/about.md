@@ -50,7 +50,7 @@ Seda, kui hea on arvuti ja milleks see on võimeline, kirjeldatakse läbi arvu
 
 ### Tüüpiline personaalarvuti ja selle komponendid 
 
-[https://sisuloome.e-koolikott.ee/h5p/31528800/embed](https://sisuloome.e-koolikott.ee/h5p/5288/embed)
+https://sisuloome.e-koolikott.ee/h5p/5288/embed
 
 ## Millised komponendid on arvuti tööks hädavajalikud?
 
@@ -61,33 +61,31 @@ Kui me mõtleme mingi masina või organismi peale, siis me ilmselt saame aru, 
 Tavapäraselt on arvuti töötamiseks vaja vähemalt järgmised komponendid:
 - protsessor - miski peab arvutis arvutusi tegema ja seadmeid juhtima
 
-![Protsessor](../../images/Protsessor_Martti_Raaveli_foto.jpg)
-
 ![Protsessor](Protsessor_Martti_Raaveli_foto.jpg)
 
 Protsessor. Martti Raaveli foto.
 
 - emaplaat - erinevate komponentide "kokku sidumiseks"
 
-![Emaplaat](../../images/Emaplaat_horisontaalne_Taimo_Tammiku_foto.jpg)
+![Emaplaat](Emaplaat_horisontaalne_Taimo_Tammiku_foto.jpg)
 
 Emaplaat. Taimo Tammiku foto.
 
 - operatiivmälu - andmeid on vaja töö käigus kusagil hoida ja kusagilt lugeda
 
-![DDR3 mälu](../../images/DDR3_mälu_Martti_Raaveli_foto.jpg)
+![DDR3 mälu](DDR3_mälu_Martti_Raaveli_foto.jpg)
 
 DDR3 mälu. Martti Raaveli foto.
 
 - mingit andmekandjat - kusagilt peab olema võimalik lugeda vähemalt operatsioonisüsteem
 
-![SATA kõvaketas](../../images/SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
+![SATA kõvaketas](SATA_3,5_kõvaketas_Taimo_Tammiku_foto.jpg)
 
 SATA kõvaketas.Taimo Tammiku foto.
 
 - toiteallikat - ilma vooluta elektroonika ei tööta
 
-![ATX toiteplokk](../../images/ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
+![ATX toiteplokk](ATX_toiteplokk_1_Taimo_Tammiku_foto.jpg)
 
 ATX toiteplokk.Taimo Tammiku foto.
 
@@ -104,13 +102,11 @@ Järgnevalt on välja toodud loetelu erinevatest komponentidest ja lisaseadmet
 
 ### Harjutus 1
 
-[https://sisuloome.e-koolikott.ee/h5p/1985/embed](https://sisuloome.e-koolikott.ee/h5p/1985/embed)
-
 https://sisuloome.e-koolikott.ee/h5p/1985/embed
 
 ### Harjutus 2
 
-[https://sisuloome.e-koolikott.ee/h5p/3027/embed](https://sisuloome.e-koolikott.ee/h5p/3027/embed)
+https://sisuloome.e-koolikott.ee/h5p/3027/embed
 
 ### Harjutus 3
 
