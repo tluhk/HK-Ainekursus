@@ -27,9 +27,11 @@
     {{/if_equal}}
     {{/each}}
     {{/each}}
+
     {{#each this.files}}
     <li class="hover:underline">
-      <a href="https://github.com/tluhk/rif20-valikpraktika-1/tree/main/demo_aine_repo/files/{{this.filename}}">{{this.description}}</a>
+      <a href="#{{this.filename}}" 
+      onclick="javascript:fileFunc({{ this.filename }})">{{this.description}}</a>
     </li>
     {{/each}}
     {{/each}}

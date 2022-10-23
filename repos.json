@@ -6,7 +6,8 @@
     "subPath": {
       "docs": "docs",
       "concepts": "concepts",
-      "files": "files"
+      "files": "files",
+      "public": "public"
     },
     "public": "demo_aine_repo/public",
     "branch": "ref=krister"

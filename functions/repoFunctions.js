@@ -21,7 +21,7 @@ module.exports = {
     (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/sources.json?${repoDemo.branch}`
   ),
   requestFiles: (
-    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.files}/${opt}?${repoDemo.branch}`
+    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.public}/${repoDemo.subPath.files}/${opt}?${repoDemo.branch}`
   ),
 };
 

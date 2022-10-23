@@ -89,18 +89,9 @@ const {
   requestFiles,
 } = require('./functions/repoFunctions');
 
-// const { response } = require('express');
-function fileFunc() {
-  console.log('filename');
-/*  if (filename) {
-    axios
-      .get(requestFiles(filename), authTokenFiles);
-  } */
+function fileFunc(param) {
+  // return console.log('filename', param, typeof (param));
 }
-
-/*
-<!-- <li><onclick="javascript:fileFunc({{this.filename}});">{{this.description}}</li> -->
-*/
 
 // Define what to do with Axios Response, how it is rendered
 function responseAction(resConcepts, res, ...options) {
@@ -125,6 +116,7 @@ function responseAction(resConcepts, res, ...options) {
     concepts: config.concepts,
     loengud: config.loengud,
     sources: sourcesJSON,
+    filefunc: fileFunc(),
   });
 }
 

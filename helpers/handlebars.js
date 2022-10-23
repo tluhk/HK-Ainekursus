@@ -1,3 +1,4 @@
+/* eslint-disable no-script-url */
 // https://stackoverflow.com/a/40956931
 // CommonJS export Alternative:
 
@@ -18,11 +19,15 @@ module.exports = function hbsHelpers(hbs) {
           return opts.fn(this);
         } return opts.inverse(this);
       },
-      hello: (opt) => {
-        // const newstring = new hbs.SafeString(opt);
+      SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
+      /*
+      link: (filename, desc) => {
+        // handlebars faili:
+        {{{ link this.filename this.description }}}
 
-        console.log('opt:', opt);
-      },
+        const html = `<a href="#${filename}" onclick="javascript:fileFunc(${filename}">${desc}</a>`;
+        return html;
+      }, */
       // More helpers...
     },
   });
