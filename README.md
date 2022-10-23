@@ -45,6 +45,10 @@ Seejärel võib rakenduse käivitada:
 npm start
 ```
 
+## Rakenduse loomise kirjeldused
+
+[Mittetäielik dokumentatsioon](docs)
+
 Rakendusele ligipääseuks kirjuta brauseri aadressiribale `localhost:3000` ning võid kursusega pihta hakata.
 
 ## Valikpraktika I grupp
