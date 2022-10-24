@@ -76,7 +76,10 @@ app.set('views', path.join(__dirname, '/views'));
 // define application static folder:
 app.use(express.static(path.join(__dirname, '/public')));
 // define folder for demo_aine_repo static files:
-app.use(express.static(path.join(__dirname, `/${repoDemo.public}`)));
+config.concepts.forEach((elem) => {
+  app.use(express.static(path.join(__dirname, `/demo_aine_repo/${repoDemo.subPath.concepts}/${elem.slug}/${repoDemo.subPath.images}`)));
+});
+// app.use(express.static(path.join(__dirname, `/${repoDemo.public}`)));
 
 app.use(connectLivereload());
 
@@ -90,7 +93,7 @@ const {
 } = require('./functions/repoFunctions');
 
 function fileFunc(param) {
-  // return console.log('filename', param, typeof (param));
+  console.log('filename', param, typeof (param));
 }
 
 // Define what to do with Axios Response, how it is rendered
@@ -110,6 +113,7 @@ function responseAction(resConcepts, res, ...options) {
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
+
   res.render('home', {
     content: conceptsMarkdown,
     docs: config.docs,

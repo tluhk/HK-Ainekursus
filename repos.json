@@ -7,7 +7,7 @@
       "docs": "docs",
       "concepts": "concepts",
       "files": "files",
-      "public": "public"
+      "images": "images"
     },
     "public": "demo_aine_repo/public",
     "branch": "ref=krister"
