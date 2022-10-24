@@ -5,7 +5,7 @@ HTML on üles ehitatud lähtuvalt semantilise HTML põhimõtetest ja kõigile li
 
 Esialgse HTML-i skeem:
 
-![Veebilehe skelett](html.jpg)
+![Veebilehe skelett](images/html.jpg)
 
 Stiilimiseks on kasutusel Tailwind CSS-raamistik. Kaalumisel olid ka Windi CSS, UnoCSS ja Spectra, kuid nende puudulikum kui Tailwindil, mistap sai nendest loobutud. Samuti oli kaalumisel üldse raamistikust loobumine ja selle asemel puhta CSS-i ja CSS-grid'i kasutamine, kuid tagasisidest selgus, et backendi arendajatele, kes peavad vahest samuti frontendi osas käe külge panema, on raamistiku kasutamine lihtsam.
 
