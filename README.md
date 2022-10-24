@@ -1,4 +1,4 @@
-# RIF20 Valikpraktika-1 – Online kursuse rakendus
+# Veebikursuse rakendus
 
 TLU HK RIF20 Valikpraktika raames koostatud rakendus
 
@@ -6,8 +6,13 @@ TLU HK RIF20 Valikpraktika raames koostatud rakendus
 
 ## Töö sisu
 
-Tegemist on online kursuse rakenduse I faasiga.  
-Ülesanne koosnes järgmistest etappides:
+**Töö sisuks on õppejõule veebipõhise abistava õppematerjali ja õpilasele õppimismaterjali loomine.  
+Olemasolevate e-kursuste (nt Moodle) probleem on jäikus ja keerulisus (kõigile kõike), kuid samas kontrolli ja API puudus.**
+
+**Tegemist on online kursuse rakenduse I faasiga, ehk materjalide lao ja kursuse raamistku loomisega.
+Samuti luuakse ka visioon lõplikust tootest. See võib muidugi aja jooksul veel muutuda.**
+
+### I faas koosneb järgmistest alamülesannetest:
 
 - Eeltööga selgitada välja kursuse haldajate ning lõppkasutajate vajadused.
 - Kaardistada kasutajateekonnad.
@@ -23,6 +28,12 @@ Kasutatud on Handlebar tepmliitimiskeelt ning Tailwind CSS-raamistikku.
 Sisumootoriks on Node + Express.js
 
 ## Rakenduse kasutamine ja käivitamine
+
+Rakendus eeldab NODE olemasolu arendusmasinas: [Node paigaldamisjuhised](https://nodejs.org/en/download/)
+
+Nimekirja rakenduses kasutatud tehnoloogiatest leiad [Back-Endi](docs/content/backend/) ja [Front-Endi](docs/content/frontend/) kirjelduste alt [docs](docs) kaustast.
+
+Disaini põhimõtted ja valikuteed leiad [UX](docs/content/ux/) kasutast.
 
 ### Installeerimine
 
@@ -45,11 +56,7 @@ Seejärel võib rakenduse käivitada:
 npm start
 ```
 
-## Rakenduse loomise kirjeldused
-
-[Mittetäielik dokumentatsioon](docs)
-
-Rakendusele ligipääseuks kirjuta brauseri aadressiribale `localhost:3000` ning võid kursusega pihta hakata.
+Rakendusele ligipääsuks kirjuta brauseri aadressiribale `localhost:3000` ning võid kursusega pihta hakata.
 
 ## Valikpraktika I grupp
 
