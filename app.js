@@ -35,18 +35,14 @@ const MarkdownIt = require('markdown-it')({
   typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
 }).enable('image');
 
-/*
-// render images from Markdown - NOT WORKING ON BROWSER
-// https://www.npmjs.com/package/markdown-it-image-figures
-const implicitFigures = require('markdown-it-image-figures');
-
-MarkdownIt.use(implicitFigures, {
-  removeSrc: false,
-  async: false,
-}); */
-
 const repos = require('./repos.json');
 const repoDemo = repos[0];
+
+// 1. Read repos from github account, starting with HK_
+// 2. Save each matching repo content into a variable
+
+// Get repository content: https://docs.github.com/en/rest/repos/contents#get-repository-content
+// Get a latest release: https://docs.github.com/en/rest/releases/releases#get-the-latest-release 
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
@@ -55,13 +51,6 @@ const handlebars = require('./helpers/handlebars')(exphbs);
 const authToken = {
   headers: {
     Accept: 'application/vnd.github+json',
-    Authorization: auth,
-  },
-};
-const authTokenFiles = {
-  headers: {
-    // https://docs.github.com/en/rest/overview/media-types
-    Accept: 'application/vnd.github.raw',
     Authorization: auth,
   },
 };
@@ -75,11 +64,6 @@ app.set('views', path.join(__dirname, '/views'));
 
 // define application static folder:
 app.use(express.static(path.join(__dirname, '/public')));
-// define folder for demo_aine_repo static files:
-config.concepts.forEach((elem) => {
-  app.use(express.static(path.join(__dirname, `/demo_aine_repo/${repoDemo.subPath.concepts}/${elem.slug}/${repoDemo.subPath.images}`)));
-});
-// app.use(express.static(path.join(__dirname, `/${repoDemo.public}`)));
 
 app.use(connectLivereload());
 
@@ -93,7 +77,7 @@ const {
 } = require('./functions/repoFunctions');
 
 function fileFunc(param) {
-  console.log('filename', param, typeof (param));
+  // console.log('filename', param, typeof (param));
 }
 
 // Define what to do with Axios Response, how it is rendered
@@ -121,12 +105,30 @@ function responseAction(resConcepts, res, ...options) {
     loengud: config.loengud,
     sources: sourcesJSON,
     filefunc: fileFunc(),
+    gitToken: authToken.headers.Authorization,
   });
 }
 
-/* function responseActionFiles(resFiles) {
+// import and save tluhk organisation repos
+const matchingRepos = function getMatchingRepos() {
+  const allRepos = [];
 
-}  */
+  axios.get('https://api.github.com/orgs/tluhk/repos', authToken)
+    .then((response) => {
+      response.data.forEach((repo) => {
+        if (repo.name.startsWith('rif20-')) allRepos.push(repo);
+        else console.log('ei hakka sobiva algusega:', repo.name);
+      });
+
+      console.log('sobivad repod:', allRepos);
+    })
+    .catch((error) => {
+      // handle error
+      console.log(error);
+    });
+
+  return allRepos;
+};
 
 // *** ENDPOINTS ***
 
@@ -171,41 +173,10 @@ config.loengud.forEach((elem) => {
   });
 });
 
-/*
-// Failide endpointid
-config.loengud.forEach((elem) => {
-  // console.log('elem.slug:', elem.slug);
-  const fileResponses = [];
-
-  elem.files.forEach((file) => {
-    axios
-      .get(requestFiles(file.filename), authTokenFiles)
-      .then((response) => {
-        console.log('response', response);
-
-        fileResponses.push(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-
-  console.log('fileResponses', fileResponses);
-//  responseActionFiles(fileResponses);
-});
-
-/*
-    )
-    .then((fileResponses) => {
-      responseAction(fileResponses);
-    })
-    .catch((error) => {
-      console.log(error);
-    });  */
-
 // Teemade endpointid
 config.concepts.forEach((elem) => {
-  // console.log('elem.slug:', elem.slug);
+  // define folder for each concept's static files:
+  app.use(express.static(path.join(__dirname, `/demo_aine_repo/${repoDemo.subPath.concepts}/${elem.slug}`)));
 
   app.get(`/${elem.slug}`, (req, res) => {
     const concepts = axios.get(requestConcepts(`${elem.slug}`), authToken);
@@ -222,10 +193,6 @@ config.concepts.forEach((elem) => {
           responseAction(resConcepts, res, resSources);
         }),
       )
-      /* axios.get(requestConcepts(`${elem.slug}`), authToken)
-      .then((response) => {
-        responseAction(response, res);
-      }) */
       .catch((error) => {
         console.log(error);
       });
