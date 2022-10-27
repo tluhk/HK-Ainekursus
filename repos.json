@@ -1,15 +1,14 @@
 [
   {
     "owner": "tluhk",
-    "name": "rif20-valikpraktika-1",
-    "mainPath": "contents/demo_aine_repo",
+    "name": "HK_Programmeerimine-II",
+    "mainPath": "contents",
     "subPath": {
       "docs": "docs",
       "concepts": "concepts",
       "files": "files",
       "images": "images"
     },
-    "public": "demo_aine_repo/public",
-    "branch": "ref=krister"
+    "public": "demo_aine_repo/public"
   }
 ]
