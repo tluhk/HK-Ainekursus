@@ -42,7 +42,7 @@ const repoDemo = repos[0];
 // 2. Save each matching repo content into a variable
 
 // Get repository content: https://docs.github.com/en/rest/repos/contents#get-repository-content
-// Get a latest release: https://docs.github.com/en/rest/releases/releases#get-the-latest-release 
+// Get a latest release: https://docs.github.com/en/rest/releases/releases#get-the-latest-release
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./helpers/handlebars')(exphbs);
@@ -110,13 +110,14 @@ function responseAction(resConcepts, res, ...options) {
 }
 
 // import and save tluhk organisation repos
-const matchingRepos = function getMatchingRepos() {
+function getMatchingRepos() {
   const allRepos = [];
 
   axios.get('https://api.github.com/orgs/tluhk/repos', authToken)
     .then((response) => {
       response.data.forEach((repo) => {
-        if (repo.name.startsWith('rif20-')) allRepos.push(repo);
+        if (repo.name.startsWith('HK_')) allRepos.push(repo.full_name);
+
         else console.log('ei hakka sobiva algusega:', repo.name);
       });
 
@@ -127,8 +128,12 @@ const matchingRepos = function getMatchingRepos() {
       console.log(error);
     });
 
-  return allRepos;
-};
+  return { allRepos };
+}
+
+const matchingRepos = getMatchingRepos();
+
+console.log('matchingRepos', matchingRepos);
 
 // *** ENDPOINTS ***
 
