@@ -1,4 +1,4 @@
-# Tere, Kalev!
+# Ainekursuse ülesehitus
 
 Kursuse eesmärk ei ole koolitada välja arvutispetsialisti, kes tunneb detailidena arvutite siseelu, vaid pigem on eesmärgiks anda õpilasetele üldised teadmised arvutite ehitusest, arvuti komponentidest ja operatsioonisüsteemidest. Samuti ei ole materjalid esialgu mõeldud 100% iseseisvalt teadmiste omandamiseks, vaid on mõeldud toetavateks materjalideks loengus õpitule ja räägitule.
 
