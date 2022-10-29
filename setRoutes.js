@@ -102,7 +102,7 @@ const setRoutes = async (app, config) => {
   // Teemade endpointid
   config.concepts.forEach((elem) => {
     // define folder for each concept's static files:
-    console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
+    // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
     app.use(express.static(requestStaticURL(elem.slug)));
 
     app.get(`/${elem.slug}`, (req, res) => {
