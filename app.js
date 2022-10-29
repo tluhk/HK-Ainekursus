@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
 require('dotenv').config();
+
 const path = require('path');
 
 const express = require('express');
@@ -33,9 +34,10 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.use(connectLivereload());
 
-const func = require('./routes');
+// require('./engine');
+const { engine } = require('./engine');
 
-func.routes(app);
+engine(app);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
