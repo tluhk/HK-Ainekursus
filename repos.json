@@ -1,15 +1,12 @@
-[
-  {
-    "owner": "tluhk",
-    "name": "rif20-valikpraktika-1",
-    "mainPath": "contents/demo_aine_repo",
-    "subPath": {
-      "docs": "docs",
-      "concepts": "concepts",
-      "files": "files",
-      "images": "images"
-    },
-    "public": "demo_aine_repo/public",
-    "branch": "ref=krister"
-  }
-]
+{
+  "owner": "tluhk",
+  "name": "",
+  "mainPath": "contents",
+  "subPath": {
+    "docs": "docs",
+    "concepts": "concepts",
+    "files": "files",
+    "images": "images"
+  },
+  "public": "demo_aine_repo/public"
+}

@@ -2,9 +2,6 @@
   <h3>Kursus</h3>
   
   <ul>
-    <li class="hover:underline">
-      <a href="/">Tühi avaleht</a>
-    </li>
     <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
     <!-- Ainekursusest ja Hindamine lingid -->
     {{#each docs}}
@@ -33,6 +30,7 @@
       <a href="#">{{this.description}}</a>
     </li>
     {{/each}}
+        <br>
     {{/each}}
   </ul>
 </nav>
