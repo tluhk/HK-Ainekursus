@@ -11,12 +11,13 @@ const {
 
 const getRepoResponse = (async () => {
   const repoName = await getAllRepos();
+  const selectedRepo = repoName[0];
 
   // console.log('repoName[1]', repoName[1]);
   let response = '';
   try {
-    response = axios.get(requestConfig(repoName[0]), authToken);
-    updateRepoJSONFile(repoName[0]);
+    response = axios.get(requestConfig(selectedRepo), authToken);
+    updateRepoJSONFile(selectedRepo);
   } catch (err) {
     // Handle Error Here
     console.error(err);
