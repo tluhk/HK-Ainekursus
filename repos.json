@@ -1,14 +1,12 @@
-[
-  {
-    "owner": "tluhk",
-    "name": "HK_Riistvara-alused",
-    "mainPath": "contents",
-    "subPath": {
-      "docs": "docs",
-      "concepts": "concepts",
-      "files": "files",
-      "images": "images"
-    },
-    "public": "demo_aine_repo/public"
-  }
-]
+{
+  "owner": "tluhk",
+  "name": "",
+  "mainPath": "contents",
+  "subPath": {
+    "docs": "docs",
+    "concepts": "concepts",
+    "files": "files",
+    "images": "images"
+  },
+  "public": "demo_aine_repo/public"
+}

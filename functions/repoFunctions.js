@@ -2,9 +2,7 @@
 
 const baseUrl = 'https://api.github.com';
 // Loen sisse repos.json faili, mis loeb demo_aine_repo asukohta githubis. Sinna on võimalik lisada ka teisi reposid.
-const repos = require('../repos.json');
-// Loen demo_aine_repo kausta rif20-valikpraktika-1 repost
-const repoDemo = repos[0];
+const repoDemo = require('../repos.json');
 
 // Github API request endpoints
 module.exports = {
@@ -12,19 +10,19 @@ module.exports = {
     (repoOwnerName) => `${baseUrl}/repos/${repoOwnerName}/${repoDemo.mainPath}/config.json`
   ),
   requestDocs: (
-    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}.md`
+    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}.md`
   ),
   requestLoengud: (
-    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/about.md`
+    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/about.md`
   ),
   requestConcepts: (
-    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/about.md`
+    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/about.md`
   ),
   requestSources: (
-    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/sources.json`
+    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/sources.json`
   ),
-  requestStatic: (
-    (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${opt}`
+  requestStaticURL: (
+    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}`
   ),
   /* requestFiles: (
     (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/loeng_01/files/${opt}`

@@ -10,7 +10,7 @@ const {
   requestLoengud,
   requestConcepts,
   requestSources,
-  requestStatic,
+  requestStaticURL,
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
@@ -102,7 +102,8 @@ const setRoutes = async (app, config) => {
   // Teemade endpointid
   config.concepts.forEach((elem) => {
     // define folder for each concept's static files:
-    app.use(express.static(requestStatic(elem)));
+    console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
+    app.use(express.static(requestStaticURL(elem.slug)));
 
     app.get(`/${elem.slug}`, (req, res) => {
       const concepts = axios.get(requestConcepts(`${elem.slug}`), authToken);
