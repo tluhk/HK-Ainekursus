@@ -1,25 +1,25 @@
 <nav class="font-serif italic font-normal text-lg" id="sidebar">
-  <h3>Kursus</h3>
+  <h3>{{courseSlug}}</h3>
   
   <ul>
     <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
     <!-- Ainekursusest ja Hindamine lingid -->
     {{#each docs}}
     <li class="hover:underline">
-      <a href="/{{this.slug}}">{{this.name}}</a>
+      <a href="/{{../courseSlug}}/{{this.slug}}">{{this.name}}</a>
       </li>
     {{/each}} <br>
     <!-- Loengute ja teemade lingid -->
     {{#each loengud}}
     <li class="hover:underline">
-      <a href="/{{this.slug}}">{{this.name}}</a>
+      <a href="/{{../courseSlug}}/{{this.slug}}">{{this.name}}</a>
     </li>
     {{#each this.concepts}}
     <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
     {{#each ../../concepts}}
     {{#if_equal this.slug ../this }}
     <li class="hover:underline">
-      <a href="/{{../this.slug}}">{{../this.name}}</a>
+      <a href="/{{../../../../courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
     </li>
     {{/if_equal}}
     {{/each}}
@@ -31,6 +31,15 @@
     </li>
     {{/each}}
         <br>
+    {{/each}}
+  </ul>
+
+  <h3>Teised kursused</h3>
+  <ul>
+    {{#each courses}}
+    {{#if_not_equal this.slug ../courseSlug}}
+      <a href="/{{../this.slug}}">{{../this.slug}}</a>
+    {{/if_not_equal}}
     {{/each}}
   </ul>
 </nav>

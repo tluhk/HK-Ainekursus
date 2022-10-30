@@ -1,13 +1,14 @@
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
 
-const { getConfig } = require('./getConfig');
-const { setRoutes } = require('./setRoutes');
+const { getAllRepos } = require('./allRepos');
+const { setCoursesRoutes } = require('./setCoursesRoutes');
 
 const engine = async (app) => {
-  const config = await getConfig;
+  // const config = await getConfig(selectedCourse);
+  const allCourses = await getAllRepos;
   // console.log('config from engine.js:', config);
-  setRoutes(app, config);
+  setCoursesRoutes(app, allCourses);
 };
 
 // Get repository content: https://docs.github.com/en/rest/repos/contents#get-repository-content
