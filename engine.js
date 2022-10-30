@@ -2,7 +2,7 @@
 /* eslint-disable import/newline-after-import */
 
 const { getAllRepos } = require('./allRepos');
-const { setCoursesRoutes } = require('./setCoursesRoutes');
+const { setCoursesRoutes } = require('./setAllCoursesRoutes');
 
 const engine = async (app) => {
   // const config = await getConfig(selectedCourse);

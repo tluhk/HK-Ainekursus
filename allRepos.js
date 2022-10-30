@@ -16,7 +16,6 @@ const getAllRepos = (async () => {
           name: elem.full_name,
         };
         allRepos.push(repo);
-        // allRepos.push(repo.full_name);
       }
       // console.log('ei ole sobivad repod:', repo.name);
       return true;
@@ -29,13 +28,5 @@ const getAllRepos = (async () => {
 
   return allRepos;
 })();
-/*
-const getAllRepos = async () => {
-  const allReposWait = await sendReposGetRequest();
-
-  // console.log('allRepos[1]', allReposWait[1]);
-
-  return allReposWait;
-}; */
 
 module.exports = { getAllRepos };
