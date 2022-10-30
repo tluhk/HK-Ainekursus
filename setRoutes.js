@@ -14,7 +14,7 @@ const {
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
-function responseAction(resConcepts, config, res, pageName, ...options) {
+function responseAction(resConcepts, config, res, courseSlug, allCourses, ...options) {
   const concepts = resConcepts.data;
   const conceptsDecoded = base64.decode(concepts.content);
   const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded);
@@ -39,8 +39,8 @@ function responseAction(resConcepts, config, res, pageName, ...options) {
     concepts: config.concepts,
     loengud: config.loengud,
     sources: sourcesJSON,
-    gitToken: authToken.headers.Authorization,
-    pageName,
+    courseSlug,
+    courses: allCourses,
   });
 }
 
@@ -48,7 +48,7 @@ function responseAction(resConcepts, config, res, pageName, ...options) {
   console.log('conf', conf);
 }; */
 
-const setRoutes = async (app, config) => {
+const setRoutes = async (app, config, courseSlug, allCourses) => {
   // console.log('config from setRoutes.js', config);
   // console.log('config.loengud[1].concepts from setRoutes.js', config.loengud[1].concepts);
 
@@ -60,20 +60,20 @@ const setRoutes = async (app, config) => {
       docs: config.docs,
       concepts: config.concepts,
       loengud: config.loengud,
+      courses: allCourses,
     });
   });
 
+  // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
   // Ainekursusest ja Hindamine endpointid
   config.docs.forEach((elem) => {
     // console.log('elem.slug:', elem.slug);
 
-    app.get(`/${elem.slug}`, (req, res) => {
-      const pageName = elem.name;
-
+    app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       axios
         .get(requestDocs(`${elem.slug}`), authToken)
         .then((response) => {
-          responseAction(response, config, res, pageName);
+          responseAction(response, config, res, courseSlug, allCourses);
         })
         .catch((error) => {
           console.log(error);
@@ -85,13 +85,11 @@ const setRoutes = async (app, config) => {
   config.loengud.forEach((elem) => {
     // console.log('elem.slug:', elem.slug);
 
-    app.get(`/${elem.slug}`, (req, res) => {
-      const pageName = elem.name;
-
+    app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       axios
         .get(requestLoengud(`${elem.slug}`), authToken)
         .then((response) => {
-          responseAction(response, config, res, pageName);
+          responseAction(response, config, res, courseSlug, allCourses);
         })
         .catch((error) => {
           console.log(error);
@@ -105,10 +103,9 @@ const setRoutes = async (app, config) => {
     // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
     app.use(express.static(requestStaticURL(elem.slug)));
 
-    app.get(`/${elem.slug}`, (req, res) => {
+    app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       const concepts = axios.get(requestConcepts(`${elem.slug}`), authToken);
       const sources = axios.get(requestSources(`${elem.slug}`), authToken);
-      const pageName = elem.name;
 
       axios
         .all([concepts, sources])
@@ -118,7 +115,7 @@ const setRoutes = async (app, config) => {
             const resSources = responses[1];
 
             // console.log('resSources', resSources);
-            responseAction(resConcepts, config, res, pageName, resSources);
+            responseAction(resConcepts, config, res, courseSlug, allCourses, resSources);
           }),
         )
         .catch((error) => {

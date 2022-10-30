@@ -6,8 +6,9 @@ const repoDemo = require('../repos.json');
 
 // Github API request endpoints
 module.exports = {
+  requestCourses: 'https://api.github.com/orgs/tluhk/repos',
   requestConfig: (
-    (repoOwnerName) => `${baseUrl}/repos/${repoOwnerName}/${repoDemo.mainPath}/config.json`
+    (repoPath) => `${baseUrl}/repos/${repoPath}/${repoDemo.mainPath}/config.json`
   ),
   requestDocs: (
     (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}.md`

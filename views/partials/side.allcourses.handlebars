@@ -1,0 +1,11 @@
+<nav class="font-serif italic font-normal text-lg" id="sidebar">
+  <h3>Kõik kursused</h3>
+  
+  <ul>
+    {{#each courses}}
+    <li class="hover:underline">
+      <a href="/{{this.slug}}">{{this.slug}}</a>
+    </li>
+    {{/each}} <br>
+  </ul>
+</nav>

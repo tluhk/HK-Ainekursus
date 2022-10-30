@@ -19,6 +19,11 @@ module.exports = function hbsHelpers(hbs) {
           return opts.fn(this);
         } return opts.inverse(this);
       },
+      if_not_equal: (a, b, opts) => {
+        if (a !== b) {
+          return opts.fn(this);
+        } return opts.inverse(this);
+      },
       SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
       /*
       link: (filename, desc) => {
