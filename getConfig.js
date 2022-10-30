@@ -15,7 +15,7 @@ const getRepoResponse = async (selectedCourse) => {
     updateRepoJSONFile(selectedCourse);
   } catch (err) {
     // Handle Error Here
-    // console.error(err);
+    console.error(err);
   }
   return response;
 };
