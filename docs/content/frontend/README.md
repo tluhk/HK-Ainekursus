@@ -19,6 +19,8 @@ Siinses rakenduses on kasutatud Tailwindi koos PostCSS pistikprogramm. PostCSS v
 Installeerimise juhendid leiab (siit:)[https://tailwindcss.com/docs/installation/using-postcss].
 Installeerimise järel tekivad juurkataloogi samad failid, mis eelneval lingil oleval lehel ning puuduvad tuleb lisada nii nagu näidatud.
 
+### Isikupärastamine
+
 Peamised seadistused tehakse `tailwind.js`-is.
 Tailwindi `Contendi`real tuleb ära näidata, millistes failides ja folderites asub stiilitav kood.  
 Siinse näite puhul: `content: ['./views/**/*.{handlebars,html,js}', './views/home.handlebars'],`
@@ -27,34 +29,111 @@ Kompileerimiskäsklus ja sihtpunktid on mõitlik lisada `package.json` faili: `"
 
 Vaikimisi on Tailwind nagu 0-stiil, tema eripäraks ongi see, et sa ehitad üles oma kujunduse, nö sisustades ära Tailwindi poolt antud raamid.
 
-### Isikupärastamine
-
-Omalooming hakkab juurkataloogis asuvast `tailwind.config.js`
-
 ## Siin rakenduses ettevõetud asjad.
 
+- Layout  
+  Layout'i loomiseks on kasutatud Tailwindi Flex'i klasse
 - Tüpograafia
-  lisatud on oma kirjatüüp ja hierarhia.
-- Värvilahendus
+  Lisatud on oma kirjatüüp ja hierarhia. Fondid on asendatud `tailwindconfig.js`-is:
 
-Baasfondi suurendamine käib läbi plugina:
+  ```javascript
+  extend: {
+      fontFamily: {
+        sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
+        serif: ['Zilla Slab', ...defaultTheme.fontFamily.serif],
+      },
+  ```
+
+  `defaultTheme` on defineeritud sama faili alguses:
+  `const defaultTheme = require('tailwindcss/defaultTheme');`
+
+  Pealkirjad ja baasfondi suurus on defineeritud sama faili pistikprogrammis:
+
+  ```javascript
+  plugins: [
+    plugin(function ({ addBase, theme, addComponents }) {
+      addBase({
+        html: { fontSize: '18px' },
+        h1: {
+          fontFamily: 'Zilla Slab',
+          fontSize: theme('fontSize.5xl'),
+          lineHeight: '3rem',
+          marginTop: '1.25rem',
+          marginBottom: '1.25rem',
+        },
+  ...
+  ```
+
+  Seda on võimalik teha ka css-is.
+
+- Värvilahendus
+  Värvilahenduses on kasutusel Tailwindi enda värvid, mis on defineeritud `tailwind.config.js`-is:
 
 ```javascript
-const plugin = require("tailwindcss/plugin");
+theme: {
+    colors: {
+      primary: colors.red,
+      secondary: colors.stone,
+      white: colors.white,
+    },
+...
+```
+
+Neid on võimalik seega kasitada nt `bg-primary-700`või `text-secondary-500`jne
+
+## Siinse lehe spetsiifika, komponendid ja kujundusosade loomine.
+
+### Komponendid
+
+Komponendid võib luua nii `tailwind.config.js`-is kui ka `main.css`-is. Esimesel juhul `addComponent`pistiku abil nt nii:
+
+```javascript
+const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-  // other settings
   plugins: [
-    plugin(function ({ addBase }) {
-      addBase({
-        html: { fontSize: "10px" },
+    plugin(function ({ addComponents }) {
+      addComponents({
+        '.btn': {
+          padding: '.5rem 1rem',
+          borderRadius: '.25rem',
+          fontWeight: '600',
+        },
+        '.btn-blue': {
+          backgroundColor: '#3490dc',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#2779bd',
+          },
+        },
+        '.btn-red': {
+          backgroundColor: '#e3342f',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#cc1f1a',
+          },
+        },
       });
     }),
   ],
 };
 ```
 
-## Siinse lehe spetsiifika, komponendid ja kujundusosade loomine.
+Kui need võib ehitada ka `css`failis nt nii:
+
+```javascript
+@layer components {
+  .btn {
+    @apply py-4 px-4 rounded-sm shadow-2xl;
+  }
+  .btn-primary {
+    @apply bg-primary-700 text-white hover:bg-primary-800;
+  }
+  .btn-menu {
+    @apply w-28;
+  }
+}
+```
 
 ### Sticky sidebar
 
