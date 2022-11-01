@@ -34,18 +34,17 @@ Vaikimisi on Tailwind nagu 0-stiil, tema eripäraks ongi see, et sa ehitad üles
 - Layout  
   Layout'i loomiseks on kasutatud Tailwindi Flex'i klasse
 - Tüpograafia
-  Lisatud on oma kirjatüüp ja hierarhia. Fondid on asendatud `tailwindconfig.js`-is:
+  Lisatud on oma kirjatüüp ja hierarhia. Fondid on asendatud `tailwindconfig.js`-is.`defaultTheme` on defineeritud sama faili alguses.
 
   ```javascript
+  const defaultTheme = require('tailwindcss/defaultTheme');
+
   extend: {
       fontFamily: {
         sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
         serif: ['Zilla Slab', ...defaultTheme.fontFamily.serif],
       },
   ```
-
-  `defaultTheme` on defineeritud sama faili alguses:
-  `const defaultTheme = require('tailwindcss/defaultTheme');`
 
   Pealkirjad ja baasfondi suurus on defineeritud sama faili pistikprogrammis:
 
@@ -70,13 +69,28 @@ Vaikimisi on Tailwind nagu 0-stiil, tema eripäraks ongi see, et sa ehitad üles
   Värvilahenduses on kasutusel Tailwindi enda värvid, mis on defineeritud `tailwind.config.js`-is:
 
 ```javascript
+const colors = require('tailwindcss/colors');
+
+module.exports = {
+    theme: {
+        colors: {
+          primary: colors.red,
+          secondary: colors.stone,
+          white: colors.white,
+        },
+    ...
+```
+
+Võib defineerida ka oma värvid:
+
+```javascript
 theme: {
     colors: {
-      primary: colors.red,
-      secondary: colors.stone,
-      white: colors.white,
+      brand_red: '#b71234',
+      brand_black: '#282627',
+      brand_grey: '545153',
+      on_brand: '#fff',
     },
-...
 ```
 
 Neid on võimalik seega kasitada nt `bg-primary-700`või `text-secondary-500`jne
