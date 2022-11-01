@@ -154,4 +154,12 @@ Kuid need võib ehitada ka `css`failis nt nii:
 Külgriba jääb lihtsama navigatsiooni huvides kui veebilehte ekraani ülaserva kerid, ülaserva pidama. Nn "sticky position".  
 Selleks tuleb kasutada CSS omadust – sticky. Et see toimiks, on vaja määrata selle külgriba kõrgus ning CSS omadusele top, anda väärtus 0 (sel juhul kinnitub ta 0-i jõudes).
 
+## Vidinad
+
+### Flowbite kalender
+
+https://flowbite.com/docs/plugins/datepicker/  
+https://flowbite.com/docs/getting-started/quickstart/  
+Siin kasutusel üle CDN-i
+
 [<Tagasi](../../README.md)
