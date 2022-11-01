@@ -133,7 +133,7 @@ module.exports = {
 };
 ```
 
-Kui need võib ehitada ka `css`failis nt nii:
+Kuid need võib ehitada ka `css`failis nt nii:
 
 ```javascript
 @layer components {
