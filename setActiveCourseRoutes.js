@@ -14,7 +14,14 @@ const {
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
-function responseAction(resConcepts, config, res, courseSlug, allCourses, ...options) {
+function responseAction(
+  resConcepts,
+  config,
+  res,
+  courseSlug,
+  allCourses,
+  ...options
+) {
   const concepts = resConcepts.data;
   const conceptsDecoded = base64.decode(concepts.content);
   const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded);
@@ -107,8 +114,15 @@ const setRoutes = async (app, config, courseSlug, allCourses) => {
             const resSources = responses[1];
 
             // console.log('resSources', resSources);
-            responseAction(resConcepts, config, res, courseSlug, allCourses, resSources);
-          }),
+            responseAction(
+              resConcepts,
+              config,
+              res,
+              courseSlug,
+              allCourses,
+              resSources
+            );
+          })
         )
         .catch((error) => {
           console.log(error);
