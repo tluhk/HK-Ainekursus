@@ -3,7 +3,17 @@
     <meta charset='UTF-8' />
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      href='https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Zilla+Slab:ital,wght@0,700;1,700&display=swap'
+      rel='stylesheet'
+    />
+    <!-- Flowbite kalender -->
+    <link
+      rel='stylesheet'
+      href='https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css'
+    />
     <!-- Static faile hoiatakse /public kaustas.  -->
 
     <link rel='stylesheet' href='/css/main.css' />
@@ -17,6 +27,8 @@
     <!-- järgmine body kuvab /views kaustast ükskõik millist, hetkel ainult home.handlebars. 
     /views kausta võib lisada ka teistsuguse struktuuriga faile, mis erinevad home.handlebars vaatest. Nt kui mõnel lehevaatel ei taha näidata headerit/footerit, sidebari või midagi kolmandat, siis saab teha /views kausta uue .handlebars faili. -->
     {{{body}}}
-
+    <script src='/js/js.js'></script>
+    <!-- Flowbite kalender -->
+    <script src='https://unpkg.com/flowbite@1.5.3/dist/flowbite.js'></script>
   </body>
 </html>
