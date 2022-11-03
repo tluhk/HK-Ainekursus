@@ -1,4 +1,7 @@
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar flex justify-between items-start absolute lg:relative left-[-100vw] lg:left-0 w-full lg:w-auto  transition-all" id="sidebar">
+    
+  
+  <div>
   <!-- this can be better :( -->
   <h3>{{#each courses}}
     {{#if_equal this.slug ../courseSlug}}
@@ -52,4 +55,15 @@
       {{/each}}
     </li>
   </ul>
+  </div>
+  
+
+    
+  <span
+      onclick='closeSideMenu()'
+      class='mt-3 material-symbols-outlined text-4xl cursor-pointer lg:hidden'>
+      close
+  </span>
+
+
 </nav>

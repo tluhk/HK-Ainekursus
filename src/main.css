@@ -13,6 +13,8 @@
   padding-top: 1px;
 }
 
-.top-zero {
+.menu-zero {
   top: 0;
+  left: 0;
+  z-index: 1;
 }
