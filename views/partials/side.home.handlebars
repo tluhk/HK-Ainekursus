@@ -27,7 +27,7 @@
     <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
     {{#each ../../concepts}}
     {{#if_equal this.slug ../this }}
-    <li class="flex gap-2 hover:underline"><span class="material-symbols-outlined">radio_button_unchecked</span>
+    <li class="flex gap-2"><span class="material-symbols-outlined">radio_button_unchecked</span>
       <a class=" hover:underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
     </li>
     {{/if_equal}}
