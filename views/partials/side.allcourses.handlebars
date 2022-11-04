@@ -8,7 +8,10 @@
     <ul>
       {{#each courses}}
         <li class='hover:underline'>
-          <a href='/{{this.slug}}'>{{this.slug}}</a>
+          <a
+            class='hover:underline'
+            href='/{{this.courseSlug}}'
+          >{{this.courseName}} ({{this.courseCode}})</a>
         </li>
       {{/each}}
     </ul>
@@ -21,6 +24,5 @@
   >
     close
   </span>
-
 
 </nav>
