@@ -2,13 +2,13 @@
 
   <div class="breadcrumb" style="display:inline flex; gap: 20px">
     {{#if breadcrumb.courseName}}
-      <a href='/{{path.courseSlug}}'>{{breadcrumb.courseName}}</a>
+      <a class=" hover:underline" href='/{{path.courseSlug}}'>{{breadcrumb.courseName}}</a>
     {{/if}}
     {{#if breadcrumb.contentName}}
-      > <a href='/{{path.courseSlug}}/{{path.contentSlug}}'>{{breadcrumb.contentName}}</a>
+      > <a class=" hover:underline" href='/{{path.courseSlug}}/{{path.contentSlug}}'>{{breadcrumb.contentName}}</a>
     {{/if}}
   </div>
-  
+
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   {{{content}}}
