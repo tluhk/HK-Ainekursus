@@ -3,10 +3,10 @@
   <div>
   <!-- this can be better :( -->
   <h3>{{#each courses}}
-    {{#if_equal this.slug ../courseSlug}}
-    {{../this.title}}
-    {{/if_equal}}
-    {{/each}}</h3>
+      {{#if_equal this.courseSlug ../path.courseSlug}}
+      <a class=" hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
+      {{/if_equal}}
+      {{/each}}</h3>
 
   <ul>
     <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
