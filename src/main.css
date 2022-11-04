@@ -12,3 +12,25 @@
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
   padding-top: 1px;
 }
+
+.menu-zero {
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+.sidebar.menu-zero {
+  top: 194px;
+  left: 0;
+  z-index: 1;
+}
+.sidebar.menu-down {
+  top: 352px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.skip:focus {
+  left: 0;
+}
