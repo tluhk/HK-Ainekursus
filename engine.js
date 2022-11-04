@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
 
-const { getAllRepos } = require('./allRepos');
+const { getAllCourses } = require('./getAllCourses');
 const { setCoursesRoutes } = require('./setAllCoursesRoutes');
 
 const engine = async (app) => {
-  // const config = await getConfig(selectedCourse);
-  const allCourses = await getAllRepos;
-  // console.log('config from engine.js:', config);
+  const allCourses = await getAllCourses();
+  // console.log('allCourses', allCourses);
+
   setCoursesRoutes(app, allCourses);
 };
 
