@@ -1,5 +1,14 @@
 <div style='max-width:70ch;'>
 
+  <div class="breadcrumb" style="display:inline flex; gap: 20px">
+    {{#if breadcrumb.courseName}}
+      <a class=" hover:underline" href='/{{path.courseSlug}}'>{{breadcrumb.courseName}}</a>
+    {{/if}}
+    {{#if breadcrumb.contentName}}
+      > <a class=" hover:underline" href='/{{path.courseSlug}}/{{path.contentSlug}}'>{{breadcrumb.contentName}}</a>
+    {{/if}}
+  </div>
+
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   {{{content}}}
@@ -15,5 +24,11 @@
       </ul>
     </div>
   {{/if}}
+
+  <br>
+  <div class="navigation-buttons" style="display: flex; justify-content: end; gap: 10px" >
+    <button type="button" style="background-color: rgb(178, 178, 178); color: white; black; border: 1px solid; padding: 10px" >Eelmine</button> 
+    <button type="button" style="background-color: rgb(3, 200, 3); color: white; border: 1px solid; padding: 10px" >Märgi läbituks (liigu edasi)</button> 
+  </div>
 
 </div>
