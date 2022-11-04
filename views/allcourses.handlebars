@@ -2,12 +2,35 @@
 <header class='bg-brand_black text-on_brand text-center'>
   {{> header }}
 </header>
-<div class="flex-1 flex ">
-  <aside class="">
+<div class="flex flex-col lg:flex-row grow">
+
+  <aside class="h-full basis-2/12">
+    <div onclick='closeSideMenu()' class="flex items-center justify-end  cursor-pointer">
+      <span class="lg:hidden mt-4 mr-[5rem] font-bold">Kursuse menüü </span>
+      <span
+        class='material-symbols-outlined text-4xl cursor-pointer absolute right-8 mt-4 lg:hidden'>
+          menu
+      </span>
+    </div>
+    <!-- sticky: sticky h-screen top-0 -->
     <!-- Viitab side.handlebars failile /partials kaustas -->
     {{> side.allcourses }}
   </aside>
 
+  <main id="main-content" class="p-4 md:p-16 lg:p-8 xl:p-16 basis-8/12">
+ 
+    <!-- Viitab content.handlebars failile /partials kaustas -->
+    {{> content.home }}
+
+  </main>
+  <aside class="basis-1/12">
+   
+   
+    <!-- Datepicker -->
+
+    {{> calendar }}
+
+  </aside>
 </div>
 
 <!-- Viitab footer.handlebars failile /partials kaustas -->

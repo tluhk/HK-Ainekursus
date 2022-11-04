@@ -22,12 +22,18 @@
     <!-- Static faile hoiatakse /public kaustas.  -->
 
     <link rel='stylesheet' href='/css/main.css' />
+    <style>
+      main { opacity: 0; transition: opacity 1s; }
+    </style>
 
     <title>Demo kursus</title>
 
   </head>
 
-  <body class='min-h-screen flex flex-col justify-between'>
+  <body
+    onload="document.getElementById('main-content') .style.opacity='1'"
+    class='min-h-screen flex flex-col justify-between'
+  >
     <a
       class='skip absolute left-[-1000] mt-4 ml-4 px-4 py-2 bg-white'
       href='#main-content'

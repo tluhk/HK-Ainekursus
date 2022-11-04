@@ -1,12 +1,25 @@
-<nav class='sidebar' id='sidebar'>
-  <h3>Kõik kursused</h3>
+<nav
+  class='sidebar flex justify-between items-start absolute lg:relative left-[-100vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full lg:w-auto transition-all'
+  id='sidebar'
+>
 
-  <ul>
-    {{#each courses}}
-      <li class='hover:underline'>
-        <a href='/{{this.slug}}'>{{this.slug}}</a>
-      </li>
-    {{/each}}
-    <br />
-  </ul>
+  <div>
+    <h3>Kõik kursused</h3>
+    <ul>
+      {{#each courses}}
+        <li class='hover:underline'>
+          <a href='/{{this.slug}}'>{{this.slug}}</a>
+        </li>
+      {{/each}}
+    </ul>
+
+  </div>
+
+  <span
+    onclick='closeSideMenu()'
+    class='material-symbols-outlined mt-[-1.5rem] lg:mt-auto text-4xl cursor-pointer lg:hidden'
+  >
+    close
+  </span>
+
 </nav>
