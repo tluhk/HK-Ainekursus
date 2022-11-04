@@ -18,7 +18,8 @@ function responseAction(
   resConcepts,
   config,
   res,
-  courseSlug,
+  breadcrumbNames,
+  path,
   allCourses,
   ...options
 ) {
@@ -45,34 +46,34 @@ function responseAction(
     concepts: config.concepts,
     loengud: config.loengud,
     sources: sourcesJSON,
-    courseSlug,
+    breadcrumb: breadcrumbNames,
+    path,
     courses: allCourses,
   });
 }
 
-const setRoutes = async (app, config, courseSlug, allCourses) => {
+const setRoutes = async (app, config, course, allCourses) => {
   // *** ENDPOINTS ***
-
-  // localhost:3000/ endpoint; renderdab "home" faili ja saadab kaasa "docs", "concepts" ja "loengud" optionid, mis pärinevad config.json failist
-  app.get('/', (req, res) => {
-    res.render('home', {
-      docs: config.docs,
-      concepts: config.concepts,
-      loengud: config.loengud,
-      courses: allCourses,
-    });
-  });
+  const { courseName, courseSlug } = course;
 
   // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
   // Ainekursusest ja Hindamine endpointid
   config.docs.forEach((elem) => {
     // console.log('elem.slug:', elem.slug);
+    const breadcrumbNames = {
+      courseName,
+      contentName: elem.name,
+    };
+    const path = {
+      courseSlug,
+      contentSlug: elem.slug,
+    };
 
     app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       axios
         .get(requestDocs(`${elem.slug}`), authToken)
         .then((response) => {
-          responseAction(response, config, res, courseSlug, allCourses);
+          responseAction(response, config, res, breadcrumbNames, path, allCourses);
         })
         .catch((error) => {
           console.log(error);
@@ -83,12 +84,20 @@ const setRoutes = async (app, config, courseSlug, allCourses) => {
   // Loengute endpointid
   config.loengud.forEach((elem) => {
     // console.log('elem.slug:', elem.slug);
+    const breadcrumbNames = {
+      courseName,
+      contentName: elem.name,
+    };
+    const path = {
+      courseSlug,
+      contentSlug: elem.slug,
+    };
 
     app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       axios
         .get(requestLoengud(`${elem.slug}`), authToken)
         .then((response) => {
-          responseAction(response, config, res, courseSlug, allCourses);
+          responseAction(response, config, res, breadcrumbNames, path, allCourses);
         })
         .catch((error) => {
           console.log(error);
@@ -98,6 +107,15 @@ const setRoutes = async (app, config, courseSlug, allCourses) => {
 
   // Teemade endpointid
   config.concepts.forEach((elem) => {
+    const breadcrumbNames = {
+      courseName,
+      contentName: elem.name,
+    };
+    const path = {
+      courseSlug,
+      contentSlug: elem.slug,
+    };
+
     // define folder for each concept's static files:
     // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
     app.use(express.static(requestStaticURL(elem.slug)));
@@ -113,16 +131,16 @@ const setRoutes = async (app, config, courseSlug, allCourses) => {
             const resConcepts = responses[0];
             const resSources = responses[1];
 
-            // console.log('resSources', resSources);
             responseAction(
               resConcepts,
               config,
               res,
-              courseSlug,
+              breadcrumbNames,
+              path,
               allCourses,
-              resSources
+              resSources,
             );
-          })
+          }),
         )
         .catch((error) => {
           console.log(error);
