@@ -1,11 +1,18 @@
 <div style='max-width:70ch;'>
 
-  <div class="breadcrumb" style="display:inline flex; gap: 20px">
+  <div class='breadcrumb' style='display:inline flex; gap: 20px'>
     {{#if breadcrumb.courseName}}
-      <a class=" hover:underline" href='/{{path.courseSlug}}'>{{breadcrumb.courseName}}</a>
+      <a
+        class='hover:underline'
+        href='/{{path.courseSlug}}'
+      >{{breadcrumb.courseName}}</a>
     {{/if}}
     {{#if breadcrumb.contentName}}
-      > <a class=" hover:underline" href='/{{path.courseSlug}}/{{path.contentSlug}}'>{{breadcrumb.contentName}}</a>
+      >
+      <a
+        class='hover:underline'
+        href='/{{path.courseSlug}}/{{path.contentSlug}}'
+      >{{breadcrumb.contentName}}</a>
     {{/if}}
   </div>
 
@@ -25,10 +32,10 @@
     </div>
   {{/if}}
 
-  <br>
-  <div class="navigation-buttons" style="display: flex; justify-content: end; gap: 10px" >
-    <button type="button" style="background-color: rgb(178, 178, 178); color: white; black; border: 1px solid; padding: 10px" >Eelmine</button> 
-    <button type="button" style="background-color: rgb(3, 200, 3); color: white; border: 1px solid; padding: 10px" >Märgi läbituks (liigu edasi)</button> 
+  <br />
+  <div class='flex gap-4'>
+    <button type='button' class='btn btn-secondary'>Eelmine</button>
+    <button type='button' class='btn btn-primary'>Märgi läbituks (liigu edasi)</button>
   </div>
 
 </div>
