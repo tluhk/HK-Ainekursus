@@ -569,6 +569,8 @@ p {
   --tw-bg-opacity: 1;
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
   padding: 2rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
   height: calc(100% - 149px);
@@ -1096,6 +1098,10 @@ a:hover {
 }
 
 @media (min-width: 1280px) {
+  .xl\:block {
+    display: block;
+  }
+
   .xl\:p-16 {
     padding: 4rem;
   }
