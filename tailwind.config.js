@@ -62,7 +62,6 @@ module.exports = {
         h6: {
           fontWeight: '600',
           marginTop: '1.25rem',
-          marginBottom: '1.25rem',
         },
         p: {
           marginBottom: '1.25rem',
