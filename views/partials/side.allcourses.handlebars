@@ -7,9 +7,9 @@
     <h3>Kõik kursused</h3>
     <ul>
       {{#each courses}}
-        <li class='hover:underline'>
+        <li>
           <a
-            class='hover:underline'
+            class='hover:!underline !no-underline'
             href='/{{this.courseSlug}}'
           >{{this.courseName}} ({{this.courseCode}})</a>
         </li>

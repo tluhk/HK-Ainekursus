@@ -2,7 +2,7 @@
 
   <div>
   <!-- this can be better :( -->
-  <h3 class="text-xl">{{#each courses}}
+  <h3 class="text-xl mb-1">{{#each courses}}
       {{#if_equal this.courseSlug ../path.courseSlug}}
       <a class="!no-underline hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
       {{/if_equal}}
@@ -13,20 +13,20 @@
     <!-- Ainekursusest ja Hindamine lingid -->
     {{#each docs}}
     <li class="flex gap-2">
-      <span class="material-symbols-outlined">check_circle</span>
-      <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+      <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
     </li>
-    {{/each}} <br>
+    {{/each}}
     <!-- Loengute ja teemade lingid -->
     {{#each loengud}}
     <li class="flex gap-2">
-      <span class="material-symbols-outlined">radio_button_unchecked</span>
+      <span class="material-symbols-outlined">check_circle</span>
       <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
     </li>
     {{#each this.concepts}}
     <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
     {{#each ../../concepts}}
     {{#if_equal this.slug ../this }}
+    
     <li class="flex gap-2"><span class="material-symbols-outlined">radio_button_unchecked</span>
       <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
     </li>
@@ -40,9 +40,10 @@
       <a class="hover:!underline !no-underline" href="#">{{this.description}}</a>
     </li>
     {{/each}}
-    <br>
+
     {{/each}}
   </ul>
+
 
   <h3>Teised kursused</h3>
   <ul>
