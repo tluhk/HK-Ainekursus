@@ -753,6 +753,10 @@ p {
   min-height: 100vh;
 }
 
+.w-72 {
+  width: 18rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -785,16 +789,12 @@ p {
   flex-basis: 16.666667%;
 }
 
-.basis-9\/12 {
-  flex-basis: 75%;
+.basis-8\/12 {
+  flex-basis: 66.666667%;
 }
 
 .basis-1\/12 {
   flex-basis: 8.333333%;
-}
-
-.basis-8\/12 {
-  flex-basis: 66.666667%;
 }
 
 .cursor-pointer {
