@@ -2,9 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+.mobileheight {
+  height: calc(100% - 149px);
+}
+
 @layer components {
   .sidebar {
-    @apply bg-brand_red text-white h-full p-8;
+    @apply bg-brand_red text-white mobileheight lg:h-full p-8 text-sm;
+  }
+  .sidebar.menu-zero {
+    @apply top-[194px] lg:top-0 left-0 z-10;
+  }
+  .btn {
+    @apply py-2 px-4 rounded-full;
+  }
+  .btn-primary {
+    @apply bg-primary-700 hover:bg-primary-800 text-white;
+  }
+  .btn-secondary {
+    @apply bg-secondary-500 hover:bg-secondary-600 text-white;
   }
 }
 
@@ -13,24 +29,16 @@
   padding-top: 1px;
 }
 
-.menu-zero {
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-.sidebar.menu-zero {
-  top: 194px;
-  left: 0;
-  z-index: 1;
-}
-.sidebar.menu-down {
-  top: 352px;
-}
-
-a:hover {
+a {
   text-decoration: underline;
 }
 
 .skip:focus {
   left: 0;
+}
+
+.menu-zero {
+  top: 0;
+  left: 0;
+  z-index: 20;
 }

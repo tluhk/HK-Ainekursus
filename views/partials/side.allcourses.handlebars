@@ -1,12 +1,75 @@
-<nav class='sidebar' id='sidebar'>
-  <h3>Kõik kursused</h3>
+<nav
+  class='sidebar flex justify-between items-start absolute lg:relative left-[-100vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full lg:w-auto transition-all'
+  id='sidebar'
+>
 
-  <ul>
-    {{#each courses}}
-      <li class='hover:underline'>
-        <a class=" hover:underline" href='/{{this.courseSlug}}'>{{this.courseName}} ({{this.courseCode}})</a>
-      </li>
-    {{/each}}
-    <br />
-  </ul>
+  <div>
+    <h3>Kõik kursused</h3>
+    <ul>
+      {{#each courses}}
+        <li>
+          <a
+            class='hover:!underline !no-underline'
+            href='/{{this.courseSlug}}'
+          >{{this.courseName}} ({{this.courseCode}})</a>
+        </li>
+      {{/each}}
+    </ul>
+
+    <!-- DROPDOWN MENÜÜ VARIANT -->
+
+    <section >
+      <div class="col">
+        <h3>Kõik kursused</h3>
+        <div class="tabs">
+
+          <!-- Kursuste lingid -->
+          {{#each courses}}
+          <div class="tab">
+            <label class="tab-label">
+              <a class='hover:!underline !no-underline'
+              href='/{{this.courseSlug}}'>{{this.courseName}} ({{this.courseCode}})</a><label>
+          </div>
+          {{/each}}
+
+    <!-- ??? Kas siia lehele lisada veel alamenüü lehti?
+    Nt otseviide kursuse ainekaardi lingile või kuvada loengute pealkirjad siin ära, et oleks mugav Kõigi Kursuste lehelt juba kindla kursuse materjalini jõuda.  -->
+          <!--
+          {{#each loengud}}
+          <div class="tab">
+            <input type="checkbox" id="chck{{@index}}">
+            <label class="tab-label" for="chck{{@index}}">
+              <div class="flex gap-2">
+                <span class="material-symbols-outlined">check_circle</span>
+                <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+              </div>
+            </label>
+            
+            {{#each this.concepts}}
+              {{#each ../../concepts}}
+                {{#if_equal this.slug ../this }}
+                <div class="tab-content flex gap-2" >
+                  <span class="material-symbols-outlined">radio_button_unchecked</span>
+                  <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
+                </div>
+                {{/if_equal}}
+              {{/each}}
+            {{/each}}
+          </div>
+          {{/each}}
+          -->
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <span
+    onclick='closeSideMenu()'
+    class='material-symbols-outlined mt-[-1.5rem] lg:mt-auto text-4xl cursor-pointer lg:hidden'
+  >
+    close
+  </span>
+
 </nav>

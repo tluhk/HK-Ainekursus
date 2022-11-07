@@ -4,7 +4,7 @@
 </header>
 <div class="flex flex-col lg:flex-row grow">
 
-  <aside class="h-full basis-2/12">
+  <aside class="h-full w-72">
     <div onclick='closeSideMenu()' class="flex items-center justify-end  cursor-pointer">
       <span class="lg:hidden mt-4 mr-[5rem] font-bold">Kursuse menüü </span>
       <span
@@ -17,13 +17,13 @@
     {{> side.home }}
   </aside>
 
-  <main id="main-content" class="p-4 md:p-16 lg:p-8 xl:p-16 basis-8/12">
+  <main id="main-content" class="px-4 py-8 md:px-16 md:py-8 lg:p-8 xl:px-16 xl:py-8">
  
     <!-- Viitab content.handlebars failile /partials kaustas -->
     {{> content.home }}
 
   </main>
-  <aside class="basis-1/12">
+  <aside class="lg:hidden 2xl:block">
    
    
     <!-- Datepicker -->

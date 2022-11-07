@@ -1,40 +1,40 @@
 <nav class="sidebar flex justify-between items-start absolute lg:relative left-[-100vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full lg:w-auto  transition-all" id="sidebar">
-     
-  
+
   <div>
   <!-- this can be better :( -->
-  <h3>{{#each courses}}
-    {{#if_equal this.courseSlug ../path.courseSlug}} 
-    <div>
-      {{../this.courseName}} <br>
-      {{../this.courseCode}}
-    </div>
-
-    {{/if_equal}}
-    {{/each}}</h3>
+  <h3 class="text-xl mb-1">{{#each courses}}
+      {{#if_equal this.courseSlug ../path.courseSlug}}
+      <a class="!no-underline hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
+      {{/if_equal}}
+      {{/each}}</h3>
 
   <ul>
     <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
+    
     <!-- Ainekursusest ja Hindamine lingid -->
     {{#each docs}}
     <li class="flex gap-2">
-      <span class="material-symbols-outlined">check_circle</span>
-      <a class=" hover:underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+      <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
     </li>
-    {{/each}} <br>
-    <!-- Loengute ja teemade lingid -->
+    {{/each}}
+
+    <!-- Loengute lingid -->
     {{#each loengud}}
     <li class="flex gap-2">
-      <span class="material-symbols-outlined">radio_button_unchecked</span>
-      <a class=" hover:underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+      <span class="material-symbols-outlined">check_circle</span>
+      <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
     </li>
+
+    <!-- Teemade lingid -->
     {{#each this.concepts}}
     <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
     {{#each ../../concepts}}
     {{#if_equal this.slug ../this }}
-    <li class="flex gap-2 hover:underline"><span class="material-symbols-outlined">radio_button_unchecked</span>
-      <a class=" hover:underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
+    <li class="flex gap-2">
+      <span class="material-symbols-outlined">radio_button_unchecked</span>
+        <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
     </li>
+
     {{/if_equal}}
     {{/each}}
     {{/each}}
@@ -42,25 +42,81 @@
     {{#each this.files}}
     <li class="flex gap-2">
       <span class="material-symbols-outlined">radio_button_unchecked</span>
-      <a class=" hover:underline" href="#">{{this.description}}</a>
+      <a class="hover:!underline !no-underline" href="#">{{this.description}}</a>
     </li>
     {{/each}}
-    <br>
-    {{/each}}
+
+    {{/each}} 
   </ul>
+
 
   <h3>Teised kursused</h3>
   <ul>
     <li>
       {{#each courses}}
       {{#if_not_equal this.courseSlug ../path.courseSlug}}
-      <a class=" hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
+      <a class="hover:!underline !no-underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
       {{/if_not_equal}}
       {{/each}}
     </li>
   </ul>
+
+
+<!-- DROPDOWN MENÜÜ VARIANT -->
+
+  <section >
+    <div class="col">
+      <!-- Kuvab aine nime ja ainekoodi -->
+
+      <h3 class="text-xl mb-1">
+        {{#each courses}}
+          {{#if_equal this.courseSlug ../path.courseSlug}}
+          <a class="!no-underline hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}} ({{../this.courseCode}})</a>
+          {{/if_equal}}
+        {{/each}}</h3>
+
+      <div class="tabs">
+
+        <!-- Ainekursusest ja Hindamine lingid -->
+        {{#each docs}}
+        <div class="tab">
+          <label class="tab-label">
+            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a></label>
+        </div>
+        {{/each}}
+
+        <!-- Loengute pealkirjad ja lingid -->
+        {{#each loengud}}
+        <div class="tab">
+          <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
+          <label class="tab-label" for="chck{{@index}}">
+            <div class="flex gap-2">
+              <span class="material-symbols-outlined">check_circle</span>
+              <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+            </div>
+          </label>
+          
+          <!-- Teemade lingid -->
+          {{#each this.concepts}}
+            {{#each ../../concepts}}
+            <!-- Järgnev rida kuvab ainult sobiva loengu teemasid -->
+              {{#if_equal this.slug ../this }}
+              <div class="tab-content flex gap-2" >
+                <span class="material-symbols-outlined">radio_button_unchecked</span>
+                <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
+              </div>
+              {{/if_equal}}
+            {{/each}}
+          {{/each}}
+        </div>
+        {{/each}}
+
+      </div>
+    </div>
+  </section>
+
+
   </div>
-  
 
     
   <span
@@ -68,6 +124,5 @@
       class='material-symbols-outlined mt-[-1.5rem] lg:mt-auto text-4xl cursor-pointer lg:hidden'>
       close
   </span>
-
 
 </nav>
