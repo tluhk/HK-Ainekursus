@@ -1,6 +1,13 @@
-<nav class="sidebar flex justify-between items-start absolute lg:relative left-[-100vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full lg:w-auto  transition-all" id="sidebar">
+<nav class="sidebar flex flex-col items-start absolute lg:relative left-[-100vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full lg:w-auto  transition-all" id="sidebar">
 
-  <div>
+  <button onclick='closeSideMenu()' class="flex items-center ml-4 lg:hidden pt-4">
+    <i class="material-symbols-outlined lg:mt-auto cursor-pointer lg:hidden text-4xl" aria-hidden="true">arrow_circle_left</i>
+    <span class="font absolute left-[-1000]">Sulge</span>
+  </button>
+
+
+
+  <div class="px-8">
   <!-- this can be better :( -->
   <h3 class="text-xl mb-1">{{#each courses}}
       {{#if_equal this.courseSlug ../path.courseSlug}}
@@ -59,11 +66,9 @@
   
 
     
-  <span
-      onclick='closeSideMenu()'
-      class='material-symbols-outlined mt-[-1.5rem] lg:mt-auto text-4xl cursor-pointer lg:hidden'>
-      close
-  </span>
-
+  
 
 </nav>
+
+
+

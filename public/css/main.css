@@ -567,7 +567,6 @@ p {
 .sidebar {
   --tw-bg-opacity: 1;
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
-  padding: 2rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   --tw-text-opacity: 1;
@@ -637,12 +636,12 @@ p {
   position: sticky;
 }
 
-.right-8 {
-  right: 2rem;
-}
-
 .top-0 {
   top: 0px;
+}
+
+.right-8 {
+  right: 2rem;
 }
 
 .left-\[-1000\] {
@@ -665,16 +664,20 @@ p {
   left: -100vw;
 }
 
+.ml-4 {
+  margin-left: 1rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
 .mr-\[5rem\] {
   margin-right: 5rem;
-}
-
-.ml-4 {
-  margin-left: 1rem;
 }
 
 .mb-2 {
@@ -902,9 +905,9 @@ p {
   padding-right: 1rem;
 }
 
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .py-2 {
@@ -937,6 +940,15 @@ p {
   padding-bottom: 1rem;
 }
 
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
+}
+
 .pr-8 {
   padding-right: 2rem;
 }
@@ -947,10 +959,6 @@ p {
 
 .pl-8 {
   padding-left: 2rem;
-}
-
-.pt-4 {
-  padding-top: 1rem;
 }
 
 .pl-2 {
@@ -1183,5 +1191,9 @@ a {
 @media (min-width: 1536px) {
   .\32xl\:block {
     display: block;
+  }
+
+  .\32xl\:justify-between {
+    justify-content: space-between;
   }
 }
