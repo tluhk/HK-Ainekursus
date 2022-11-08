@@ -22,6 +22,31 @@
   .btn-secondary {
     @apply bg-secondary-500 hover:bg-secondary-600 text-white;
   }
+  /* accordion components */
+  .tabs {
+    @apply overflow-hidden;
+  }
+  .tab {
+    @apply overflow-hidden;
+  }
+  .tab-label {
+    @apply flex justify-between p-4 bg-primary-800 hover:bg-primary-900 font-bold cursor-pointer;
+  }
+  .tab-content {
+    @apply max-h-0 py-0 px-4 bg-primary-100 transition-all;
+  }
+  .tab-close {
+    @apply flex justify-end p-4 cursor-pointer bg-secondary-700 hover:bg-secondary-800;
+  }
+  input:checked + .tab-label {
+    @apply rotate-90;
+  }
+  input:checked ~ .tab-label {
+    @apply max-h-screen p-4;
+  }
+  .tab-label::after {
+    @apply content-['\276F'] w-4 h-4 text-center transition-all;
+  }
 }
 
 .material-symbols-outlined {
