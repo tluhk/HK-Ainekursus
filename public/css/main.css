@@ -565,6 +565,8 @@ p {
 }
 
 .sidebar {
+  top: 194px;
+  width: 18rem !important;
   --tw-bg-opacity: 1;
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
   font-size: 0.875rem;
@@ -576,6 +578,7 @@ p {
 
 @media (min-width: 1024px) {
   .sidebar {
+    top: 0px;
     height: 100%;
   }
 }
@@ -640,12 +643,12 @@ p {
   top: 0px;
 }
 
-.right-8 {
-  right: 2rem;
-}
-
 .left-\[-1000\] {
   left: -1000;
+}
+
+.right-8 {
+  right: 2rem;
 }
 
 .left-0 {
@@ -676,10 +679,6 @@ p {
   margin-top: 1rem;
 }
 
-.mr-\[5rem\] {
-  margin-right: 5rem;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -706,10 +705,6 @@ p {
 
 .mt-\[-2\.5rem\] {
   margin-top: -2.5rem;
-}
-
-.mt-\[-1\.5rem\] {
-  margin-top: -1.5rem;
 }
 
 .block {
@@ -756,10 +751,6 @@ p {
   min-height: 100vh;
 }
 
-.w-72 {
-  width: 18rem;
-}
-
 .w-4 {
   width: 1rem;
 }
@@ -786,10 +777,6 @@ p {
 
 .grow {
   flex-grow: 1;
-}
-
-.basis-2\/12 {
-  flex-basis: 16.666667%;
 }
 
 .basis-8\/12 {
@@ -822,10 +809,6 @@ p {
 
 .items-center {
   align-items: center;
-}
-
-.justify-end {
-  justify-content: flex-end;
 }
 
 .justify-center {
@@ -938,11 +921,6 @@ p {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.px-8 {
-  padding-left: 2rem;
-  padding-right: 2rem;
 }
 
 .pt-4 {
