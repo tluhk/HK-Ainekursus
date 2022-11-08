@@ -566,7 +566,6 @@ p {
 
 .sidebar {
   top: 194px;
-  width: 18rem !important;
   --tw-bg-opacity: 1;
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
   font-size: 0.875rem;
@@ -580,6 +579,12 @@ p {
   .sidebar {
     top: 0px;
     height: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sidebar {
+    width: 18rem !important;
   }
 }
 
