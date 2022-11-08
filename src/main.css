@@ -8,7 +8,7 @@
 
 @layer components {
   .sidebar {
-    @apply bg-brand_red text-white mobileheight lg:h-full text-sm top-[194px] lg:top-0 !w-72;
+    @apply bg-brand_red text-white mobileheight lg:h-full text-sm top-[194px] lg:top-0 xl:!w-72;
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
