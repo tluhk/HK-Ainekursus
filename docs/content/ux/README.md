@@ -18,4 +18,4 @@ Low-fi prototüüpide ja tagasiside baasil tegime esialgsed Hi-fi kavandid. Need
 
 Hi-fi prototüüp Figmas:
 
-![hi-fi](https://www.figma.com/file/xW1dnmDtbxcboAQoRy8KgP/Valikpraktika?node-id=0%3A1)
+https://www.figma.com/file/xW1dnmDtbxcboAQoRy8KgP/Valikpraktika?node-id=0%3A1
