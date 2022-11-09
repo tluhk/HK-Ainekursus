@@ -14,8 +14,7 @@ Low-fi prototüüpide ja tagasiside baasil tegime esialgsed Hi-fi kavandid. Need
 ![hi-fi](images/hi-fi-2.jpg)
 ![hi-fi](images/hi-fi-3.jpg)
 ![hi-fi](images/hi-fi-4.jpg)
-[<Tagasi](../../README.md)
-
 Hi-fi prototüüp Figmas:
 
 https://www.figma.com/file/xW1dnmDtbxcboAQoRy8KgP/Valikpraktika?node-id=0%3A1
+[<Tagasi](../../README.md)
