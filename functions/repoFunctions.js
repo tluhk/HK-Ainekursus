@@ -8,22 +8,22 @@ const repoDemo = require('../repos.json');
 module.exports = {
   requestCourses: 'https://api.github.com/orgs/tluhk/repos',
   requestConfig: (
-    (repoPath) => `${baseUrl}/repos/${repoPath}/${repoDemo.mainPath}/config.json`
+    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/config.json`
   ),
   requestDocs: (
-    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}.md`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}.md`
   ),
   requestLoengud: (
-    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/about.md`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/about.md`
   ),
   requestConcepts: (
-    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/about.md`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/about.md`
   ),
   requestSources: (
-    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/sources.json`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/sources.json`
   ),
   requestStaticURL: (
-    (opt) => `${baseUrl}/repos/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/images`
   ),
   /* requestFiles: (
     (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/loeng_01/files/${opt}`

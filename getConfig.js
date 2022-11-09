@@ -12,7 +12,7 @@ const getRepoResponse = async (selectedCourse) => {
   let response = '';
   try {
     response = await axios.get(requestConfig(selectedCourse), authToken);
-    updateRepoJSONFile(selectedCourse);
+    // updateRepoJSONFile(selectedCourse);
   } catch (err) {
     // Handle Error Here
     console.error(err);
