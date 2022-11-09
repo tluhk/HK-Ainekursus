@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 
 const { getConfig } = require('./getConfig');
-const { setRoutes } = require('./setActiveCourseRoutes');
 
 const setCoursesRoutes = async (app, allCourses) => {
   // *** ENDPOINTS ***
@@ -26,7 +25,6 @@ const setCoursesRoutes = async (app, allCourses) => {
 
     app.get(`/${course.courseSlug}`, async (req, res) => {
       const config = await getConfig(coursePathInGithub);
-      setRoutes(app, config, course, allCourses);
 
       res.render('home', {
         courseSlug,

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const express = require('express');
+const { promises } = require('fs');
 
 const { base64, utf8, MarkdownIt } = require('./setupMarkdown');
 const { axios, authToken } = require('./setupGithub');
@@ -52,9 +52,19 @@ function responseAction(
   });
 }
 
+const getImgPromises = async (coursePathInGithub, slug) => {
+  try {
+    const files = await axios.get(requestStaticURL(coursePathInGithub, slug), authToken);
+    // console.log('files1.data', files.data);
+    return files;
+  } catch (err) {
+    return console.log(err);
+  }
+};
+
 const setRoutes = async (app, config, course, allCourses) => {
   // *** ENDPOINTS ***
-  const { courseName, courseSlug } = course;
+  const { courseName, courseSlug, coursePathInGithub } = course;
 
   // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
   // Ainekursusest ja Hindamine endpointid
@@ -71,7 +81,7 @@ const setRoutes = async (app, config, course, allCourses) => {
 
     app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       axios
-        .get(requestDocs(`${elem.slug}`), authToken)
+        .get(requestDocs(coursePathInGithub, `${elem.slug}`), authToken)
         .then((response) => {
           responseAction(response, config, res, breadcrumbNames, path, allCourses);
         })
@@ -95,7 +105,7 @@ const setRoutes = async (app, config, course, allCourses) => {
 
     app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
       axios
-        .get(requestLoengud(`${elem.slug}`), authToken)
+        .get(requestLoengud(coursePathInGithub, `${elem.slug}`), authToken)
         .then((response) => {
           responseAction(response, config, res, breadcrumbNames, path, allCourses);
         })
@@ -118,11 +128,26 @@ const setRoutes = async (app, config, course, allCourses) => {
 
     // define folder for each concept's static files:
     // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
-    app.use(express.static(requestStaticURL(elem.slug)));
+    // app.use(express.static(requestStaticURL(elem.slug)));
 
-    app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
-      const concepts = axios.get(requestConcepts(`${elem.slug}`), authToken);
-      const sources = axios.get(requestSources(`${elem.slug}`), authToken);
+    app.get(`/${courseSlug}/${elem.slug}`, async (req, res) => {
+      const concepts = axios.get(requestConcepts(coursePathInGithub, `${elem.slug}`), authToken);
+      const sources = axios.get(requestSources(coursePathInGithub, `${elem.slug}`), authToken);
+
+      // app.use('images', express.static('https://api.github.com/tluhk/HK_Riistvara-alused/contents/concepts/arvuti/images'));
+
+      /* try {
+        const response = await getImgPromises(coursePathInGithub, elem.slug);
+        // console.log('response.data', response.data);
+        const responseData = response.data;
+        // console.log('data', responseData);
+
+        const files = [];
+        responseData.map((x) => files.push(x.download_url));
+        // console.log('files', files);
+      } catch (err) {
+        console.error(err);
+      } */
 
       axios
         .all([concepts, sources])
