@@ -21,7 +21,7 @@ Installeerimise järel tekivad juurkataloogi samad failid, mis eelneval lingil o
 
 ### Isikupärastamine
 
-Peamised seadistused tehakse `tailwind.js`-is.
+Peamised seadistused tehakse `tailwindconfig.js`-is.
 Tailwindi `Contendi`real tuleb ära näidata, millistes failides ja folderites asub stiilitav kood.  
 Siinse näite puhul: `content: ['./views/**/*.{handlebars,html,js}', './views/home.handlebars'],`
 Kui muuta midagi nendes failides ja seejärel käivitada Tailwindi kokkukirjutamiskäsklus, lisatakse sobiv osa css koodi stiilifaili.
