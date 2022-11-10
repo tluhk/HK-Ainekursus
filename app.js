@@ -23,7 +23,7 @@ liveReloadServer.server.once('connection', () => {
 const connectLivereload = require('connect-livereload');
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
-const handlebars = require('./helpers/handlebars')(exphbs);
+const handlebars = require('./src/helpers/handlebars')(exphbs);
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');

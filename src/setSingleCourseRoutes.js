@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
-const { promises } = require('fs');
+// const { promises } = require('fs');
 
-const { base64, utf8, MarkdownIt } = require('./setupMarkdown');
-const { axios, authToken } = require('./setupGithub');
+const { base64, utf8, MarkdownIt } = require('./setup/setupMarkdown');
+const { axios, authToken } = require('./setup/setupGithub');
 
 // Import request functions for Axios
 const {
@@ -10,7 +10,7 @@ const {
   requestLoengud,
   requestConcepts,
   requestSources,
-  requestStaticURL,
+  // requestStaticURL,
 } = require('./functions/repoFunctions');
 
 // Define what to do with Axios Response, how it is rendered
@@ -52,7 +52,7 @@ function responseAction(
   });
 }
 
-const getImgPromises = async (coursePathInGithub, slug) => {
+/* const getImgPromises = async (coursePathInGithub, slug) => {
   try {
     const files = await axios.get(requestStaticURL(coursePathInGithub, slug), authToken);
     // console.log('files1.data', files.data);
@@ -60,9 +60,9 @@ const getImgPromises = async (coursePathInGithub, slug) => {
   } catch (err) {
     return console.log(err);
   }
-};
+}; */
 
-const setRoutes = async (app, config, course, allCourses) => {
+const setSingleCourseRoutes = async (app, config, course, allCourses) => {
   // *** ENDPOINTS ***
   const { courseName, courseSlug, coursePathInGithub } = course;
 
@@ -174,4 +174,4 @@ const setRoutes = async (app, config, course, allCourses) => {
   });
 };
 
-module.exports = { setRoutes };
+module.exports = { setSingleCourseRoutes };

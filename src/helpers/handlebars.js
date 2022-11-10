@@ -11,8 +11,8 @@ const path = require('path');
 module.exports = function hbsHelpers(hbs) {
   return hbs.create({
     defaultLayout: 'main',
-    layoutsDir: path.join(__dirname, '..', '/views/layouts'),
-    partialsDir: path.join(__dirname, '..', '/views/partials'),
+    layoutsDir: path.join(__dirname, '../..', '/views/layouts'),
+    partialsDir: path.join(__dirname, '../..', '/views/partials'),
     helpers: {
       if_equal: (a, b, opts) => {
         if (a === b) {

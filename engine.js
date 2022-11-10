@@ -1,22 +1,22 @@
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
 
-const { getAllCourses } = require('./getAllCourses');
-const { getConfig } = require('./getConfig');
-const { setRoutes } = require('./setActiveCourseRoutes');
-const { setCoursesRoutes } = require('./setAllCoursesRoutes');
+const { getAllCourses } = require('./src/getAllCourses');
+const { getConfig } = require('./src/getConfig');
+const { setSingleCourseRoutes } = require('./src/setSingleCourseRoutes');
+const { setAllCoursesRoutes } = require('./src/setAllCoursesRoutes');
 
 const engine = async (app) => {
   const allCourses = await getAllCourses();
   // console.log('allCourses', allCourses);
 
   // Määra Kõik Kursused routimine
-  setCoursesRoutes(app, allCourses);
+  setAllCoursesRoutes(app, allCourses);
 
   // Määra Kursuse-sisene ruutimine
   allCourses.forEach(async (course) => {
     const config = await getConfig(course.coursePathInGithub);
-    setRoutes(app, config, course, allCourses);
+    setSingleCourseRoutes(app, config, course, allCourses);
   });
 };
 

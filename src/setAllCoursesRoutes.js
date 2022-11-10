@@ -2,7 +2,7 @@
 
 const { getConfig } = require('./getConfig');
 
-const setCoursesRoutes = async (app, allCourses) => {
+const setAllCoursesRoutes = async (app, allCourses) => {
   // *** ENDPOINTS ***
 
   app.get('/', (req, res) => {
@@ -39,4 +39,4 @@ const setCoursesRoutes = async (app, allCourses) => {
   });
 };
 
-module.exports = { setCoursesRoutes };
+module.exports = { setAllCoursesRoutes };

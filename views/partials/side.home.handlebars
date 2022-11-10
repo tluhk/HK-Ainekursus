@@ -8,66 +8,6 @@
 
 
   <div class="px-4">
-  <!-- this can be better :( -->
-  <h3 class="text-xl mb-1">{{#each courses}}
-      {{#if_equal this.courseSlug ../path.courseSlug}}
-      <a class="!no-underline hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
-      {{/if_equal}}
-      {{/each}}</h3>
-
-  <ul>
-    <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
-    
-    <!-- Ainekursusest ja Hindamine lingid -->
-    {{#each docs}}
-    <li class="flex gap-2">
-      <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
-    </li>
-    {{/each}}
-
-    <!-- Loengute lingid -->
-    {{#each loengud}}
-    <li class="flex gap-2">
-      <span class="material-symbols-outlined">check_circle</span>
-      <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
-    </li>
-
-    <!-- Teemade lingid -->
-    {{#each this.concepts}}
-    <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
-    {{#each ../../concepts}}
-    {{#if_equal this.slug ../this }}
-    <li class="flex gap-2">
-      <span class="material-symbols-outlined">radio_button_unchecked</span>
-        <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
-    </li>
-
-    {{/if_equal}}
-    {{/each}}
-    {{/each}}
-
-    {{#each this.files}}
-    <li class="flex gap-2">
-      <span class="material-symbols-outlined">radio_button_unchecked</span>
-      <a class="hover:!underline !no-underline" href="#">{{this.description}}</a>
-    </li>
-    {{/each}}
-
-    {{/each}} 
-  </ul>
-
-
-  <h3>Teised kursused</h3>
-  <ul>
-    <li>
-      {{#each courses}}
-      {{#if_not_equal this.courseSlug ../path.courseSlug}}
-      <a class="hover:!underline !no-underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
-      {{/if_not_equal}}
-      {{/each}}
-    </li>
-  </ul>
-
 
 <!-- DROPDOWN MENÜÜ VARIANT -->
 
@@ -121,6 +61,68 @@
       </div>
     </div>
   </section>
+
+  <h3>Teised kursused</h3>
+  <ul>
+    <li>
+      {{#each courses}}
+      {{#if_not_equal this.courseSlug ../path.courseSlug}}
+      <a class="hover:!underline !no-underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
+      {{/if_not_equal}}
+      {{/each}}
+    </li>
+  </ul>
+
+
+<!-- VANA MENÜÜ VARIANT -->
+
+<!-- this can be better :( -->
+  <h3 class="text-xl mb-1">{{#each courses}}
+      {{#if_equal this.courseSlug ../path.courseSlug}}
+      <a class="!no-underline hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
+      {{/if_equal}}
+      {{/each}}</h3>
+
+  <ul>
+    <!-- Järgnevalt loetakse "docs", "loengud" ja "concepts" arraysid app.js failist, mis antakse iga res.render() funktsiooniga kaasa.  -->
+    
+    <!-- Ainekursusest ja Hindamine lingid -->
+    {{#each docs}}
+    <li class="flex gap-2">
+      <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+    </li>
+    {{/each}}
+
+    <!-- Loengute lingid -->
+    {{#each loengud}}
+    <li class="flex gap-2">
+      <span class="material-symbols-outlined">check_circle</span>
+      <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+    </li>
+
+    <!-- Teemade lingid -->
+    {{#each this.concepts}}
+    <!-- https://stackoverflow.com/questions/14059157/handlebars-js-each-loop-inside-another-each-loop-3 -->
+    {{#each ../../concepts}}
+    {{#if_equal this.slug ../this }}
+    <li class="flex gap-2">
+      <span class="material-symbols-outlined">radio_button_unchecked</span>
+        <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
+    </li>
+
+    {{/if_equal}}
+    {{/each}}
+    {{/each}}
+
+    {{#each this.files}}
+    <li class="flex gap-2">
+      <span class="material-symbols-outlined">radio_button_unchecked</span>
+      <a class="hover:!underline !no-underline" href="#">{{this.description}}</a>
+    </li>
+    {{/each}}
+
+    {{/each}} 
+  </ul>
 
 
   </div>

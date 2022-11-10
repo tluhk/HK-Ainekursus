@@ -1,4 +1,4 @@
-const { axios, authToken } = require('./setupGithub');
+const { axios, authToken } = require('./setup/setupGithub');
 const { requestCourses } = require('./functions/repoFunctions');
 const { getConfig } = require('./getConfig');
 

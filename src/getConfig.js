@@ -1,7 +1,7 @@
 const base64 = require('base-64');
 const utf8 = require('utf8');
-const { axios, authToken } = require('./setupGithub');
-const { updateRepoJSONFile } = require('./functions/updateRepoJSONFile');
+const { axios, authToken } = require('./setup/setupGithub');
+// const { updateRepoJSONFile } = require('./functions/updateRepoJSONFile');
 
 // Import request functions for Axios
 const {
