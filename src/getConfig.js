@@ -1,7 +1,6 @@
 const base64 = require('base-64');
 const utf8 = require('utf8');
 const { axios, authToken } = require('./setup/setupGithub');
-// const { updateRepoJSONFile } = require('./functions/updateRepoJSONFile');
 
 // Import request functions for Axios
 const {
@@ -12,7 +11,6 @@ const getRepoResponse = async (selectedCourse) => {
   let response = '';
   try {
     response = await axios.get(requestConfig(selectedCourse), authToken);
-    // updateRepoJSONFile(selectedCourse);
   } catch (err) {
     // Handle Error Here
     console.error(err);

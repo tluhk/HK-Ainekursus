@@ -25,6 +25,7 @@ module.exports = function hbsHelpers(hbs) {
         } return opts.inverse(this);
       },
       SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
+      last: (array) => array[array.length - 1],
       /*
       link: (filename, desc) => {
         // handlebars faili:

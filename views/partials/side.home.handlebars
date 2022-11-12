@@ -33,7 +33,7 @@
         {{/each}}
 
         <!-- Loengute pealkirjad ja lingid -->
-        {{#each loengud}}
+        {{#each lessons}}
         <div class="tab">
           <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
           <label class="tab-label" for="chck{{@index}}">
@@ -94,7 +94,7 @@
     {{/each}}
 
     <!-- Loengute lingid -->
-    {{#each loengud}}
+    {{#each lessons}}
     <li class="flex gap-2">
       <span class="material-symbols-outlined">check_circle</span>
       <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>

@@ -13,6 +13,19 @@ const {
   // requestStaticURL,
 } = require('./functions/repoFunctions');
 
+const returnPreviousPage = (currentPage, paths) => {
+  const currentIndex = paths.indexOf(currentPage);
+  if (currentIndex !== 0) {
+    return paths[currentIndex - 1];
+  } return currentPage;
+};
+const returnNextPage = (currentPage, paths) => {
+  const currentIndex = paths.indexOf(currentPage);
+  if (currentIndex !== paths.lenght - 1) {
+    return paths[currentIndex + 1];
+  } return currentPage;
+};
+
 // Define what to do with Axios Response, how it is rendered
 function responseAction(
   resConcepts,
@@ -21,6 +34,7 @@ function responseAction(
   breadcrumbNames,
   path,
   allCourses,
+  singleCoursePaths,
   ...options
 ) {
   const concepts = resConcepts.data;
@@ -44,11 +58,14 @@ function responseAction(
     content: conceptsMarkdown,
     docs: config.docs,
     concepts: config.concepts,
-    loengud: config.loengud,
+    lessons: config.lessons,
     sources: sourcesJSON,
     breadcrumb: breadcrumbNames,
     path,
+    singleCoursePaths,
     courses: allCourses,
+    returnPreviousPage,
+    returnNextPage,
   });
 }
 
@@ -65,6 +82,27 @@ function responseAction(
 const setSingleCourseRoutes = async (app, config, course, allCourses) => {
   // *** ENDPOINTS ***
   const { courseName, courseSlug, coursePathInGithub } = course;
+
+  // For Forward/Back buttons, push all possible paths in one course to an Array:
+  const singleCoursePaths = [];
+  // Comment out config.docs.map() if you don't want to show buttons on Ainekursusest and Hindamine pages
+  config.docs.map((x) => {
+    singleCoursePaths.push(x.slug);
+    return true;
+  });
+  config.lessons.map((x) => {
+    singleCoursePaths.push(x.slug);
+    x.concepts.map((y) => {
+      singleCoursePaths.push(y);
+      return true;
+    });
+    return true;
+  });
+
+  /* const lessons = course.lessons;
+  console.log('lessonIndex:', lessons);
+  const lessonConcepts = course.lessons.concepts;
+  console.log('lessonConcepts:', lessonConcepts); */
 
   // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
   // Ainekursusest ja Hindamine endpointid
@@ -83,7 +121,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       axios
         .get(requestDocs(coursePathInGithub, `${elem.slug}`), authToken)
         .then((response) => {
-          responseAction(response, config, res, breadcrumbNames, path, allCourses);
+          responseAction(response, config, res, breadcrumbNames, path, allCourses, singleCoursePaths);
         })
         .catch((error) => {
           console.log(error);
@@ -92,7 +130,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
   });
 
   // Loengute endpointid
-  config.loengud.forEach((elem) => {
+  config.lessons.forEach((elem) => {
     // console.log('elem.slug:', elem.slug);
     const breadcrumbNames = {
       courseName,
@@ -107,7 +145,15 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       axios
         .get(requestLoengud(coursePathInGithub, `${elem.slug}`), authToken)
         .then((response) => {
-          responseAction(response, config, res, breadcrumbNames, path, allCourses);
+          responseAction(
+            response,
+            config,
+            res,
+            breadcrumbNames,
+            path,
+            allCourses,
+            singleCoursePaths,
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -125,6 +171,9 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       courseSlug,
       contentSlug: elem.slug,
     };
+    /* console.log('prevConceptIndex', prevConceptIndex);
+    console.log('nextConceptIndex', nextConceptIndex);
+    console.log('conceptsLength', conceptsLength); */
 
     // define folder for each concept's static files:
     // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
@@ -163,6 +212,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
               breadcrumbNames,
               path,
               allCourses,
+              singleCoursePaths,
               resSources,
             );
           }),
