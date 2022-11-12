@@ -34,11 +34,19 @@
       </ul>
     </div>
   {{/if}}
+  
+  <br> <br>
 
-  <br />
   <div class='flex gap-4'>
-    <button type='button' class='btn btn-secondary'>Eelmine</button>
-    <button type='button' class='btn btn-primary'>Märgi läbituks (liigu edasi)</button>
+    {{#if_not_equal path.contentSlug singleCoursePaths.[0] }}
+      <input type="button" class="btn btn-secondary" 
+      onclick="location.href='{{../returnPreviousPage ../path.contentSlug ../singleCoursePaths}}';" 
+      value="Eelmine leht" />
+    {{/if_not_equal }}
+
+    {{#if_not_equal path.contentSlug (last singleCoursePaths) }}
+      <input type="button" class="btn btn-primary" onclick="location.href='{{../returnNextPage ../path.contentSlug ../singleCoursePaths}}';" value="Järgmine leht" />
+    {{/if_not_equal }}
   </div>
 
 </div>

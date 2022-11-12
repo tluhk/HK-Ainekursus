@@ -13,12 +13,13 @@ const getAllCourses = (async () => {
   const map1 = filter1.map((y) => {
     const coursePromise = (param) => getConfig(param.full_name)
       .then((result) => ({
-        courseName: result.aine_nimi,
+        courseName: result.courseName,
         courseSlug: result.slug,
         courseSlugInGithub: y.name,
         coursePathInGithub: y.full_name,
-        courseCode: result.aine_kood,
-        courseCardUrl: result.ainekaart_url,
+        courseCode: result.courseCode,
+        courseCardUrl: result.courseUrl,
+        courseIsActive: result.active,
       }));
 
     return coursePromise(y);

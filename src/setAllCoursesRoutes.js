@@ -30,7 +30,7 @@ const setAllCoursesRoutes = async (app, allCourses) => {
         courseSlug,
         docs: config.docs,
         concepts: config.concepts,
-        loengud: config.loengud,
+        lessons: config.lessons,
         courses: allCourses,
         breadcrumb: breadcrumbNames,
         path,
