@@ -34,9 +34,14 @@
       </ul>
     </div>
   {{/if}}
+
+  {{#if_equal path.contentSlug 'about'}}
+  <b>Ainekava: </b><a href='{{../config.courseUrl}}' target='_blank'>{{../config.courseName}} ({{../config.courseCode}})</a>
+  {{/if_equal}}
   
   <br> <br>
 
+  {{#if path.contentSlug }}
   <div class='flex gap-4'>
     {{#if_not_equal path.contentSlug singleCoursePaths.[0] }}
       <input type="button" class="btn btn-secondary" 
@@ -48,5 +53,6 @@
       <input type="button" class="btn btn-primary" onclick="location.href='{{../returnNextPage ../path.contentSlug ../singleCoursePaths}}';" value="Järgmine leht" />
     {{/if_not_equal }}
   </div>
+  {{/if }}
 
 </div>

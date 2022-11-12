@@ -31,6 +31,10 @@
             <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a></label>
         </div>
         {{/each}}
+        <div class="tab">
+          <label class="tab-label">
+            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">Viited materjalidele</a></label>
+        </div>
 
         <!-- Loengute pealkirjad ja lingid -->
         {{#each lessons}}
@@ -55,6 +59,10 @@
               {{/if_equal}}
             {{/each}}
           {{/each}}
+
+          <div class="tab-content flex gap-2" >
+                <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">Viited materjalidele</a>
+              </div>
         </div>
         {{/each}}
 

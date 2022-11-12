@@ -66,6 +66,7 @@ function responseAction(
     courses: allCourses,
     returnPreviousPage,
     returnNextPage,
+    config,
   });
 }
 
