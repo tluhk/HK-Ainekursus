@@ -32,7 +32,8 @@
         ">
           <label class="tab-label">
             <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-                <!-- {{../path.contentSlug}}
+<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab" menüüelemendi nime järel:
+                {{../path.contentSlug}}
                 {{this.slug}} -->
                 {{#if_equal this.slug ../path.contentSlug }} 
                   active-tab
@@ -50,7 +51,8 @@
         ">
           <label class="tab-label">
             <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-                <!-- {{../path.fullPath}}
+<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab" menüüelemendi nime järel:
+                {{../path.fullPath}}
                 {{this.slug}} -->
                 {{#if_equal this.slug ../path.fullPath }} 
                   active-tab
@@ -71,7 +73,8 @@
             <div class="flex gap-2">
               <span class="material-symbols-outlined">check_circle</span>
               <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-                  <!-- {{../path.contentSlug}}
+<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab" menüüelemendi nime järel:
+                  {{../path.contentSlug}}
                   {{this.slug}} -->
                   {{#if_equal this.slug ../path.contentSlug }} 
                     active-tab
@@ -98,7 +101,8 @@
                 {{/each }}
                 </a>
              </div>
-                  <!-- {{../../path.fullPath}}
+<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab-content" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab-content" menüüelemendi nime järel:
+                  {{../../path.fullPath}}
                   {{concatActivePath ../this.slug this}} -->
                   {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }} 
                     active-tab-content
@@ -115,7 +119,8 @@
             ">
               <a class="hover:!underline !no-underline" 
               href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
-                  <!-- {{../../path.fullPath}}
+<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab-content" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab-content" menüüelemendi nime järel:
+                  {{../../path.fullPath}}
                   {{concatActivePath ../this.slug this.slug}} -->
                   {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
                     active-tab-content
