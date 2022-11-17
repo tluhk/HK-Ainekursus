@@ -6,7 +6,6 @@
   </button>
 
 
-
   <div class="px-4">
 
 <!-- DROPDOWN MENÜÜ VARIANT -->
@@ -26,34 +25,68 @@
 
         <!-- Ainekursusest ja Hindamine lingid -->
         {{#each docs}}
-        <div class="tab">
+        <div class="tab 
+          {{#if_equal this.slug ../path.contentSlug }} 
+            active-tab 
+          {{/if_equal }}
+        ">
           <label class="tab-label">
-            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a></label>
+            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+                <!-- {{../path.contentSlug}}
+                {{this.slug}} -->
+                {{#if_equal this.slug ../path.contentSlug }} 
+                  active-tab
+                {{/if_equal }}
+            </a></label>
         </div>
         {{/each}}
 
         <!-- Aine lisamaterjali link -->
         {{#each additionalMaterials}}
-        <div class="tab">
+        <div class="tab
+          {{#if_equal this.slug ../path.fullPath }} 
+            active-tab
+          {{/if_equal }}
+        ">
           <label class="tab-label">
-            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a></label>
+            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+                <!-- {{../path.fullPath}}
+                {{this.slug}} -->
+                {{#if_equal this.slug ../path.fullPath }} 
+                  active-tab
+                {{/if_equal }}
+            </a></label>
         </div>
         {{/each}}
 
         <!-- Loengute pealkirjad ja lingid -->
         {{#each lessons}}
-        <div class="tab">
+        <div class="tab
+          {{#if_equal this.slug ../path.contentSlug }} 
+            active-tab
+          {{/if_equal }}
+        ">
           <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
           <label class="tab-label" for="chck{{@index}}">
             <div class="flex gap-2">
               <span class="material-symbols-outlined">check_circle</span>
-              <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+              <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+                  <!-- {{../path.contentSlug}}
+                  {{this.slug}} -->
+                  {{#if_equal this.slug ../path.contentSlug }} 
+                    active-tab
+                  {{/if_equal }}
+              </a>
             </div>
           </label>
           
           <!-- Teemade lingid -->
           {{#each this.concepts}}
-            <div class="tab-content flex gap-2" >
+            <div class="tab-content flex gap-2
+              {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
+                active-tab-content
+              {{/if_equal }}
+            " >
               <div class="flex gap-2" >
                 <span class="material-symbols-outlined">radio_button_unchecked</span>
                 <a class="hover:!underline !no-underline" 
@@ -65,14 +98,28 @@
                 {{/each }}
                 </a>
              </div>
+                  <!-- {{../../path.fullPath}}
+                  {{concatActivePath ../this.slug this}} -->
+                  {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }} 
+                    active-tab-content
+                  {{/if_equal }}
             </div>
           {{/each}}
 
           <!-- Loengu lisamaterjali link -->
           {{#each this.additionalMaterials}}
-            <div class="tab-content flex gap-2" >
+            <div class="tab-content flex gap-2
+              {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
+                active-tab-content
+              {{/if_equal }}
+            ">
               <a class="hover:!underline !no-underline" 
               href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
+                  <!-- {{../../path.fullPath}}
+                  {{concatActivePath ../this.slug this.slug}} -->
+                  {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
+                    active-tab-content
+                  {{/if_equal }}
             </div>
           {{/each}}
 

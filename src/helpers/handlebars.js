@@ -26,6 +26,7 @@ module.exports = function hbsHelpers(hbs) {
       },
       SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
       last: (array) => array[array.length - 1].path,
+      concatActivePath: (arg1, arg2) => `${arg1}/${arg2}`,
       /* ifIn: (elem, objects) => {
         console.log('objects', objects);
         const index = objects.findIndex((object) => object.path === elem);
