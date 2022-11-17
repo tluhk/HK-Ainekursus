@@ -25,7 +25,15 @@ module.exports = function hbsHelpers(hbs) {
         } return opts.inverse(this);
       },
       SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
-      last: (array) => array[array.length - 1],
+      last: (array) => array[array.length - 1].path,
+      /* ifIn: (elem, objects) => {
+        console.log('objects', objects);
+        const index = objects.findIndex((object) => object.path === elem);
+        if (index > -1) {
+          return true;
+        }
+        return false;
+      }, */
       /*
       link: (filename, desc) => {
         // handlebars faili:

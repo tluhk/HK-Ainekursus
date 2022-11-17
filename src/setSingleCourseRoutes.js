@@ -10,20 +10,25 @@ const {
   requestLoengud,
   requestConcepts,
   requestSources,
+  requestCourseAdditionalMaterials,
+  requestLessonAdditionalMaterials,
   // requestStaticURL,
 } = require('./functions/repoFunctions');
 
-const returnPreviousPage = (currentPage, paths) => {
-  const currentIndex = paths.indexOf(currentPage);
+const returnPreviousPage = (currentPath, paths) => {
+  // console.log('paths', paths);
+  // console.log('currentPath', currentPath);
+  const currentIndex = paths.findIndex((object) => object.path === currentPath);
+  // console.log('currentIndex', currentIndex);
   if (currentIndex !== 0) {
-    return paths[currentIndex - 1];
-  } return currentPage;
+    return paths[currentIndex - 1].path;
+  } return currentPath;
 };
-const returnNextPage = (currentPage, paths) => {
-  const currentIndex = paths.indexOf(currentPage);
+const returnNextPage = (currentPath, paths) => {
+  const currentIndex = paths.findIndex((object) => object.path === currentPath);
   if (currentIndex !== paths.lenght - 1) {
-    return paths[currentIndex + 1];
-  } return currentPage;
+    return paths[currentIndex + 1].path;
+  } return currentPath;
 };
 
 // Define what to do with Axios Response, how it is rendered
@@ -57,6 +62,7 @@ function responseAction(
   res.render('home', {
     content: conceptsMarkdown,
     docs: config.docs,
+    additionalMaterials: config.additionalMaterials,
     concepts: config.concepts,
     lessons: config.lessons,
     sources: sourcesJSON,
@@ -87,25 +93,32 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
   // For Forward/Back buttons, push all possible paths in one course to an Array:
   const singleCoursePaths = [];
   // Comment out config.docs.map() if you don't want to show buttons on Ainekursusest and Hindamine pages
-  config.docs.map((x) => {
-    singleCoursePaths.push(x.slug);
-    return true;
-  });
+  config.docs.map((x) => singleCoursePaths.push({
+    path: x.slug,
+  }));
+  config.additionalMaterials.map((x) => singleCoursePaths.push({
+    path: x.slug,
+  }));
   config.lessons.map((x) => {
-    singleCoursePaths.push(x.slug);
-    x.concepts.map((y) => {
-      singleCoursePaths.push(y);
-      return true;
+    singleCoursePaths.push({
+      path: x.slug,
     });
+    x.concepts.map((y) => singleCoursePaths.push({
+      path: `${x.slug}/${y}`,
+    }));
+    x.additionalMaterials.map((z) => singleCoursePaths.push({
+      path: `${x.slug}/${z.slug}`,
+    }));
+    // console.log('singleCoursePaths:', singleCoursePaths);
     return true;
   });
 
-  /* const lessons = course.lessons;
-  console.log('lessonIndex:', lessons);
-  const lessonConcepts = course.lessons.concepts;
-  console.log('lessonConcepts:', lessonConcepts); */
-
+  /*
+  courseSlug,
+  contentSlug,
+  conceptSlug */
   // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
+
   // Ainekursusest ja Hindamine endpointid
   config.docs.forEach((elem) => {
     // console.log('elem.slug:', elem.slug);
@@ -116,11 +129,36 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     const path = {
       courseSlug,
       contentSlug: elem.slug,
+      fullPath: elem.slug,
     };
 
-    app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
+    app.get(`/${courseSlug}/${path.contentSlug}`, (req, res) => {
       axios
-        .get(requestDocs(coursePathInGithub, `${elem.slug}`), authToken)
+        .get(requestDocs(coursePathInGithub, `${path.contentSlug}`), authToken)
+        .then((response) => {
+          responseAction(response, config, res, breadcrumbNames, path, allCourses, singleCoursePaths);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  });
+
+  // Aine lisamaterjalid endpoint
+  config.additionalMaterials.forEach((mat) => {
+    const breadcrumbNames = {
+      courseName,
+      contentName: mat.name,
+    };
+    const path = {
+      courseSlug,
+      contentSlug: mat.slug,
+      fullPath: mat.slug,
+    };
+
+    app.get(`/${courseSlug}/${path.contentSlug}`, (req, res) => {
+      axios
+        .get(requestCourseAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken)
         .then((response) => {
           responseAction(response, config, res, breadcrumbNames, path, allCourses, singleCoursePaths);
         })
@@ -131,20 +169,21 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
   });
 
   // Loengute endpointid
-  config.lessons.forEach((elem) => {
+  config.lessons.forEach((lesson) => {
     // console.log('elem.slug:', elem.slug);
     const breadcrumbNames = {
       courseName,
-      contentName: elem.name,
+      contentName: lesson.name,
     };
     const path = {
       courseSlug,
-      contentSlug: elem.slug,
+      contentSlug: lesson.slug,
+      fullPath: lesson.slug,
     };
 
-    app.get(`/${courseSlug}/${elem.slug}`, (req, res) => {
+    app.get(`/${courseSlug}/${path.contentSlug}`, (req, res) => {
       axios
-        .get(requestLoengud(coursePathInGithub, `${elem.slug}`), authToken)
+        .get(requestLoengud(coursePathInGithub, `${path.contentSlug}`), authToken)
         .then((response) => {
           responseAction(
             response,
@@ -162,6 +201,97 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     });
   });
 
+  // Loengu lisamaterjalid endpoint
+  config.lessons.forEach((lesson) => {
+    lesson.additionalMaterials.map((mat) => {
+      const breadcrumbNames = {
+        courseName,
+        contentName: lesson.name,
+        conceptName: mat.name,
+      };
+      const path = {
+        courseSlug,
+        contentSlug: lesson.slug,
+        conceptSlug: mat.slug,
+        fullPath: `${lesson.slug}/${mat.slug}`,
+      };
+
+      return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, (req, res) => {
+        axios
+          .get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken)
+          .then((response) => {
+            responseAction(
+              response,
+              config,
+              res,
+              breadcrumbNames,
+              path,
+              allCourses,
+              singleCoursePaths,
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    });
+  });
+
+  // Loengu concepts endpointid
+  config.lessons.forEach((lesson) => {
+    lesson.concepts.map((concept) => {
+      const conceptInfo = config.concepts.find((x) => x.slug === concept);
+      const breadcrumbNames = {
+        courseName,
+        contentName: lesson.name,
+        conceptName: conceptInfo.name,
+      };
+      const path = {
+        courseSlug,
+        contentSlug: lesson.slug,
+        conceptSlug: conceptInfo.slug,
+        fullPath: `${lesson.slug}/${conceptInfo.slug}`,
+      };
+
+      return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, async (req, res) => {
+        const concepts = await axios.get(requestConcepts(coursePathInGithub, `${path.conceptSlug}`), authToken);
+        const sources = await axios.get(requestSources(coursePathInGithub, `${path.conceptSlug}`), authToken);
+
+        /* console.log('concept', concept);
+        console.log('conceptInfo', conceptInfo);
+        console.log('breadcrumbNames:', breadcrumbNames);
+        console.log('path:', path); */
+
+        axios
+          .all([concepts, sources])
+          .then(
+            axios.spread((...responses) => {
+              const resConcepts = responses[0];
+              const resSources = responses[1];
+
+              responseAction(
+                resConcepts,
+                config,
+                res,
+                breadcrumbNames,
+                path,
+                allCourses,
+                singleCoursePaths,
+                resSources,
+              );
+            }),
+          )
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    });
+  });
+};
+
+module.exports = { setSingleCourseRoutes };
+
+/*
   // Teemade endpointid
   config.concepts.forEach((elem) => {
     const breadcrumbNames = {
@@ -172,10 +302,6 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       courseSlug,
       contentSlug: elem.slug,
     };
-    /* console.log('prevConceptIndex', prevConceptIndex);
-    console.log('nextConceptIndex', nextConceptIndex);
-    console.log('conceptsLength', conceptsLength); */
-
     // define folder for each concept's static files:
     // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
     // app.use(express.static(requestStaticURL(elem.slug)));
@@ -198,7 +324,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       } catch (err) {
         console.error(err);
       } */
-
+/*
       axios
         .all([concepts, sources])
         .then(
@@ -223,6 +349,4 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         });
     });
   });
-};
-
-module.exports = { setSingleCourseRoutes };
+  */
