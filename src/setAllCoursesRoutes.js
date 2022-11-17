@@ -29,6 +29,7 @@ const setAllCoursesRoutes = async (app, allCourses) => {
       res.render('home', {
         courseSlug,
         docs: config.docs,
+        additionalMaterials: config.additionalMaterials,
         concepts: config.concepts,
         lessons: config.lessons,
         courses: allCourses,

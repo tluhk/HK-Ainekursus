@@ -13,8 +13,14 @@ module.exports = {
   requestDocs: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}.md`
   ),
+  requestCourseAdditionalMaterials: (
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/about.md`
+  ),
   requestLoengud: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/about.md`
+  ),
+  requestLessonAdditionalMaterials: (
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/lisamaterjalid/about.md`
   ),
   requestConcepts: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/about.md`

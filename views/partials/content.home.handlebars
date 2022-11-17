@@ -14,6 +14,13 @@
         href='/{{path.courseSlug}}/{{path.contentSlug}}'
       >{{breadcrumb.contentName}}</a>
     {{/if}}
+    {{#if breadcrumb.conceptName}}
+      >
+      <a
+        class='hover:underline'
+        href='/{{path.courseSlug}}/{{path.contentSlug}}/{{path.conceptSlug}}'
+      >{{breadcrumb.conceptName}}</a>
+    {{/if}}
   </div>
 
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
@@ -40,19 +47,27 @@
   {{/if_equal}}
   
   <br> <br>
+  <!-- 
+  {{singleCoursePaths }}
+  {{path.fullPath }} 
+  -->
 
-  {{#if path.contentSlug }}
+  {{#if singleCoursePaths }}
   <div class='flex gap-4'>
-    {{#if_not_equal path.contentSlug singleCoursePaths.[0] }}
+    {{#if_not_equal path.fullPath singleCoursePaths.[0].path }}
       <input type="button" class="btn btn-secondary" 
-      onclick="location.href='{{../returnPreviousPage ../path.contentSlug ../singleCoursePaths}}';" 
+      onclick="location.href='/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
       value="Eelmine leht" />
     {{/if_not_equal }}
 
-    {{#if_not_equal path.contentSlug (last singleCoursePaths) }}
-      <input type="button" class="btn btn-primary" onclick="location.href='{{../returnNextPage ../path.contentSlug ../singleCoursePaths}}';" value="Järgmine leht" />
+    {{#if_not_equal path.fullPath (last singleCoursePaths) }}
+      <input type="button" class="btn btn-primary" onclick="location.href='/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine leht" />
     {{/if_not_equal }}
   </div>
   {{/if }}
 
 </div>
+
+<!--
+  (ifIn ../path.fullPath ../
+  -->

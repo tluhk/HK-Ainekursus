@@ -31,10 +31,14 @@
             <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a></label>
         </div>
         {{/each}}
+
+        <!-- Aine lisamaterjali link -->
+        {{#each additionalMaterials}}
         <div class="tab">
           <label class="tab-label">
-            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">Viited materjalidele</a></label>
+            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a></label>
         </div>
+        {{/each}}
 
         <!-- Loengute pealkirjad ja lingid -->
         {{#each lessons}}
@@ -49,20 +53,29 @@
           
           <!-- Teemade lingid -->
           {{#each this.concepts}}
-            {{#each ../../concepts}}
-            <!-- Järgnev rida kuvab ainult sobiva loengu teemasid -->
-              {{#if_equal this.slug ../this }}
-              <div class="tab-content flex gap-2" >
+            <div class="tab-content flex gap-2" >
+              <div class="flex gap-2" >
                 <span class="material-symbols-outlined">radio_button_unchecked</span>
-                <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">{{../this.name}}</a>
-              </div>
-              {{/if_equal}}
-            {{/each}}
+                <a class="hover:!underline !no-underline" 
+                href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
+                {{#each ../../concepts}}
+                  {{#if_equal this.slug ../this}}
+                    {{../this.name}}
+                  {{/if_equal}}
+                {{/each }}
+                </a>
+             </div>
+            </div>
           {{/each}}
 
-          <div class="tab-content flex gap-2" >
-                <a class="hover:!underline !no-underline" href="/{{../../../../path.courseSlug}}/{{../this.slug}}">Viited materjalidele</a>
-              </div>
+          <!-- Loengu lisamaterjali link -->
+          {{#each this.additionalMaterials}}
+            <div class="tab-content flex gap-2" >
+              <a class="hover:!underline !no-underline" 
+              href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
+            </div>
+          {{/each}}
+
         </div>
         {{/each}}
 
@@ -120,13 +133,6 @@
 
     {{/if_equal}}
     {{/each}}
-    {{/each}}
-
-    {{#each this.files}}
-    <li class="flex gap-2">
-      <span class="material-symbols-outlined">radio_button_unchecked</span>
-      <a class="hover:!underline !no-underline" href="#">{{this.description}}</a>
-    </li>
     {{/each}}
 
     {{/each}} 
