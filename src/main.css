@@ -14,7 +14,7 @@
     @apply top-[194px] lg:top-0 left-0 z-10;
   }
   .btn {
-    @apply py-2 px-4 rounded-full;
+    @apply py-2 px-4 rounded-full cursor-pointer;
   }
   .btn-primary {
     @apply bg-primary-700 hover:bg-primary-800 text-white;
@@ -39,9 +39,11 @@
   .tab-content {
     @apply max-h-0 py-0 px-4 bg-primary-100 text-secondary-900 transition-all;
   }
+  .active-tab .tab-label,
   input:checked + .tab-label {
     @apply bg-primary-600;
   }
+  .active-tab .tab-label::after,
   input:checked + .tab-label::after {
     @apply rotate-90;
   }
@@ -51,6 +53,8 @@
   .tab-label::after {
     @apply content-['\276F'] w-4 h-4 text-center transition-all;
   }
+  /* opened accordion. If only with input:chekced: input:checked ~ .tab-content */
+  .active-tab .tab-content,
   input:checked ~ .tab-content {
     @apply max-h-screen p-4;
   }
@@ -76,4 +80,8 @@ a {
   top: 0;
   left: 0;
   z-index: 20;
+}
+
+.reading_content {
+  max-width: 70ch;
 }

@@ -601,6 +601,7 @@ p {
 }
 
 .btn {
+  cursor: pointer;
   border-radius: 9999px;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -673,12 +674,14 @@ p {
   transition-duration: 150ms;
 }
 
-input:checked + .tab-label {
+.active-tab .tab-label,
+  input:checked + .tab-label {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
-input:checked + .tab-label::after {
+.active-tab .tab-label::after,
+  input:checked + .tab-label::after {
   --tw-rotate: 90deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -699,7 +702,10 @@ input:checked ~ .tab-label {
   content: var(--tw-content);
 }
 
-input:checked ~ .tab-content {
+/* opened accordion. If only with input:chekced: input:checked ~ .tab-content */
+
+.active-tab .tab-content,
+  input:checked ~ .tab-content {
   max-height: 100vh;
   padding: 1rem;
 }
@@ -746,8 +752,8 @@ input:checked ~ .tab-content {
   right: 0px;
 }
 
-.left-\[-100vw\] {
-  left: -100vw;
+.left-\[-500vw\] {
+  left: -500vw;
 }
 
 .ml-4 {
@@ -806,10 +812,6 @@ input:checked ~ .tab-content {
   display: grid;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .h-screen {
   height: 100vh;
 }
@@ -834,6 +836,10 @@ input:checked ~ .tab-content {
   min-height: 100vh;
 }
 
+.w-full {
+  width: 100%;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -848,10 +854,6 @@ input:checked ~ .tab-content {
 
 .w-64 {
   width: 16rem;
-}
-
-.w-full {
-  width: 100%;
 }
 
 .flex-1 {
@@ -1130,6 +1132,10 @@ a {
   top: 0;
   left: 0;
   z-index: 20;
+}
+
+.reading_content {
+  max-width: 70ch;
 }
 
 .hover\:underline:hover {
