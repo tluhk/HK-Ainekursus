@@ -1,10 +1,10 @@
-<!-- Viitab header.handlebars failile /partials kaustas -->
+<!-- Refers to header.handlebars fail in /partials folder -->
 <header class='bg-brand_black text-on_brand text-center'>
   {{> header }}
 </header>
 <div class="flex flex-col lg:flex-row grow 2xl:justify-between">
 
-  <aside class="h-full">
+  <aside class="flex">
     
 
 
@@ -17,13 +17,13 @@
 
 
     <!-- sticky: sticky h-screen top-0 -->
-    <!-- Viitab side.handlebars failile /partials kaustas -->
+    <!-- Refers to side.handlebars fail in /partials folder -->
     {{> side.home }}
   </aside>
 
-  <main id="main-content" class="px-4 py-16 md:px-16 md:py-8 lg:p-8 xl:px-16 xl:py-8">
+  <main id="main-content" class="w-full px-4 py-16 md:px-16 md:py-8 lg:p-8 xl:px-16 xl:py-8">
  
-    <!-- Viitab content.handlebars failile /partials kaustas -->
+    <!-- Refers to content.handlebars fail in /partials folder -->
     {{> content.home }}
 
   </main>
@@ -32,12 +32,12 @@
    
     <!-- Datepicker -->
 
-    {{> calendar }}
+    <!-- {{> calendar }} -->
 
   </aside>
 </div>
 
-<!-- Viitab footer.handlebars failile /partials kaustas -->
+<!-- Refers to footer.handlebars fail in /partials folder -->
 <footer class="p-8 bg-brand_grey text-on_brand flex justify-center">
   {{> footer }}
 </footer>

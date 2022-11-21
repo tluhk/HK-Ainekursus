@@ -1,22 +1,22 @@
-<!-- Viitab header.handlebars failile /partials kaustas -->
+<!-- Refer to header.handlebars fail in /partials folder -->
 <header class='bg-brand_black text-on_brand text-center'>
   {{> header }}
 </header>
 <div class="flex flex-col lg:flex-row grow">
 
-  <aside class="h-full">
+  <aside class="flex">
     <button onclick='closeSideMenu()' class="flex items-center ml-4 lg:hidden pt-4 course_menu">
     <i class="material-symbols-outlined lg:mt-auto cursor-pointer text-4xl" aria-hidden="true">arrow_circle_right</i>
     <span class="font-bold ml-1">Sirvi kursuseid</span>
     </button>
     <!-- sticky: sticky h-screen top-0 -->
-    <!-- Viitab side.handlebars failile /partials kaustas -->
+    <!-- refers to side.handlebars fail in /partials folder -->
     {{> side.allcourses }}
   </aside>
 
-  <main id="main-content" class="p-4 md:p-16 lg:p-8 xl:p-16 basis-8/12">
+  <main id="main-content" class="w-full p-4 md:p-16 lg:p-8 xl:p-16 basis-8/12">
  
-    <!-- Viitab content.handlebars failile /partials kaustas -->
+    <!-- refers to content.handlebars fail in /partials folder -->
     {{> content.home }}
 
   </main>
@@ -25,12 +25,12 @@
    
     <!-- Datepicker -->
 
-    {{> calendar }}
+    <!-- {{> calendar }} -->
 
   </aside>
 </div>
 
-<!-- Viitab footer.handlebars failile /partials kaustas -->
+<!-- refers to footer.handlebars fail in /partials folder -->
 <footer class="p-8 bg-brand_grey text-on_brand flex justify-center">
   {{> footer }}
 </footer>
