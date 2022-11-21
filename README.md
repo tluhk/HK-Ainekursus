@@ -48,7 +48,11 @@ npm install
 ### Käivitamine
 
 Githubiga ühenduse loomiseks on tarviline Githubi tokeni loomine ja selle lisamine juurkataloogi .env faili.
-faili sisuks `AUTH = 'Bearer ghp_SINUGITHUBITOKEN'`
+faili sisuks `AUTH = 'Bearer ghp_SINUGITHUBITOKEN'`.  
+
+Github tokeni loomise juhend: https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token. 
+
+
 
 Seejärel võib rakenduse käivitada:
 
