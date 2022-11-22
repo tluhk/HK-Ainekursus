@@ -31,6 +31,9 @@ module.exports = {
   requestStaticURL: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.concepts}/${opt}/images`
   ),
+  requestFiles: (
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/${opt}/files`
+  ),
   /* requestFiles: (
     (opt) => `${baseUrl}/repos/${repoDemo.owner}/${repoDemo.name}/${repoDemo.mainPath}/${repoDemo.subPath.docs}/loeng_01/files/${opt}`
     /*

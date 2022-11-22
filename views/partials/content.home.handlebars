@@ -42,10 +42,34 @@
     </div>
   {{/if}}
 
+  <!-- NB! Ainekava linki config.json failist kuvatakse ainult "about"/Ainekursusest lehel -->
+
   {{#if_equal path.contentSlug 'about'}}
   <br>
   <b>Ainekava: </b><a href='{{../config.courseUrl}}' target='_blank'>{{../config.courseName}} ({{../config.courseCode}})</a>
   {{/if_equal}}
+
+  <!-- NB! Faile kuvatakse ainult Lisamaterjalid lehekülgedel.
+  Kuna github lisab igasse kausta ".DS_Store" faili ja seda faili me ei taha kuvada, siis on see välja hardcode'tud. 
+  
+  Github raw download_url juhend: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
+  Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866-->
+  {{#if files}}
+    <div class='files'>
+      <h6>Failid:</h6>
+      <ul>
+        {{#each files}}
+          {{#if_not_equal this.name '.DS_Store'}}
+            <li><a
+                href="#"
+                onclick="window.open(
+                  '{{../this.download_url}}','_blank');"
+              >{{../this.name}}</a></li>
+          {{/if_not_equal}}
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
   
   <br> <br>
   <!-- 
