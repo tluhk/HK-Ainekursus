@@ -31,10 +31,11 @@
   {{#if sources}}
     <div class='sources'>
       <h2>Allikad:</h2>
-      <ul>
+      <ul class="markdown">
         {{#each sources}}
           <li><a
               href='{{this.url}}'
+              class="markdown"
               target='_blank'
             >{{this.description}}</a></li>
         {{/each}}
@@ -57,10 +58,12 @@
   {{#if files}}
     <div class='files'>
       <h2>Failid:</h2>
-      <ul>
+      <ul class="markdown"
+>
         {{#each files}}
           <li><a
               href="#"
+              class="markdown"
               onclick="window.open(
                 '{{this.download_url}}','_blank');"
             >{{this.name}}</a></li>

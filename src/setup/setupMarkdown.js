@@ -1,3 +1,4 @@
+/* eslint-disable import/newline-after-import */
 const base64 = require('base-64');
 const utf8 = require('utf8');
 const mila = require('markdown-it-link-attributes');
@@ -9,6 +10,15 @@ const MarkdownIt = require('markdown-it')({
   linkify: true, // Autoconvert URL-like text to links
   typographer: true, // Enable some language-neutral replacement + quotes beautification.e https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
 }).enable('image');
+
+// lisa määratud elementidele "markdown" class
+const markdownItClass = require('@toycode/markdown-it-class');
+const mapContent = {
+  ol: 'markdown',
+  ul: 'markdown',
+  a: 'markdown',
+};
+MarkdownIt.use(markdownItClass, mapContent);
 
 MarkdownIt.use(mila, {
   attrs: {
