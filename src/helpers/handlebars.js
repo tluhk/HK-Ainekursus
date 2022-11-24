@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-script-url */
 // https://stackoverflow.com/a/40956931
 // CommonJS export Alternative:
@@ -27,6 +28,13 @@ module.exports = function hbsHelpers(hbs) {
       SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
       last: (array) => array[array.length - 1].path,
       concatActivePath: (arg1, arg2) => `${arg1}/${arg2}`,
+      ifNotIn: (elem, list, options) => {
+        console.log('list', list);
+        if (list.indexOf(elem) <= -1) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
       /* ifIn: (elem, objects) => {
         console.log('objects', objects);
         const index = objects.findIndex((object) => object.path === elem);

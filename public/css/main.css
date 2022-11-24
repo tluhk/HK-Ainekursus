@@ -333,6 +333,7 @@ menu {
   list-style: none;
   margin: 0;
   padding: 0;
+  paddin
 }
 
 /*
@@ -1263,4 +1264,12 @@ a {
   .\32xl\:justify-between {
     justify-content: space-between;
   }
+}
+
+/*
+Set list item heights
+*/
+
+li{
+  margin: 10px 0;
 }

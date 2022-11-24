@@ -12,6 +12,7 @@ const {
   requestSources,
   requestCourseAdditionalMaterials,
   requestLessonAdditionalMaterials,
+  requestFiles,
   // requestStaticURL,
 } = require('./functions/repoFunctions');
 
@@ -30,6 +31,8 @@ const returnNextPage = (currentPath, paths) => {
     return paths[currentIndex + 1].path;
   } return currentPath;
 };
+// Määra failinimed, mida githubis /files kaustadest ignoreeritakse ja Lisamaterjalid lehtedel ei kuvata
+const ignoreFiles = ['.DS_Store', '.gitkeep'];
 
 // Define what to do with Axios Response, how it is rendered
 function responseAction(
@@ -40,6 +43,7 @@ function responseAction(
   path,
   allCourses,
   singleCoursePaths,
+  resFiles,
   ...options
 ) {
   const concepts = resConcepts.data;
@@ -73,6 +77,7 @@ function responseAction(
     returnPreviousPage,
     returnNextPage,
     config,
+    files: resFiles,
   });
 }
 
@@ -156,12 +161,24 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       fullPath: mat.slug,
     };
 
-    app.get(`/${courseSlug}/${path.contentSlug}`, (req, res) => {
+    app.get(`/${courseSlug}/${path.contentSlug}`, async (req, res) => {
+      const materials = await axios.get(requestCourseAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
+      // Github raw download_url juhend: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
+      // Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
+      const files = await axios.get(requestFiles(coursePathInGithub, `${path.fullPath}`), authToken);
+
+      // KUI GITHUBIS FILES KAUSTA EI TEKI (SEE ON TÜHI), SIIS RAKENDUS CRASHIB. Kontrolli, kas files kaust eksisteerib või mitte!
+
       axios
-        .get(requestCourseAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken)
-        .then((response) => {
-          responseAction(response, config, res, breadcrumbNames, path, allCourses, singleCoursePaths);
-        })
+        .all([materials, files])
+        .then(
+          axios.spread((...responses) => {
+            const resConcepts = responses[0];
+            const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
+
+            responseAction(resConcepts, config, res, breadcrumbNames, path, allCourses, singleCoursePaths, resFiles);
+          }),
+        )
         .catch((error) => {
           console.log(error);
         });
@@ -216,20 +233,31 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         fullPath: `${lesson.slug}/${mat.slug}`,
       };
 
-      return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, (req, res) => {
+      return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, async (req, res) => {
+        const materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
+        const files = await axios.get(requestFiles(coursePathInGithub, `${path.fullPath}`), authToken);
+
+        // console.log('concepts', concepts);
         axios
-          .get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken)
-          .then((response) => {
-            responseAction(
-              response,
-              config,
-              res,
-              breadcrumbNames,
-              path,
-              allCourses,
-              singleCoursePaths,
-            );
-          })
+          .all([materials, files])
+          .then(
+            axios.spread((...responses) => {
+              const resConcepts = responses[0];
+              const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
+              // console.log('resFiles: ', resFiles);
+
+              responseAction(
+                resConcepts,
+                config,
+                res,
+                breadcrumbNames,
+                path,
+                allCourses,
+                singleCoursePaths,
+                resFiles,
+              );
+            }),
+          )
           .catch((error) => {
             console.log(error);
           });
@@ -268,6 +296,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
             axios.spread((...responses) => {
               const resConcepts = responses[0];
               const resSources = responses[1];
+              const resFiles = [];
 
               responseAction(
                 resConcepts,
@@ -277,6 +306,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
                 path,
                 allCourses,
                 singleCoursePaths,
+                resFiles,
                 resSources,
               );
             }),

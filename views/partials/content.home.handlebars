@@ -30,7 +30,7 @@
   <!-- NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad"" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed. -->
   {{#if sources}}
     <div class='sources'>
-      <h6>Allikad:</h6>
+      <h2>Allikad:</h2>
       <ul>
         {{#each sources}}
           <li><a
@@ -42,10 +42,32 @@
     </div>
   {{/if}}
 
+  <!-- NB! Ainekava linki config.json failist kuvatakse ainult "about"/Ainekursusest lehel -->
+
   {{#if_equal path.contentSlug 'about'}}
   <br>
   <b>Ainekava: </b><a href='{{../config.courseUrl}}' target='_blank'>{{../config.courseName}} ({{../config.courseCode}})</a>
   {{/if_equal}}
+
+  <!-- NB! Faile kuvatakse ainult Lisamaterjalid lehekülgedel.
+  Kuna github lisab igasse kausta ".DS_Store" faili ja seda faili me ei taha kuvada, siis on see välja hardcode'tud. 
+  
+  Github raw download_url juhend: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
+  Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866-->
+  {{#if files}}
+    <div class='files'>
+      <h2>Failid:</h2>
+      <ul>
+        {{#each files}}
+          <li><a
+              href="#"
+              onclick="window.open(
+                '{{this.download_url}}','_blank');"
+            >{{this.name}}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
   
   <br> <br>
   <!-- 
@@ -56,13 +78,14 @@
   {{#if singleCoursePaths }}
   <div class='flex gap-4'>
     {{#if_not_equal path.fullPath singleCoursePaths.[0].path }}
-      <input type="button" class="btn btn-secondary" 
+      <input type="button" class="btn btn-secondary"
       onclick="location.href='/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
       value="Eelmine leht" />
     {{/if_not_equal }}
 
     {{#if_not_equal path.fullPath (last singleCoursePaths) }}
-      <input type="button" class="btn btn-primary" onclick="location.href='/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine leht" />
+      <input type="button" class="btn btn-primary"
+      onclick="location.href='/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine leht" />
     {{/if_not_equal }}
   </div>
   {{/if }}
