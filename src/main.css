@@ -22,7 +22,7 @@
   .btn-secondary {
     @apply bg-secondary-500 hover:bg-secondary-600 text-white;
   }
-  /* accordion components */
+  /*--------------------------- accordion components ---------------------------*/
 
   .tab-close {
     @apply flex justify-end p-4 cursor-pointer bg-secondary-700;
@@ -62,6 +62,7 @@
     @apply absolute opacity-0 -z-10;
   }
 }
+/*--------------------------- end of sidebar tab's -------------------------------*/
 
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
@@ -75,7 +76,7 @@ a {
 .skip:focus {
   left: 0;
 }
-
+/* to keep sidebar in same level when it's clodes and when is open */
 .menu-zero {
   top: 0;
   left: 0;
@@ -84,4 +85,5 @@ a {
 
 .reading_content {
   max-width: 70ch;
+  margin: 0 auto;
 }
