@@ -120,7 +120,6 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     path: x.slug,
   }));
 
- 
   // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
 
   // Ainekursusest ja Hindamine endpointid
