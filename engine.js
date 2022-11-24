@@ -9,14 +9,14 @@ const { setAllCoursesRoutes } = require('./src/setAllCoursesRoutes');
 const engine = async (app) => {
   const allCourses = await getAllCourses();
   // console.log('allCourses', allCourses);
-
+  const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
   // Määra Kõik Kursused routimine
-  setAllCoursesRoutes(app, allCourses);
+  setAllCoursesRoutes(app, allCoursesActive);
 
   // Määra Kursuse-sisene ruutimine
-  allCourses.forEach(async (course) => {
+  allCoursesActive.forEach(async (course) => {
     const config = await getConfig(course.coursePathInGithub);
-    setSingleCourseRoutes(app, config, course, allCourses);
+    setSingleCourseRoutes(app, config, course, allCoursesActive);
   });
 };
 

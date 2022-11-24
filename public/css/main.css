@@ -333,7 +333,21 @@ menu {
   list-style: none;
   margin: 0;
   padding: 0;
-  paddin
+}
+
+/*
+Listide ja linkide stiilid "markdown" klassiga elementidele.
+"markdown" klass lisatakse markdown failidele selles failis: src/setup/SetupMarkdown.js
+*/
+ul.markdown {
+  list-style: disc;
+  margin-left: 40;
+}
+a.markdown {
+  color: #0000EE;
+}
+a.markdown:visited {
+  color: #551A8B;
 }
 
 /*

@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/tluhk/rif20-valikpraktika-1#readme",
   "dependencies": {
+    "@toycode/markdown-it-class": "^1.2.4",
     "-": "^0.0.1",
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
@@ -42,6 +43,7 @@
     "markdown-it-image-figures": "^2.1.0",
     "markdown-it-link-attributes": "^4.0.1",
     "md-block": "^0.0.1",
+    "node-cache": "^5.1.2",
     "read-markdown": "^1.0.2",
     "tailwindcss": "^3.2.1",
     "use": "^3.1.1",
