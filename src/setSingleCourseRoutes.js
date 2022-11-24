@@ -12,7 +12,8 @@ const {
   requestSources,
   requestCourseAdditionalMaterials,
   requestLessonAdditionalMaterials,
-  requestFiles,
+  requestCourseFiles,
+  requestLessonFiles,
   // requestStaticURL,
 } = require('./functions/repoFunctions');
 
@@ -97,11 +98,8 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
 
   // For Forward/Back buttons, push all possible paths in one course to an Array:
   const singleCoursePaths = [];
-  // Comment out config.docs.map() if you don't want to show buttons on Ainekursusest and Hindamine pages
+  // Comment out config.docs.map() if you don't want to show buttons on Ainekursusest pages
   config.docs.map((x) => singleCoursePaths.push({
-    path: x.slug,
-  }));
-  config.additionalMaterials.map((x) => singleCoursePaths.push({
     path: x.slug,
   }));
   config.lessons.map((x) => {
@@ -117,11 +115,12 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     // console.log('singleCoursePaths:', singleCoursePaths);
     return true;
   });
+  // Comment out config.additionalMaterials.map() if you don't want to show buttons on Ainekursusest pages
+  config.additionalMaterials.map((x) => singleCoursePaths.push({
+    path: x.slug,
+  }));
 
-  /*
-  courseSlug,
-  contentSlug,
-  conceptSlug */
+ 
   // ** SINGLE COURSE ENDPOINTS (home.handlebars) **
 
   // Ainekursusest ja Hindamine endpointid
@@ -162,10 +161,10 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     };
 
     app.get(`/${courseSlug}/${path.contentSlug}`, async (req, res) => {
-      const materials = await axios.get(requestCourseAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
+      const materials = await axios.get(requestCourseAdditionalMaterials(coursePathInGithub), authToken);
       // Github raw download_url juhend: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
       // Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
-      const files = await axios.get(requestFiles(coursePathInGithub, `${path.fullPath}`), authToken);
+      const files = await axios.get(requestCourseFiles(coursePathInGithub), authToken);
 
       // KUI GITHUBIS FILES KAUSTA EI TEKI (SEE ON TÜHI), SIIS RAKENDUS CRASHIB. Kontrolli, kas files kaust eksisteerib või mitte!
 
@@ -235,7 +234,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
 
       return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, async (req, res) => {
         const materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
-        const files = await axios.get(requestFiles(coursePathInGithub, `${path.fullPath}`), authToken);
+        const files = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
 
         // console.log('concepts', concepts);
         axios
