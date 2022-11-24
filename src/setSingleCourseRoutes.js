@@ -244,7 +244,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
             axios.spread((...responses) => {
               const resConcepts = responses[0];
               const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
-              console.log('resFiles', resFiles);
+              // console.log('resFiles: ', resFiles);
 
               responseAction(
                 resConcepts,
@@ -296,6 +296,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
             axios.spread((...responses) => {
               const resConcepts = responses[0];
               const resSources = responses[1];
+              const resFiles = [];
 
               responseAction(
                 resConcepts,
@@ -305,6 +306,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
                 path,
                 allCourses,
                 singleCoursePaths,
+                resFiles,
                 resSources,
               );
             }),
