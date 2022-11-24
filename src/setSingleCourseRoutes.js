@@ -31,6 +31,8 @@ const returnNextPage = (currentPath, paths) => {
     return paths[currentIndex + 1].path;
   } return currentPath;
 };
+// Määra failinimed, mida githubis /files kaustadest ignoreeritakse ja Lisamaterjalid lehtedel ei kuvata
+const ignoreFiles = ['.DS_Store', '.gitkeep'];
 
 // Define what to do with Axios Response, how it is rendered
 function responseAction(
@@ -167,14 +169,12 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
 
       // KUI GITHUBIS FILES KAUSTA EI TEKI (SEE ON TÜHI), SIIS RAKENDUS CRASHIB. Kontrolli, kas files kaust eksisteerib või mitte!
 
-      // console.log('concepts', concepts);
       axios
         .all([materials, files])
         .then(
           axios.spread((...responses) => {
             const resConcepts = responses[0];
-            const resFiles = responses[1].data;
-            console.log('resFiles', resFiles);
+            const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
 
             responseAction(resConcepts, config, res, breadcrumbNames, path, allCourses, singleCoursePaths, resFiles);
           }),
@@ -243,7 +243,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
           .then(
             axios.spread((...responses) => {
               const resConcepts = responses[0];
-              const resFiles = responses[1].data;
+              const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
               console.log('resFiles', resFiles);
 
               responseAction(

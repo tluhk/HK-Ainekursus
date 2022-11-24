@@ -59,13 +59,11 @@
       <h6>Failid:</h6>
       <ul>
         {{#each files}}
-          {{#if_not_equal this.name '.DS_Store'}}
-            <li><a
-                href="#"
-                onclick="window.open(
-                  '{{../this.download_url}}','_blank');"
-              >{{../this.name}}</a></li>
-          {{/if_not_equal}}
+          <li><a
+              href="#"
+              onclick="window.open(
+                '{{this.download_url}}','_blank');"
+            >{{this.name}}</a></li>
         {{/each}}
       </ul>
     </div>
