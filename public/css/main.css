@@ -1160,6 +1160,24 @@ a.markdown:visited {
   color: #551A8B;
 }
 
+/*
+Markdown styling
+*/
+
+.markdown-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.header-anchor {
+  display: none;
+}
+
+.markdown-wrapper:hover .header-anchor {
+  display: block;
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
@@ -1285,18 +1303,4 @@ a.markdown:visited {
   .\32xl\:justify-between {
     justify-content: space-between;
   }
-}
-
-.markdown-wrapper {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.header-anchor {
-  display: none;
-}
-
-.markdown-wrapper:hover .header-anchor {
-  display: block;
 }

@@ -102,3 +102,18 @@ a.markdown {
 a.markdown:visited {
   color: #551A8B;
 }
+
+/*
+Markdown styling
+*/
+.markdown-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.header-anchor {
+  display: none;
+}
+.markdown-wrapper:hover .header-anchor {
+  display: block;
+}
