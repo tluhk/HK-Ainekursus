@@ -1286,3 +1286,17 @@ a.markdown:visited {
     justify-content: space-between;
   }
 }
+
+.markdown-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.header-anchor {
+  display: none;
+}
+
+.markdown-wrapper:hover .header-anchor {
+  display: block;
+}

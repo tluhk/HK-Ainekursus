@@ -2,6 +2,8 @@
 const base64 = require('base-64');
 const utf8 = require('utf8');
 const mila = require('markdown-it-link-attributes');
+const anchor = require('markdown-it-anchor');
+const blockEmbedPlugin = require('markdown-it-block-embed');
 
 // Markdown faili lugemiseks ja dekodeerimiseks
 const MarkdownIt = require('markdown-it')({
@@ -25,6 +27,22 @@ MarkdownIt.use(mila, {
     target: '_blank',
     rel: 'noopener',
   },
+});
+
+// Add anchor links to markdown headings
+// https://github.com/valeriangalliat/markdown-it-anchor#link-after-header
+MarkdownIt.use(anchor, {
+  permalink: anchor.permalink.linkAfterHeader({
+    style: 'aria-describedby',
+    wrapper: ['<div class="markdown-wrapper">', '</div>'],
+    symbol: '<span class="material-symbols-outlined">link</span>',
+  }),
+});
+
+// Add embed video support
+// https://github.com/rotorz/markdown-it-block-embed
+MarkdownIt.use(blockEmbedPlugin, {
+  containerClassName: 'video-embed',
 });
 
 module.exports = {
