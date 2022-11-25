@@ -336,21 +336,6 @@ menu {
 }
 
 /*
-Listide ja linkide stiilid "markdown" klassiga elementidele.
-"markdown" klass lisatakse markdown failidele selles failis: src/setup/SetupMarkdown.js
-*/
-ul.markdown {
-  list-style: disc;
-  margin-left: 40;
-}
-a.markdown {
-  color: #0000EE;
-}
-a.markdown:visited {
-  color: #551A8B;
-}
-
-/*
 Prevent resizing textareas horizontally by default.
 */
 
@@ -648,7 +633,7 @@ p {
   background-color: rgb(87 83 78 / var(--tw-bg-opacity));
 }
 
-/* accordion components */
+/*--------------------------- accordion components ---------------------------*/
 
 .tabs {
   overflow: hidden;
@@ -1130,6 +1115,8 @@ input:checked ~ .tab-label {
   height: calc(100% - 149px);
 }
 
+/*--------------------------- end of sidebar tab's -------------------------------*/
+
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
   padding-top: 1px;
@@ -1143,6 +1130,8 @@ a {
   left: 0;
 }
 
+/* to keep sidebar in same level when it's clodes and when is open */
+
 .menu-zero {
   top: 0;
   left: 0;
@@ -1151,6 +1140,7 @@ a {
 
 .reading_content {
   max-width: 70ch;
+  margin: 0 auto;
 }
 
 .hover\:underline:hover {
@@ -1278,12 +1268,4 @@ a {
   .\32xl\:justify-between {
     justify-content: space-between;
   }
-}
-
-/*
-Set list item heights
-*/
-
-li{
-  margin: 10px 0;
 }
