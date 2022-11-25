@@ -1143,6 +1143,23 @@ a {
   margin: 0 auto;
 }
 
+/* List and links stiles with classname "markdown".
+"markdown" class will added in src/setup/SetupMarkdown.js
+*/
+
+ul.markdown {
+  list-style: disc;
+  margin-left: 40;
+}
+
+a.markdown {
+  color: #0000EE;
+}
+
+a.markdown:visited {
+  color: #551A8B;
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
