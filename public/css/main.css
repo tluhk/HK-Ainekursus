@@ -579,11 +579,6 @@ p {
   .sidebar {
     top: 0px;
     height: 100%;
-  }
-}
-
-@media (min-width: 1280px) {
-  .sidebar {
     width: 18rem !important;
   }
 }
@@ -1153,11 +1148,11 @@ ul.markdown {
 }
 
 a.markdown {
-  color: #0000EE;
+  color: #0000ee;
 }
 
 a.markdown:visited {
-  color: #551A8B;
+  color: #551a8b;
 }
 
 /*
