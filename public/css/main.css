@@ -1236,12 +1236,20 @@ Markdown styling
     position: relative;
   }
 
+  .lg\:sticky {
+    position: sticky;
+  }
+
   .lg\:\!top-0 {
     top: 0px !important;
   }
 
   .lg\:left-0 {
     left: 0px;
+  }
+
+  .lg\:top-0 {
+    top: 0px;
   }
 
   .lg\:mt-auto {
@@ -1252,12 +1260,20 @@ Markdown styling
     display: none;
   }
 
+  .lg\:max-h-screen {
+    max-height: 100vh;
+  }
+
   .lg\:w-auto {
     width: auto;
   }
 
   .lg\:flex-row {
     flex-direction: row;
+  }
+
+  .lg\:overflow-y-auto {
+    overflow-y: auto;
   }
 
   .lg\:p-8 {
