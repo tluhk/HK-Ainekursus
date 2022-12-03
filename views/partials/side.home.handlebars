@@ -1,17 +1,17 @@
-<nav class="sidebar flex flex-col items-start absolute lg:relative left-[-500vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full lg:w-auto  transition-all" id="sidebar">
+<nav class="sidebar flex flex-col items-start absolute lg:relative left-[-500vw] lg:left-0 mt-[-2.5rem] lg:mt-auto w-full transition-all" id="sidebar">
 
   <button onclick='closeSideMenu()' class="flex items-center ml-4 lg:hidden pt-4">
     <i class="material-symbols-outlined lg:mt-auto cursor-pointer lg:hidden text-4xl" aria-hidden="true">arrow_circle_left</i>
     <span class="font absolute left-[-1000]">Sulge</span>
   </button>
 
-
-  <div class="px-4">
+  <!-- sidebar sticky behavior beginning from lg size -->
+  <div class="px-4 lg:sticky lg:top-0 lg:overflow-y-auto lg:max-h-screen">
 
 <!-- DROPDOWN MENÜÜ VARIANT -->
 
   <section >
-    <div class="col">
+    <div>
       <!-- Kuvab aine nime ja ainekoodi -->
 
       <h3 class="text-xl mb-1">

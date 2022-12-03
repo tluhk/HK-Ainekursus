@@ -579,11 +579,6 @@ p {
   .sidebar {
     top: 0px;
     height: 100%;
-  }
-}
-
-@media (min-width: 1280px) {
-  .sidebar {
     width: 18rem !important;
   }
 }
@@ -1153,11 +1148,11 @@ ul.markdown {
 }
 
 a.markdown {
-  color: #0000EE;
+  color: #0000ee;
 }
 
 a.markdown:visited {
-  color: #551A8B;
+  color: #551a8b;
 }
 
 /*
@@ -1244,12 +1239,20 @@ html {
     position: relative;
   }
 
+  .lg\:sticky {
+    position: sticky;
+  }
+
   .lg\:\!top-0 {
     top: 0px !important;
   }
 
   .lg\:left-0 {
     left: 0px;
+  }
+
+  .lg\:top-0 {
+    top: 0px;
   }
 
   .lg\:mt-auto {
@@ -1260,12 +1263,20 @@ html {
     display: none;
   }
 
+  .lg\:max-h-screen {
+    max-height: 100vh;
+  }
+
   .lg\:w-auto {
     width: auto;
   }
 
   .lg\:flex-row {
     flex-direction: row;
+  }
+
+  .lg\:overflow-y-auto {
+    overflow-y: auto;
   }
 
   .lg\:p-8 {
