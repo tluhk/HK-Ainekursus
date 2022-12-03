@@ -17,7 +17,8 @@
       <h3 class="text-xl mb-1">
         {{#each courses}}
           {{#if_equal this.courseSlug ../path.courseSlug}}
-          <a class="!no-underline hover:underline" href="/{{../this.courseSlug}}">{{../this.courseName}} ({{../this.courseCode}})</a>
+          <a class="hover:!underline !no-underline
+          " href="/{{../this.courseSlug}}/about">{{../this.courseName}} ({{../this.courseCode}})</a>
           {{/if_equal}}
         {{/each}}</h3>
 
@@ -140,7 +141,7 @@
     <li>
       {{#each courses}}
       {{#if_not_equal this.courseSlug ../path.courseSlug}}
-      <a class="hover:!underline !no-underline" href="/{{../this.courseSlug}}">{{../this.courseName}}</a>
+      <a class="hover:!underline !no-underline" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
       {{/if_not_equal}}
       {{/each}}
     </li>
