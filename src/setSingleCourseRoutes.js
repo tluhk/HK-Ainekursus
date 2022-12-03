@@ -49,7 +49,7 @@ function responseAction(
 ) {
   const concepts = resConcepts.data;
   const conceptsDecoded = base64.decode(concepts.content);
-  const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded);
+  const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded).toString();
   const conceptsMarkdown = MarkdownIt.render(conceptsDecodedUtf8);
 
   const resSources = options[0];
@@ -60,7 +60,7 @@ function responseAction(
   if (resSources) {
     const sources = resSources.data;
     const sourcesDecoded = base64.decode(sources.content);
-    const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
+    const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded).toString();
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 

@@ -1173,6 +1173,14 @@ Markdown styling
   display: block;
 }
 
+/**
+ * Smooth scrolling on the whole document
+ */
+
+html {
+  scroll-behavior: smooth;
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
