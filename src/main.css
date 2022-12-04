@@ -8,7 +8,7 @@
 
 @layer components {
   .sidebar {
-    @apply bg-neutral-100 mobileheight lg:h-full text-sm top-[194px] lg:top-0 lg:!w-72;
+    @apply bg-neutral-100 mobileheight lg:h-full text-sm top-[194px] lg:top-0 lg:!w-80;
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
@@ -33,36 +33,50 @@
   .tab {
     @apply overflow-hidden w-full;
   }
-  .tab-label {
-    @apply flex justify-between p-4 bg-primary-800 hover:bg-primary-900 font-bold cursor-pointer;
+  .tab-label,
+  .no-tab-label {
+    @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer px-4;
   }
   .tab-content {
-    @apply max-h-0 py-0 px-4 bg-primary-100 text-secondary-900 transition-all;
+    @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900 transition-all;
   }
   .active-tab .tab-label,
+  .active-tab .no-tab-label,
+  .active-tab-content,
+  .tab-content:hover,
   input:checked + .tab-label {
-    @apply bg-primary-600;
+    @apply bg-neutral-200;
   }
   .active-tab .tab-label::after,
   input:checked + .tab-label::after {
     @apply rotate-90;
   }
+  .active-tab .tab-content,
+  .tab-label {
+    @apply border-b border-neutral-200;
+  }
+  .tab-label::after {
+    @apply mt-3;
+  }
   input:checked ~ .tab-label {
-    @apply max-h-screen p-4;
+    @apply max-h-screen;
   }
   .tab-label::after {
     @apply content-['\276F'] w-4 h-4 text-center transition-all;
   }
+  .active-tab .tab-label::after {
+    @apply hidden;
+  }
   /* opened accordion. If only with input:chekced: input:checked ~ .tab-content */
   .active-tab .tab-content,
   input:checked ~ .tab-content {
-    @apply max-h-screen p-4;
+    @apply max-h-screen;
   }
   .sidebar input {
     @apply absolute opacity-0 -z-10;
   }
+  /*--------------------------- end of sidebar tab's -------------------------------*/
 }
-/*--------------------------- end of sidebar tab's -------------------------------*/
 
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;

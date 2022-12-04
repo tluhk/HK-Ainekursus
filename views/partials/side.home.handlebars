@@ -6,27 +6,26 @@
   </button>
 
   <!-- sidebar sticky behavior beginning from lg size -->
-  <div class="px-4 lg:sticky lg:top-0 lg:overflow-y-auto lg:max-h-screen">
+  <div class="p-2 lg:sticky lg:top-0 lg:overflow-y-auto lg:max-h-screen drop-shadow-2xl">
 
 <!-- DROPDOWN MENu -->
 
-  <section >
-    <div>
+    <div class="bg-neutral-100 mb-5">
       <!-- Topic name and code -->
 
-      <div class="mb-1 hover:!underline ">
+      <div class="!no-underline p-4">
         {{#each courses}}
           {{#if_equal this.courseSlug ../path.courseSlug}}
-          <div>
-            <a class="text-md font-bold !no-underline "href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+          <div class="mb-2">
+            <a class="text-md font-bold mb-2 !no-underline "href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
           </div>
           <div class="flex justify-between">
-            <a class="!no-underline" href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
+            <a class="!no-underline py-2" href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
           {{/if_equal}}
         {{/each}}
             <!-- About links -->
             {{#each docs}}
-              <a class="!no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+              <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
             {{/each}}
           </div>
       </div>
@@ -39,22 +38,16 @@
 
         <!-- Lessons links -->
         {{#each lessons}}
-        <div class="tab
+        <div class="tab 
           {{#if_equal this.slug ../path.contentSlug }} 
             active-tab
           {{/if_equal }}
         ">
           <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
           <label class="tab-label" for="chck{{@index}}">
-            <div class="flex gap-2">
-              <span class="material-symbols-outlined">check_circle</span>
-              <a class="hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab" menüüelemendi nime järel:
-                  {{../path.contentSlug}}
-                  {{this.slug}} -->
-                  {{#if_equal this.slug ../path.contentSlug }} 
-                    active-tab
-                  {{/if_equal }}
+            <div class="flex gap-2 w-full items-center">
+              <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+
               </a>
             </div>
           </label>
@@ -66,9 +59,9 @@
                 active-tab-content
               {{/if_equal }}
             " >
-              <div class="flex gap-2" >
-                <span class="material-symbols-outlined">radio_button_unchecked</span>
-                <a class="hover:!underline !no-underline" 
+              <div class="flex gap-2 w-full" >
+                <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
+                <a class="grow py-3 !no-underline" 
                 href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
                 {{#each ../../concepts}}
                   {{#if_equal this.slug ../this}}
@@ -77,76 +70,78 @@
                 {{/each }}
                 </a>
              </div>
-<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab-content" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab-content" menüüelemendi nime järel:
-                  {{../../path.fullPath}}
-                  {{concatActivePath ../this.slug this}} -->
-                  {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }} 
-                    active-tab-content
-                  {{/if_equal }}
+
             </div>
           {{/each}}
 
-          <!-- Loengu lisamaterjali link -->
+          <!-- Lesson extra material -->
           {{#each this.additionalMaterials}}
             <div class="tab-content flex gap-2
               {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
                 active-tab-content
               {{/if_equal }}
             ">
-              <a class="hover:!underline !no-underline" 
+              <a class="py-3 w-full !no-underline" 
               href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
-<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab-content" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab-content" menüüelemendi nime järel:
-                  {{../../path.fullPath}}
-                  {{concatActivePath ../this.slug this.slug}} -->
-                  {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
-                    active-tab-content
-                  {{/if_equal }}
+
             </div>
           {{/each}}
 
         </div>
         {{/each}}
 
-        <!-- Aine lisamaterjali link -->
+        <!-- Topic extra material link -->
         {{#each additionalMaterials}}
         <div class="tab
           {{#if_equal this.slug ../path.fullPath }} 
             active-tab
           {{/if_equal }}
         ">
-          <label class="tab-label">
-            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab" menüüelemendi nime järel:
-                {{../path.fullPath}}
-                {{this.slug}} -->
-                {{#if_equal this.slug ../path.fullPath }} 
-                  active-tab
-                {{/if_equal }}
+          <label class="no-tab-label">
+            <a class="py-3 w-full !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
             </a></label>
         </div>
         {{/each}}
 
       </div>
     </div>
-  </section>
 
-  <h3>Teised kursused</h3>
-  <ul>
-    <li>
+    <div class="!no-underline p-4 bg-white">
+        {{#each courses}}
+          {{#if_not_equal this.courseSlug ../path.courseSlug}}
+          <div class="mb-2">
+            <a class="text-md font-bold mb-2 !no-underline "href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+          </div>
+          <div class="flex justify-between">
+            <a class="!no-underline py-2" href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
+
+            <a class="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a>
+          {{/if_not_equal}}
+        {{/each}}
+          </div>
+      </div>
+
+
+    {{!-- <div class="text-md font-bold p-4 w-full bg-white hover:bg-neutral-100">
       {{#each courses}}
       {{#if_not_equal this.courseSlug ../path.courseSlug}}
-      <a class="hover:!underline !no-underline" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+      <a class="!no-underline" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
       {{/if_not_equal}}
       {{/each}}
-    </li>
-  </ul>
+    </div> --}}
+
+
+
+
+
+
+
+
+
+
 
 
 
   </div>
-
-    
-  
-
 </nav>
 
