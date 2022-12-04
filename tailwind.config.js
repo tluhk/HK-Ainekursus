@@ -12,6 +12,22 @@ module.exports = {
       primary: colors.red,
       secondary: colors.stone,
       white: colors.white,
+      // from there begins the right color palette
+      neutral: {
+        DEFAULT: '#40464D',
+        100: '#E7E9EC',
+        200: '#D4D6D8',
+        300: '#BBC0C5',
+      },
+    },
+    fontSize: {
+      sm: '0.8rem',
+      base: '1rem',
+      md: '1.25rem',
+      lg: '1.563rem',
+      xl: '1.953rem',
+      xxl: '2.441rem',
+      xxxl: '3.052rem',
     },
     extend: {
       fontFamily: {
@@ -25,23 +41,22 @@ module.exports = {
       addBase({
         html: { fontSize: '18px' },
         h1: {
-          fontFamily: 'Zilla Slab',
-          fontSize: theme('fontSize.5xl'),
-          lineHeight: '3rem',
+          fontSize: theme('fontSize.xxxl'),
+          fontWeight: '700',
+          lineHeight: '1.2',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
         h2: {
-          fontFamily: 'Zilla Slab',
-          fontSize: theme('fontSize.4xl'),
-          lineHeight: '2rem',
+          fontSize: theme('fontSize.xxl'),
+          fontWeight: '700',
+          lineHeight: '1.1',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
         h3: {
-          fontFamily: 'Zilla Slab',
-          fontSize: theme('fontSize.2xl'),
-          lineHeight: '1.5rem',
+          fontSize: theme('fontSize.xl'),
+          fontWeight: '700',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
