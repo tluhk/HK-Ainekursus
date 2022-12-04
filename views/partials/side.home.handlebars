@@ -14,39 +14,30 @@
     <div>
       <!-- Topic name and code -->
 
-      <div class="text-md font-bold mb-1">
+      <div class="mb-1 hover:!underline ">
         {{#each courses}}
           {{#if_equal this.courseSlug ../path.courseSlug}}
-          <a class="hover:!underline !no-underline
-          " href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
-          <a class="hover:!underline !no-underline
-          " href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
+          <div>
+            <a class="text-md font-bold !no-underline "href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+          </div>
+          <div class="flex justify-between">
+            <a class="!no-underline" href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
           {{/if_equal}}
-        {{/each}}</div>
+        {{/each}}
+            <!-- About links -->
+            {{#each docs}}
+              <a class="!no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}</a>
+            {{/each}}
+          </div>
+      </div>
+
+
 
 
       <div class="tabs">
 
-        <!-- Ainekursusest ja Hindamine lingid -->
-        {{#each docs}}
-        <div class="tab 
-          {{#if_equal this.slug ../path.contentSlug }} 
-            active-tab 
-          {{/if_equal }}
-        ">
-          <label class="tab-label">
-            <a class=" hover:!underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-<!-- Kuva aktiivse lehe path ning menüüelemendi path. Kui need kattuvad, siis lisa "active-tab" class (vt <div class="tab... rida) ning kontrolliks kuva "active-tab" menüüelemendi nime järel:
-                {{../path.contentSlug}}
-                {{this.slug}} -->
-                {{#if_equal this.slug ../path.contentSlug }} 
-                  active-tab
-                {{/if_equal }}
-            </a></label>
-        </div>
-        {{/each}}
 
-        <!-- Loengute pealkirjad ja lingid -->
+        <!-- Lessons links -->
         {{#each lessons}}
         <div class="tab
           {{#if_equal this.slug ../path.contentSlug }} 
@@ -68,7 +59,7 @@
             </div>
           </label>
           
-          <!-- Teemade lingid -->
+          <!-- Themes links -->
           {{#each this.concepts}}
             <div class="tab-content flex gap-2
               {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
