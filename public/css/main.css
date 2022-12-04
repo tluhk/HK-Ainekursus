@@ -421,31 +421,30 @@ html {
 }
 
 h1 {
-  font-family: Zilla Slab;
-  font-size: 3rem;
-  line-height: 3rem;
+  font-size: 3.052rem;
+  font-weight: 700;
+  line-height: 1.2;
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 h2 {
-  font-family: Zilla Slab;
-  font-size: 2.25rem;
-  line-height: 2rem;
+  font-size: 2.441rem;
+  font-weight: 700;
+  line-height: 1.1;
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 h3 {
-  font-family: Zilla Slab;
-  font-size: 1.5rem;
-  line-height: 1.5rem;
+  font-size: 1.953rem;
+  font-weight: 700;
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 h4 {
-  font-size: 1.25rem;
+  font-size: 1.953rem;
   font-weight: 600;
   line-height: 1.5rem;
   margin-top: 1.25rem;
@@ -453,7 +452,7 @@ h4 {
 }
 
 h5 {
-  font-size: 1.125rem;
+  font-size: 1.563rem;
   font-weight: 600;
   line-height: 1.5rem;
   margin-top: 1.25rem;
@@ -567,11 +566,8 @@ p {
 .sidebar {
   top: 194px;
   --tw-bg-opacity: 1;
-  background-color: rgb(183 18 52 / var(--tw-bg-opacity));
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  background-color: rgb(231 233 236 / var(--tw-bg-opacity));
+  font-size: 0.8rem;
   height: calc(100% - 149px);
 }
 
@@ -929,22 +925,19 @@ input:checked ~ .tab-label {
   border-width: 2px;
 }
 
-.bg-brand_black {
-  --tw-bg-opacity: 1;
-  background-color: rgb(40 38 39 / var(--tw-bg-opacity));
-}
-
-.bg-brand_grey {
-  background-color: 545153;
-}
-
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.p-8 {
-  padding: 2rem;
+.bg-neutral-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(231 233 236 / var(--tw-bg-opacity));
+}
+
+.bg-neutral {
+  --tw-bg-opacity: 1;
+  background-color: rgb(64 70 77 / var(--tw-bg-opacity));
 }
 
 .p-4 {
@@ -961,6 +954,10 @@ input:checked ~ .tab-label {
 
 .p-1 {
   padding: 0.25rem;
+}
+
+.p-8 {
+  padding: 2rem;
 }
 
 .px-4 {
@@ -1027,29 +1024,16 @@ input:checked ~ .tab-label {
   text-align: center;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
-
 .text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1.563rem;
 }
 
 .text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.8rem;
 }
 
-.text-xl {
+.text-md {
   font-size: 1.25rem;
-  line-height: 1.75rem;
 }
 
 .font-bold {
@@ -1295,6 +1279,10 @@ html {
 
   .lg\:pr-0 {
     padding-right: 0px;
+  }
+
+  .lg\:pb-0 {
+    padding-bottom: 0px;
   }
 }
 
