@@ -1225,15 +1225,15 @@ table.gsc-search-box td.gsc-input {
 }
 
 .gsc-search-button-v2 {
-  padding: 8px 27px !important;
-  border: 1px solid #dfe1e5 !important;
-  border-radius: 0 !important;
+  padding: 8px 12px !important;
+  border: 1px solid #fff !important;
+  border-radius: 0 1rem 1rem 0 !important;
   height: 2rem;
-  background-color: #979B9F !important;
+  background-color: #fff !important;
 }
 
 .gsc-search-button-v2:hover {
-  background-color: #595F65 !important;
+  background-color: #fff !important;
 }
 
 .gsc-input-box {
@@ -1241,6 +1241,17 @@ table.gsc-search-box td.gsc-input {
   height: 2rem !important;
   display: flex;
   align-items: center;
+  border-radius: 1rem 0 0 1rem;
+}
+
+.gsc-search-button-v2 svg {
+  fill: #30373e !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+.gsc-input-box {
+  width: 8.5rem;
 }
 
 .hover\:bg-neutral-300:hover {
