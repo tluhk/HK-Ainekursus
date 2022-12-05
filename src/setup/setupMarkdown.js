@@ -6,6 +6,8 @@ const mila = require('markdown-it-link-attributes');
 const blockEmbedPlugin = require('markdown-it-block-embed');
 const playgroundPlugin = require('markdown-it-playground');
 const hljs = require('highlight.js');
+const iframe = require('markdown-it-iframe');
+// const iFrameResize = require('iframe-resizer');
 
 // Enable markdown file parser
 // https://github.com/markdown-it/markdown-it
@@ -44,6 +46,7 @@ const mapContent = {
   h2: 'markdown-wrapper',
   h3: 'markdown-wrapper',
   h4: 'markdown-wrapper',
+  iframe: 'markdown-iframe',
 };
 MarkdownIt.use(markdownItClass, mapContent);
 
@@ -71,6 +74,12 @@ MarkdownIt.use(anchor, {
 // https://github.com/rotorz/markdown-it-block-embed
 MarkdownIt.use(blockEmbedPlugin, {
   containerClassName: 'video-embed',
+  /* services: {
+    sisuloome: {
+      width: 600,
+      height: 600,
+    },
+  }, */
 });
 
 // Enable embedded code demo environments like JSFiddle and CodePen
@@ -78,6 +87,18 @@ MarkdownIt.use(blockEmbedPlugin, {
 MarkdownIt.use(playgroundPlugin, {
   allowFullScreen: true,
 });
+
+// https://github.com/rjriel/markdown-it-iframe
+MarkdownIt.use(iframe, {
+  allowfullscreen: false,
+  frameborder: 0, // default: 0
+  renderIframe: true, // default: true
+});
+
+/* MarkdownIt.use(iFrameResize, {
+  log: true,
+  autoResize: true,
+}, [iframe]); */
 
 module.exports = {
   base64,
