@@ -137,3 +137,40 @@ Markdown styling
 html {
   scroll-behavior: smooth;
 }
+
+/* gogle search input */
+.gsc-control-cse {
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  margin-top: 1rem;
+}
+.gsc-control-cse {
+  padding: 0 !important;
+}
+form.gsc-search-box {
+  margin-bottom: 6px !important;
+  padding-left: 34px !important;
+}
+table.gsc-search-box td.gsc-input {
+  padding-right: 0 !important;
+}
+.gsc-search-button {
+  margin-left: 0 !important;
+}
+
+.gsc-search-button-v2 {
+  padding: 8px 27px !important;
+  border: 1px solid #dfe1e5 !important;
+  border-radius: 0 !important;
+  height: 2rem;
+  background-color: #979B9F !important;
+}
+.gsc-search-button-v2:hover {
+  background-color: #595F65 !important;
+}
+.gsc-input-box {
+  border: 0 !important;
+  height: 2rem !important;
+  display: flex;
+  align-items: center;
+}
