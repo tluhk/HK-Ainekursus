@@ -9,6 +9,7 @@ const {
   requestDocs,
   requestLoengud,
   requestConcepts,
+  requestPractices,
   requestSources,
   requestCourseAdditionalMaterials,
   requestLessonAdditionalMaterials,
@@ -37,7 +38,7 @@ const ignoreFiles = ['.DS_Store', '.gitkeep'];
 
 // Define what to do with Axios Response, how it is rendered
 function responseAction(
-  resConcepts,
+  resComponents,
   config,
   res,
   breadcrumbNames,
@@ -47,10 +48,10 @@ function responseAction(
   resFiles,
   ...options
 ) {
-  const concepts = resConcepts.data;
-  const conceptsDecoded = base64.decode(concepts.content);
-  const conceptsDecodedUtf8 = utf8.decode(conceptsDecoded);
-  const conceptsMarkdown = MarkdownIt.render(conceptsDecodedUtf8);
+  const component = resComponents.data;
+  const componentDecoded = base64.decode(component.content);
+  const componentDecodedUtf8 = utf8.decode(componentDecoded);
+  const componentMarkdown = MarkdownIt.render(componentDecodedUtf8);
 
   const resSources = options[0];
 
@@ -65,10 +66,11 @@ function responseAction(
   }
 
   res.render('home', {
-    content: conceptsMarkdown,
+    component: componentMarkdown,
     docs: config.docs,
     additionalMaterials: config.additionalMaterials,
     concepts: config.concepts,
+    practices: config.practices,
     lessons: config.lessons,
     sources: sourcesJSON,
     breadcrumb: breadcrumbNames,
@@ -106,7 +108,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     singleCoursePaths.push({
       path: x.slug,
     });
-    x.concepts.map((y) => singleCoursePaths.push({
+    x.components.map((y) => singleCoursePaths.push({
       path: `${x.slug}/${y}`,
     }));
     x.additionalMaterials.map((z) => singleCoursePaths.push({
@@ -133,6 +135,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       courseSlug,
       contentSlug: elem.slug,
       fullPath: elem.slug,
+      type: 'docs',
     };
 
     app.get(`/${courseSlug}/${path.contentSlug}`, (req, res) => {
@@ -157,6 +160,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       courseSlug,
       contentSlug: mat.slug,
       fullPath: mat.slug,
+      type: 'docs',
     };
 
     app.get(`/${courseSlug}/${path.contentSlug}`, async (req, res) => {
@@ -171,10 +175,10 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         .all([materials, files])
         .then(
           axios.spread((...responses) => {
-            const resConcepts = responses[0];
+            const resComponents = responses[0];
             const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
 
-            responseAction(resConcepts, config, res, breadcrumbNames, path, allCourses, singleCoursePaths, resFiles);
+            responseAction(resComponents, config, res, breadcrumbNames, path, allCourses, singleCoursePaths, resFiles);
           }),
         )
         .catch((error) => {
@@ -222,16 +226,17 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       const breadcrumbNames = {
         courseName,
         contentName: lesson.name,
-        conceptName: mat.name,
+        componentName: mat.name,
       };
       const path = {
         courseSlug,
         contentSlug: lesson.slug,
-        conceptSlug: mat.slug,
+        componentSlug: mat.slug,
         fullPath: `${lesson.slug}/${mat.slug}`,
+        type: 'docs',
       };
 
-      return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, async (req, res) => {
+      return app.get(`/${courseSlug}/${path.contentSlug}/${path.componentSlug}`, async (req, res) => {
         const materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
         const files = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
 
@@ -240,12 +245,12 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
           .all([materials, files])
           .then(
             axios.spread((...responses) => {
-              const resConcepts = responses[0];
+              const resComponents = responses[0];
               const resFiles = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
               // console.log('resFiles: ', resFiles);
 
               responseAction(
-                resConcepts,
+                resComponents,
                 config,
                 res,
                 breadcrumbNames,
@@ -265,39 +270,71 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
 
   // Loengu concepts endpointid
   config.lessons.forEach((lesson) => {
-    lesson.concepts.map((concept) => {
-      const conceptInfo = config.concepts.find((x) => x.slug === concept);
+    lesson.components.map((comp) => {
+      let component = {};
+      if (config.concepts.map((x) => x.slug).includes(comp)) {
+        component = config.concepts.find((x) => x.slug === comp);
+        component.type = 'concept';
+      }
+      if (config.practices.map((x) => x.slug).includes(comp)) {
+        component = config.practices.find((x) => x.slug === comp);
+        component.type = 'practice';
+      }
       const breadcrumbNames = {
         courseName,
         contentName: lesson.name,
-        conceptName: conceptInfo.name,
+        componentName: component.name,
       };
       const path = {
         courseSlug,
         contentSlug: lesson.slug,
-        conceptSlug: conceptInfo.slug,
-        fullPath: `${lesson.slug}/${conceptInfo.slug}`,
+        componentSlug: component.slug,
+        fullPath: `${lesson.slug}/${component.slug}`,
+        type: component.type,
       };
 
-      return app.get(`/${courseSlug}/${path.contentSlug}/${path.conceptSlug}`, async (req, res) => {
-        const concepts = await axios.get(requestConcepts(coursePathInGithub, `${path.conceptSlug}`), authToken);
-        const sources = await axios.get(requestSources(coursePathInGithub, `${path.conceptSlug}`), authToken);
+      return app.get(`/${courseSlug}/${path.contentSlug}/${path.componentSlug}`, async (req, res) => {
+        let components = [];
+        let sources = [];
+        if (path.type === 'concept') {
+          components = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`), authToken);
+          sources = await axios.get(requestSources(coursePathInGithub, `${path.componentSlug}`), authToken);
 
-        /* console.log('concept', concept);
-        console.log('conceptInfo', conceptInfo);
-        console.log('breadcrumbNames:', breadcrumbNames);
-        console.log('path:', path); */
+          axios
+            .all([components, sources])
+            .then(
+              axios.spread((...responses) => {
+                const resComponents = responses[0];
+                const resSources = responses[1];
+                const resFiles = [];
 
-        axios
-          .all([concepts, sources])
-          .then(
-            axios.spread((...responses) => {
-              const resConcepts = responses[0];
-              const resSources = responses[1];
-              const resFiles = [];
+                responseAction(
+                  resComponents,
+                  config,
+                  res,
+                  breadcrumbNames,
+                  path,
+                  allCourses,
+                  singleCoursePaths,
+                  resFiles,
+                  resSources,
+                );
+              }),
+            )
+            .catch((error) => {
+              console.log(error);
+            });
+        }
 
+        if (path.type === 'practice') {
+          components = await axios.get(requestPractices(coursePathInGithub, `${path.componentSlug}`), authToken);
+
+          const resFiles = [];
+          axios
+            .get(requestPractices(coursePathInGithub, `${path.componentSlug}`), authToken)
+            .then((response) => {
               responseAction(
-                resConcepts,
+                response,
                 config,
                 res,
                 breadcrumbNames,
@@ -305,76 +342,15 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
                 allCourses,
                 singleCoursePaths,
                 resFiles,
-                resSources,
               );
-            }),
-          )
-          .catch((error) => {
-            console.log(error);
-          });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       });
     });
   });
 };
 
 module.exports = { setSingleCourseRoutes };
-
-/*
-  // Teemade endpointid
-  config.concepts.forEach((elem) => {
-    const breadcrumbNames = {
-      courseName,
-      contentName: elem.name,
-    };
-    const path = {
-      courseSlug,
-      contentSlug: elem.slug,
-    };
-    // define folder for each concept's static files:
-    // console.log('requestStatic(elem.slug)', requestStaticURL(elem.slug));
-    // app.use(express.static(requestStaticURL(elem.slug)));
-
-    app.get(`/${courseSlug}/${elem.slug}`, async (req, res) => {
-      const concepts = axios.get(requestConcepts(coursePathInGithub, `${elem.slug}`), authToken);
-      const sources = axios.get(requestSources(coursePathInGithub, `${elem.slug}`), authToken);
-
-      // app.use('images', express.static('https://api.github.com/tluhk/HK_Riistvara-alused/contents/concepts/arvuti/images'));
-
-      /* try {
-        const response = await getImgPromises(coursePathInGithub, elem.slug);
-        // console.log('response.data', response.data);
-        const responseData = response.data;
-        // console.log('data', responseData);
-
-        const files = [];
-        responseData.map((x) => files.push(x.download_url));
-        // console.log('files', files);
-      } catch (err) {
-        console.error(err);
-      } */
-/*
-      axios
-        .all([concepts, sources])
-        .then(
-          axios.spread((...responses) => {
-            const resConcepts = responses[0];
-            const resSources = responses[1];
-
-            responseAction(
-              resConcepts,
-              config,
-              res,
-              breadcrumbNames,
-              path,
-              allCourses,
-              singleCoursePaths,
-              resSources,
-            );
-          }),
-        )
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  });
-  */

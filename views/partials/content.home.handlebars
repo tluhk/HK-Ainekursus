@@ -14,18 +14,18 @@
         href='/{{path.courseSlug}}/{{path.contentSlug}}'
       >{{breadcrumb.contentName}}</a>
     {{/if}}
-    {{#if breadcrumb.conceptName}}
+    {{#if breadcrumb.componentName}}
       >
       <a
         class='hover:underline'
-        href='/{{path.courseSlug}}/{{path.contentSlug}}/{{path.conceptSlug}}'
-      >{{breadcrumb.conceptName}}</a>
+        href='/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}'
+      >{{breadcrumb.componentName}}</a>
     {{/if}}
   </div>
 
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
-  {{{content}}}
+  {{{component}}}
 
   <!-- NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad"" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed. -->
   {{#if sources}}
@@ -45,7 +45,7 @@
 
   <!-- NB! Ainekava linki config.json failist kuvatakse ainult "about"/Ainekursusest lehel -->
 
-  {{#if_equal path.contentSlug 'about'}}
+  {{#if_equal path.componentSlug 'about'}}
   <br>
   <b>Ainekava: </b><a href='{{../config.courseUrl}}' target='_blank'>{{../config.courseName}} ({{../config.courseCode}})</a>
   {{/if_equal}}
