@@ -45,7 +45,7 @@
         ">
           <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
           <label class="tab-label" for="chck{{@index}}">
-            <div class="flex gap-2 w-full items-center">
+            <div class="flex gap-2 w-full">
               <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
               </a>
             </div>
@@ -53,14 +53,14 @@
           
           <!-- Themes links -->
           {{#each this.components}}
-            <div class="tab-content flex gap-2 items-center 
+            <div class="tab-content flex gap-2 
               {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
                 active-tab-content
               {{/if_equal }}
             " >
               <a class="grow py-3 !no-underline" 
                 href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
-                 <div class="flex gap-2 w-full items-center" >
+                 <div class="flex gap-2 w-full" >
                     <span class="material-symbols-outlined">
                       {{{showComponentType this ../../concepts ../../practices}}}
                     </span>
