@@ -35,7 +35,36 @@ module.exports = function hbsHelpers(hbs) {
         }
         return options.inverse(this);
       },
-      /* ifIn: (elem, objects) => {
+      componentIcon: (type) => {
+        switch (type) {
+          case 'docs': return 'attach_file';
+          case 'concepts': return 'sticky_note_2';
+          case 'practice': return 'home_repair_service';
+          default: return '';
+            // do nothing
+        }
+      },
+      showComponentType: (component, concepts, practices) => {
+        const components = concepts.concat(practices);
+        const comp = components.find((x) => (x.slug) === component);
+        switch (comp.type) {
+          case 'docs': return 'attach_file';
+          case 'concept': return 'sticky_note_2';
+          case 'practice': return 'home_repair_service';
+          default: return '';
+        }
+      },
+      showComponentName: (component, concepts, practices) => {
+        const components = concepts.concat(practices);
+        const comp = components.find((x) => (x.slug) === component);
+        return comp.name;
+      },
+    },
+    /*
+    {{#showComponentType this ../../concepts ../../practices}}
+                  {{/showComponentType }}
+    */
+  /* ifIn: (elem, objects) => {
         console.log('objects', objects);
         const index = objects.findIndex((object) => object.path === elem);
         if (index > -1) {
@@ -43,15 +72,5 @@ module.exports = function hbsHelpers(hbs) {
         }
         return false;
       }, */
-      /*
-      link: (filename, desc) => {
-        // handlebars faili:
-        {{{ link this.filename this.description }}}
-
-        const html = `<a href="#${filename}" onclick="javascript:fileFunc(${filename}">${desc}</a>`;
-        return html;
-      }, */
-      // More helpers...
-    },
   });
 };
