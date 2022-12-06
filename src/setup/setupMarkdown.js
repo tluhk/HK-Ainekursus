@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-empty */
 /* eslint-disable import/newline-after-import */
 const base64 = require('base-64');
@@ -93,12 +94,41 @@ MarkdownIt.use(iframe, {
   allowfullscreen: false,
   frameborder: 0, // default: 0
   renderIframe: true, // default: true
+  width: '100%',
+  height: '500px',
 });
 
-/* MarkdownIt.use(iFrameResize, {
+/*
+iframe resizer:
+https://www.npmjs.com/package/wl-iframe-resizer?activeTab=readme
+
+** IFrame not resizing **
+The most common cause of this is not placing the iframeResizer.contentWindow.min.js script inside the iFramed page. If the other page is on a domain outside your control and you can not add JavaScript to that page, then now is the time to give up all hope of ever getting the iFrame to size to the content. As it is impossible to work out the size of the contained page, without using JavaScript on both the parent and child pages.
+
+MarkdownIt.use(iFrameResize, {
   log: true,
   autoResize: true,
-}, [iframe]); */
+}, [iframe]);
+
+Other notes:
+CSS:
+.iframe-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  height: 600px;
+}
+
+.markdown-iframe {
+  flex-grow: 3;
+  border: non1;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+*/
 
 module.exports = {
   base64,
