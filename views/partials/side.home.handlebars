@@ -10,14 +10,14 @@
 
 <!-- DROPDOWN MENu -->
 
-    <div class="bg-neutral-100 mb-2 uppercase">
+    <div class="bg-neutral-100 mb-2">
 
       <div class="!no-underline p-4 border-b border-neutral-200">
         <!-- Topic name and code -->
         {{#each courses}}
           {{#if_equal this.courseSlug ../path.courseSlug}}
           <div class="mb-2">
-            <a class="text-md font-bold mb-2 !no-underline "href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+            <a class="text-md font-bold mb-2 !no-underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
           </div>
           <div class="flex justify-between">
             <a class="!no-underline py-2" href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
@@ -105,12 +105,12 @@
         {{#each courses}}
           {{#if_not_equal this.courseSlug ../path.courseSlug}}
           <div class="mb-2">
-            <a class="text-md font-bold mb-2 !no-underline "href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+            <a class="text-md font-bold mb-2 !no-underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
           </div>
           <div class="flex justify-between">
             <a class="!no-underline py-2" href="/{{../this.courseSlug}}/about">({{../this.courseCode}})</a>
 
-            <a class="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a>
+            <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a>
           {{/if_not_equal}}
         {{/each}}
           </div>

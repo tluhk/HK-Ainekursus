@@ -17,7 +17,7 @@
     @apply py-2 px-4 rounded-full cursor-pointer;
   }
   .btn-primary {
-    @apply bg-neutral-600 hover:bg-neutral-900 text-white;
+    @apply bg-neutral-500 hover:bg-neutral-900 text-white;
   }
   .btn-secondary {
     @apply bg-white border-2 border-neutral-300 hover:bg-neutral-100;
@@ -194,3 +194,9 @@ table.gsc-search-box td.gsc-input {
 .gsc-input-box {
   width: 8.5rem;
 }
+
+/* Pregressbar */
+
+progress::-webkit-progress-bar { @apply bg-neutral-200; }
+progress::-webkit-progress-value { @apply bg-neutral-500; }
+progress { @apply w-full;}
