@@ -421,7 +421,7 @@ html {
 }
 
 h1 {
-  font-size: 3.052rem;
+  font-size: 2.488rem;
   font-weight: 700;
   line-height: 1.2;
   margin-top: 1.25rem;
@@ -429,7 +429,7 @@ h1 {
 }
 
 h2 {
-  font-size: 2.441rem;
+  font-size: 2.074rem;
   font-weight: 700;
   line-height: 1.1;
   margin-top: 1.25rem;
@@ -437,14 +437,14 @@ h2 {
 }
 
 h3 {
-  font-size: 1.953rem;
+  font-size: 1.728rem;
   font-weight: 700;
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 h4 {
-  font-size: 1.953rem;
+  font-size: 1.728rem;
   font-weight: 600;
   line-height: 1.5rem;
   margin-top: 1.25rem;
@@ -452,7 +452,7 @@ h4 {
 }
 
 h5 {
-  font-size: 1.563rem;
+  font-size: 1.44rem;
   font-weight: 600;
   line-height: 1.5rem;
   margin-top: 1.25rem;
@@ -567,7 +567,7 @@ p {
   top: 194px;
   --tw-bg-opacity: 1;
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
-  font-size: 0.8rem;
+  font-size: 0.833rem;
   height: calc(100% - 149px);
 }
 
@@ -1059,15 +1059,15 @@ input:checked ~ .tab-label {
 }
 
 .text-lg {
-  font-size: 1.563rem;
+  font-size: 1.44rem;
 }
 
 .text-sm {
-  font-size: 0.8rem;
+  font-size: 0.833rem;
 }
 
 .text-md {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .font-bold {

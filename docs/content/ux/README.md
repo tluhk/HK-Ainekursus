@@ -17,5 +17,12 @@ Low-fi prototüüpide ja tagasiside baasil tegime esialgsed Hi-fi kavandid. Need
 Hi-fi prototüüp Figmas:
 
 https://www.figma.com/file/xW1dnmDtbxcboAQoRy8KgP/Valikpraktika?node-id=0%3A1
+Vahepeal mõeldud värvilahendused. Päris mitu esmast testijt avaldasid väga tugevat negatiivset reaktsiooni rohelise värvilahenduse osas ja seega sai see hüljatud.
+![image (7)](https://user-images.githubusercontent.com/79322409/205870638-4ab96599-7ef9-4c5c-bcff-6a05ac3a67da.png)
+![image (6)](https://user-images.githubusercontent.com/79322409/205870642-ed8c3c58-b314-4c72-9e3d-c6542c56757f.png)
+Hetkel on hi-fi prototüübi tööversioon, millega edasi minnakse selline:
+![image](https://user-images.githubusercontent.com/79322409/205871508-7a3d54b0-feab-4b23-8b88-680e4b0a75d2.png)
+![image](https://user-images.githubusercontent.com/79322409/205871577-cd34bf2f-f8d5-429f-aac7-2920fcf98129.png)
+
 
 [<Tagasi](../../README.md)

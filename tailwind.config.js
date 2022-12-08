@@ -21,13 +21,13 @@ module.exports = {
       },
     },
     fontSize: {
-      sm: '0.8rem',
+      sm: '0.833rem',
       base: '1rem',
-      md: '1.25rem',
-      lg: '1.563rem',
-      xl: '1.953rem',
-      xxl: '2.441rem',
-      xxxl: '3.052rem',
+      md: '1.2rem',
+      lg: '1.44rem',
+      xl: '1.728rem',
+      xxl: '2.074rem',
+      xxxl: '2.488rem',
     },
     extend: {
       fontFamily: {
