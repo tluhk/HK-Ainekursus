@@ -1,8 +1,24 @@
 /* eslint-disable max-len */
 // const { promises } = require('fs');
 
+const NodeCache = require('node-cache');
 const { base64, utf8, MarkdownIt } = require('./setup/setupMarkdown');
 const { axios, authToken } = require('./setup/setupGithub');
+
+const cache = new NodeCache({ stdTTL: 30 });
+
+const verifyCache = (req, res, next) => {
+  try {
+    const { routePath } = req.params;
+    if (cache.has(routePath)) {
+      return res.status(200).json(cache.get(routePath));
+    }
+    return next();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 
 // Import request functions for Axios
 const {
@@ -138,7 +154,18 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       type: 'docs',
     };
 
-    app.get(`/${courseSlug}/${path.contentSlug}`, (req, res) => {
+    // routePath peab olema unikaalne
+    const routePath = `${courseSlug}/${path.contentSlug}`;
+
+    app.get(`/${routePath}`, verifyCache, async (req, res) => {
+      try {
+        const { routePath } = req.params;
+        const { data } = await axios.get(requestDocs(coursePathInGithub, `${path.contentSlug}`), authToken);
+        return res.status(200).json(data);
+      } catch (response) {
+        return res.sendStatus(response.status);
+      }
+
       axios
         .get(requestDocs(coursePathInGithub, `${path.contentSlug}`), authToken)
         .then((response) => {
@@ -237,11 +264,23 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       };
 
       return app.get(`/${courseSlug}/${path.contentSlug}/${path.componentSlug}`, async (req, res) => {
-        const materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
-        const files = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
+        let materials = {};
+        let files = {};
+
+        try {
+          materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
+        } catch ({ response }) {
+          return res.sendStatus(response.status);
+        }
+
+        try {
+          files = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
+        } catch ({ response }) {
+          return res.sendStatus(response.status);
+        }
 
         // console.log('concepts', concepts);
-        axios
+        return axios
           .all([materials, files])
           .then(
             axios.spread((...responses) => {

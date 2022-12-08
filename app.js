@@ -40,6 +40,18 @@ const { engine } = require('./engine');
 
 engine(app);
 
-app.listen(port, () => {
+/* app.listen(port, () => {
   console.log(`Listening on port ${port}`);
-});
+}); */
+
+const start = (portProp) => {
+  try {
+    app.listen(portProp);
+    console.log(`Listening on port ${portProp}`);
+  } catch (err) {
+    console.error(err);
+    process.exit();
+  }
+};
+
+start(port);
