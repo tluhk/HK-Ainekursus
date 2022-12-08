@@ -2,8 +2,8 @@
 // const { promises } = require('fs');
 
 const NodeCache = require('node-cache');
-const { base64, utf8, MarkdownIt } = require('./setup/setupMarkdown');
-const { axios, authToken } = require('./setup/setupGithub');
+const { base64, utf8, MarkdownIt } = require('../setup/setupMarkdown');
+const { axios, authToken } = require('../setup/setupGithub');
 
 const cache = new NodeCache({ stdTTL: 30 });
 
@@ -19,7 +19,6 @@ const verifyCache = (req, res, next) => {
   }
 };
 
-
 // Import request functions for Axios
 const {
   requestDocs,
@@ -32,7 +31,7 @@ const {
   requestCourseFiles,
   requestLessonFiles,
   // requestStaticURL,
-} = require('./functions/repoFunctions');
+} = require('../functions/repoFunctions');
 
 const returnPreviousPage = (currentPath, paths) => {
   // console.log('paths', paths);
@@ -158,14 +157,6 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     const routePath = `${courseSlug}/${path.contentSlug}`;
 
     app.get(`/${routePath}`, verifyCache, async (req, res) => {
-      try {
-        const { routePath } = req.params;
-        const { data } = await axios.get(requestDocs(coursePathInGithub, `${path.contentSlug}`), authToken);
-        return res.status(200).json(data);
-      } catch (response) {
-        return res.sendStatus(response.status);
-      }
-
       axios
         .get(requestDocs(coursePathInGithub, `${path.contentSlug}`), authToken)
         .then((response) => {
@@ -267,17 +258,8 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         let materials = {};
         let files = {};
 
-        try {
-          materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
-        } catch ({ response }) {
-          return res.sendStatus(response.status);
-        }
-
-        try {
-          files = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
-        } catch ({ response }) {
-          return res.sendStatus(response.status);
-        }
+        materials = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
+        files = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
 
         // console.log('concepts', concepts);
         return axios

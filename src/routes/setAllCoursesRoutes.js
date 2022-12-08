@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-const { getConfig } = require('./getConfig');
+const { getConfig } = require('../getConfig');
 
 const setAllCoursesRoutes = async (app, allCourses) => {
   // *** ENDPOINTS ***
@@ -23,7 +23,7 @@ const setAllCoursesRoutes = async (app, allCourses) => {
       courseSlug,
     };
 
-    app.get(`/${course.courseSlug}`, async (req, res) => {
+    /* app.get(`/${course.courseSlug}`, async (req, res) => {
       const config = await getConfig(coursePathInGithub);
 
       res.render('home', {
@@ -36,7 +36,9 @@ const setAllCoursesRoutes = async (app, allCourses) => {
         breadcrumb: breadcrumbNames,
         path,
       });
-    });
+    }); */
+
+    app.get(`/${course.courseSlug}`, (req, res) => res.redirect(`/${course.courseSlug}/about`));
   });
 };
 

@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
 
-const { getAllCourses } = require('./src/getAllCourses');
+const { getAllCourses } = require('./src/routes/getAllCourses');
 const { getConfig } = require('./src/getConfig');
-const { setSingleCourseRoutes } = require('./src/setSingleCourseRoutes');
-const { setAllCoursesRoutes } = require('./src/setAllCoursesRoutes');
+const { setSingleCourseRoutes } = require('./src/routes/setSingleCourseRoutes');
+const { setAllCoursesRoutes } = require('./src/routes/setAllCoursesRoutes');
 
 const engine = async (app) => {
   const allCourses = await getAllCourses();
