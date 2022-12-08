@@ -1,6 +1,6 @@
-const { axios, authToken } = require('./setup/setupGithub');
-const { requestCourses } = require('./functions/repoFunctions');
-const { getConfig } = require('./getConfig');
+const { axios, authToken } = require('../setup/setupGithub');
+const { requestCourses } = require('../functions/repoFunctions');
+const { getConfig } = require('../getConfig');
 
 const getAllCourses = (async () => {
   const resp = await axios.get(requestCourses, authToken).catch((error) => {

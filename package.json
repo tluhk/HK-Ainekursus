@@ -40,6 +40,7 @@
     "helmet": "^6.0.0",
     "highlight.js": "^11.7.0",
     "iframe-resizer": "^3.6.6",
+    "instantclick": "^3.1.0-2",
     "jquery": "^3.6.1",
     "js-base64": "^3.7.2",
     "jsdom": "^20.0.3",

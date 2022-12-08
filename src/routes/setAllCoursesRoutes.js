@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-const { getConfig } = require('./getConfig');
+const { getConfig } = require('../getConfig');
 
 const setAllCoursesRoutes = async (app, allCourses) => {
   // *** ENDPOINTS ***
