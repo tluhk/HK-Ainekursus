@@ -45,6 +45,8 @@ module.exports = function hbsHelpers(hbs) {
         }
       },
       showComponentType: (component, concepts, practices) => {
+        console.log('concepts:', concepts);
+        console.log('practices:', practices);
         const components = concepts.concat(practices);
         const comp = components.find((x) => (x.slug) === component);
         switch (comp.type) {
