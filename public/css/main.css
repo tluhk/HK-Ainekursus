@@ -1288,6 +1288,10 @@ table.gsc-search-box td.gsc-input {
   width: 8.5rem;
 }
 
+.gsib_a {
+  padding: 5px 9px 4px 16px !important;
+}
+
 /* Pregressbar */
 
 progress::-webkit-progress-bar {

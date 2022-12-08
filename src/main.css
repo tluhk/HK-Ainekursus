@@ -194,6 +194,9 @@ table.gsc-search-box td.gsc-input {
 .gsc-input-box {
   width: 8.5rem;
 }
+.gsib_a {
+  padding: 5px 9px 4px 16px !important;
+}
 
 /* Pregressbar */
 
