@@ -22,13 +22,13 @@ const MarkdownIt = require('markdown-it')({
   highlight: (str, lang) => {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return `<pre class="hljs"><code>${
+        return `<pre class="markdown-pre"><code>${
           hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
         }</code></pre>`;
       } catch (__) {}
     }
 
-    return `<pre class="hljs"><code>${MarkdownIt.utils.escapeHtml(str)}</code></pre>`;
+    return `<pre class="markdown-pre"><code>${MarkdownIt.utils.escapeHtml(str)}</code></pre>`;
   },
 }).enable('image');
 

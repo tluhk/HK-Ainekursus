@@ -8,7 +8,7 @@
 
 @layer components {
   .sidebar {
-    @apply bg-neutral-100 mobileheight lg:h-full text-sm top-[194px] lg:top-0 lg:!w-80;
+    @apply bg-neutral-100 mobileheight lg:h-full top-[194px] lg:top-0 lg:!w-[22rem];
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
@@ -17,11 +17,20 @@
     @apply py-2 px-4 rounded-full cursor-pointer;
   }
   .btn-primary {
-    @apply bg-primary-700 hover:bg-primary-800 text-white;
+    @apply bg-neutral-600 hover:bg-neutral-900 text-white;
   }
   .btn-secondary {
-    @apply bg-secondary-500 hover:bg-secondary-600 text-white;
+    @apply bg-white border-2 border-neutral-300 hover:bg-neutral-100;
   }
+
+  a, a.markdown {
+    @apply !text-neutral-600;
+  }
+
+  pre {
+    @apply bg-neutral-800 text-white pt-6 px-4 pb-2 rounded;
+  }
+
   /*--------------------------- accordion components ---------------------------*/
 
   .tab-close {
@@ -40,11 +49,13 @@
   .tab-content {
     @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900 transition-all;
   }
-  .active-tab .tab-label,
   .active-tab .no-tab-label,
   .active-tab-content,
   .tab-content:hover,
   input:checked + .tab-label {
+    @apply bg-neutral-100;
+  }
+  .active-tab .tab-label:hover {
     @apply bg-neutral-200;
   }
   .active-tab .tab-label::after,

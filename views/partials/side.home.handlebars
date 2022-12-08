@@ -10,9 +10,9 @@
 
 <!-- DROPDOWN MENu -->
 
-    <div class="bg-neutral-100 mb-5">
+    <div class="bg-neutral-100 mb-2 uppercase">
 
-      <div class="!no-underline p-4">
+      <div class="!no-underline p-4 border-b border-neutral-200">
         <!-- Topic name and code -->
         {{#each courses}}
           {{#if_equal this.courseSlug ../path.courseSlug}}
@@ -101,7 +101,7 @@
       </div>
     </div>
 
-    <div class="!no-underline p-4 bg-white">
+    <div class="!no-underline p-4 bg-neutral-100">
         {{#each courses}}
           {{#if_not_equal this.courseSlug ../path.courseSlug}}
           <div class="mb-2">
