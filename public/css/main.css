@@ -765,8 +765,8 @@ input:checked ~ .tab-label {
   top: 0px;
 }
 
-.left-\[-1000\] {
-  left: -1000;
+.left-\[-1000px\] {
+  left: -1000px;
 }
 
 .right-8 {
@@ -787,6 +787,10 @@ input:checked ~ .tab-label {
 
 .left-\[-500vw\] {
   left: -500vw;
+}
+
+.left-\[-1000\] {
+  left: -1000;
 }
 
 .ml-4 {
@@ -1308,10 +1312,6 @@ progress {
   width: 100%;
 }
 
-@font-face {
-  font-display: swap;
-}
-
 .hover\:bg-neutral-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(187 192 197 / var(--tw-bg-opacity));
@@ -1468,3 +1468,5 @@ progress {
     justify-content: space-between;
   }
 }
+
+
