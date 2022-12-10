@@ -35,16 +35,15 @@ app.use('/images', express.static('https://api.github.com/tluhk/HK_Riistvara-alu
 
 app.use(connectLivereload());
 
-// require('./engine');
 const { engine } = require('./engine');
 
 engine(app);
 
-/* app.listen(port, () => {
+app.listen(port, () => {
   console.log(`Listening on port ${port}`);
-}); */
+});
 
-const start = (portProp) => {
+/* const start = (portProp) => {
   try {
     app.listen(portProp);
     console.log(`Listening on port ${portProp}`);
@@ -54,4 +53,4 @@ const start = (portProp) => {
   }
 };
 
-start(port);
+start(port); */

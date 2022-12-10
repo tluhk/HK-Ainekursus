@@ -3,8 +3,8 @@
 
 const { getAllCourses } = require('./src/routes/getAllCourses');
 const { getConfig } = require('./src/getConfig');
-const { setSingleCourseRoutes } = require('./src/routes/setSingleCourseRoutes');
-const { setAllCoursesRoutes } = require('./src/routes/setAllCoursesRoutes');
+const { setSingleCourseRoutes } = require('./src/routes/singleCourseRoutes');
+const { setAllCoursesRoutes } = require('./src/routes/allCoursesRoutes');
 
 const engine = async (app) => {
   const allCourses = await getAllCourses();

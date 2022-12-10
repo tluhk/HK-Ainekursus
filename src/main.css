@@ -203,3 +203,5 @@ table.gsc-search-box td.gsc-input {
 progress::-webkit-progress-bar { @apply bg-neutral-200; }
 progress::-webkit-progress-value { @apply bg-neutral-500; }
 progress { @apply w-full;}
+
+
