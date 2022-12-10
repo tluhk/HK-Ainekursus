@@ -15,7 +15,7 @@ module.exports = {
   requestCourseAdditionalMaterials: (
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md`
   ),
-  requestLoengud: (
+  requestLessons: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${opt}/about.md`
   ),
   requestLessonAdditionalMaterials: (

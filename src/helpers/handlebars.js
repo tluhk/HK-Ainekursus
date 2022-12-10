@@ -26,10 +26,19 @@ module.exports = function hbsHelpers(hbs) {
         } return opts.inverse(this);
       },
       SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
+
       last: (array) => array[array.length - 1].path,
+
       concatActivePath: (arg1, arg2) => `${arg1}/${arg2}`,
+      ifIn: (elem, list, options) => {
+        if (list === undefined) return options.inverse(this);
+        const listMap = list.map((a) => a.path);
+        if (listMap.indexOf(elem) > -1) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
       ifNotIn: (elem, list, options) => {
-        console.log('list', list);
         if (list.indexOf(elem) <= -1) {
           return options.fn(this);
         }
