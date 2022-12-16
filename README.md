@@ -2,8 +2,6 @@
 
 TLU HK RIF20 Valikpraktika raames koostatud rakendus
 
-![Kursuse rakendus](thumb-2.jpg)
-
 ## Töö sisu
 
 **Töö sisuks on õppejõule veebipõhise abistava õppematerjali ja õpilasele õppimismaterjali loomine.  
