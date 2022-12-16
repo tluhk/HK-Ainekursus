@@ -16,12 +16,14 @@ Samuti luuakse ka visioon lõplikust tootest. See võib muidugi aja jooksul veel
 
 - Eeltööga selgitada välja kursuse haldajate ning lõppkasutajate vajadused.
 - Kaardistada kasutajateekonnad.
-- Luua prototüüp
+- Luua prototüüp.
 - Luua esialgne rakendus.
 
-Rakendus on täielikult haldajate kontrolli all, tema sisu on võimalik ristkasutada ning kasutajasõbralikul moel kätte saada, kuvada ja töödelda. Need on olnud seniste lhenduste nõrkused.  
-Rakenduse sisu asub Githubis. Githubi api kaudu saab sisu jagada ja kuvada.  
-Esimeses faasis luuakse sisu git'i käskluste baasil. Eraldi kasutajaliidest pole.
+Rakendus on täielikult haldajate kontrolli all, selle sisu on võimalik ristkasutada ning kasutajasõbralikul moel kätte saada, kuvada ja töödelda. Need on olnud seniste lahenduste nõrkused.
+Õppematerjalide baasmaterjal asub Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumite nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
+Õppematerjali erinevate kursuste sisu on kättesaadav kolmel viisil: 1) jagades Githubis baasmaterjali veebiaadressi, 2) pärides baasmaterjali infot Github API kaudu, 3) eesrakenduses on igal leheküljel unikaalne aadress ja igal pealkirjal unikaalne ankur-aadress, mida saab kopeerida ning jagada lõppkasutajatele.
+
+Rakenduse esimeses versioonis hallaakse õppematerjalide sisu läbi git-i,  eraldi kasutajaliidest sisu haldamiseks pole.
 
 Lõppkasutajale on loodud kaasaegne kasutajaliides, mis on kasutatav nii mobiilis kui desktopis.  
 Kasutatud on Handlebar tepmliitimiskeelt ning Tailwind CSS-raamistikku.
@@ -45,14 +47,17 @@ cd rif20-valikpraktika-1
 npm install
 ```
 
-### Käivitamine
+### Github tokeni lisamine rakendusse
 
 Githubiga ühenduse loomiseks on tarviline Githubi tokeni loomine ja selle lisamine juurkataloogi .env faili.
-faili sisuks `AUTH = 'Bearer ghp_SINUGITHUBITOKEN'`.  
+1. Loo juurkataloogi `.env` fail
+2. Loo Githubis token: [juhend](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token.)
+3. `.env` faili sisuks määra:
+   ```
+   AUTH = 'Bearer ghp_SINUGITHUBITOKEN'
+   ```
 
-Github tokeni loomise juhend: https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token. 
-
-
+### Rakenduse käivitamine
 
 Seejärel võib rakenduse käivitada:
 
