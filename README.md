@@ -27,7 +27,7 @@ Rakenduse esimeses versioonis hallaakse õppematerjalide sisu läbi git-i,  eral
 
 Lõppkasutajale on loodud kaasaegne kasutajaliides, mis on kasutatav nii mobiilis kui desktopis.  
 Kasutatud on Handlebar tepmliitimiskeelt ning Tailwind CSS-raamistikku.
-Sisumootoriks on Node + Express.js
+Sisumootoriks on Node + Express.js.
 
 ## Rakenduse kasutamine ja käivitamine
 
