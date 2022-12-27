@@ -12,15 +12,15 @@
 
     <div class="bg-neutral-100 mb-2">
 
-      <div class="!no-underline p-4 border-b border-neutral-200">
+      <div class="!no-underline p-4 border-b border-neutral-200 bg-brand_red">
         <!-- Topic name and code -->
         {{#each courses}}
           {{#if_equal this.courseSlug ../path.courseSlug}}
-          <div class="mb-2">
-            <a class="text-md font-bold mb-2 !no-underline hover:!underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+          <div class="mb-2 ">
+            <a class="!text-white text-md font-bold mb-2 !no-underline hover:!underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
           </div>
           <div class="flex justify-between">
-            <a class="!no-underline hover:!underline py-2" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
+            <a class="!text-white !no-underline hover:!underline py-2" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
           {{/if_equal}}
         {{/each}}
             <!-- About links -->

@@ -624,7 +624,8 @@ p {
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
 }
 
-a, a.markdown {
+a,
+  a.markdown {
   --tw-text-opacity: 1 !important;
   color: rgb(48 55 62 / var(--tw-text-opacity)) !important;
 }
@@ -687,11 +688,22 @@ pre {
 }
 
 .active-tab .no-tab-label,
-  .active-tab-content,
+  .active-tab .tab-label {
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+}
+
+.active-tab-content,
   .tab-content:hover,
   input:checked + .tab-label {
   --tw-bg-opacity: 1;
-  background-color: rgb(231 233 236 / var(--tw-bg-opacity));
+  background-color: rgb(183 18 52 / var(--tw-bg-opacity));
+}
+
+.active-tab-content *,
+  .tab-content:hover * {
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
 }
 
 .active-tab .tab-label:hover {
@@ -1001,6 +1013,11 @@ input:checked ~ .tab-label {
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
 }
 
+.bg-brand_red {
+  --tw-bg-opacity: 1;
+  background-color: rgb(183 18 52 / var(--tw-bg-opacity));
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -1135,6 +1152,11 @@ input:checked ~ .tab-label {
   color: rgb(41 37 36 / var(--tw-text-opacity));
 }
 
+.\!text-white {
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+}
+
 .\!no-underline {
   text-decoration-line: none !important;
 }
@@ -1237,7 +1259,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* gogle search input */
+/* google search input */
 
 .gsc-control-cse {
   background-color: transparent !important;
@@ -1293,7 +1315,7 @@ table.gsc-search-box td.gsc-input {
   padding: 5px 9px 4px 16px !important;
 }
 
-/* Pregressbar */
+/* Progressbar */
 
 progress::-webkit-progress-bar {
   --tw-bg-opacity: 1;
@@ -1302,12 +1324,14 @@ progress::-webkit-progress-bar {
 
 progress::-webkit-progress-value {
   --tw-bg-opacity: 1;
-  background-color: rgb(89 95 101 / var(--tw-bg-opacity));
+  background-color: rgb(183 18 52 / var(--tw-bg-opacity));
 }
 
 progress {
   width: 100%;
 }
+
+/* navbar accent shape */
 
 .hover\:bg-neutral-300:hover {
   --tw-bg-opacity: 1;
@@ -1320,6 +1344,10 @@ progress {
 
 .hover\:\!underline:hover {
   text-decoration-line: underline !important;
+}
+
+.hover\:\!no-underline:hover {
+  text-decoration-line: none !important;
 }
 
 .focus\:outline-none:focus {
@@ -1460,5 +1488,3 @@ progress {
     justify-content: space-between;
   }
 }
-
-

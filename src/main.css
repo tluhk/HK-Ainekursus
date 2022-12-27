@@ -23,7 +23,8 @@
     @apply bg-white border-2 border-neutral-300 hover:bg-neutral-100;
   }
 
-  a, a.markdown {
+  a,
+  a.markdown {
     @apply !text-neutral-600;
   }
 
@@ -49,10 +50,17 @@
     @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900 transition-all;
   }
   .active-tab .no-tab-label,
+  .active-tab .tab-label {
+    @apply bg-neutral-200;
+  }
   .active-tab-content,
   .tab-content:hover,
   input:checked + .tab-label {
-    @apply bg-neutral-100;
+    @apply bg-brand_red;
+  }
+  .active-tab-content *,
+  .tab-content:hover * {
+    @apply !text-white;
   }
   .active-tab .tab-label:hover {
     @apply bg-neutral-200;
@@ -148,7 +156,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* gogle search input */
+/* google search input */
 .gsc-control-cse {
   background-color: transparent !important;
   border: 1px solid transparent !important;
@@ -197,10 +205,16 @@ table.gsc-search-box td.gsc-input {
   padding: 5px 9px 4px 16px !important;
 }
 
-/* Pregressbar */
+/* Progressbar */
 
-progress::-webkit-progress-bar { @apply bg-neutral-200; }
-progress::-webkit-progress-value { @apply bg-neutral-500; }
-progress { @apply w-full;}
+progress::-webkit-progress-bar {
+  @apply bg-neutral-200;
+}
+progress::-webkit-progress-value {
+  @apply bg-brand_red;
+}
+progress {
+  @apply w-full;
+}
 
-
+/* navbar accent shape */
