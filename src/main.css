@@ -8,7 +8,7 @@
 
 @layer components {
   .sidebar {
-    @apply bg-neutral-100 mobileheight lg:h-full top-[194px] lg:top-0 w-[calc(100%-3rem)] lg:!w-[22rem];
+    @apply bg-neutral-100 mobileheight lg:h-full top-[194px] lg:top-0 !w-[22rem];
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
@@ -94,6 +94,9 @@
     @apply absolute opacity-0 -z-10;
   }
   /*--------------------------- end of sidebar tab's -------------------------------*/
+  .aside.menu-zero {
+    @apply ml-[-21.5rem];
+  }
 }
 
 .material-symbols-outlined {
@@ -112,10 +115,13 @@ a {
 .menu-zero {
   top: 0;
   left: 0;
-  z-index: 20;
 }
 .menu-zero i {
   transform: rotate(180deg);
+}
+.aside {
+  margin-left: inherit;
+  transition: all 1s;
 }
 
 .reading_content {

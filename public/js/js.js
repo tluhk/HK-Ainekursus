@@ -8,6 +8,6 @@ function closeMenu() {
 }
 
 function closeSideMenu() {
-  let x = document.querySelector('.sidebar');
+  let x = document.querySelector('.aside');
   x.classList.toggle('menu-zero');
 }

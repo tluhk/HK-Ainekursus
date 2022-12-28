@@ -565,7 +565,7 @@ p {
 
 .sidebar {
   top: 194px;
-  width: calc(100% - 3rem);
+  width: 22rem !important;
   --tw-bg-opacity: 1;
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
   height: calc(100% - 149px);
@@ -575,7 +575,6 @@ p {
   .sidebar {
     top: 0px;
     height: 100%;
-    width: 22rem !important;
   }
 }
 
@@ -763,6 +762,10 @@ input:checked ~ .tab-label {
 
 /*--------------------------- end of sidebar tab's -------------------------------*/
 
+.aside.menu-zero {
+  margin-left: -21.5rem;
+}
+
 .absolute {
   position: absolute;
 }
@@ -803,16 +806,8 @@ input:checked ~ .tab-label {
   left: -500vw;
 }
 
-.left-\[calc\(-100\%\+3\.5rem\)\] {
-  left: calc(-100% + 3.5rem);
-}
-
-.right-\[-3rem\] {
-  right: -3rem;
-}
-
-.left-\[-1000\] {
-  left: -1000;
+.z-10 {
+  z-index: 10;
 }
 
 .ml-4 {
@@ -871,6 +866,11 @@ input:checked ~ .tab-label {
   height: 100vh;
 }
 
+.h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
 .h-4 {
   height: 1rem;
 }
@@ -885,6 +885,10 @@ input:checked ~ .tab-label {
 
 .h-10 {
   height: 2.5rem;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .min-h-screen {
@@ -935,6 +939,10 @@ input:checked ~ .tab-label {
   grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
+.flex-row {
+  flex-direction: row;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -973,6 +981,10 @@ input:checked ~ .tab-label {
   margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -998,6 +1010,11 @@ input:checked ~ .tab-label {
   border-color: rgb(212 214 216 / var(--tw-border-opacity));
 }
 
+.bg-neutral-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(231 233 236 / var(--tw-bg-opacity));
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -1011,11 +1028,6 @@ input:checked ~ .tab-label {
 .bg-neutral {
   --tw-bg-opacity: 1;
   background-color: rgb(64 70 77 / var(--tw-bg-opacity));
-}
-
-.bg-neutral-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(231 233 236 / var(--tw-bg-opacity));
 }
 
 .bg-brand_red {
@@ -1213,11 +1225,15 @@ a {
 .menu-zero {
   top: 0;
   left: 0;
-  z-index: 20;
 }
 
 .menu-zero i {
   transform: rotate(180deg);
+}
+
+.aside {
+  margin-left: inherit;
+  transition: all 1s;
 }
 
 .reading_content {
