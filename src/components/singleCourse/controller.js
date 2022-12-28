@@ -120,13 +120,12 @@ const singleCourseController = {
   requestDocsController: async (req, res, next) => {
     const {
       coursePathInGithub,
-      path,
     } = res.locals.params;
 
     const routePath = req.url;
 
     if (!cache.get(routePath)) {
-      const docs = await axios.get(requestDocs(coursePathInGithub, path.contentSlug), authToken);
+      const docs = await axios.get(requestDocs(coursePathInGithub), authToken);
 
       res.locals.dataObj = {
         resComponents: docs,

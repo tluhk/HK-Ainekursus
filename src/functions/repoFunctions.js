@@ -10,7 +10,7 @@ module.exports = {
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.json`
   ),
   requestDocs: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${opt}.md`
+    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/about.md`
   ),
   requestCourseAdditionalMaterials: (
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md`
