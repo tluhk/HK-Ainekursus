@@ -6,26 +6,33 @@ const baseUrl = 'https://api.github.com';
 // Github API request endpoints
 module.exports = {
   requestCourses: 'https://api.github.com/orgs/tluhk/repos',
+  // config
   requestConfig: (
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.json`
   ),
+  // docs related
   requestDocs: (
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/about.md`
   ),
   requestCourseAdditionalMaterials: (
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md`
   ),
+  requestCourseFiles: (
+    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/files`
+  ),
+  // lessons related
   requestLessons: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/about.md`
   ),
   requestLessonAdditionalMaterials: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/lisamaterjalid.md`
   ),
+  requestLessonFiles: (
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/files`
+  ),
+  // concepts related
   requestConcepts: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/about.md`
-  ),
-  requestPractices: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/about.md`
   ),
   requestSources: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/sources.json`
@@ -33,14 +40,8 @@ module.exports = {
   requestStaticURL: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/images`
   ),
-  requestCourseFiles: (
-    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/files`
+  // practices related
+  requestPractices: (
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/about.md`
   ),
-  requestLessonFiles: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/files`
-  ),
-  /* requestFiles: (
-    (opt) => `${baseUrl}/repos/${repo.owner}/${repo.name}/contents/docs/loeng_01/files/${opt}`
-    /*
-    curl -H 'Authorization: Bearer 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 ' -H 'Accept: application/vnd.github.v3.raw' -O -L https://api.github.com/repos/tluhk/rif20-valikpraktika-1/contents/demo_aine_repo/docs/loeng_01/files/1.loeng.pdf?ref=krister */
 };
