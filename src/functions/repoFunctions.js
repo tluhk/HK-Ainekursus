@@ -16,10 +16,10 @@ module.exports = {
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md`
   ),
   requestLessons: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${opt}/about.md`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/about.md`
   ),
   requestLessonAdditionalMaterials: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${opt}/lisamaterjalid.md`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/lisamaterjalid.md`
   ),
   requestConcepts: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/about.md`
@@ -37,7 +37,7 @@ module.exports = {
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/files`
   ),
   requestLessonFiles: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${opt}/files`
+    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/files`
   ),
   /* requestFiles: (
     (opt) => `${baseUrl}/repos/${repo.owner}/${repo.name}/contents/docs/loeng_01/files/${opt}`
