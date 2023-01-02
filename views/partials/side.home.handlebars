@@ -1,121 +1,124 @@
-<nav class="sidebar h-full flex flex-col items-start " id="sidebar">
-  <!-- sidebar sticky behavior beginning from lg size -->
-  <div class="p-2 lg:sticky lg:top-0 lg:overflow-y-auto lg:max-h-screen drop-shadow-2xl w-full">
+<nav class="sidebar h-fit relative lg:sticky top-0" id="sidebar">
+    <button onclick='closeSideMenu()' class="flex items-center p-1 top-2 h-fit bg-neutral-100 rounded-r-lg absolute right-[-3rem]">
+    <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_left</i>
+    </button>
+    <!-- sidebar sticky behavior beginning from lg size -->
+    <div class="p-2 lg:overflow-y-auto lg:max-h-screen drop-shadow-2xl w-full">
 
-    <!-- DROPDOWN MENU -->
+      <!-- DROPDOWN MENU -->
 
-    <div class="bg-neutral-100 mb-2">
+      <div class="bg-neutral-100 mb-2">
 
-      <div class="!no-underline p-4 border-b border-neutral-200 bg-brand_red">
-        <!-- Topic name and code -->
-        {{#each courses}}
-          {{#if_equal this.courseSlug ../path.courseSlug}}
-          <div class="mb-2 ">
-            <a class="!text-white text-md font-bold mb-2 !no-underline hover:!underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
-          </div>
-          <div class="flex justify-between">
-            <a class="!text-white !no-underline hover:!underline py-2" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
-          {{/if_equal}}
-        {{/each}}
-            <!-- About links -->
-            {{#each docs}}
-              <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">
-              {{this.name}}</a>
-            {{/each}}
-          </div>
-      </div>
-
-      <div class="tabs">
-
-        <!-- Lessons links -->
-        {{#each lessons}}
-        <div class="tab 
-          {{#if_equal this.slug ../path.contentSlug }} 
-            active-tab
-          {{/if_equal }}
-        ">
-          <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
-          <label class="tab-label" for="chck{{@index}}">
-            <div class="flex gap-2 w-full">
-              <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-              </a>
+        <div class="!no-underline p-4 border-b border-neutral-200 bg-brand_red">
+          <!-- Topic name and code -->
+          {{#each courses}}
+            {{#if_equal this.courseSlug ../path.courseSlug}}
+            <div class="mb-2 ">
+              <a class="!text-white text-md font-bold mb-2 !no-underline hover:!underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
             </div>
-          </label>
-          
-          <!-- Themes links -->
-          {{#each this.components}}
-            <div class="tab-content flex gap-2 
-              {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
-                active-tab-content
-              {{/if_equal }}
-            " >
-              <a class="grow py-3 !no-underline" 
-                href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
-                 <div class="flex gap-2 w-full" >
-                    <span class="material-symbols-outlined">
-                      {{{showComponentType this ../../concepts ../../practices}}}
-                    </span>
-                    {{{showComponentName this ../../concepts ../../practices}}}
-                  </div>
+            <div class="flex justify-between">
+              <a class="!text-white !no-underline hover:!underline py-2" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
+            {{/if_equal}}
+          {{/each}}
+              <!-- About links -->
+              {{#each docs}}
+                <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">
+                {{this.name}}</a>
+              {{/each}}
+            </div>
+        </div>
+
+        <div class="tabs">
+
+          <!-- Lessons links -->
+          {{#each lessons}}
+          <div class="tab 
+            {{#if_equal this.slug ../path.contentSlug }} 
+              active-tab
+            {{/if_equal }}
+          ">
+            <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
+            <label class="tab-label" for="chck{{@index}}">
+              <div class="flex gap-2 w-full">
+                <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
                 </a>
-                <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
+              </div>
+            </label>
+            
+            <!-- Themes links -->
+            {{#each this.components}}
+              <div class="tab-content flex gap-2 
+                {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
+                  active-tab-content
+                {{/if_equal }}
+              " >
+                <a class="grow py-3 !no-underline" 
+                  href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
+                  <div class="flex gap-2 w-full" >
+                      <span class="material-symbols-outlined">
+                        {{{showComponentType this ../../concepts ../../practices}}}
+                      </span>
+                      {{{showComponentName this ../../concepts ../../practices}}}
+                    </div>
+                  </a>
+                  <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
 
-            </div>
-          {{/each}}
+              </div>
+            {{/each}}
 
-          <!-- Lesson extra material -->
-          {{#each this.additionalMaterials}}
-            <div class="tab-content flex gap-2
-              {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
-                active-tab-content
-              {{/if_equal }}
-            ">
-              <a class="py-3 w-full !no-underline" 
-              href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
+            <!-- Lesson extra material -->
+            {{#each this.additionalMaterials}}
+              <div class="tab-content flex gap-2
+                {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
+                  active-tab-content
+                {{/if_equal }}
+              ">
+                <a class="py-3 w-full !no-underline" 
+                href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
 
-            </div>
-          {{/each}}
+              </div>
+            {{/each}}
 
-        </div>
-        {{/each}}
-
-        <!-- Topic extra material link -->
-        {{#each additionalMaterials}}
-        <div class="tab
-          {{#if_equal this.slug ../path.fullPath }} 
-            active-tab
-          {{/if_equal }}
-        ">
-          <label class="no-tab-label">
-            <a class="py-3 w-full !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-            </a></label>
-        </div>
-        {{/each}}
-
-      </div>
-    </div>
-    <!-- other courses -->
-    <div class="!no-underline">
-        {{#each courses}}
-          {{#if_not_equal this.courseSlug ../path.courseSlug}}
-          <!-- beginning of loupe -->
-          <div class="mb-2 p-4 bg-neutral-100">
-            <div class="mb-2">
-              <a class="text-md font-bold mb-2 !no-underline hover:!underline uppercase" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
-            </div>
-            <div class="flex justify-between items-center">
-              <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
-              <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a>
-            </div>
           </div>
-          {{/if_not_equal}}
-        {{/each}}
+          {{/each}}
+
+          <!-- Topic extra material link -->
+          {{#each additionalMaterials}}
+          <div class="tab
+            {{#if_equal this.slug ../path.fullPath }} 
+              active-tab
+            {{/if_equal }}
+          ">
+            <label class="no-tab-label">
+              <a class="py-3 w-full !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+              </a></label>
+          </div>
+          {{/each}}
+
+        </div>
+      </div>
+      <!-- other courses -->
+      <div class="!no-underline">
+          {{#each courses}}
+            {{#if_not_equal this.courseSlug ../path.courseSlug}}
+            <!-- beginning of loupe -->
+            <div class="mb-2 p-4 bg-neutral-100">
+              <div class="mb-2">
+                <a class="text-md font-bold mb-2 !no-underline hover:!underline uppercase" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+              </div>
+              <div class="flex justify-between items-center">
+                <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
+                <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a>
+              </div>
+            </div>
+            {{/if_not_equal}}
+          {{/each}}
+      </div>
+
+
+
+
     </div>
-
-
-
-
-  </div>
   
 </nav>
 
