@@ -802,20 +802,16 @@ input:checked ~ .tab-label {
   right: 0px;
 }
 
-.left-\[-500vw\] {
-  left: -500vw;
-}
-
 .z-10 {
   z-index: 10;
 }
 
-.ml-4 {
-  margin-left: 1rem;
-}
-
 .mt-4 {
   margin-top: 1rem;
+}
+
+.ml-4 {
+  margin-left: 1rem;
 }
 
 .mb-2 {
@@ -840,10 +836,6 @@ input:checked ~ .tab-label {
 
 .mr-4 {
   margin-right: 1rem;
-}
-
-.mt-\[-2\.5rem\] {
-  margin-top: -2.5rem;
 }
 
 .block {
@@ -925,10 +917,6 @@ input:checked ~ .tab-label {
 
 .basis-8\/12 {
   flex-basis: 66.666667%;
-}
-
-.basis-1\/12 {
-  flex-basis: 8.333333%;
 }
 
 .cursor-pointer {
@@ -1433,16 +1421,8 @@ progress {
     top: 0px !important;
   }
 
-  .lg\:left-0 {
-    left: 0px;
-  }
-
   .lg\:top-0 {
     top: 0px;
-  }
-
-  .lg\:mt-auto {
-    margin-top: auto;
   }
 
   .lg\:hidden {
