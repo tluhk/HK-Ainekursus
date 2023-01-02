@@ -924,10 +924,6 @@ input:checked ~ .tab-label {
   flex-grow: 1;
 }
 
-.basis-8\/12 {
-  flex-basis: 66.666667%;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -1092,6 +1088,10 @@ input:checked ~ .tab-label {
   padding-top: 1rem;
 }
 
+.pr-1 {
+  padding-right: 0.25rem;
+}
+
 .pr-8 {
   padding-right: 2rem;
 }
@@ -1159,6 +1159,21 @@ input:checked ~ .tab-label {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-success {
+  --tw-text-opacity: 1;
+  color: rgb(164 214 94 / var(--tw-text-opacity));
+}
+
+.text-secondary-400 {
+  --tw-text-opacity: 1;
+  color: rgb(168 162 158 / var(--tw-text-opacity));
+}
+
+.text-brand_red {
+  --tw-text-opacity: 1;
+  color: rgb(183 18 52 / var(--tw-text-opacity));
 }
 
 .text-secondary-800 {
@@ -1402,18 +1417,8 @@ progress {
 }
 
 @media (min-width: 768px) {
-  .md\:p-16 {
-    padding: 4rem;
-  }
-
-  .md\:px-16 {
-    padding-left: 4rem;
-    padding-right: 4rem;
-  }
-
-  .md\:py-8 {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+  .md\:flex-row {
+    flex-direction: row;
   }
 }
 
@@ -1454,10 +1459,6 @@ progress {
     overflow-y: auto;
   }
 
-  .lg\:p-8 {
-    padding: 2rem;
-  }
-
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
@@ -1474,22 +1475,6 @@ progress {
 
   .lg\:pb-0 {
     padding-bottom: 0px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .xl\:p-16 {
-    padding: 4rem;
-  }
-
-  .xl\:px-16 {
-    padding-left: 4rem;
-    padding-right: 4rem;
-  }
-
-  .xl\:py-8 {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
   }
 }
 

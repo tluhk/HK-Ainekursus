@@ -8,10 +8,11 @@ module.exports = {
     colors: {
       brand_red: '#b71234',
       brand_black: '#282627',
-      brand_grey: '545153',
+      brand_grey: '#545153',
       primary: colors.red,
       secondary: colors.stone,
       white: colors.white,
+      success: '#A4D65E',
       // from there begins the right color palette
       neutral: {
         DEFAULT: '#40464D',
@@ -20,10 +21,10 @@ module.exports = {
         300: '#BBC0C5',
         400: '#979B9F',
         500: '#595F65',
-        600:  '#30373E',
-        700:  '#2B3138',
-        800:  '#2B3138',
-        900:  '#262C32',
+        600: '#30373E',
+        700: '#2B3138',
+        800: '#2B3138',
+        900: '#262C32',
       },
     },
     fontSize: {
