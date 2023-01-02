@@ -601,14 +601,14 @@ p {
 
 .btn-primary {
   --tw-bg-opacity: 1;
-  background-color: rgb(89 95 101 / var(--tw-bg-opacity));
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .btn-primary:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(38 44 50 / var(--tw-bg-opacity));
+  background-color: rgb(153 27 27 / var(--tw-bg-opacity));
 }
 
 .btn-secondary {
