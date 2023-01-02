@@ -806,6 +806,15 @@ input:checked ~ .tab-label {
   z-index: 10;
 }
 
+.m-0 {
+  margin: 0px;
+}
+
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -945,10 +954,6 @@ input:checked ~ .tab-label {
 
 .items-center {
   align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
 }
 
 .justify-between {
@@ -1137,6 +1142,10 @@ input:checked ~ .tab-label {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.not-italic {
+  font-style: normal;
 }
 
 .leading-6 {
