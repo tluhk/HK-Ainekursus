@@ -35,7 +35,7 @@ Rakendus eeldab NODE olemasolu arendusmasinas: [Node paigaldamisjuhised](https:/
 
 Nimekirja rakenduses kasutatud tehnoloogiatest leiad [Back-Endi](docs/content/backend/) ja [Front-Endi](docs/content/frontend/) kirjelduste alt [docs](docs) kaustast.
 
-Disaini põhimõtted ja valikuteed leiad [UX](docs/content/ux/) kasutast.
+Disaini põhimõtted ja valikuteed leiad [UX](docs/content/ux/) kaustast.
 
 ### Installeerimine
 
