@@ -37,6 +37,11 @@
       href='#main-content'
     >Liigu põhisisu juurde</a>
 
+<!-- Refers to header.handlebars fail in /partials folder -->
+<header>
+  {{> header }}
+</header>
+
     <!-- body shows /views folder content, at the moment home.handlebars. -->
     {{{body}}}
 
@@ -46,4 +51,11 @@
       <script src='../../src/jquery.js'></script> -->
 
   </body>
+
+
+<!-- Refers to footer.handlebars fail in /partials folder -->
+<footer>
+  {{> footer }}
+</footer>
+
 </html>

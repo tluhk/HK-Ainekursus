@@ -12,25 +12,21 @@
   <div class='p-2 lg:max-h-screen drop-shadow-2xl w-full'>
     <div class=''>
       {{#each courses}}
-        <div class='mb-2 bg-neutral-100 p-4'>
-          <div>
-            <a
-              class='hover:!underline text-md font-bold mb-2 !no-underline uppercase'
-              href='/{{this.courseSlug}}/about'
-            >{{this.courseName}}</a>
+        <a href='/{{this.courseSlug}}/about' class="!no-underline hover:!underline" >
+          <div class='mb-2 bg-neutral-100 p-4'>
+            <div class="text-md font-bold mb-2 !no-underline uppercase" >
+              {{this.courseName}}
+            </div>
+            <div>
+              <progress id='{{this.courseCode}}' value='32' max='100'>
+                32%
+              </progress>
+            </div>
+            <div class='!no-underline'>
+              {{this.courseCode}}
+            </div>
           </div>
-          <div>
-            <progress id='{{this.courseCode}}' value='32' max='100'>
-              32%
-            </progress>
-          </div>
-          <div>
-            <a
-              class='hover:!underline !no-underline'
-              href='/{{this.courseSlug}}/about'
-            >{{this.courseCode}}</a>
-          </div>
-        </div>
+        </a>
       {{/each}}
 
       <!-- ??? Kas siia lehele lisada veel alamenüü lehti?
