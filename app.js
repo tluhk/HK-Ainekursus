@@ -4,12 +4,15 @@ const path = require('path');
 
 const express = require('express');
 const exphbs = require('express-handlebars');
+
 const app = express();
 const compression = require('compression');
 const helmet = require('helmet');
+
 const PORT = process.env.PORT || 3000;
 
 /* const livereload = require('livereload');
+
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, '/views'));
 liveReloadServer.watch(path.join(__dirname, 'public'));
@@ -19,6 +22,7 @@ liveReloadServer.server.once('connection', () => {
   }, 100);
 });
 const connectLivereload = require('connect-livereload');
+
 app.use(connectLivereload()); */
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
