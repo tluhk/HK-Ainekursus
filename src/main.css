@@ -54,8 +54,7 @@
     @apply bg-neutral-200;
   }
   .active-tab-content,
-  .tab-content:hover,
-  input:checked + .tab-label {
+  .tab-content:hover {
     @apply bg-brand_red;
   }
   .active-tab-content *,
@@ -217,7 +216,7 @@ table.gsc-search-box td.gsc-input {
 /* Progressbar */
 
 progress::-webkit-progress-bar {
-  @apply bg-neutral-200;
+  @apply bg-neutral-300;
 }
 progress::-webkit-progress-value {
   @apply bg-brand_red;
