@@ -47,7 +47,7 @@
     @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer px-4;
   }
   .tab-content {
-    @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900 transition-all;
+    @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900;
   }
   .active-tab .no-tab-label,
   .active-tab .tab-label {
@@ -80,7 +80,7 @@
     @apply max-h-screen;
   }
   .tab-label::after {
-    @apply content-['\276F'] w-4 h-4 text-center transition-all;
+    @apply content-['\276F'] w-4 h-4 text-center;
   }
   .active-tab .tab-label::after {
     @apply hidden;
@@ -121,7 +121,7 @@ a {
 }
 .aside {
   margin-left: inherit;
-  transition: all 1s;
+  transition: margin 1s;
 }
 
 .reading_content {
