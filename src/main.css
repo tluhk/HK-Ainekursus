@@ -217,7 +217,7 @@ table.gsc-search-box td.gsc-input {
 /* Progressbar */
 
 progress::-webkit-progress-bar {
-  @apply bg-neutral-200;
+  @apply bg-neutral-300;
 }
 progress::-webkit-progress-value {
   @apply bg-brand_red;

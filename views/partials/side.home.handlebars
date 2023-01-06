@@ -14,10 +14,10 @@
           {{#each courses}}
             {{#if_equal this.courseSlug ../path.courseSlug}}
             <div class="mb-2 ">
-              <a class="!text-white text-md font-bold mb-2 !no-underline hover:!underline uppercase"href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+              <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
             </div>
             <div class="flex justify-between">
-              <a class="!text-white !no-underline hover:!underline py-2" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
+              <div class="!text-white py-2">{{../this.courseCode}}</div>
             {{/if_equal}}
           {{/each}}
               <!-- About links -->
@@ -102,13 +102,13 @@
           {{#each courses}}
             {{#if_not_equal this.courseSlug ../path.courseSlug}}
             <!-- beginning of loupe -->
-            <div class="mb-2 p-4 bg-neutral-100">
-              <div class="mb-2">
-                <a class="text-md font-bold mb-2 !no-underline hover:!underline uppercase" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
-              </div>
+            <div class="mb-2 bg-neutral-500">
+
+                <a class="!text-white flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-400" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+
               <div class="flex justify-between items-center">
-                <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a>
-                <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a>
+                {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
+                {{!-- <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a> --}}
               </div>
             </div>
             {{/if_not_equal}}

@@ -1020,6 +1020,11 @@ input:checked ~ .tab-label {
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
 }
 
+.bg-neutral-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(89 95 101 / var(--tw-bg-opacity));
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -1363,7 +1368,7 @@ table.gsc-search-box td.gsc-input {
 
 progress::-webkit-progress-bar {
   --tw-bg-opacity: 1;
-  background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+  background-color: rgb(187 192 197 / var(--tw-bg-opacity));
 }
 
 progress::-webkit-progress-value {
@@ -1377,9 +1382,19 @@ progress {
 
 /* navbar accent shape */
 
+.hover\:bg-neutral-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-neutral-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(187 192 197 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-neutral-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(151 155 159 / var(--tw-bg-opacity));
 }
 
 .hover\:underline:hover {
