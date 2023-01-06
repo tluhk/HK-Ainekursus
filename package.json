@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ext js,mjs,json,css,handlebars app.js",
+    "start": "NODE_ENV=production nodemon --ext js,mjs,json,css,handlebars app.js",
     "build-css": "tailwindcss -i ./src/main.css -o ./public/css/main.css",
     "lint": "eslint"
   },
@@ -30,6 +30,7 @@
     "base-64": "^1.0.0",
     "bootstrap": "^5.2.1",
     "clipboardy": "^3.0.0",
+    "compression": "^1.7.4",
     "connect": "^3.7.0",
     "connect-livereload": "^0.6.1",
     "copy-text-to-clipboard": "^3.0.1",

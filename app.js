@@ -31,7 +31,12 @@ app.set('views', path.join(__dirname, '/views'));
 
 // define application static folder:
 app.use(express.static(path.join(__dirname, '/public')));
-app.use('/images', express.static('https://api.github.com/tluhk/HK_Riistvara-alused/contents/concepts/arvuti/images'));
+app.use(
+  '/images',
+  express.static(
+    'https://api.github.com/tluhk/HK_Riistvara-alused/contents/concepts/arvuti/images'
+  )
+);
 
 app.use(connectLivereload());
 
