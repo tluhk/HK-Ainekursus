@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable import/newline-after-import */
 require('dotenv').config();
 
 const path = require('path');
