@@ -38,7 +38,7 @@
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
     "handlebars-utils": "^1.0.6",
-    "helmet": "^6.0.0",
+    "helmet": "^6.0.1",
     "highlight.js": "^11.7.0",
     "iframe-resizer": "^3.6.6",
     "instantclick": "^3.1.0-2",
