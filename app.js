@@ -7,7 +7,7 @@ const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 4000;
 
 const livereload = require('livereload');
 const liveReloadServer = livereload.createServer();
@@ -44,8 +44,8 @@ const { engine } = require('./engine');
 
 engine(app);
 
-app.listen(process.env.port, () => {
-  console.log(`Listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
 
 /* const start = (portProp) => {
