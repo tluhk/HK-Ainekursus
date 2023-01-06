@@ -2,7 +2,7 @@
   "name": "rif20-valikpraktika-1",
   "version": "1.0.0",
   "description": "NB repo täiendades palun rangelt tegutseda oma \"branchis\"   nt `git checkout -b <sinu branchi nimi>`   Edaspidi \"branchide\" vahel liikumiseks `git checkout <sinu branchi nimi>`   Okstega mässamiseks juhend [siin](https://www.varonis.com/blog/git-branching):",
-  "main": "index.js",
+  "main": "app.js",
   "directories": {
     "doc": "docs"
   },
