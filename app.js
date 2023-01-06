@@ -11,6 +11,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const port = process.env.PORT || 3000;
 
+/* kui tahad livesse lasta, siis chekout production ja seal kommenteeri kogu livereload plokk välja – see blokeerib lehte */
 const livereload = require('livereload');
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, '/views'));
