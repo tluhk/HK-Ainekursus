@@ -29,7 +29,7 @@ const { engine } = require('./engine');
 
 engine(app);
 
-app.listen(process.env.PORT, () => {
+app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
