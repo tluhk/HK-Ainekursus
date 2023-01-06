@@ -7,7 +7,7 @@ const exphbs = require('express-handlebars');
 const app = express();
 const compression = require('compression');
 const helmet = require('helmet');
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./src/helpers/handlebars')(exphbs);
