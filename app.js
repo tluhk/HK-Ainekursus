@@ -46,10 +46,6 @@ const { engine } = require('./engine');
 
 engine(app);
 
-app.listen(port, () => {
-  console.log(`Server running at http://${hostname}:${$PORT}/`);
-});
-
 /* const start = (portProp) => {
   try {
     app.listen(portProp);
