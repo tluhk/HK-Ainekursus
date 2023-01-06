@@ -7,11 +7,9 @@ const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
-const compression = require('compression');
-const helmet = require('helmet');
 const port = process.env.PORT || 3000;
 
-/* kui tahad livesse lasta, siis chekout production ja seal kommenteeri kogu livereload plokk välja – see blokeerib lehte */
+/* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
 const livereload = require('livereload');
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, '/views'));
@@ -27,9 +25,6 @@ app.use(connectLivereload());
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./src/helpers/handlebars')(exphbs);
 
-app.use(compression());
-
-app.use(helmet());
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
