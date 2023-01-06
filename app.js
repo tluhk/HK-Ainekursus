@@ -1,8 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
 require('dotenv').config();
-const http = require('http');
-const hostname = '0.0.0.0';
 
 const path = require('path');
 
@@ -45,6 +43,10 @@ app.use(connectLivereload());
 const { engine } = require('./engine');
 
 engine(app);
+
+app.listen(process.env.port, () => {
+  console.log(`Listening on port ${port}`);
+});
 
 /* const start = (portProp) => {
   try {
