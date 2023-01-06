@@ -25,8 +25,6 @@ app.use(
   )
 );
 
-app.use(connectLivereload());
-
 const { engine } = require('./engine');
 
 engine(app);
