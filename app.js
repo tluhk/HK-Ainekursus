@@ -7,7 +7,7 @@ const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./src/helpers/handlebars')(exphbs);
