@@ -39,7 +39,7 @@ Seejärel võib rakenduse käivitada:
 npm start
 ```
 
-Rakendusele ligipääsuks kirjuta brauseri aadressiribale `localhost:3000` ning võid kursusega pihta hakata.
+Rakendusele ligipääsuks kirjuta brauseri aadressiribale `localhost:3000` ning saad rakendust kasutama hakata.
 
 ## Ainekursuste lisamine rakendusse
 
