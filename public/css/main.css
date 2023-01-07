@@ -699,7 +699,6 @@ pre {
   --tw-bg-opacity: 1;
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
   padding-left: 1rem;
-  padding-right: 1rem;
   font-weight: 700;
 }
 
@@ -757,17 +756,18 @@ pre {
   border-color: rgb(212 214 216 / var(--tw-border-opacity));
 }
 
-.tab-label::after {
-  margin-top: 0.75rem;
-}
-
 input:checked ~ .tab-label {
   max-height: 100vh;
 }
 
 .tab-label::after {
-  height: 1rem;
-  width: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
   text-align: center;
   --tw-content: '\276F';
   content: var(--tw-content);
@@ -969,6 +969,10 @@ input:checked ~ .tab-label {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.resize {
+  resize: both;
 }
 
 .grid-cols-7 {
