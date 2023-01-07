@@ -97,14 +97,16 @@
 
         </div>
       </div>
+
+
       <!-- other courses -->
       <div class="!no-underline">
           {{#each courses}}
             {{#if_not_equal this.courseSlug ../path.courseSlug}}
             <!-- beginning of loupe -->
-            <div class="mb-2 bg-neutral-500 break-words">
+            <div class="mb-2 bg-neutral-200 break-all">
 
-                <a class="!text-white flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-400" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+                <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
 
               <div class="flex justify-between items-center">
                 {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
@@ -114,9 +116,7 @@
             {{/if_not_equal}}
           {{/each}}
       </div>
-
-
-
+ 
 
     </div>
   
