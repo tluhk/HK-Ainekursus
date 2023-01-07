@@ -565,8 +565,14 @@ p {
 
 .sidebar {
   top: 194px;
-  width: 22rem !important;
+  width: 14.4rem;
   height: calc(100% - 149px);
+}
+
+@media (min-width: 640px) {
+  .sidebar {
+    width: 22rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -585,6 +591,21 @@ p {
   .sidebar.menu-zero {
     top: 0px;
   }
+}
+
+.aside.menu-zero {
+  margin-left: -13.9rem;
+}
+
+@media (min-width: 640px) {
+  .aside.menu-zero {
+    margin-left: -21.5rem;
+  }
+}
+
+.aside {
+  max-width: calc(100% - 3rem);
+  overflow-wrap: break-word;
 }
 
 .btn {
@@ -752,10 +773,6 @@ input:checked ~ .tab-label {
 
 /*--------------------------- end of sidebar tab's -------------------------------*/
 
-.aside.menu-zero {
-  margin-left: -21.5rem;
-}
-
 .absolute {
   position: absolute;
 }
@@ -906,8 +923,8 @@ input:checked ~ .tab-label {
   width: 50%;
 }
 
-.w-64 {
-  width: 16rem;
+.w-40 {
+  width: 10rem;
 }
 
 .flex-1 {
@@ -932,6 +949,10 @@ input:checked ~ .tab-label {
 
 .flex-col {
   flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .items-end {
@@ -962,6 +983,10 @@ input:checked ~ .tab-label {
 
 .overflow-x-hidden {
   overflow-x: hidden;
+}
+
+.break-words {
+  overflow-wrap: break-word;
 }
 
 .rounded-lg {
@@ -1434,6 +1459,12 @@ progress {
   .dark\:hover\:text-white:hover {
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
+  }
+}
+
+@media (min-width: 640px) {
+  .sm\:w-64 {
+    width: 16rem;
   }
 }
 
