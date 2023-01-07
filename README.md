@@ -68,6 +68,10 @@ npm start
 
 Rakendusele ligipääsuks kirjuta brauseri aadressiribale `localhost:3000` ning võid kursusega pihta hakata.
 
+## Ainekursuse lisamine rakendusse
+
+Uue ainekursuse lisamiseks järgi juhendeid sellest repositooriumist: https://github.com/tluhk/HK_Ainekursuse_mall
+
 ## Valikpraktika I grupp
 
 Tiina, Kristi, Krister, Juho, Kalev
