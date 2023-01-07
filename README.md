@@ -2,6 +2,9 @@
 
 TLU HK RIF20 Valikpraktika raames loodud rakendus ainekursuste haldamiseks läbi giti ja kuvamiseks eesrakenduses.
 
+## Rakenduse demoversiooni "lives"
+https://rif.up.railway.app
+
 ## Rakenduse kasutamine ja käivitamine
 
 Rakendus eeldab NODE olemasolu arendusmasinas: [Node paigaldamisjuhised](https://nodejs.org/en/download/)
