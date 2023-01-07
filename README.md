@@ -41,9 +41,9 @@ npm start
 
 Rakendusele ligipääsuks kirjuta brauseri aadressiribale `localhost:3000` ning võid kursusega pihta hakata.
 
-## Ainekursuse lisamine rakendusse
+## Ainekursuste lisamine rakendusse
 
-Uue ainekursuse lisamiseks järgi juhendeid sellest repositooriumist: https://github.com/tluhk/HK_Ainekursuse_mall
+Uute ainekursuste lisamiseks järgi juhendeid sellest repositooriumist: https://github.com/tluhk/HK_Ainekursuse_mall
 
 Ainekursuste materjalid asuvad Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumide nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
 
