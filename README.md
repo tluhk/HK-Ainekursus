@@ -1,33 +1,6 @@
-# Veebikursuse rakendus
+# Ainekursuste rakendus
 
-TLU HK RIF20 Valikpraktika raames koostatud rakendus
-
-## Töö sisu
-
-**Töö sisuks on õppejõule veebipõhise abistava õppematerjali ja õpilasele õppimismaterjali loomine.  
-Olemasolevate e-kursuste (nt Moodle) probleem on jäikus ja keerulisus (kõigile kõike), kuid samas kontrolli ja API puudus.**
-
-**Tegemist on online kursuse rakenduse I faasiga, ehk materjalide lao ja kursuse raamistku loomisega.
-Samuti luuakse ka visioon lõplikust tootest. See võib muidugi aja jooksul veel muutuda.**
-
-### I faas koosneb järgmistest alamülesannetest:
-
-- Eeltööga selgitada välja kursuse haldajate ning lõppkasutajate vajadused.
-- Kaardistada kasutajateekonnad.
-- Luua prototüüp.
-- Luua esialgne rakendus.
-
-Rakendus on täielikult haldajate kontrolli all, selle sisu on võimalik ristkasutada ning kasutajasõbralikul moel kätte saada, kuvada ja töödelda. Need on olnud seniste lahenduste nõrkused.
-
-Õppematerjalide baasmaterjal asub Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumite nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
-
-Õppematerjali erinevate kursuste sisu on kättesaadav kolmel viisil: 1) jagades Githubis baasmaterjali veebiaadressi, 2) pärides baasmaterjali infot Github API kaudu, 3) eesrakenduses on igal leheküljel unikaalne aadress ja igal pealkirjal unikaalne ankur-aadress, mida saab kopeerida ning jagada lõppkasutajatele.
-
-Rakenduse esimeses versioonis hallaakse õppematerjalide sisu läbi git-i,  eraldi kasutajaliidest sisu haldamiseks pole.
-
-Lõppkasutajale on loodud kaasaegne kasutajaliides, mis on kasutatav nii mobiilis kui desktopis.  
-Kasutatud on Handlebar tepmliitimiskeelt ning Tailwind CSS-raamistikku.
-Sisumootoriks on Node + Express.js.
+TLU HK RIF20 Valikpraktika raames loodud rakendus ainekursuste haldamiseks läbi giti ja kuvamiseks eesrakenduses.
 
 ## Rakenduse kasutamine ja käivitamine
 
@@ -72,8 +45,34 @@ Rakendusele ligipääsuks kirjuta brauseri aadressiribale `localhost:3000` ning 
 
 Uue ainekursuse lisamiseks järgi juhendeid sellest repositooriumist: https://github.com/tluhk/HK_Ainekursuse_mall
 
+Ainekursuste materjalid asuvad Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumide nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
+
 ## Valikpraktika I grupp
 
 Tiina, Kristi, Krister, Juho, Kalev
 
-Valikpraktika repo: https://github.com/tluhk/rif20-valikpraktika
+Valikpraktika aine üldine repo: https://github.com/tluhk/rif20-valikpraktika
+
+## Projekti sisust
+
+**Töö sisuks on luua rakendus, mille kaudu saavad õppejõud ainekursuseid hallata ning õpilased ainekursuste materjale läbida.
+Olemasolevate e-kursuste (nt Moodle) probleem on jäikus ja keerulisus (kõigile kõike), kuid samas kontrolli ja API puudus.**
+
+### Rakenduse versioon 1 arendus koosneb järgmistest alamülesannetest:
+
+- Eeltööga selgitada välja kursuse haldajate ning lõppkasutajate vajadused.
+- Kaardistada kasutajateekonnad.
+- Luua prototüüp.
+- Luua esialgne rakendus.
+
+Rakendus on täielikult haldajate kontrolli all, selle sisu on võimalik ristkasutada ning kasutajasõbralikul moel kätte saada, kuvada ja töödelda. Need on olnud seniste lahenduste nõrkused.
+
+Õppematerjalide baasmaterjal asub Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumite nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
+
+Õppematerjali erinevate kursuste sisu on kättesaadav kolmel viisil: 1) jagades Githubis baasmaterjali veebiaadressi, 2) pärides baasmaterjali infot Github API kaudu, 3) eesrakenduses on igal leheküljel unikaalne aadress ja igal pealkirjal unikaalne ankur-aadress, mida saab kopeerida ning jagada lõppkasutajatele.
+
+Rakenduse esimeses versioonis hallatakse õppematerjalide sisu läbi git-i,  eraldi kasutajaliidest sisu haldamiseks pole.
+
+Lõppkasutajale on loodud kaasaegne kasutajaliides, mis on kasutatav nii mobiilis kui desktopis.  
+Kasutatud on Handlebars tepmliitimiskeelt ning Tailwind CSS-raamistikku.
+Sisumootoriks on Node + Express.js.
