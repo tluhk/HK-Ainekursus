@@ -120,7 +120,7 @@
     @apply flex items-start gap-1;
   }
   .breadcrumb > * {
-    @apply whitespace-nowrap max-w-[30%] text-ellipsis inline-block overflow-hidden;
+    @apply whitespace-nowrap text-ellipsis inline-block overflow-hidden;
   }
 }
 

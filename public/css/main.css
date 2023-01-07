@@ -800,7 +800,6 @@ input:checked ~ .tab-label {
 
 .breadcrumb > * {
   display: inline-block;
-  max-width: 30%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
