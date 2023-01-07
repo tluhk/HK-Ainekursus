@@ -53,7 +53,8 @@ module.exports = function hbsHelpers(hbs) {
             // do nothing
         }
       },
-      showComponentType: (component, concepts, practices) => {
+      showComponentType: (componentUppercase, concepts, practices) => {
+        const component = componentUppercase;
         const components = concepts.concat(practices);
         const comp = components.find((x) => (x.slug) === component);
         switch (comp.type) {
@@ -63,7 +64,8 @@ module.exports = function hbsHelpers(hbs) {
           default: return '';
         }
       },
-      showComponentName: (component, concepts, practices) => {
+      showComponentName: (componentUppercase, concepts, practices) => {
+        const component = componentUppercase;
         const components = concepts.concat(practices);
         const comp = components.find((x) => (x.slug) === component);
         return comp.name;
