@@ -715,8 +715,8 @@ pre {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
   padding-top: 0px;
   padding-bottom: 0px;
+  padding-left: 1rem;
   padding-right: 1rem;
-  padding-left: 2rem;
   --tw-text-opacity: 1;
   color: rgb(28 25 23 / var(--tw-text-opacity));
 }
