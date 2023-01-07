@@ -208,7 +208,9 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       - concept lehel on eraldi sources osas, mida loetakse sources.json failist
       - kummalgi tüübil kuvatakse eesrakenduses erinevat ikooni. Lehetüübi määramiseks kasutatakse component.type, seda loeb handlebars fail, mis kuvab õige ikoon
     */
-    lesson.components.map((comp) => {
+    lesson.components.map((compUppercase) => {
+      const comp = compUppercase;
+      console.log('comp:', comp);
       let component = {};
       if (config.concepts.map((x) => x.slug).includes(comp)) {
         component = config.concepts.find((x) => x.slug === comp);
@@ -218,6 +220,8 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         component = config.practices.find((x) => x.slug === comp);
         component.type = 'practice';
       }
+      console.log('component:', component);
+
       const breadcrumbNames = {
         courseName,
         contentName: lesson.name,
