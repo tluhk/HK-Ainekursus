@@ -6,12 +6,35 @@
   height: calc(100% - 149px);
 }
 
+@layer base {
+  @screen sm {
+    h1 {
+      @apply text-xxxl;
+    }
+    h2 {
+      @apply text-xxl;
+    }
+    h3 {
+      @apply text-xl;
+    }
+    h4 {
+      @apply text-lg;
+    }
+  }
+}
+
 @layer components {
   .sidebar {
-    @apply mobileheight top-[194px] lg:top-0 !w-[22rem];
+    @apply mobileheight top-[194px] lg:top-0 w-[14.4rem] sm:w-[22rem];
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
+  }
+  .aside.menu-zero {
+    @apply ml-[-13.9rem] sm:ml-[-21.5rem];
+  }
+  .aside {
+    @apply max-w-[calc(100%-3rem)] break-words;
   }
   .btn {
     @apply py-2 px-4 rounded-full cursor-pointer;
@@ -29,7 +52,7 @@
   }
 
   pre {
-    @apply bg-neutral-800 text-white pt-6 px-4 pb-2 rounded whitespace-pre-wrap;
+    @apply bg-neutral-800 text-white pt-6 px-4 pb-2 rounded whitespace-pre-wrap break-words;
   }
   /*--------------------------- accordion components ---------------------------*/
 
@@ -47,7 +70,7 @@
     @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer px-4;
   }
   .tab-content {
-    @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900;
+    @apply max-h-0 py-0 px-4 bg-white text-secondary-900;
   }
   .active-tab .no-tab-label,
   .active-tab .tab-label {
@@ -93,8 +116,11 @@
     @apply absolute opacity-0 -z-10;
   }
   /*--------------------------- end of sidebar tab's -------------------------------*/
-  .aside.menu-zero {
-    @apply ml-[-21.5rem];
+  .breadcrumb {
+    @apply flex items-start gap-1;
+  }
+  .breadcrumb > * {
+    @apply whitespace-nowrap text-ellipsis inline-block overflow-hidden;
   }
 }
 
@@ -133,7 +159,7 @@ a {
 */
 ul.markdown {
   list-style: disc;
-  margin-left: 40;
+  margin-left: 1rem;
 }
 a.markdown {
   color: #0000ee;

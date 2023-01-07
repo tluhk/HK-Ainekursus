@@ -16,7 +16,7 @@
             <div class="mb-2 ">
               <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between flex-wrap">
               <div class="!text-white py-2">{{../this.courseCode}}</div>
             {{/if_equal}}
           {{/each}}
@@ -101,15 +101,12 @@
 
       <!-- other courses -->
       <div class="!no-underline">
-        <div class="p-4 text-sm font-bold mb-2 d uppercase">
-          Muud kursused
-        </div>
           {{#each courses}}
             {{#if_not_equal this.courseSlug ../path.courseSlug}}
             <!-- beginning of loupe -->
-            <div class="mb-2 bg-neutral-500">
+            <div class="mb-2 bg-neutral-200 break-all">
 
-                <a class="!text-white flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-400" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+                <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
 
               <div class="flex justify-between items-center">
                 {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
