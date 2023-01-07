@@ -1,6 +1,6 @@
 <div class="reading_content">
 
-  <div class='breadcrumb' style='display:inline flex; gap: 20px'>
+  <div class='breadcrumb'>
     {{#if breadcrumb.courseName}}
       <a
         class='hover:underline'
@@ -81,16 +81,16 @@
   -->
 
   {{#ifIn path.fullPath singleCoursePaths }}
-  <div class='flex gap-4'>
+  <div class='flex gap-4 justify-center'>
     {{#if_not_equal ../path.fullPath ../singleCoursePaths.[0].path }}
       <input type="button" class="btn btn-secondary"
       onclick="location.href='/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
-      value="Eelmine leht" />
+      value="Eelmine" />
     {{/if_not_equal }}
 
     {{#if_not_equal ../path.fullPath (last ../singleCoursePaths) }}
       <input type="button" class="btn btn-primary"
-      onclick="location.href='/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine leht" />
+      onclick="location.href='/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine" />
     {{/if_not_equal }}
   </div>
   {{/ifIn }}

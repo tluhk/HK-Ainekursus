@@ -32,9 +32,13 @@ module.exports = {
       base: '1rem',
       md: '1.2rem',
       lg: '1.44rem',
+      lgsmall: '1.266rem',
       xl: '1.728rem',
+      xlsmall: '1.424rem',
       xxl: '2.074rem',
+      xxlsmall: '1.602rem',
       xxxl: '2.488rem',
+      xxxlsmall: '1.802rem',
     },
     extend: {
       fontFamily: {
@@ -48,34 +52,34 @@ module.exports = {
       addBase({
         html: { fontSize: '18px' },
         h1: {
-          fontSize: theme('fontSize.xxxl'),
+          fontSize: theme('fontSize.xxxlsmall'),
           fontWeight: '700',
           lineHeight: '1.2',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
         h2: {
-          fontSize: theme('fontSize.xxl'),
+          fontSize: theme('fontSize.xxlsmall'),
           fontWeight: '700',
           lineHeight: '1.1',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
         h3: {
-          fontSize: theme('fontSize.xl'),
+          fontSize: theme('fontSize.xlsmall'),
           fontWeight: '700',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
         h4: {
-          fontSize: theme('fontSize.xl'),
+          fontSize: theme('fontSize.lgsmall'),
           fontWeight: '600',
           lineHeight: '1.5rem',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
         h5: {
-          fontSize: theme('fontSize.lg'),
+          fontSize: theme('fontSize.md'),
           fontWeight: '600',
           lineHeight: '1.5rem',
           marginTop: '1.25rem',

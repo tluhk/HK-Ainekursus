@@ -6,6 +6,23 @@
   height: calc(100% - 149px);
 }
 
+@layer base {
+  @screen sm {
+    h1 {
+      @apply text-xxxl;
+    }
+    h2 {
+      @apply text-xxl;
+    }
+    h3 {
+      @apply text-xl;
+    }
+    h4 {
+      @apply text-lg;
+    }
+  }
+}
+
 @layer components {
   .sidebar {
     @apply mobileheight top-[194px] lg:top-0 w-[14.4rem] sm:w-[22rem];
@@ -35,7 +52,7 @@
   }
 
   pre {
-    @apply bg-neutral-800 text-white pt-6 px-4 pb-2 rounded whitespace-pre-wrap;
+    @apply bg-neutral-800 text-white pt-6 px-4 pb-2 rounded whitespace-pre-wrap break-words;
   }
   /*--------------------------- accordion components ---------------------------*/
 
@@ -99,6 +116,12 @@
     @apply absolute opacity-0 -z-10;
   }
   /*--------------------------- end of sidebar tab's -------------------------------*/
+  .breadcrumb {
+    @apply flex items-start gap-1;
+  }
+  .breadcrumb > * {
+    @apply whitespace-nowrap max-w-[30%] text-ellipsis inline-block overflow-hidden;
+  }
 }
 
 .material-symbols-outlined {
@@ -136,7 +159,7 @@ a {
 */
 ul.markdown {
   list-style: disc;
-  margin-left: 40;
+  margin-left: 1rem;
 }
 a.markdown {
   color: #0000ee;
