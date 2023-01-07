@@ -67,7 +67,7 @@
   }
   .tab-label,
   .no-tab-label {
-    @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer px-4;
+    @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer pl-4;
   }
   .tab-content {
     @apply max-h-0 py-0 px-4 bg-white text-secondary-900;
@@ -95,14 +95,11 @@
   .tab-label {
     @apply border-b border-neutral-200;
   }
-  .tab-label::after {
-    @apply mt-3;
-  }
   input:checked ~ .tab-label {
     @apply max-h-screen;
   }
   .tab-label::after {
-    @apply content-['\276F'] w-4 h-4 text-center;
+    @apply content-['\276F'] py-[0.4rem] px-[1.4rem] text-center flex justify-center items-center;
   }
   .active-tab .tab-label::after {
     @apply hidden;
