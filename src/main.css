@@ -8,10 +8,16 @@
 
 @layer components {
   .sidebar {
-    @apply mobileheight top-[194px] lg:top-0 !w-[22rem];
+    @apply mobileheight top-[194px] lg:top-0 w-[14.4rem] sm:w-[22rem];
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
+  }
+  .aside.menu-zero {
+    @apply ml-[-13.9rem] sm:ml-[-21.5rem];
+  }
+  .aside {
+    @apply max-w-[calc(100%-3rem)] break-words;
   }
   .btn {
     @apply py-2 px-4 rounded-full cursor-pointer;
@@ -93,9 +99,6 @@
     @apply absolute opacity-0 -z-10;
   }
   /*--------------------------- end of sidebar tab's -------------------------------*/
-  .aside.menu-zero {
-    @apply ml-[-21.5rem];
-  }
 }
 
 .material-symbols-outlined {
