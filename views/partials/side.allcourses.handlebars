@@ -12,21 +12,20 @@
   <div class='p-2 lg:max-h-screen drop-shadow-2xl w-full'>
     <div class=''>
       {{#each courses}}
-        <a href='/{{this.courseSlug}}/about' class="!no-underline hover:!underline" >
-          <div class='mb-2 bg-neutral-100 p-4'>
-            <div class="text-md font-bold mb-2 !no-underline uppercase" >
-              {{this.courseName}}
-            </div>
+        <div class='mb-2 bg-neutral-100 hover:bg-neutral-200 flex'>
+
+          <a
+            class='p-4 !no-underline uppercase w-full'
+            href='/{{this.courseSlug}}/about'
+          ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
+
             <div>
               <progress id='{{this.courseCode}}' value='32' max='100'>
                 32%
               </progress>
             </div>
-            <div class='!no-underline'>
-              {{this.courseCode}}
-            </div>
-          </div>
-        </a>
+            <div>{{this.courseCode}}</div></a>
+        </div>
       {{/each}}
 
       <!-- ??? Kas siia lehele lisada veel alamenüü lehti?

@@ -679,9 +679,6 @@ pre {
   padding-left: 2rem;
   --tw-text-opacity: 1;
   color: rgb(28 25 23 / var(--tw-text-opacity));
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }
 
 .active-tab .no-tab-label,
@@ -691,8 +688,7 @@ pre {
 }
 
 .active-tab-content,
-  .tab-content:hover,
-  input:checked + .tab-label {
+  .tab-content:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
 }
@@ -733,9 +729,6 @@ input:checked ~ .tab-label {
   height: 1rem;
   width: 1rem;
   text-align: center;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
   --tw-content: '\276F';
   content: var(--tw-content);
 }
@@ -1026,6 +1019,11 @@ input:checked ~ .tab-label {
   background-color: rgb(183 18 52 / var(--tw-bg-opacity));
 }
 
+.bg-neutral-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(89 95 101 / var(--tw-bg-opacity));
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -1258,7 +1256,7 @@ a {
 
 .aside {
   margin-left: inherit;
-  transition: all 1s;
+  transition: margin 1s;
 }
 
 .reading_content {
@@ -1369,7 +1367,7 @@ table.gsc-search-box td.gsc-input {
 
 progress::-webkit-progress-bar {
   --tw-bg-opacity: 1;
-  background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+  background-color: rgb(187 192 197 / var(--tw-bg-opacity));
 }
 
 progress::-webkit-progress-value {
@@ -1383,9 +1381,19 @@ progress {
 
 /* navbar accent shape */
 
+.hover\:bg-neutral-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-neutral-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(187 192 197 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-neutral-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(151 155 159 / var(--tw-bg-opacity));
 }
 
 .hover\:underline:hover {
