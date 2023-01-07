@@ -49,10 +49,11 @@ npm install
 
 ### Github tokeni lisamine rakendusse
 
-Githubiga ühenduse loomiseks on tarviline Githubi tokeni loomine ja selle lisamine juurkataloogi .env faili.
+Githubiga ühenduse loomiseks on vajalik Githubi tokeni loomine ja selle lisamine juurkataloogi .env faili.
 1. Loo juurkataloogi `.env` fail
-2. Loo Githubis token: [juhend](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token.)
-3. `.env` faili sisuks määra:
+2. Loo Githubis token: [juhend](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+3. Token loomisel määra **Expiration**: "No expiration" ning **Select scopes** alt lisa linnuke tervele "repo" sektsioonile: <img width="600" alt="Screenshot 2023-01-07 at 09 15 18" src="https://user-images.githubusercontent.com/62253084/211138976-dde411be-4d47-4676-a6a8-8d24ce396e25.png">
+4. `.env` faili sisuks määra:
    ```
    AUTH = 'Bearer ghp_SINUGITHUBITOKEN'
    ```
