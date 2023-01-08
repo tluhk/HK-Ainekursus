@@ -249,3 +249,7 @@ progress {
 }
 
 /* navbar accent shape */
+
+.img .markdown-iframe {
+  max-width: 400px;
+}

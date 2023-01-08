@@ -44,4 +44,12 @@ module.exports = {
   requestPractices: (
     (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/about.md`
   ),
+  // images related
+  requestImgURL: (
+    (coursePathInGithub, path, url) => {
+      if (path.type === 'docs') return `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${url}`;
+      if (path.type === 'concept') return `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${path.componentSlug}/${url}`;
+      if (path.type === 'practice') return `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${path.componentSlug}/${url}`;
+    }
+  ),
 };

@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 /* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
-const livereload = require('livereload');
+/* const livereload = require('livereload');
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, '/views'));
 liveReloadServer.watch(path.join(__dirname, 'public'));
@@ -20,7 +20,7 @@ liveReloadServer.server.once('connection', () => {
   }, 100);
 });
 const connectLivereload = require('connect-livereload');
-app.use(connectLivereload());
+app.use(connectLivereload()); */
 
 // add handlebars helpers: https://stackoverflow.com/a/32707476
 const handlebars = require('./src/helpers/handlebars')(exphbs);

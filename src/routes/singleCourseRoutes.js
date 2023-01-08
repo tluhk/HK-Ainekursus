@@ -4,16 +4,6 @@
 
 const { singleCourseController, verifyCache, responseAction } = require('../components/singleCourse/controller');
 
-/* const getImgPromises = async (coursePathInGithub, slug) => {
-  try {
-    const files = await axios.get(requestStaticURL(coursePathInGithub, slug), authToken);
-    // console.log('files1.data', files.data);
-    return files;
-  } catch (err) {
-    return console.log(err);
-  }
-}; */
-
 const setSingleCourseRoutes = async (app, config, course, allCourses) => {
   const { courseName, courseSlug, coursePathInGithub } = course;
 
@@ -210,7 +200,6 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     */
     lesson.components.map((compUppercase) => {
       const comp = compUppercase;
-      console.log('comp:', comp);
       let component = {};
       if (config.concepts.map((x) => x.slug).includes(comp)) {
         component = config.concepts.find((x) => x.slug === comp);
@@ -220,7 +209,6 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         component = config.practices.find((x) => x.slug === comp);
         component.type = 'practice';
       }
-      console.log('component:', component);
 
       const breadcrumbNames = {
         courseName,
@@ -235,6 +223,9 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
         type: component.type,
       };
 
+      // console.log('coursePathInGithub:', coursePathInGithub);
+
+      // console.log('path:', path);
       const saveParams = async (req, res, next) => {
         const params = {
           coursePathInGithub,
