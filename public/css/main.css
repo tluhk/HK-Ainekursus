@@ -1449,6 +1449,10 @@ progress {
 
 /* navbar accent shape */
 
+.img .markdown-iframe {
+  max-width: 400px;
+}
+
 .hover\:bg-neutral-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(212 214 216 / var(--tw-bg-opacity));
