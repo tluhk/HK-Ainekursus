@@ -894,6 +894,10 @@ input:checked ~ .tab-label {
   margin-right: 1rem;
 }
 
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
 .block {
   display: block;
 }
