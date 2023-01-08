@@ -25,16 +25,16 @@
 
 @layer components {
   .sidebar {
-    @apply mobileheight top-[194px] lg:top-0 w-full sm:w-[22rem];
+    @apply mobileheight top-[194px] lg:top-0 w-[14.4rem] sm:w-[22rem];
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
   }
   .aside.menu-zero {
-    @apply ml-[calc(-100%+4rem)] sm:ml-[-21.5rem];
+    @apply ml-[-13.9rem] sm:ml-[-21.5rem];
   }
   .aside {
-    @apply max-w-[calc(100%-3.5rem)] break-words;
+    @apply max-w-[calc(100%-3rem)] break-words;
   }
   .btn {
     @apply py-2 px-4 rounded-full cursor-pointer;
@@ -67,10 +67,10 @@
   }
   .tab-label,
   .no-tab-label {
-    @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer pl-4;
+    @apply flex justify-between bg-neutral-100 hover:bg-neutral-200 font-bold cursor-pointer px-4;
   }
   .tab-content {
-    @apply max-h-0 py-0 px-4 bg-white text-secondary-900;
+    @apply max-h-0 py-0 pl-8 px-4 bg-white text-secondary-900;
   }
   .active-tab .no-tab-label,
   .active-tab .tab-label {
@@ -95,11 +95,14 @@
   .tab-label {
     @apply border-b border-neutral-200;
   }
+  .tab-label::after {
+    @apply mt-3;
+  }
   input:checked ~ .tab-label {
     @apply max-h-screen;
   }
   .tab-label::after {
-    @apply content-['\276F'] py-[0.4rem] px-[1.4rem] text-center flex justify-center items-center;
+    @apply content-['\276F'] w-4 h-4 text-center;
   }
   .active-tab .tab-label::after {
     @apply hidden;
@@ -117,7 +120,7 @@
     @apply flex items-start gap-1;
   }
   .breadcrumb > * {
-    @apply whitespace-nowrap text-ellipsis inline-block overflow-hidden;
+    @apply whitespace-nowrap max-w-[30%] text-ellipsis inline-block overflow-hidden;
   }
 }
 
