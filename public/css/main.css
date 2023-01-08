@@ -963,6 +963,14 @@ input:checked ~ .tab-label {
   width: 10rem;
 }
 
+.w-\[22rem\] {
+  width: 22rem;
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1448,6 +1456,10 @@ progress {
 }
 
 /* navbar accent shape */
+
+.img .markdown-iframe {
+  max-width: 400px;
+}
 
 .hover\:bg-neutral-200:hover {
   --tw-bg-opacity: 1;

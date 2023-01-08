@@ -13,7 +13,7 @@
           <!-- Topic name and code -->
           {{#each courses}}
             {{#if_equal this.courseSlug ../path.courseSlug}}
-            <div class="mb-2 ">
+            <div class="mb-2 w-[22rem] max-w-full">
               <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
             </div>
             <div class="flex justify-between flex-wrap">
