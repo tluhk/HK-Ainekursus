@@ -583,7 +583,7 @@ p {
 
 .sidebar {
   top: 194px;
-  width: 14.4rem;
+  width: 100%;
   height: calc(100% - 149px);
 }
 
@@ -612,7 +612,7 @@ p {
 }
 
 .aside.menu-zero {
-  margin-left: -13.9rem;
+  margin-left: calc(-100% + 4rem);
 }
 
 @media (min-width: 640px) {
@@ -622,7 +622,7 @@ p {
 }
 
 .aside {
-  max-width: calc(100% - 3rem);
+  max-width: calc(100% - 3.5rem);
   overflow-wrap: break-word;
 }
 
