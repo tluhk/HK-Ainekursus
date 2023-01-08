@@ -1,4 +1,4 @@
-# Siia tekib Front-endi sisu
+# Frontendis kasutatud tehnikad ja põhimõtted
 
 [<Tagasi](../../README.md)  
 HTML on üles ehitatud lähtuvalt semantilise HTML põhimõtetest ja kõigile ligipääsetavuse huvidest.
@@ -7,7 +7,7 @@ Esialgse HTML-i skeem:
 
 ![Veebilehe skelett](images/html.jpg)
 
-Stiilimiseks on kasutusel Tailwind CSS-raamistik. Kaalumisel olid ka Windi CSS, UnoCSS ja Spectra, kuid nende puudulikum kui Tailwindil, mistap sai nendest loobutud. Samuti oli kaalumisel üldse raamistikust loobumine ja selle asemel puhta CSS-i ja CSS-grid'i kasutamine, kuid tagasisidest selgus, et backendi arendajatele, kes peavad vahest samuti frontendi osas käe külge panema, on raamistiku kasutamine lihtsam.
+Stiilimiseks on kasutusel Tailwind CSS-raamistik. Kaalumisel olid ka Windi CSS, UnoCSS ja Spectra, kuid nende juhendid olid puudulikumad kui Tailwindil, mistap sai nendest loobutud. Samuti oli kaalumisel üldse raamistikust loobumine ja selle asemel puhta CSS-i ja CSS-grid'i kasutamine, kuid tagasisidest selgus, et backendi arendajatele, kes peavad vahest samuti frontendi osas käe külge panema, on raamistiku kasutamine lihtsam.
 
 Tailwind kontrollib allikafailidest, milliseid klasse kasutatakse ning kopeerib need siis lõppfolderisse.
 
@@ -50,13 +50,13 @@ Vaikimisi on Tailwind nagu 0-stiil, tema eripäraks ongi see, et sa ehitad üles
 
   ```javascript
   plugins: [
-    plugin(function ({ addBase, theme, addComponents }) {
+    plugin(({ addBase, theme }) => {
       addBase({
         html: { fontSize: '18px' },
         h1: {
-          fontFamily: 'Zilla Slab',
-          fontSize: theme('fontSize.5xl'),
-          lineHeight: '3rem',
+          fontSize: theme('fontSize.xxxlsmall'),
+          fontWeight: '700',
+          lineHeight: '1.2',
           marginTop: '1.25rem',
           marginBottom: '1.25rem',
         },
@@ -66,31 +66,21 @@ Vaikimisi on Tailwind nagu 0-stiil, tema eripäraks ongi see, et sa ehitad üles
   Seda on võimalik teha ka css-is.
 
 - Värvilahendus
-  Värvilahenduses on kasutusel Tailwindi enda värvid, mis on defineeritud `tailwind.config.js`-is:
+  Värvid on defineeritud `tailwind.config.js`-is, kuid kasutatud ka Tailwindi enda värve:
 
 ```javascript
-const colors = require('tailwindcss/colors');
-
 module.exports = {
-    theme: {
-        colors: {
-          primary: colors.red,
-          secondary: colors.stone,
-          white: colors.white,
-        },
-    ...
-```
-
-Võib defineerida ka oma värvid:
-
-```javascript
-theme: {
+  content: ['./views/**/*.{handlebars,html,js}', './views/home.handlebars'],
+  theme: {
     colors: {
       brand_red: '#b71234',
       brand_black: '#282627',
-      brand_grey: '545153',
-      on_brand: '#fff',
-    },
+      brand_grey: '#545153',
+      primary: colors.red,
+      secondary: colors.stone,
+      white: colors.white,
+      success: '#A4D65E',
+    ...
 ```
 
 Neid on võimalik seega kasitada nt `bg-primary-700`või `text-secondary-500`jne
@@ -153,13 +143,5 @@ Kuid need võib ehitada ka `css`failis nt nii:
 
 Külgriba jääb lihtsama navigatsiooni huvides kui veebilehte ekraani ülaserva kerid, ülaserva pidama. Nn "sticky position".  
 Selleks tuleb kasutada CSS omadust – sticky. Et see toimiks, on vaja määrata selle külgriba kõrgus ning CSS omadusele top, anda väärtus 0 (sel juhul kinnitub ta 0-i jõudes).
-
-## Vidinad
-
-### Flowbite kalender
-
-https://flowbite.com/docs/plugins/datepicker/  
-https://flowbite.com/docs/getting-started/quickstart/  
-Siin kasutusel üle CDN-i
 
 [<Tagasi](../../README.md)
