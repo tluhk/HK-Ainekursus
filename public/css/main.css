@@ -841,12 +841,12 @@ input:checked ~ .tab-label {
   right: 0px;
 }
 
-.right-\[-3rem\] {
-  right: -3rem;
-}
-
 .top-2 {
   top: 0.5rem;
+}
+
+.right-\[-3rem\] {
+  right: -3rem;
 }
 
 .z-10 {
