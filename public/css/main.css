@@ -596,6 +596,7 @@ p {
 @media (min-width: 1024px) {
   .sidebar {
     top: 0px;
+    overflow: scroll;
   }
 }
 
@@ -849,6 +850,10 @@ input:checked ~ .tab-label {
   right: -3rem;
 }
 
+.left-\[3\.5rem\] {
+  left: 3.5rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -896,6 +901,10 @@ input:checked ~ .tab-label {
 
 .mb-8 {
   margin-bottom: 2rem;
+}
+
+.ml-\[-3\.5rem\] {
+  margin-left: -3.5rem;
 }
 
 .block {
@@ -1175,6 +1184,10 @@ input:checked ~ .tab-label {
   padding-left: 0.5rem;
 }
 
+.pb-12 {
+  padding-bottom: 3rem;
+}
+
 .pr-2 {
   padding-right: 0.5rem;
 }
@@ -1304,6 +1317,17 @@ input:checked ~ .tab-label {
 
 .mobileheight {
   height: calc(100% - 149px);
+}
+
+.pseudobackground::after {
+  content: '';
+  display: block;
+  height: 100vh;
+  width: 22rem;
+  background: #e6e9ec;
+  position: fixed;
+  z-index: -9;
+  top: 0;
 }
 
 .material-symbols-outlined {
@@ -1538,6 +1562,18 @@ progress {
     top: 0px !important;
   }
 
+  .lg\:left-\[inherit\] {
+    left: inherit;
+  }
+
+  .lg\:right-\[-3rem\] {
+    right: -3rem;
+  }
+
+  .lg\:ml-\[inherit\] {
+    margin-left: inherit;
+  }
+
   .lg\:hidden {
     display: none;
   }
@@ -1556,6 +1592,10 @@ progress {
 
   .lg\:overflow-x-clip {
     overflow-x: clip;
+  }
+
+  .lg\:bg-transparent {
+    background-color: transparent;
   }
 
   .lg\:pr-0 {

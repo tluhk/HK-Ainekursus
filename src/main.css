@@ -25,7 +25,7 @@
 
 @layer components {
   .sidebar {
-    @apply mobileheight top-[194px] lg:top-0 w-full sm:w-[22rem];
+    @apply mobileheight top-[194px] lg:top-0 w-full sm:w-[22rem] lg:overflow-scroll;
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
@@ -119,6 +119,16 @@
   .breadcrumb > * {
     @apply whitespace-nowrap text-ellipsis inline-block overflow-hidden;
   }
+}
+.pseudobackground::after {
+  content: '';
+  display: block;
+  height: 100vh;
+  width: 22rem;
+  background: #e6e9ec;
+  position: fixed;
+  z-index: -9;
+  top: 0;
 }
 
 .material-symbols-outlined {

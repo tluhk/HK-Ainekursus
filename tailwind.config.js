@@ -13,6 +13,7 @@ module.exports = {
       secondary: colors.stone,
       white: colors.white,
       success: '#A4D65E',
+      transparent: 'transparent',
       // from there begins the right color palette
       neutral: {
         DEFAULT: '#40464D',

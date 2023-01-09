@@ -1,125 +1,127 @@
-<nav class="sidebar h-fit relative lg:sticky top-0" id="sidebar">
-    <button onclick='closeSideMenu()' class="flex items-center p-1 top-2 h-fit bg-neutral-100 rounded-r-lg absolute right-[-3rem]">
+<div class="flex pseudobackground bg-neutral-100 lg:bg-transparent">  
+  <nav class="sidebar pb-12 h-fit relative lg:sticky top-0" id="sidebar">
+      
+      <!-- sidebar sticky behavior beginning from lg size -->
+      <div class="p-2 lg:max-h-screen drop-shadow-2xl w-full">
+
+        <!-- DROPDOWN MENU -->
+
+        <div class="bg-neutral-100 mb-8 ">
+
+          <div class="!no-underline p-4 border-b border-neutral-200 bg-brand_red">
+            <!-- Topic name and code -->
+            {{#each courses}}
+              {{#if_equal this.courseSlug ../path.courseSlug}}
+              <div class="mb-2 w-[22rem] max-w-full">
+                <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
+              </div>
+              <div class="flex justify-between flex-wrap">
+                <div class="!text-white py-2 pr-2">{{../this.courseCode}}</div>
+              {{/if_equal}}
+            {{/each}}
+                <!-- About links -->
+                {{#each docs}}
+                  <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">
+                  {{this.name}}</a>
+                {{/each}}
+              </div>
+          </div>
+
+          <div class="tabs">
+
+            <!-- Lessons links -->
+            {{#each lessons}}
+            <div class="tab 
+              {{#if_equal this.slug ../path.contentSlug }} 
+                active-tab
+              {{/if_equal }}
+            ">
+              <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
+              <label class="tab-label" for="chck{{@index}}">
+                <div class="flex gap-2 w-full">
+                  <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+                  </a>
+                </div>
+              </label>
+              
+              <!-- Themes links -->
+              {{#each this.components}}
+                <div class="tab-content flex gap-2 
+                  {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
+                    active-tab-content
+                  {{/if_equal }}
+                " >
+                  <a class="grow py-3 !no-underline" 
+                    href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
+                    <div class="flex gap-2 w-full" >
+                        <span class="material-symbols-outlined">
+                          {{{showComponentType this ../../concepts ../../practices}}}
+                        </span>
+                        {{{showComponentName this ../../concepts ../../practices}}}
+                      </div>
+                    </a>
+                    <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
+
+                </div>
+              {{/each}}
+
+              <!-- Lesson extra material -->
+              {{#each this.additionalMaterials}}
+                <div class="tab-content flex gap-2
+                  {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
+                    active-tab-content
+                  {{/if_equal }}
+                ">
+                  <a class="py-3 w-full !no-underline" 
+                  href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
+
+                </div>
+              {{/each}}
+
+            </div>
+            {{/each}}
+
+            <!-- Topic extra material link -->
+            {{#each additionalMaterials}}
+            <div class="tab
+              {{#if_equal this.slug ../path.fullPath }} 
+                active-tab
+              {{/if_equal }}
+            ">
+              <label class="no-tab-label">
+                <a class="py-3 w-full !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+                </a></label>
+            </div>
+            {{/each}}
+
+          </div>
+        </div>
+
+
+        <!-- other courses -->
+        <div class="!no-underline">
+            {{#each courses}}
+              {{#if_not_equal this.courseSlug ../path.courseSlug}}
+              <!-- beginning of loupe -->
+              <div class="mb-2 bg-neutral-200 break-all">
+
+                  <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+
+                <div class="flex justify-between items-center">
+                  {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
+                  {{!-- <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a> --}}
+                </div>
+              </div>
+              {{/if_not_equal}}
+            {{/each}}
+        </div>
+  
+
+      </div>
+    
+  </nav>
+  <button onclick='closeSideMenu()' class=" h-fit lg:sticky top-0 flex items-center p-1 top-2 h-fit bg-neutral-100 rounded-r-lg relative relative left-[3.5rem] ml-[-3.5rem] lg:left-[inherit] lg:ml-[inherit] lg:right-[-3rem]">
     <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_left</i>
     </button>
-    <!-- sidebar sticky behavior beginning from lg size -->
-    <div class="p-2 lg:max-h-screen drop-shadow-2xl w-full">
-
-      <!-- DROPDOWN MENU -->
-
-      <div class="bg-neutral-100 mb-8 ">
-
-        <div class="!no-underline p-4 border-b border-neutral-200 bg-brand_red">
-          <!-- Topic name and code -->
-          {{#each courses}}
-            {{#if_equal this.courseSlug ../path.courseSlug}}
-            <div class="mb-2 w-[22rem] max-w-full">
-              <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
-            </div>
-            <div class="flex justify-between flex-wrap">
-              <div class="!text-white py-2 pr-2">{{../this.courseCode}}</div>
-            {{/if_equal}}
-          {{/each}}
-              <!-- About links -->
-              {{#each docs}}
-                <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">
-                {{this.name}}</a>
-              {{/each}}
-            </div>
-        </div>
-
-        <div class="tabs">
-
-          <!-- Lessons links -->
-          {{#each lessons}}
-          <div class="tab 
-            {{#if_equal this.slug ../path.contentSlug }} 
-              active-tab
-            {{/if_equal }}
-          ">
-            <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
-            <label class="tab-label" for="chck{{@index}}">
-              <div class="flex gap-2 w-full">
-                <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-                </a>
-              </div>
-            </label>
-            
-            <!-- Themes links -->
-            {{#each this.components}}
-              <div class="tab-content flex gap-2 
-                {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
-                  active-tab-content
-                {{/if_equal }}
-              " >
-                <a class="grow py-3 !no-underline" 
-                  href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
-                  <div class="flex gap-2 w-full" >
-                      <span class="material-symbols-outlined">
-                        {{{showComponentType this ../../concepts ../../practices}}}
-                      </span>
-                      {{{showComponentName this ../../concepts ../../practices}}}
-                    </div>
-                  </a>
-                  <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
-
-              </div>
-            {{/each}}
-
-            <!-- Lesson extra material -->
-            {{#each this.additionalMaterials}}
-              <div class="tab-content flex gap-2
-                {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
-                  active-tab-content
-                {{/if_equal }}
-              ">
-                <a class="py-3 w-full !no-underline" 
-                href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
-
-              </div>
-            {{/each}}
-
-          </div>
-          {{/each}}
-
-          <!-- Topic extra material link -->
-          {{#each additionalMaterials}}
-          <div class="tab
-            {{#if_equal this.slug ../path.fullPath }} 
-              active-tab
-            {{/if_equal }}
-          ">
-            <label class="no-tab-label">
-              <a class="py-3 w-full !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
-              </a></label>
-          </div>
-          {{/each}}
-
-        </div>
-      </div>
-
-
-      <!-- other courses -->
-      <div class="!no-underline">
-          {{#each courses}}
-            {{#if_not_equal this.courseSlug ../path.courseSlug}}
-            <!-- beginning of loupe -->
-            <div class="mb-2 bg-neutral-200 break-all">
-
-                <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
-
-              <div class="flex justify-between items-center">
-                {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
-                {{!-- <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a> --}}
-              </div>
-            </div>
-            {{/if_not_equal}}
-          {{/each}}
-      </div>
- 
-
-    </div>
-  
-</nav>
-
+</div>
 
