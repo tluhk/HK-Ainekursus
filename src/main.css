@@ -22,7 +22,6 @@
     }
   }
 }
-
 @layer components {
   .sidebar {
     @apply mobileheight top-[194px] lg:top-0 w-full sm:w-[22rem];
