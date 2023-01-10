@@ -1,8 +1,10 @@
 # Siia tekib UX-i osa
+
+[<Tagasi](../../README.md)  
+
 Hi-fi prototüüp Figmas:
 
 https://www.figma.com/file/xW1dnmDtbxcboAQoRy8KgP/Valikpraktika?node-id=0%3A1
-[<Tagasi](../../README.md)  
 UX'i raames tehtud low-fi prototüübid:  
 ![ux low](images/ux_1.jpg)  
 ![ux low](images/ux_2.jpg)  
