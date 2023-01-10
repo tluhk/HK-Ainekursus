@@ -14,6 +14,9 @@
 - express JS: https://expressjs.com/ – web application framework used to build a single page, multipage, and hybrid web application
 - express-handlebars: https://www.npmjs.com/package/express-handlebars – pure rendering engine. Allows writing semantic templates for rendering HTML-pages, e-mails or markdown files
 
+## Used tools for cache:
+- Add in-memory cache: https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4
+
 ## Used tools for reading and displaying content from GitHub:
 
 - GitHub API: https://docs.github.com/en/rest – to read data from GitHub repositories
@@ -32,8 +35,5 @@
 - Enable embedded code demo environments like JSFiddle and CodePen: https://www.npmjs.com/package/markdown-it-playground
 - Enable embedded iframes: https://github.com/rjriel/markdown-it-iframe
 - Specify image rendering: https://www.npmjs.com/package/markdown-it-imagination
-
-## Node cache:
-- Add in-memory cache: https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4
 
 [<Tagasi](../../README.md)
