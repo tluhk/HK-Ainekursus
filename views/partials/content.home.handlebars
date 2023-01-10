@@ -31,8 +31,8 @@
 
   <!-- NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad"" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed. -->
   {{#if sources}}
-    <div class='sources'>
-      <h2>Allikad:</h2>
+    <div class='sources pt-4'>
+      <h4>Allikad:</h4>
       <ul class="markdown">
         {{#each sources}}
           <li><a
@@ -58,8 +58,8 @@
   Github raw download_url juhend: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
   Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866-->
   {{#if files}}
-    <div class='files'>
-      <h2>Failid:</h2>
+    <div class='files pt-4'>
+      <h3>Failid:</h3>
       <ul class="markdown"
 >
         {{#each files}}
