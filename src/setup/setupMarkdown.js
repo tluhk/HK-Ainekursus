@@ -90,6 +90,7 @@ MarkdownIt.use(playgroundPlugin, {
   allowFullScreen: true,
 });
 
+// Enable embedded iframes
 // https://github.com/rjriel/markdown-it-iframe
 MarkdownIt.use(iframe, {
   allowfullscreen: false,
@@ -99,6 +100,7 @@ MarkdownIt.use(iframe, {
   height: '500px',
 });
 
+// Specify image rendering
 // https://www.npmjs.com/package/markdown-it-imagination
 MarkdownIt.use(mdImagination, {
   lazy: true,
