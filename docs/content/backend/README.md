@@ -1,4 +1,4 @@
-# Siia tekib Backendi sisu
+# Tagarakenduse töövahendid
 
 [<Tagasi](../../README.md)
 
@@ -21,12 +21,19 @@
 - base64: https://www.npmjs.com/package/base-64 – for decoding encoded responses from GitHub API
 - utf8: https://www.npmjs.com/package/utf8 – for making decoded GitHub API responses utf8 compatible
 - markdown-it: https://github.com/markdown-it/markdown-it – for parsing Markdown files (after requesting Markdown files from Githhub and decoding with both base64 and utf8)
-- markdown-it-link-attributes: https://www.google.com/search?client=firefox-b-d&q=markdown-it-link-attributes – link attributes plugin for markdown-it markdown parser
 
-## Markdown-it plugins:
--
+### Markdown-it pluginad Markdown-failide renderdamiseks
+- Enable syntax hightlighting: https://github.com/markdown-it/markdown-it#syntax-highlighting
+- Add anchors to markdown headings: https://github.com/valeriangalliat/markdown-it-anchor
+- Add certain classes to selected elements in markdown files, needed for CSS: https://github.com/HiroshiOkada/markdown-it-class
+- Add attributes to href links in markdown file: https://www.npmjs.com/package/markdown-it-link-attributes
+- Add anchor links to headings in markdown file: https://github.com/valeriangalliat/markdown-it-anchor
+- Add embed video support: https://github.com/rotorz/markdown-it-block-embed
+- Enable embedded code demo environments like JSFiddle and CodePen: https://www.npmjs.com/package/markdown-it-playground
+- Enable embedded iframes: https://github.com/rjriel/markdown-it-iframe
+- Specify image rendering: https://www.npmjs.com/package/markdown-it-imagination
 
 ## Node cache:
--
+- Add in-memory cache: https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4
 
 [<Tagasi](../../README.md)
