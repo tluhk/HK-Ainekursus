@@ -2,10 +2,14 @@
 
 // Import request functions for Axios
 
-const { singleCourseController, verifyCache, responseAction } = require('../components/singleCourse/controller');
+const { singleCourseController, verifyCache, responseAction } = require('../components/singleCourse/singleController');
 
-const setSingleCourseRoutes = async (app, config, course, allCourses) => {
-  const { courseName, courseSlug, coursePathInGithub } = course;
+// const setSingleCourseRoutes = async (app, config, course, allCourses) => {
+
+const setSingleCourseRoutes = async (req, res) => {
+  const { course, config, allCourses } = res.locals;
+
+  console.log('res.locals2:', res.locals);
 
   // *** BUTTONS – FORWARD/BACK PATH SETTINGS ***
 
@@ -70,7 +74,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     };
 
     app.get(
-      `/${courseSlug}/${path.contentSlug}`,
+      `/courses/${courseSlug}/${path.contentSlug}`,
       verifyCache,
       saveParams,
       singleCourseController.requestDocsController,
@@ -106,7 +110,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     };
 
     app.get(
-      `/${courseSlug}/${path.contentSlug}`,
+      `/courses/${courseSlug}/${path.contentSlug}`,
       verifyCache,
       saveParams,
       singleCourseController.requestCourseAdditionalMaterials,
@@ -143,7 +147,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
     };
 
     app.get(
-      `/${courseSlug}/${path.contentSlug}`,
+      `/courses/${courseSlug}/${path.contentSlug}`,
       verifyCache,
       saveParams,
       singleCourseController.requestLessons,
@@ -182,7 +186,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       };
 
       return app.get(
-        `/${courseSlug}/${path.contentSlug}/${path.componentSlug}`,
+        `/courses/${courseSlug}/${path.contentSlug}/${path.componentSlug}`,
         verifyCache,
         saveParams,
         singleCourseController.requestLessonAdditionalMaterials,
@@ -241,7 +245,7 @@ const setSingleCourseRoutes = async (app, config, course, allCourses) => {
       };
 
       return app.get(
-        `/${courseSlug}/${path.contentSlug}/${path.componentSlug}`,
+        `/courses/${courseSlug}/${path.contentSlug}/${path.componentSlug}`,
         verifyCache,
         saveParams,
         singleCourseController.requestLessonComponents,

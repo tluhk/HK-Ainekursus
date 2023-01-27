@@ -1,13 +1,22 @@
 /* eslint-disable max-len */
+
 /* eslint-disable import/newline-after-import */
 require('dotenv').config();
 
-const path = require('path');
-
+/**
+ * Import express framework
+ */
 const express = require('express');
+
+const path = require('path');
 const exphbs = require('express-handlebars');
+
+/**
+  * Create express app
+  */
 const app = express();
 const port = process.env.PORT || 3000;
+const favicon = require('serve-favicon');
 
 /* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
 const livereload = require('livereload');
@@ -22,38 +31,50 @@ liveReloadServer.server.once('connection', () => {
 const connectLivereload = require('connect-livereload');
 app.use(connectLivereload());
 
-// add handlebars helpers: https://stackoverflow.com/a/32707476
+const {
+  allCoursesController, verifyCache, responseAction, renderPage,
+} = require('./src/components/courses/coursesController');
+// const { setSingleCourseRoutes } = require('./src/routes/singleCourseRoutes');
+// const { responseAction } = require('./src/components/singleCourse/controller');
+
+/**
+ *  Import handlebars helpers: https://stackoverflow.com/a/32707476
+ */
 const handlebars = require('./src/helpers/handlebars')(exphbs);
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
-// define application static folder:
+/**
+ *  Define application static folder
+ */
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(
-  '/images',
-  express.static(
-    'https://api.github.com/tluhk/HK_Riistvara-alused/contents/concepts/arvuti/images'
-  )
-);
 
-const { engine } = require('./engine');
+/**
+ *  Define favicon file
+ */
+app.use(favicon(path.join(__dirname, '/public/images', 'favicon.ico')));
 
-engine(app);
+/**
+  * Testing API endpoints
+  */
+app.get('/ping', (req, res) => {
+  res.status(200).json({
+    message: 'API is working',
+  });
+});
 
+/**
+  * Available endpoints
+  */
+app.get('/', allCoursesController.getAllCourses);
+app.get('/courses', allCoursesController.getAllCourses);
+app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', verifyCache, allCoursesController.getSpecificCourse, responseAction, renderPage);
+
+/**
+ * Start a server and listen on port 3000
+ */
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-/* const start = (portProp) => {
-  try {
-    app.listen(portProp);
-    console.log(`Listening on port ${portProp}`);
-  } catch (err) {
-    console.error(err);
-    process.exit();
-  }
-};
-
-start(port); */

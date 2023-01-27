@@ -22,7 +22,7 @@
           {{/each}}
               <!-- About links -->
               {{#each docs}}
-                <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">
+                <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/course/{{../path.courseSlug}}/{{this.slug}}">
                 {{this.name}}</a>
               {{/each}}
             </div>
@@ -40,7 +40,7 @@
             <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
             <label class="tab-label" for="chck{{@index}}">
               <div class="flex gap-2 w-full">
-                <a class="grow py-3 !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+                <a class="grow py-3 !no-underline" href="/course/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
                 </a>
               </div>
             </label>
@@ -53,7 +53,7 @@
                 {{/if_equal }}
               " >
                 <a class="grow py-3 !no-underline" 
-                  href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
+                  href="/course/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}">
                   <div class="flex gap-2 w-full" >
                       <span class="material-symbols-outlined">
                         {{{showComponentType this ../../concepts ../../practices}}}
@@ -74,7 +74,7 @@
                 {{/if_equal }}
               ">
                 <a class="py-3 w-full !no-underline" 
-                href="/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
+                href="/course/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}">{{this.name}}</a>
 
               </div>
             {{/each}}
@@ -90,7 +90,7 @@
             {{/if_equal }}
           ">
             <label class="no-tab-label">
-              <a class="py-3 w-full !no-underline" href="/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
+              <a class="py-3 w-full !no-underline" href="/course/{{../path.courseSlug}}/{{this.slug}}">{{this.name}}
               </a></label>
           </div>
           {{/each}}
@@ -106,7 +106,7 @@
             <!-- beginning of loupe -->
             <div class="mb-2 bg-neutral-200 break-all">
 
-                <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
+                <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/course/{{../this.courseSlug}}/about">{{../this.courseName}}</a>
 
               <div class="flex justify-between items-center">
                 {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
