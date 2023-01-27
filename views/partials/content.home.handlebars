@@ -4,7 +4,7 @@
     {{#if breadcrumb.courseName}}
       <a
         class='hover:underline'
-        href='/{{path.courseSlug}}'
+        href='/course/{{path.courseSlug}}/about'
       >{{breadcrumb.courseName}}</a>
     {{/if}}
     {{#if_not_equal path.contentSlug 'about' }}
@@ -12,7 +12,7 @@
         >
         <a
           class='hover:underline'
-          href='/{{../path.courseSlug}}/{{../path.contentSlug}}'
+          href='/course/{{../path.courseSlug}}/{{../path.contentSlug}}'
         >{{../breadcrumb.contentName}}</a>
       {{/if}}
     {{/if_not_equal}}
@@ -20,7 +20,7 @@
       >
       <a
         class='hover:underline'
-        href='/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}'
+        href='/course/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}'
       >{{breadcrumb.componentName}}</a>
     {{/if}}
   </div>
@@ -84,13 +84,13 @@
   <div class='flex gap-4 justify-center'>
     {{#if_not_equal ../path.fullPath ../singleCoursePaths.[0].path }}
       <input type="button" class="btn btn-secondary"
-      onclick="location.href='/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
       value="Eelmine" />
     {{/if_not_equal }}
 
     {{#if_not_equal ../path.fullPath (last ../singleCoursePaths) }}
       <input type="button" class="btn btn-primary"
-      onclick="location.href='/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine" />
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine" />
     {{/if_not_equal }}
   </div>
   {{/ifIn }}

@@ -53,16 +53,16 @@ module.exports = function hbsHelpers(hbs) {
             // do nothing
         }
       },
-      showComponentType: (componentUppercase, concepts, practices) => {
-        const component = componentUppercase;
-        const components = concepts.concat(practices);
-        const comp = components.find((x) => (x.slug) === component);
-        switch (comp.type) {
-          case 'docs': return 'attach_file';
-          case 'concept': return 'sticky_note_2';
-          case 'practice': return 'home_repair_service';
-          default: return '';
-        }
+      showComponentType: (component, concepts, practices) => {
+        /* console.log('component:', component);
+        console.log('concepts:', concepts);
+        console.log('practices:', practices); */
+
+        // https://stackoverflow.com/a/50909930
+        const checkMatch = (obj) => obj.slug === component;
+        if (concepts.some(checkMatch)) return 'sticky_note_2';
+        if (practices.some(checkMatch)) return 'build';
+        return 'attach_file';
       },
       showComponentName: (componentUppercase, concepts, practices) => {
         const component = componentUppercase;

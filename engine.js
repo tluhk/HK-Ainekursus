@@ -5,13 +5,26 @@ const { getAllCourses } = require('./src/routes/getAllCourses');
 const { getConfig } = require('./src/getConfig');
 const { setSingleCourseRoutes } = require('./src/routes/singleCourseRoutes');
 const { setAllCoursesRoutes } = require('./src/routes/allCoursesRoutes');
+const axios = require('axios');
+const { allCoursesController } = require('./src/components/allCourses/singleController');
 
 const engine = async (app) => {
   const allCourses = await getAllCourses();
   // console.log('allCourses', allCourses);
   const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-  // Määra Kõik Kursused routimine
-  setAllCoursesRoutes(app, allCoursesActive);
+
+  // ** ALL COURSES ENDPOINTS (allcourses.handlebars) **
+
+  // redirect each "/courseSlug" page to "/courseSlug/about" page
+  app.get('/courses/:courseSlug', allCoursesController);
+
+  app.get(
+    '/:courseSlug',
+    (req, res) => {
+      // console.log('reqCon:', req);
+      res.redirect('/:courseSlug/about');
+    },
+  );
 
   // Määra Kursuse-sisene ruutimine
   allCoursesActive.forEach(async (course) => {
@@ -19,8 +32,5 @@ const engine = async (app) => {
     setSingleCourseRoutes(app, config, course, allCoursesActive);
   });
 };
-
-// Get repository content: https://docs.github.com/en/rest/repos/contents#get-repository-content
-// Get a latest release: https://docs.github.com/en/rest/releases/releases#get-the-latest-release
 
 module.exports = { engine };
