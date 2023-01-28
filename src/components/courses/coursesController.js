@@ -1,216 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
-const { default: axios } = require('axios');
 const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 
 // Enable in-memory cache
 const { cache } = require('../../setup/setupCache');
 const { getAllCourses } = require('../../routes/getAllCourses');
 const { getConfig } = require('../../getConfig');
-const {
-  requestDocs, requestCourseAdditionalMaterials, requestCourseFiles, requestLessons, requestLessonAdditionalMaterials, requestLessonFiles, requestConcepts, requestSources, requestPractices,
-} = require('../../functions/repoFunctions');
-const { authToken } = require('../../setup/setupGithub');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
 const { verifyCache } = require('./coursesVerifyCache');
-
-/**
- * Define files to ignore from /files folders
- */
-const ignoreFiles = ['.DS_Store', '.gitkeep'];
-
-/**
- * Define all API requests that are done to GitHub API
- */
-const apiRequests = {
-  requestDocs: async (locals, request) => {
-    const {
-      coursePathInGithub,
-    } = locals.course;
-
-    // console.log('request.url1:', request.url);
-
-    const routePath = `${request.url}+components`;
-    // console.log('routePath2:', routePath);
-
-    let components;
-
-    if (!cache.has(routePath)) {
-      components = await axios.get(requestDocs(coursePathInGithub), authToken);
-
-      // console.log('Axioscomponents1:', components);
-      cache.set(routePath, components);
-    } else {
-      // console.log('taken from cache');
-      components = cache.get(routePath);
-      // console.log('Cachecomponents2:', components);
-    }
-
-    return { components };
-  },
-  requestCourseAdditionalMaterials: async (locals, request) => {
-    const {
-      coursePathInGithub,
-    } = locals.course;
-
-    const routePath = `${request.url}+components`;
-    const routePathFiles = `${request.url}+files`;
-
-    let components;
-    let files;
-
-    if (!cache.get(routePath) || !cache.get(routePathFiles)) {
-      const componentsRaw = await axios.get(requestCourseAdditionalMaterials(coursePathInGithub), authToken);
-      // Github raw download_url juhend:
-      // https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
-      //  Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
-      const filesRaw = await axios.get(requestCourseFiles(coursePathInGithub), authToken);
-
-      await axios
-        .all([componentsRaw, filesRaw])
-        .then(
-          axios.spread((...responses) => {
-            [components, files] = responses;
-            files = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
-
-            // console.log('files1:', files);
-
-            cache.set(routePath, components);
-            cache.set(routePathFiles, files);
-          }),
-        )
-        .catch((error) => {
-          console.log('siin on addMat error');
-          console.log(error);
-        });
-    } else {
-      // console.log('taken from cache');
-      components = cache.get(routePath);
-      files = cache.get(routePathFiles);
-      // console.log('Cachecomponents2:', components);
-      // console.log('CacheFiles2:', files);
-    }
-
-    return { components, files };
-  },
-  requestLessons: async (locals, request) => {
-    const {
-      coursePathInGithub,
-    } = locals.course;
-    const {
-      path,
-    } = locals;
-
-    const routePath = `${request.url}+components`;
-
-    let components;
-
-    if (!cache.get(routePath)) {
-      components = await axios.get(requestLessons(coursePathInGithub, `${path.contentSlug}`), authToken);
-
-      cache.set(routePath, components);
-    } else {
-      components = cache.get(routePath);
-    }
-
-    return { components };
-  },
-  requestLessonAdditionalMaterials: async (locals, request) => {
-    const {
-      coursePathInGithub,
-    } = locals.course;
-    const {
-      path,
-    } = locals;
-
-    const routePath = `${request.url}+components`;
-    const routePathFiles = `${request.url}+files`;
-
-    let components;
-    let files;
-
-    if (!cache.get(routePath) || !cache.get(routePathFiles)) {
-      const componentsRaw = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`), authToken);
-      // Github raw download_url juhend:
-      // https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
-      // Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
-      const filesRaw = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`), authToken);
-
-      await axios
-        .all([componentsRaw, filesRaw])
-        .then(
-          axios.spread((...responses) => {
-            [components, files] = responses;
-            files = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
-
-            cache.set(routePath, components);
-            cache.set(routePathFiles, files);
-          }),
-        )
-        .catch((error) => {
-          console.log('siin on addMat error');
-          console.log(error);
-        });
-    } else {
-      components = cache.get(routePath);
-      files = cache.get(routePathFiles);
-    }
-
-    return { components, files };
-  },
-  requestLessonComponents: async (locals, request) => {
-    const {
-      coursePathInGithub,
-    } = locals.course;
-    const {
-      path,
-    } = locals;
-
-    const routePath = `${request.url}+components`;
-    const routePathSources = `${request.url}+sources`;
-
-    let components;
-    let sources;
-
-    if (path.type === 'concept') {
-      if (!cache.get(routePath) || !cache.get(routePathSources)) {
-        const componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`), authToken);
-        const sourcesRaw = await axios.get(requestSources(coursePathInGithub, `${path.componentSlug}`), authToken);
-
-        await axios
-          .all([componentsRaw, sourcesRaw])
-          .then(
-            axios.spread((...responses) => {
-              [components, sources] = responses;
-
-              cache.set(routePath, components);
-              cache.set(routePathSources, sources);
-            }),
-          )
-          .catch((error) => {
-            console.log('siin on addMat error');
-            console.log(error);
-          });
-      } else {
-        components = cache.get(routePath);
-        sources = cache.get(routePathSources);
-      }
-    }
-
-    if (path.type === 'practice') {
-      if (!cache.get(routePath) || !cache.get(routePathSources)) {
-        components = await axios.get(requestPractices(coursePathInGithub, `${path.componentSlug}`), authToken);
-
-        cache.set(routePath, components);
-      } else {
-        components = cache.get(routePath);
-      }
-    }
-
-    return { components, sources };
-  },
-};
+const { apiRequests } = require('./coursesService');
 
 /**
  * Define what to do after info about couse and course page is received.
@@ -225,6 +24,7 @@ const responseAction = async (req, res, next) => {
   console.log();
 
   let apiResponse;
+  // eslint-disable-next-line no-prototype-builtins
   if (apiRequests.hasOwnProperty(githubRequest)) {
     func = await apiRequests[githubRequest];
     // console.log('func1:', func);
@@ -276,10 +76,11 @@ const renderPage = async (req, res) => {
   const componentDecoded = base64.decode(resComponentsContent);
   const componentDecodedUtf8 = utf8.decode(componentDecoded);
 
-  // sisuteema piltide kuvamine
-  // *** code sources: ***
-  // functions: https://stackoverflow.com/a/58542933
-  // changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
+  /**
+   * Sisuteema piltide kuvamine
+   * - functions: https://stackoverflow.com/a/58542933
+   * - changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
+   */
   const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8);
 
   // console.log('markdownWithModifiedImgSources:', markdownWithModifiedImgSources);
@@ -362,7 +163,15 @@ const allCoursesController = {
       config = res.locals.cache;
       // console.log('config from cache');
     } else {
-      config = await getConfig(course.coursePathInGithub);
+      try {
+        config = await getConfig(course.coursePathInGithub);
+      } catch (error) {
+        /**
+         * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
+         * Redirect back to homepage
+         */
+        return res.render('notfound');
+      }
       cache.set(routePath, config);
       // console.log('config from api');
     }
@@ -393,30 +202,27 @@ const allCoursesController = {
     let contentName;
     let githubRequest;
 
-    config.docs.find((x) => {
-      if (x.slug === contentSlug && !componentSlug) {
+    config.docs.forEach((x) => {
+      if (x.slug === contentSlug) {
         contentName = x.name;
-        githubRequest = 'requestDocs';
+        githubRequest = 'docsService';
         // console.log('githubRequest3:', githubRequest);
         console.log('Slug found in config.docs');
       }
-      return { contentName, githubRequest };
     });
-    config.additionalMaterials.find(async (x) => {
-      if (x.slug === contentSlug && !componentSlug) {
+    config.additionalMaterials.forEach(async (x) => {
+      if (x.slug === contentSlug) {
         contentName = x.name;
-        githubRequest = 'requestCourseAdditionalMaterials';
+        githubRequest = 'courseAdditionalMaterialsService';
         console.log('Slug found in config.additionalMaterials');
       }
-      return { contentName, githubRequest };
     });
     config.lessons.forEach(async (x) => {
-      if (x.slug === contentSlug && !componentSlug) {
+      if (x.slug === contentSlug) {
         contentName = x.name;
-        githubRequest = 'requestLessons';
+        githubRequest = 'lessonsService';
         console.log('Slug found in config.lessons');
       }
-      return { contentName, githubRequest };
     });
 
     /**
@@ -430,35 +236,48 @@ const allCoursesController = {
       if (x.slug === componentSlug && contentSlug) {
         componentName = x.name;
         componentType = 'concept';
-        githubRequest = 'requestLessonComponents';
+        githubRequest = 'lessonComponentsService';
         console.log('Slug found in config.concepts');
       }
-      return { contentName, componentType, githubRequest };
     });
     config.practices.forEach(async (x) => {
       if (x.slug === componentSlug && contentSlug) {
         componentName = x.name;
         componentType = 'practice';
-        githubRequest = 'requestLessonComponents';
+        githubRequest = 'lessonComponentsService';
         console.log('Slug found in config.practices');
       }
-      return { contentName, componentType, githubRequest };
     });
     config.lessons.forEach(async (x) => {
       if (x.additionalMaterials[0].slug === componentSlug && contentSlug) {
         componentName = x.additionalMaterials[0].name;
         componentType = 'docs';
-        githubRequest = 'requestLessonAdditionalMaterials';
+        githubRequest = 'lessonAdditionalMaterialsService';
         console.log('Slug found in config.lessons.additionalMaterials');
       }
-      return { contentName, componentType, githubRequest };
     });
 
-    /* console.log('contentSlug:', contentSlug);
-    console.log('contentName:', contentName);
-    console.log('componentSlug:', componentSlug);
-    console.log('componentName:', componentName);
-    console.log('githubRequest:', githubRequest); */
+    /**
+     * IF contentSlug exists, but contentName is not returned
+     * OR if contentSlug, contentName and componentSlug exist, but componentName is not returned
+     * THEN either of the slug is invalid and does not exist in config file!
+     * AND Redirect back to homepage.
+     */
+    if ((contentSlug && !contentName)
+    || (contentSlug && contentName && componentSlug && !componentName)) {
+      return res.render('notfound');
+    }
+    /**
+     * You can check values:
+     *
+      console.log('courseSlug1:', courseSlug);
+      console.log('course.courseName1:', course.courseName);
+      console.log('contentSlug1:', contentSlug);
+      console.log('contentName1:', contentName);
+      console.log('componentSlug1:', componentSlug);
+      console.log('componentName1:', componentName);
+      console.log('githubRequest1:', githubRequest);
+    */
 
     /**
      * Function to set correct fullPath, depending on if componentSlug and/or contentSlug exist.

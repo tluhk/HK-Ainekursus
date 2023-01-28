@@ -34,6 +34,7 @@ app.use(connectLivereload());
 const {
   allCoursesController, verifyCache, responseAction, renderPage,
 } = require('./src/components/courses/coursesController');
+const { otherController } = require('./src/components/other/otherController');
 // const { setSingleCourseRoutes } = require('./src/routes/singleCourseRoutes');
 // const { responseAction } = require('./src/components/singleCourse/controller');
 
@@ -71,6 +72,18 @@ app.get('/ping', (req, res) => {
 app.get('/', allCoursesController.getAllCourses);
 app.get('/courses', allCoursesController.getAllCourses);
 app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', verifyCache, allCoursesController.getSpecificCourse, responseAction, renderPage);
+
+/**
+ * 404 page for wrong links
+ */
+app.get('/notfound', otherController.notFound);
+
+/**
+ * Redirect all unknown paths to main page
+ */
+app.all('*', (req, res) => {
+  res.render('notfound');
+});
 
 /**
  * Start a server and listen on port 3000
