@@ -1,11 +1,11 @@
 const base64 = require('base-64');
 const utf8 = require('utf8');
-const { axios, authToken } = require('./setup/setupGithub');
+const { axios, authToken } = require('../setup/setupGithub');
 
 // Import request functions for Axios
 const {
   requestConfig,
-} = require('./functions/repoFunctions');
+} = require('./repoFunctions');
 
 const getRepoResponse = async (selectedCourse) => {
   let response = '';

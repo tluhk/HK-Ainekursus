@@ -4,8 +4,8 @@ const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 
 // Enable in-memory cache
 const { cache } = require('../../setup/setupCache');
-const { getAllCourses } = require('../../routes/getAllCourses');
-const { getConfig } = require('../../getConfig');
+const { getAllCourses } = require('../../functions/getAllCourses');
+const { getConfig } = require('../../functions/getConfig');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
 const { verifyCache } = require('./coursesVerifyCache');
@@ -113,6 +113,7 @@ const renderPage = async (req, res) => {
     returnNextPage,
     config,
     files: resFiles,
+    user: req.user,
   });
 };
 
@@ -126,8 +127,10 @@ const allCoursesController = {
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     // console.log('allCoursesActive:', allCoursesActive);
 
+    // console.log('req.user1:', req.user);
     return res.render('allcourses', {
       courses: allCoursesActive,
+      user: req.user,
     });
   },
 
@@ -147,6 +150,7 @@ const allCoursesController = {
      * Get all available courses
      */
     const allCourses2 = await getAllCourses();
+    // console.log('allCourses2:', allCourses2);
     /**
      * Get active course
      */
@@ -207,21 +211,21 @@ const allCoursesController = {
         contentName = x.name;
         githubRequest = 'docsService';
         // console.log('githubRequest3:', githubRequest);
-        console.log('Slug found in config.docs');
+        // console.log('Slug found in config.docs');
       }
     });
     config.additionalMaterials.forEach(async (x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'courseAdditionalMaterialsService';
-        console.log('Slug found in config.additionalMaterials');
+        // console.log('Slug found in config.additionalMaterials');
       }
     });
     config.lessons.forEach(async (x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'lessonsService';
-        console.log('Slug found in config.lessons');
+        // console.log('Slug found in config.lessons');
       }
     });
 
@@ -237,7 +241,7 @@ const allCoursesController = {
         componentName = x.name;
         componentType = 'concept';
         githubRequest = 'lessonComponentsService';
-        console.log('Slug found in config.concepts');
+        // console.log('Slug found in config.concepts');
       }
     });
     config.practices.forEach(async (x) => {
@@ -245,7 +249,7 @@ const allCoursesController = {
         componentName = x.name;
         componentType = 'practice';
         githubRequest = 'lessonComponentsService';
-        console.log('Slug found in config.practices');
+        // console.log('Slug found in config.practices');
       }
     });
     config.lessons.forEach(async (x) => {
@@ -253,7 +257,7 @@ const allCoursesController = {
         componentName = x.additionalMaterials[0].name;
         componentType = 'docs';
         githubRequest = 'lessonAdditionalMaterialsService';
-        console.log('Slug found in config.lessons.additionalMaterials');
+        // console.log('Slug found in config.lessons.additionalMaterials');
       }
     });
 
