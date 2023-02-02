@@ -1,13 +1,13 @@
 const { axios, authToken } = require('../setup/setupGithub');
-const { requestCourses } = require('../functions/repoFunctions');
-const { getConfig } = require('../getConfig');
+const { requestCourses } = require('./repoFunctions');
+const { getConfig } = require('./getConfig');
 
 const getAllCourses = (async () => {
   const resp = await axios.get(requestCourses, authToken).catch((error) => {
     console.log(error);
   });
 
-  const filter1 = resp.data.filter((x) => x.name.startsWith('HK_'));
+  const filter1 = resp.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
   // console.log('filter1', filter1);
 
   const map1 = filter1.map((y) => {
