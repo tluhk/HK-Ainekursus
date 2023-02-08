@@ -6,7 +6,7 @@ const { cache } = require('../../setup/setupCache');
 
 const {
   requestDocs, requestCourseAdditionalMaterials, requestCourseFiles, requestLessons, requestLessonAdditionalMaterials, requestLessonFiles, requestConcepts, requestSources, requestPractices,
-} = require('../../functions/repoFunctions');
+} = require('../../functions/githubReposRequests');
 const { authToken } = require('../../setup/setupGithub');
 
 /**

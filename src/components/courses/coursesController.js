@@ -126,7 +126,6 @@ const allCoursesController = {
     const allCourses = await getAllCourses();
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     // console.log('allCoursesActive:', allCoursesActive);
-
     // console.log('req.user1:', req.user);
     return res.render('allcourses', {
       courses: allCoursesActive,
@@ -163,7 +162,7 @@ const allCoursesController = {
     // console.log('routePath1:', routePath);
 
     let config;
-    if (cache.has(routePath)) {
+    if (cache.has(routePath) && cache.get(routePath) !== undefined) {
       config = res.locals.cache;
       // console.log('config from cache');
     } else {
@@ -174,7 +173,7 @@ const allCoursesController = {
          * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
          * Redirect back to homepage
          */
-        return res.render('notfound');
+        return res.redirect('/notfound');
       }
       cache.set(routePath, config);
       // console.log('config from api');
@@ -269,7 +268,7 @@ const allCoursesController = {
      */
     if ((contentSlug && !contentName)
     || (contentSlug && contentName && componentSlug && !componentName)) {
-      return res.render('notfound');
+      return res.redirect('/notfound');
     }
     /**
      * You can check values:
