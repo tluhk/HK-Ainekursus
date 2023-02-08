@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 
 const baseUrl = 'https://api.github.com';
-// Loen sisse repos.json faili, mis loeb demo_aine_repo asukohta githubis. Sinna on võimalik lisada ka teisi reposid.
 
 // Github API request endpoints
 module.exports = {

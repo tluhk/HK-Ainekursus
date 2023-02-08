@@ -1,0 +1,19 @@
+/**
+       * -- tluhk Github organisation teams:
+       * check teams that start with HK_
+       * check if team exists in teams
+       * -- if yes, check that users is up-to-date with github team?? + update??
+       * -- if yes, read team info from database? github?
+       * -- if not, add githubTeam to teams
+       */
+
+      /**
+       * check if githubID exists in tluhk Github organisation teams
+       * -- if not, redirect to /noauth page, showing you must ask access from tluhk
+       * -- if yes:
+       * check which teams it exists in
+       * check if githubID exists in users
+       * -- if yes, check that user is up-to-date with github user?? + update??
+       * -- if yes, read user info from database? github?
+       * -- if not, add githubUser to users
+       */

@@ -1,5 +1,5 @@
 const { axios, authToken } = require('../setup/setupGithub');
-const { requestCourses } = require('./repoFunctions');
+const { requestCourses } = require('./githubReposRequests');
 const { getConfig } = require('./getConfig');
 
 const getAllCourses = (async () => {
@@ -24,7 +24,7 @@ const getAllCourses = (async () => {
 
     return coursePromise(y);
   });
-  // console.log('map1', map1);
+  // console.log('map1:', map1);
 
   return Promise.all(map1).then((results) => results);
 });

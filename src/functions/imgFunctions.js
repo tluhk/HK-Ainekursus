@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const { default: axios } = require('axios');
-const { requestImgURL } = require('./repoFunctions');
+const { requestImgURL } = require('./githubReposRequests');
 const { authToken } = require('../setup/setupGithub');
 
 const getImgResponse = async (coursePathInGithub, componentSlug, url) => {

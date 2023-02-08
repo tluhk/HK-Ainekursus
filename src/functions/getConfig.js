@@ -5,7 +5,7 @@ const { axios, authToken } = require('../setup/setupGithub');
 // Import request functions for Axios
 const {
   requestConfig,
-} = require('./repoFunctions');
+} = require('./githubReposRequests');
 
 const getRepoResponse = async (selectedCourse) => {
   let response = '';

@@ -8,14 +8,14 @@ const verifyCache = (req, res, next) => {
     const routePath = `${req.url}+config` || `${req.url}+components`;
     // console.log('cache.has(routePath):', cache.has(routePath));
     if (cache.has(routePath) && cache.get(routePath) !== undefined) {
-      console.log(`content loaded with CACHE: ${routePath}`);
+      console.log(`courseContent loaded with CACHE: ${routePath}`);
       // console.log('cache.get(routePath)', cache.get(routePath));
       res.locals.cache = cache.get(routePath);
 
       return next();
       // return res.status(200).json(cache.get(routePath));
     }
-    console.log(`content loaded with API: ${routePath}`);
+    console.log(`courseContent loaded with API: ${routePath}`);
     return next();
   } catch (err) {
     console.log('err');
