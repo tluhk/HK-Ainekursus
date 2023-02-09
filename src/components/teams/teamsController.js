@@ -67,29 +67,6 @@ const teamsController = {
       throw new Error(err);
     } */
 
-    /* console.log('userID1:', userIDString);
-    console.log('typeof userID1:', typeof userIDString);
-    console.log('teamAssignments1:', teamAssignments);
-    console.log('userID2:', userID);
-    console.log('typeof userID2:', typeof userID); */
-
-    /* let userTeam;
-    while (!userTeam) {
-      teamAssignments.forEach((team) => {
-        console.log('team1:', team);
-        team.members.find((member) => {
-          console.log('id1:', member.id);
-          if (member.id === userID) {
-            console.log('user found');
-            console.log('team2:', team);
-            userTeam = team;
-            return userTeam;
-          }
-        });
-        console.log('userId not found from teamAssignments');
-      });
-    }; */
-
     /**
    * This code uses the some method of Array instead of forEach. The some method also loops over all elements, but stops when a true value is returned. The foundMember variable is used to store the return value of find, which is either undefined if nothing is found, or the first found element. If foundMember is truthy, it means the user was found and the loop stops.
    */

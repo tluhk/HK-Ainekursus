@@ -25,31 +25,32 @@
     >
       close
     </span>
-    <div>
-      <ul>
-        <div>
-      {{#if user}}
-        <ul>User ID: {{ user.id }}</ul>
-        <ul>Username: {{ user.username }}</ul>
-        <ul>Kursus: {{ user.team.name }}</ul>
-      {{/if}}
+    <div class="flex flex-row gap-4 items-start">
+    {{#if user}}
+      <div>
+         <img src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
+      </div>
+    {{/if}}
+
+    <div class="flex flex-col justify-items-start">
+    {{#if user}}
+    <ul>
+      <li>User ID: {{ user.id }}</li>
+      <li>Nimi: {{ user.username }}</li>
+      <li>Kursus: {{ user.team.name }}</li>
+    </ul>
+    {{/if}}
+    {{#unless user}}
+      <a href="/login" class="!text-white">Logi sisse</a>
+    {{/unless}}
+    {{#if user}}
+      <a href="/logout" class="!text-white">Logi välja</a>
+    {{/if}}
     </div>
-      </ul>
-      {{#unless user}}
-      <ul class='flex flex-col lg:flex-row items-end gap-y-20'>
-        <a href="/login" class="!text-white">Sign in</a>
-      </ul>
-      {{/unless}}
-      {{#if user}}
-      <ul class='flex flex-col lg:flex-row items-end gap-y-20'>
-        <a href="/logout" class="!text-white">Sign out</a>
-      </ul>
-      {{/if}}
     </div>
       <!-- google otsing -->
-      <script async src='https://cse.google.com/cse.js?cx=42b628b4183f0478e'>
-      </script>
-      <div class='gcse-search'></div>
+    <script async src='https://cse.google.com/cse.js?cx=42b628b4183f0478e'></script>
+    <div class='gcse-search'></div>
     <!-- otsing -->
     {{! <div class='relative pt-4 pl-8'>
       <input
