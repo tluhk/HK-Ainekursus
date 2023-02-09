@@ -18,8 +18,9 @@ const port = process.env.PORT || 3000;
 const favicon = require('serve-favicon');
 
 /**
- * Create a session middleware with the given options
+ * Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
+ * https://www.npmjs.com/package/passport-github2
  */
 const passport = require('passport');
 const session = require('express-session');
@@ -97,38 +98,52 @@ const ensureAuthenticated = ((req, res, next) => {
   return res.redirect('/');
 });
 
-/**
- * Request tluhk org teams and teamMembers once during app starting.
- * Save teamAssignments into res.locals
- */
-const getTeamAssignments = (async (req, res, next) => {
-  const cacheName = 'teamAssignments';
-
+const cacheService = (async (req, res, next) => {
+  const { cacheName } = res.locals;
+  console.log('cacheName1:', cacheName);
   try {
     if (cache.has(cacheName) && cache.get(cacheName) !== undefined) {
       console.log(`${cacheName} loaded with CACHE`);
-      res.locals.teamAssignments = cache.get(cacheName);
+      res.locals[cacheName] = await cache.get(cacheName);
+      delete res.locals.cacheName;
+      console.log('res.locals2:', res.locals);
 
-      return next();
+      return;
     }
     console.log(`${cacheName} loaded with API`);
   } catch (err) {
     console.log('err');
     throw new Error(err);
   }
+});
 
+/**
+ * Request tluhk org teams and teamMembers once during app starting.
+ * Save teamAssignments into res.locals
+ */
+const getTeamAssignments = (async (req, res, next) => {
+  const cacheName = 'teamAssignments';
+  res.locals.cacheName = cacheName;
+
+  await cacheService(req, res);
+  if (res.locals[cacheName]) return next();
+
+  // console.log('res.locals3:', res.locals);
   const { teams } = await teamsController.getOrgTeams();
   const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
   // console.log('getAllTeamAssignments1:', getAllTeamAssignments);
 
   cache.set(cacheName, getAllTeamAssignments);
-  res.locals.teamAssignments = getAllTeamAssignments;
+  res.locals[cacheName] = getAllTeamAssignments;
+  delete res.locals.cacheName;
+  console.log('res.locals4:', res.locals);
+
   // console.log('res.locals.teamAssignments1:', res.locals.teamAssignments);
 
   return next();
 });
 
-app.use(getTeamAssignments);
+// app.use(getTeamAssignments);
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -225,7 +240,7 @@ app.use(passport.session());
  * I recommend the middleware route, I use such a function to add last visit date-time to the req.session, and am also developing middleware in using app.all('*') to do IP request tracking
  */
 app.use(async (req, res, next) => {
-  if (req.user) {
+  if (req.user && !req.user.team) {
     const { user } = req;
     const userTeam = await teamsController.getUserTeam(user.id, cache.get('teamAssignments'));
     // console.log('user1:', user);
