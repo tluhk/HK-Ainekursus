@@ -10,7 +10,7 @@ const getOneTeamMembers = async (team) => {
 
 const teamsController = {
 
-  getOrgTeams: async () => {
+  getAllValidTeams: async () => {
     /**
      * Request all teams of tluhk organisation
      */
@@ -21,8 +21,10 @@ const teamsController = {
      * Filter out only main teams:
      * -- those that start with "rif" or "HK_" and do NOT contain a hyphen.
      */
-    const teams = allTeams.filter((x) => (x.name.startsWith('rif') && x.name.toLowerCase().indexOf('-') === -1)
-      || (x.name.startsWith('HK_') && x.name.toLowerCase().indexOf('-') === -1));
+    const teams = allTeams.filter((x) => x.name === 'rif20-valikpraktika-1',
+      /* (x.name.startsWith('rif') && x.name.toLowerCase().indexOf('-') === -1)
+      /* || (x.name.startsWith('HK_') && x.name.toLowerCase().indexOf('-') === -1) */
+    );
 
     // console.log('teams1:', teams);
 
@@ -51,26 +53,11 @@ const teamsController = {
   getUserTeam: async (userIDString, teamAssignments) => {
     const userID = parseInt(userIDString, 10);
 
-    /* const cacheName = 'userTeam';
-
-  // Check userTeam from CACHE:
-    try {
-      if (cache.has(cacheName) && cache.get(cacheName) !== undefined) {
-        console.log(`${cacheName} loaded with CACHE`);
-        res.locals.teamAssignments = cache.get(cacheName);
-
-        return next();
-      }
-      console.log(`${cacheName} loaded with API`);
-    } catch (err) {
-      console.log('err');
-      throw new Error(err);
-    } */
-
     /**
    * This code uses the some method of Array instead of forEach. The some method also loops over all elements, but stops when a true value is returned. The foundMember variable is used to store the return value of find, which is either undefined if nothing is found, or the first found element. If foundMember is truthy, it means the user was found and the loop stops.
    */
     let foundTeam;
+    console.log('teamAssignments1:', teamAssignments);
     teamAssignments.some((team) => {
       // console.log('team1:', team);
       const foundMember = team.members.find((member) => {
@@ -93,6 +80,7 @@ const teamsController = {
       // console.log('userId not found from teamAssignments');
     });
 
+    console.log('foundTeam1:', foundTeam);
     return foundTeam;
   },
 };

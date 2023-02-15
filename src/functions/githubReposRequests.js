@@ -5,6 +5,9 @@ const baseUrl = 'https://api.github.com';
 // Github API request endpoints
 module.exports = {
   requestCourses: 'https://api.github.com/orgs/tluhk/repos',
+  requestTeamCourses: (
+    (teamSlug) => `${baseUrl}/orgs/tluhk/teams/${teamSlug}/repos`
+  ),
   // config
   requestConfig: (
     (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.json`

@@ -97,7 +97,7 @@ const renderPage = async (req, res) => {
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
-  res.render('home', {
+  res.render('course', {
     component: componentMarkdown,
     docs: config.docs,
     additionalMaterials: config.additionalMaterials,
@@ -123,16 +123,19 @@ const allCoursesController = {
    * for '/' and '/courses' routes
    */
   getAllCourses: async (req, res) => {
-    const allCourses = await getAllCourses();
+    console.log('req3:', req);
+
+    let teamSlug;
+    if (req.user && req.user.team) teamSlug = req.user.team.slug;
+    const allCourses = await getAllCourses(teamSlug);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     // console.log('allCoursesActive:', allCoursesActive);
     // console.log('req.user1:', req.user);
-    return res.render('allcourses', {
+    return res.render('dashboard', {
       courses: allCoursesActive,
       user: req.user,
     });
   },
-
   /**
    * for '/course/:courseSlug/:contentSlug?/:componentSlug?' route
    */
@@ -148,7 +151,7 @@ const allCoursesController = {
     /**
      * Get all available courses
      */
-    const allCourses2 = await getAllCourses();
+    const allCourses2 = await getAllCourses(req.user.team.slug);
     // console.log('allCourses2:', allCourses2);
     /**
      * Get active course

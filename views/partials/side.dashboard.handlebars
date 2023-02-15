@@ -10,23 +10,33 @@
   </button>
   <!-- sidebar sticky behavior beginning from lg size -->
   <div class='p-2 lg:max-h-screen drop-shadow-2xl w-full'>
-    <div class=''>
-      {{#each courses}}
-        <div class='mb-2 bg-neutral-100 hover:bg-neutral-200 flex'>
+      <div class=''>
+      {{#unless user }}  
+        <div class='text-md font-bold mt-4 ml-4'>Logi sisse, et näha kursuseid</div>
+      {{/unless }}
 
-          <a
-            class='p-4 !no-underline uppercase w-full'
-            href='/course/{{this.courseSlug}}/about'
-          ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
+      {{#if user}}
+        {{#unless courses }}  
+          <div class='text-md font-bold mt-4 ml-4'>Sul pole ligipääsu ühelegi kursusele.</div>
+          <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
+        {{/unless }}
+        {{#if courses }}
+          {{#each courses}}
+            <div class='mb-2 bg-neutral-100 hover:bg-neutral-200 flex'>
 
-            <div>
-              <progress id='{{this.courseCode}}' value='32' max='100'>
-                32%
-              </progress>
+              <a
+                class='p-4 !no-underline uppercase w-full'
+                href='/course/{{this.courseSlug}}/about'
+              ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
+
+                <div>
+                  <progress id='{{this.courseCode}}' value='32' max='100'>
+                    32%
+                  </progress>
+                </div>
+                <div>{{this.courseCode}}</div></a>
             </div>
-            <div>{{this.courseCode}}</div></a>
-        </div>
-      {{/each}}
+          {{/each}}
 
       <!-- ??? Kas siia lehele lisada veel alamenüü lehti?
     Nt otseviide kursuse ainekaardi lingile või kuvada loengute pealkirjad siin ära, et oleks mugav Kõigi Kursuste lehelt juba kindla kursuse materjalini jõuda.  -->
@@ -54,7 +64,9 @@
             </div>
             {{/each}}
             -->
-      </div>
+          </div>    
+        {{/if }}
+      {{/if }}
     </div>
   </div>
 </nav>

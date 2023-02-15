@@ -22,8 +22,8 @@ const favicon = require('serve-favicon');
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
  */
-const passport = require('passport');
 const session = require('express-session');
+const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 
 /* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
@@ -122,6 +122,8 @@ const cacheService = (async (req, res, next) => {
  * Save teamAssignments into res.locals
  */
 const getTeamAssignments = (async (req, res, next) => {
+  if (res.locals.teamAssignments) return next();
+
   const cacheName = 'teamAssignments';
   res.locals.cacheName = cacheName;
 
@@ -129,7 +131,7 @@ const getTeamAssignments = (async (req, res, next) => {
   if (res.locals[cacheName]) return next();
 
   // console.log('res.locals3:', res.locals);
-  const { teams } = await teamsController.getOrgTeams();
+  const { teams } = await teamsController.getAllValidTeams();
   const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
   // console.log('getAllTeamAssignments1:', getAllTeamAssignments);
 
@@ -143,7 +145,25 @@ const getTeamAssignments = (async (req, res, next) => {
   return next();
 });
 
-// app.use(getTeamAssignments);
+/**
+ * Initialize Passport!
+ * Also use passport.session() middleware, to support persistent login sessions (recommended).
+ */
+app.use(
+  session({
+    name: 'HK_e-kursused',
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // change this to true if you're using HTTPS
+      maxAge: 60 * 60 * 1000, // 1 hour
+      // name: 'HK_e-kursused', // specify your cookie name here
+    },
+  }),
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -170,11 +190,17 @@ passport.use(
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: process.env.GITHUB_CALLBACK_URL,
+      proxy: true,
     },
     (async (accessToken, refreshToken, profile, done) => {
       // asynchronous verification, for effect...
-      // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
-      console.log('github_profile_id1:', profile.id);
+      console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
+      console.log('accessToken1:', accessToken);
+
+      // eslint-disable-next-line no-param-reassign
+      profile.token = accessToken;
+
+      console.log('github_profile2:', profile);
 
       /**
        * Check if Github user is part of tluhk Github org members.
@@ -225,31 +251,18 @@ passport.use(
 );
 
 /**
- * Initialize Passport!
- * Also use passport.session() middleware, to support persistent login sessions (recommended).
- */
-app.use(
-  session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }),
-);
-app.use(passport.initialize());
-app.use(passport.session());
-
-/**
  * https://stackoverflow.com/a/25687358
  * in an express middleware (before the router).
  * I recommend the middleware route, I use such a function to add last visit date-time to the req.session, and am also developing middleware in using app.all('*') to do IP request tracking
  */
-app.use(async (req, res, next) => {
+app.use(getTeamAssignments, async (req, res, next) => {
   if (req.user && !req.user.team) {
     const { user } = req;
-    const userTeam = await teamsController.getUserTeam(user.id, cache.get('teamAssignments'));
+    const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
     // console.log('user1:', user);
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
   }
-
-  // console.log('req.user1:', req.user);
-
   next();
 });
 
@@ -261,7 +274,9 @@ app.use(async (req, res, next) => {
 app.get(
   '/login',
   getTeamAssignments,
-  passport.authenticate('github', { scope: ['read:user'] }),
+  passport.authenticate('github', {
+    scope: ['read:user'],
+  }),
 );
 
 // GET /github-callback
@@ -271,41 +286,13 @@ app.get(
 //   which, in this example, will redirect the user to the home page.
 app.get(
   '/github-callback',
-  passport.authenticate('github', { failureRedirect: '/noauth' }),
+  passport.authenticate('github', { failureRedirect: '/noauth', session: true }),
   (req, res) => {
     console.log('Logged in');
+
     res.redirect('/');
   },
 );
-
-/**
- * Logout
- * https://www.tabnine.com/code/javascript/functions/express/Request/logout
- */
-
-app.get('/logout', (req, res, next) => {
-  console.log('Logging out process');
-  req.logout((err) => {
-    if (err) { return next(err); }
-    console.log('Logged out');
-    console.log();
-    res.redirect('/');
-  });
-});
-
-/*
-app.get('/logout', async (req, res, next) => {
-  console.log('Logging out process');
-  await req.logout({ keepSessionInfo: false });
-  req.session = null;
-  return res.redirect('/');
-/*
-  req.session.destroy((err) => {
-    if (err) { return next(err); }
-    console.log('Logged out');
-    return res.redirect('/'); // Inside a callback… bulletproof!
-  });
-}); */
 
 /**
   * Available endpoints without login
@@ -327,6 +314,50 @@ app.get('/notfound', otherController.notFound);
  * Page for not authorized login attempt (github user not part of tluhk organisation)
  */
 app.get('/noauth', otherController.noAuth);
+
+/**
+ * Logout
+ * https://www.tabnine.com/code/javascript/functions/express/Request/logout
+ */
+
+app.get('/logout', (req, res, next) => {
+  // console.log('req.user3:', req.user);
+
+  /**
+   * Try deleting github App Authorization when logging out. Gives 404 error.
+   */
+  /* try {
+    axios.create({
+      method: 'delete',
+      url: 'https://api.github.com/applications/' + process.env.GITHUB_CLIENT_ID + '/grant',
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: {
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
+        },
+      },
+      data: {
+        access_token: req.user.token, // This is the body part
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  } */
+
+  console.log('Logging out process');
+  req.logout((err) => {
+    if (err) { return next(err); }
+    req.session.destroy((err2) => {
+      if (err2) { return next(err2); }
+      console.log('Logged out');
+      res.clearCookie('HK_e-kursused');
+      // console.log('req.session2:', req.session);
+      // console.log('req2:', req);
+      res.redirect('/');
+    });
+  });
+});
 
 /**
  * Redirect all unknown paths to 404 page
