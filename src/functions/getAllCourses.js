@@ -4,7 +4,7 @@ const { getConfig } = require('./getConfig');
 
 const getAllCourses = (async (teamSlug) => {
   let courses;
-  console.log('teamSlug1:', teamSlug);
+  // console.log('teamSlug1:', teamSlug);
   /**
    * If user exists, they're in a team and team.slug exists, only then read Course repos.
    * Otherwise load courses array as empty (no courses to show).
@@ -20,7 +20,7 @@ const getAllCourses = (async (teamSlug) => {
     }); */
   }
 
-  console.log('courses1:', courses);
+  // console.log('courses1:', courses);
   const filter1 = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
   // console.log('filter1', filter1);
 

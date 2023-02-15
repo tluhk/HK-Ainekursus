@@ -7,4 +7,7 @@ module.exports = {
   deleteAppAuthorization: (
     (clientID) => `${baseUrl}/applications/${clientID}/grant`
   ),
+  searchUsers: (
+    (email) => `${baseUrl}/search/users?q=${email}`
+  ),
 };

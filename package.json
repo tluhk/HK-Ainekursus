@@ -29,6 +29,7 @@
     "alert": "^5.1.1",
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
+    "body-parser": "^1.20.1",
     "bootstrap": "^5.2.1",
     "clipboardy": "^3.0.0",
     "compression": "^1.7.4",

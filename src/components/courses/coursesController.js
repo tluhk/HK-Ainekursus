@@ -123,7 +123,7 @@ const allCoursesController = {
    * for '/' and '/courses' routes
    */
   getAllCourses: async (req, res) => {
-    console.log('req3:', req);
+    // console.log('req3:', req);
 
     let teamSlug;
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
