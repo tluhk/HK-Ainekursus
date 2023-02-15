@@ -1,8 +1,7 @@
 /* eslint-disable max-len */
 
 const { default: axios } = require('axios');
-const { requestMembers, deleteAppAuthorization } = require('../../functions/githubMembersRequests');
-const { cache } = require('../../setup/setupCache');
+const { requestMembers } = require('../../functions/githubMembersRequests');
 
 const { authToken } = require('../../setup/setupGithub');
 

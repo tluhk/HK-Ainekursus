@@ -25,6 +25,7 @@ const favicon = require('serve-favicon');
 const session = require('express-session');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
+const bodyParser = require('body-parser');
 
 /* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
 const livereload = require('livereload');
@@ -47,6 +48,7 @@ const {
 const { otherController } = require('./src/components/other/otherController');
 const { membersController } = require('./src/components/members/membersController');
 const { teamsController } = require('./src/components/teams/teamsController');
+const { authController } = require('./src/components/auth/authController');
 
 /**
  *  Import handlebars helpers: https://stackoverflow.com/a/32707476
@@ -76,6 +78,12 @@ app.get('/ping', (req, res) => {
   });
 });
 
+const loginConfig = {
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: process.env.GITHUB_CALLBACK_URL,
+};
+
 /**
  * Authentication
  * https://github.com/cfsghost/passport-github/blob/master/examples/login/app.js
@@ -100,13 +108,13 @@ const ensureAuthenticated = ((req, res, next) => {
 
 const cacheService = (async (req, res, next) => {
   const { cacheName } = res.locals;
-  console.log('cacheName1:', cacheName);
+  // console.log('cacheName1:', cacheName);
   try {
     if (cache.has(cacheName) && cache.get(cacheName) !== undefined) {
       console.log(`${cacheName} loaded with CACHE`);
       res.locals[cacheName] = await cache.get(cacheName);
       delete res.locals.cacheName;
-      console.log('res.locals2:', res.locals);
+      // console.log('res.locals2:', res.locals);
 
       return;
     }
@@ -155,6 +163,7 @@ app.use(
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
+    // prompt: 'login',
     cookie: {
       secure: false, // change this to true if you're using HTTPS
       maxAge: 60 * 60 * 1000, // 1 hour
@@ -164,6 +173,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+GitHubStrategy.prototype.authorizationParams = function (options) {
+  return options || {};
+};
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -187,38 +201,40 @@ passport.deserializeUser((obj, done) => {
 passport.use(
   new GitHubStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
-      proxy: true,
+      clientID: loginConfig.clientID,
+      clientSecret: loginConfig.clientSecret,
+      callbackURL: loginConfig.callbackURL,
+      // proxy: true,
     },
     (async (accessToken, refreshToken, profile, done) => {
-      // asynchronous verification, for effect...
-      console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
-      console.log('accessToken1:', accessToken);
+      process.nextTick(() => {
+        // asynchronous verification, for effect...
+        // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
+        // console.log('accessToken1:', accessToken);
 
-      // eslint-disable-next-line no-param-reassign
-      profile.token = accessToken;
+        // eslint-disable-next-line no-param-reassign
+        // profile.token = accessToken;
 
-      console.log('github_profile2:', profile);
+        console.log('github_profile2:', profile);
 
-      /**
-       * Check if Github user is part of tluhk Github org members.
-       * If not, forbid access by not saving passport profile.
-       * If yes, save github user profile in the passport.
-       */
-      const userInOrgMembers = membersController.isUserInOrgMembers(profile.id);
+        /**
+         * Check if Github user is part of tluhk Github org members.
+         * If not, forbid access by not saving passport profile.
+         * If yes, save github user profile in the passport.
+         */
+        const userInOrgMembers = membersController.isUserInOrgMembers(profile.id);
 
-      if (!userInOrgMembers) {
-        console.log('no user in tluhk org');
-        return done(null, null);
-      }
-      console.log('user exists in tluhk org');
+        if (!userInOrgMembers) {
+          console.log('no user in tluhk org');
+          return done(null, null);
+        }
+        console.log('user exists in tluhk org');
 
-      // console.log('userInOrgMembers1:', userInOrgMembers);
-      // console.log('profile1:', profile);
-      // console.log('Logged in');
-      return done(null, profile);
+        // console.log('userInOrgMembers1:', userInOrgMembers);
+        // console.log('profile1:', profile);
+        // console.log('Logged in');
+        return done(null, profile);
+      });
 
       /**
        * check if githubUserID exists in tluhk Github organisation members
@@ -250,6 +266,47 @@ passport.use(
   ),
 );
 
+// Make a request to the GitHub API to retrieve a list of email addresses associated with the user's account
+
+const getUsernameToEmail = ((email) => axios.get({
+  url: 'https://api.github.com/user/emails',
+  headers: {
+    'User-Agent': 'request',
+    Authorization: `Bearer ${accessToken}`,
+  },
+}, (error, response, body) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const emails = JSON.parse(body);
+  const matchingEmail = emails.find((emailObj) => emailObj.email === email);
+
+  if (matchingEmail) {
+  // If the email address is associated with a GitHub account, retrieve the username for that account
+    axios.get({
+      url: 'https://api.github.com/user',
+      headers: {
+        'User-Agent': 'request',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }, (error, response, body) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const userData = JSON.parse(body);
+      const username = userData.login;
+      console.log(`The email address ${email} is associated with the GitHub account ${username}`);
+    });
+  } else {
+    console.log(`The email address ${email} is not associated with a GitHub account`);
+  }
+})
+);
+
 /**
  * https://stackoverflow.com/a/25687358
  * in an express middleware (before the router).
@@ -274,10 +331,53 @@ app.use(getTeamAssignments, async (req, res, next) => {
 app.get(
   '/login',
   getTeamAssignments,
-  passport.authenticate('github', {
-    scope: ['read:user'],
-  }),
+  (req, res) => {
+    let message = '';
+    if (req.query.email) message = 'Emaili sisestamine pole lubatud';
+    res.send(`
+        <html>
+        <body>
+            <form action="/login" method="post">
+                <span>Sisesta enda Githubi kasutajanimi (mitte email):</span>
+                <input name="login" type="text" value=""/>
+                <input type="submit" value="Connect"/>
+            </form>
+            <p style="color:red;">${message}</p>
+        </body>
+        </html>
+    `);
+  },
 );
+
+app.post('/login', (req, res, next) => {
+  console.log('req.body.login1:', req.body.login);
+  if (!req.body.login) {
+    console.log('hey');
+    return res.sendStatus(400);
+  }
+
+  /**
+   * Check if entered value is email
+   */
+  // Regular expression to check if string is email
+  const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+  const isEmail = regexExp.test(req.body.login);
+  /**
+   * If entered value is email, redirect back to login and show "email is not allowed" message
+   */
+  if (isEmail) return res.redirect('/login?email=true');
+
+  passport.authenticate('github', {
+    login: req.body.login,
+  })(req, res, next);
+});
+
+/*
+  passport.authenticate('github', {
+    // prompt: 'login',
+    // scope: ['user:email'],
+  }),
+); */
 
 // GET /github-callback
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -286,12 +386,18 @@ app.get(
 //   which, in this example, will redirect the user to the home page.
 app.get(
   '/github-callback',
-  passport.authenticate('github', { failureRedirect: '/noauth', session: true }),
+  passport.authenticate('github', {
+    // prompt: 'login',
+    successRedirect: '/',
+    failureRedirect: '/noauth',
+    scope: ['user'],
+  }),
+  /* ,
   (req, res) => {
     console.log('Logged in');
 
     res.redirect('/');
-  },
+  }, */
 );
 
 /**
@@ -351,6 +457,7 @@ app.get('/logout', (req, res, next) => {
     req.session.destroy((err2) => {
       if (err2) { return next(err2); }
       console.log('Logged out');
+      // localStorage.removeItem('accessToken');
       res.clearCookie('HK_e-kursused');
       // console.log('req.session2:', req.session);
       // console.log('req2:', req);
