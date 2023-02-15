@@ -6,7 +6,7 @@ const setAllCoursesRoutes = async (app, allCourses) => {
   // *** ENDPOINTS ***
 
   app.get('/', (req, res) => {
-    res.render('allcourses', {
+    res.render('dashboard', {
       courses: allCourses,
     });
   });
