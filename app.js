@@ -120,7 +120,7 @@ const cacheService = (async (req, res, next) => {
     }
     console.log(`${cacheName} loaded with API`);
   } catch (err) {
-    console.log('err');
+    console.error('err');
     throw new Error(err);
   }
 });
@@ -215,7 +215,7 @@ passport.use(
         // eslint-disable-next-line no-param-reassign
         // profile.token = accessToken;
 
-        console.log('github_profile2:', profile);
+        console.log({ profile });
 
         /**
          * Check if Github user is part of tluhk Github org members.
@@ -230,6 +230,8 @@ passport.use(
         }
         console.log('user exists in tluhk org');
 
+        // getUser();
+        // saveUser(); 
         // console.log('userInOrgMembers1:', userInOrgMembers);
         // console.log('profile1:', profile);
         // console.log('Logged in');
@@ -339,7 +341,7 @@ app.get(
         <body>
             <form action="/login" method="post">
                 <span>Sisesta enda Githubi kasutajanimi (mitte email):</span>
-                <input name="login" type="text" value=""/>
+                <input name="login" type="text" value="seppkh"/>
                 <input type="submit" value="Connect"/>
             </form>
             <p style="color:red;">${message}</p>

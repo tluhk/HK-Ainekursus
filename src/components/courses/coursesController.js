@@ -129,8 +129,7 @@ const allCoursesController = {
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     const allCourses = await getAllCourses(teamSlug);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    // console.log('allCoursesActive:', allCoursesActive);
-    // console.log('req.user1:', req.user);
+    console.log('allCoursesActive1:', allCoursesActive);
     return res.render('dashboard', {
       courses: allCoursesActive,
       user: req.user,

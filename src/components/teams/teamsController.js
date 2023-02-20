@@ -18,6 +18,7 @@ const teamsController = {
     // console.log('allTeams1:', allTeams);
 
     /**
+     * Set conditions, which Teams are read from tluhk org github account
      * Filter out only main teams:
      * -- those that start with "rif" or "HK_" and do NOT contain a hyphen.
      */
