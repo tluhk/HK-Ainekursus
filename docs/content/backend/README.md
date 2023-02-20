@@ -26,6 +26,7 @@
 - markdown-it: https://github.com/markdown-it/markdown-it – for parsing Markdown files (after requesting Markdown files from Githhub and decoding with both base64 and utf8)
 
 ### Markdown-it pluginad Markdown-failide renderdamiseks
+
 - Enable syntax hightlighting: https://github.com/markdown-it/markdown-it#syntax-highlighting
 - Add anchors to markdown headings: https://github.com/valeriangalliat/markdown-it-anchor
 - Add certain classes to selected elements in markdown files, needed for CSS: https://github.com/HiroshiOkada/markdown-it-class
@@ -35,5 +36,9 @@
 - Enable embedded code demo environments like JSFiddle and CodePen: https://www.npmjs.com/package/markdown-it-playground
 - Enable embedded iframes: https://github.com/rjriel/markdown-it-iframe
 - Specify image rendering: https://www.npmjs.com/package/markdown-it-imagination
+
+## Edasiarendus
+
+- Read data from Ois Ainekaardid: https://www.npmjs.com/package/cheerio . The cheerio package will enable us to manipulate the DOM by reading the elements on the provided URL page.
 
 [<Tagasi](../../README.md)
