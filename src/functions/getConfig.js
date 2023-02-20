@@ -22,7 +22,7 @@ const getConfig = async (selectedCourse) => {
   const config = await getRepoResponse(selectedCourse);
   const configDecoded = base64.decode(config.data.content);
   const configDecodedUtf8 = utf8.decode(configDecoded);
-  // console.log('configDecodedUtf8', configDecodedUtf8);
+  console.log('configDecodedUtf8', configDecodedUtf8);
 
   const configJSON = JSON.parse(configDecodedUtf8);
 

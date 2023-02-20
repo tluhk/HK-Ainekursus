@@ -1,5 +1,6 @@
+const cheerio = require('cheerio');
 const { axios, authToken } = require('../setup/setupGithub');
-const { requestCourses, requestTeamCourses } = require('./githubReposRequests');
+const { requestTeamCourses } = require('./githubReposRequests');
 const { getConfig } = require('./getConfig');
 
 const getAllCourses = (async (teamSlug) => {
@@ -20,27 +21,71 @@ const getAllCourses = (async (teamSlug) => {
     }); */
   }
 
-  // console.log('courses1:', courses);
+  /**
+   * Set conditions, which Repositories (Courses) are read from tluhk org github account
+   */
   const filter1 = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
   // console.log('filter1', filter1);
 
   const map1 = filter1.map((y) => {
     const coursePromise = (param) => getConfig(param.full_name)
-      .then((result) => ({
-        courseName: result.courseName,
-        courseSlug: result.slug,
-        courseSlugInGithub: y.name,
-        coursePathInGithub: y.full_name,
-        courseCode: result.courseCode,
-        courseCardUrl: result.courseUrl,
-        courseIsActive: result.active,
-      }));
+      .then(async (result) => {
+        /**
+         * Read course information from ÕIS Ainekaart
+         */
+        const oisContent = {};
+        try {
+          await axios(result.courseUrl).then((response) => {
+            const { data } = response;
+            const $ = cheerio.load(data);
+
+            $('.yldaine_r', data).each(function () {
+              const ryhmHeader = $(this).find('div.ryhmHeader').text();
+              const yldaine_c1 = $(this).find('div.yldaine_c1').text();
+              const yldaine_c2 = $(this).find('div.yldaine_c2').text();
+
+              if (ryhmHeader && ryhmHeader !== '') oisContent.oisName = ryhmHeader;
+              if (yldaine_c1 && yldaine_c1 === 'Õppeaine kood') oisContent.code = yldaine_c2;
+              if (yldaine_c1 && yldaine_c1 === 'Õppeaine nimetus eesti k') oisContent.name = yldaine_c2;
+              if (yldaine_c1 && yldaine_c1 === 'Õppeaine maht EAP') oisContent.EAP = yldaine_c2;
+              if (yldaine_c1 && yldaine_c1 === 'Kontrollivorm') oisContent.grading = yldaine_c2;
+              if (yldaine_c1 && yldaine_c1 === 'Õppeaine eesmärgid') oisContent.eesmargid = yldaine_c2;
+              if (yldaine_c1 && yldaine_c1 === 'Õppeaine sisu lühikirjeldus') oisContent.summary = yldaine_c2;
+              if (yldaine_c1 && yldaine_c1 === 'Õppeaine õpiväljundid') oisContent.opivaljundid = yldaine_c2;
+            });
+          });
+        } catch (error) {
+          console.log(error, error.message);
+        }
+
+        // console.log('oisContent1:', oisContent);
+
+        return {
+          courseUrl: result.courseUrl,
+          courseIsActive: result.active,
+          courseName: result.courseName || oisContent.name,
+          courseSlug: oisContent.code, // || result.slug,
+          courseCode: oisContent.code, // || result.courseCode,
+          courseSlugInGithub: y.name,
+          coursePathInGithub: y.full_name,
+          courseEAP: oisContent.EAP,
+          courseGrading: oisContent.grading,
+          courseEesmargid: oisContent.eesmargid,
+          courseSummary: oisContent.summary,
+          courseOpivaljundid: oisContent.opivaljundid,
+        };
+      });
+
+    // console.log('coursePromise1:', coursePromise);
 
     return coursePromise(y);
   });
   // console.log('map1:', map1);
 
-  return Promise.all(map1).then((results) => results);
+  return Promise.all(map1).then((results) => {
+    console.log('results1:', results);
+    return results;
+  });
 });
 
 module.exports = { getAllCourses };

@@ -70,6 +70,7 @@ module.exports = function hbsHelpers(hbs) {
         const comp = components.find((x) => (x.slug) === component);
         return comp.name;
       },
+      capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
     },
     /*
     {{#showComponentType this ../../concepts ../../practices}}

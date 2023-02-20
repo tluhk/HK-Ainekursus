@@ -76,7 +76,7 @@ const apiRequests = {
         )
         .catch((error) => {
           console.log('siin on addMat error');
-          console.log(error);
+          console.error(error);
         });
     } else {
       // console.log('taken from cache');
@@ -144,7 +144,7 @@ const apiRequests = {
         )
         .catch((error) => {
           console.log('siin on addMat error');
-          console.log(error);
+          console.error(error);
         });
     } else {
       components = cache.get(routePath);
@@ -184,7 +184,7 @@ const apiRequests = {
           )
           .catch((error) => {
             console.log('siin on addMat error');
-            console.log(error);
+            console.error(error);
           });
       } else {
         components = cache.get(routePath);

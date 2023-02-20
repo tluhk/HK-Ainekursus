@@ -16,14 +16,20 @@
             <div class="mb-2 w-[22rem] max-w-full">
               <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
             </div>
-            <div class="flex justify-between flex-wrap">
-              <div class="!text-white py-2 pr-2">{{../this.courseCode}}</div>
+            <div class="flex flex-row justify-between flex-wrap flex-end">
+              <div class="flex flex-col gap-y-0">
+                <div class="!text-white py-2 pr-2">{{../this.courseCode}}</div>
+                <div class="!text-white py-2 pr-2">EAP: {{../this.courseEAP}}</div>
+                <div class="!text-white py-2 pr-2">Hindamine: {{capitalize ../this.courseGrading}}</div>
+              </div>
             {{/if_equal}}
           {{/each}}
               <!-- About links -->
               {{#each docs}}
+              <div>
                 <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 hover:!no-underline !no-underline" href="/course/{{../path.courseSlug}}/{{this.slug}}">
                 {{this.name}}</a>
+              </div>
               {{/each}}
             </div>
         </div>
