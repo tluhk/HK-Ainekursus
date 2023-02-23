@@ -22,9 +22,10 @@ const teamsController = {
      * Filter out only main teams:
      * -- those that start with "rif" or "HK_" and do NOT contain a hyphen.
      */
-    const teams = allTeams.filter((x) => x.name === 'rif20-valikpraktika-1',
-      /* (x.name.startsWith('rif') && x.name.toLowerCase().indexOf('-') === -1)
-      /* || (x.name.startsWith('HK_') && x.name.toLowerCase().indexOf('-') === -1) */
+
+    const teams = allTeams.filter((x) => // x.name === 'rif20-valikpraktika-1' ||
+      x.name.startsWith('rif') && !x.name.includes('-'),
+      /* || (x.name.startsWith('HK_') && !x.name.includes('-'))) */
     );
 
     // console.log('teams1:', teams);

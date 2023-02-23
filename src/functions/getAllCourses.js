@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const cheerio = require('cheerio');
 const { axios, authToken } = require('../setup/setupGithub');
 const { requestTeamCourses } = require('./githubReposRequests');
@@ -16,7 +17,7 @@ const getAllCourses = (async (teamSlug) => {
     });
   } else {
     courses = { data: [] };
-    /* await axios.get(requestCourses, authToken).catch((error) => {
+    /* await axios.get(requestRepos, authToken).catch((error) => {
       console.log(error);
     }); */
   }
@@ -32,6 +33,7 @@ const getAllCourses = (async (teamSlug) => {
       .then(async (result) => {
         /**
          * Read course information from ÕIS Ainekaart
+         * https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
          */
         const oisContent = {};
         try {
@@ -83,7 +85,7 @@ const getAllCourses = (async (teamSlug) => {
   // console.log('map1:', map1);
 
   return Promise.all(map1).then((results) => {
-    console.log('results1:', results);
+    // console.log('results1:', results);
     return results;
   });
 });

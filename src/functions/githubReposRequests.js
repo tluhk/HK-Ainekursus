@@ -4,54 +4,75 @@ const baseUrl = 'https://api.github.com';
 
 // Github API request endpoints
 module.exports = {
-  requestCourses: 'https://api.github.com/orgs/tluhk/repos',
+  requestRepos: 'https://api.github.com/orgs/tluhk/repos',
   requestTeamCourses: (
     (teamSlug) => `${baseUrl}/orgs/tluhk/teams/${teamSlug}/repos`
   ),
+  requestRepoBranches: (
+    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/branches`
+  ),
   // config
   requestConfig: (
-    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.json`
+    (coursePathInGithub, team, refBranch) => {
+      /**
+       * if user has team:
+       * - check if repo has branch with same name
+       * if yes, get the config from that branch
+       * if not, get the config from main branch
+       */
+      // console.log('team2:', team);
+      // console.log('refBranch2:', refBranch);
+
+      if (team && refBranch) {
+        try {
+          return `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?${refBranch}`;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      return `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?${refBranch}`;
+    }
   ),
   // docs related
   requestDocs: (
-    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/about.md`
+    (coursePathInGithub, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/about.md?${refBranch}`
   ),
   requestCourseAdditionalMaterials: (
-    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md`
+    (coursePathInGithub, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md?${refBranch}`
   ),
   requestCourseFiles: (
-    (coursePathInGithub) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/files`
+    (coursePathInGithub, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/docs/files?${refBranch}`
   ),
   // lessons related
   requestLessons: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/about.md`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/about.md?${refBranch}`
   ),
   requestLessonAdditionalMaterials: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/lisamaterjalid.md`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/lisamaterjalid.md?${refBranch}`
   ),
   requestLessonFiles: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/files`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/files?${refBranch}`
   ),
   // concepts related
   requestConcepts: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/about.md`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/about.md?${refBranch}`
   ),
   requestSources: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/sources.json`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/sources.json?${refBranch}`
   ),
   requestStaticURL: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/images`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/images?${refBranch}`
   ),
   // practices related
   requestPractices: (
-    (coursePathInGithub, opt) => `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/about.md`
+    (coursePathInGithub, opt, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/about.md?${refBranch}`
   ),
   // images related
   requestImgURL: (
-    (coursePathInGithub, path, url) => {
-      if (path.type === 'docs') return `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${url}`;
-      if (path.type === 'concept') return `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${path.componentSlug}/${url}`;
-      if (path.type === 'practice') return `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${path.componentSlug}/${url}`;
+    (coursePathInGithub, path, url, refBranch) => {
+      if (path.type === 'docs') return `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${url}?${refBranch}`;
+      if (path.type === 'concept') return `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${path.componentSlug}/${url}?${refBranch}`;
+      if (path.type === 'practice') return `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${path.componentSlug}/${url}?${refBranch}`;
     }
   ),
 };
