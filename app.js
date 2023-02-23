@@ -341,7 +341,7 @@ app.get(
         <body>
             <form action="/login" method="post">
                 <span>Sisesta enda Githubi kasutajanimi (mitte email):</span>
-                <input name="login" type="text" value="seppkh"/>
+                <input name="login" type="text"/>
                 <input type="submit" value="Connect"/>
             </form>
             <p style="color:red;">${message}</p>
