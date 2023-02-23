@@ -3,12 +3,12 @@ const { default: axios } = require('axios');
 const { requestImgURL } = require('./githubReposRequests');
 const { authToken } = require('../setup/setupGithub');
 
-const getImgResponse = async (coursePathInGithub, componentSlug, url) => {
+const getImgResponse = async (coursePathInGithub, componentSlug, url, refBranch) => {
   let response = '';
 
   // code without image cache:
   try {
-    response = await axios.get(requestImgURL(coursePathInGithub, componentSlug, url), authToken);
+    response = await axios.get(requestImgURL(coursePathInGithub, componentSlug, url, refBranch), authToken);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -16,7 +16,7 @@ const getImgResponse = async (coursePathInGithub, componentSlug, url) => {
   return response;
 };
 
-const function2 = async (coursePathInGithub, path, img) => {
+const function2 = async (coursePathInGithub, path, img, refBranch) => {
   // *** code source: ***
   // functions: https://stackoverflow.com/a/58542933
 
@@ -29,7 +29,7 @@ const function2 = async (coursePathInGithub, path, img) => {
 
   // get full download URL only for images that don't already have full URL
   if (!urlEncoded.startsWith('http')) {
-    const imgResponse = await getImgResponse(coursePathInGithub, path, urlEncoded);
+    const imgResponse = await getImgResponse(coursePathInGithub, path, urlEncoded, refBranch);
 
     // console.log('getImgResponse:', getImgResponse);
 
@@ -63,7 +63,7 @@ const function3 = async (markdownText, finishedPromises) => {
   return newText;
 };
 
-const function1 = async (coursePathInGithub, path, componentDecodedUtf8) => {
+const function1 = async (coursePathInGithub, path, componentDecodedUtf8, refBranch) => {
   const markdownText = componentDecodedUtf8;
 
   // *** code sources: ***
@@ -83,7 +83,7 @@ const function1 = async (coursePathInGithub, path, componentDecodedUtf8) => {
   // if markdown DOES HAVE images, then change "img src" to full URL from github:
 
   // for each image, get its used "img src" and needed "download_url" to display image on webapp. Response are Promises, save those in new array
-  const promises = images.map((img) => function2(coursePathInGithub, path, img));
+  const promises = images.map((img) => function2(coursePathInGithub, path, img, refBranch));
   // solve each Promise in previous array, save results in new array
   const finishedPromises = await Promise.all(promises);
 

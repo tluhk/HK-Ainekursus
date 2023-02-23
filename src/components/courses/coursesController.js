@@ -65,6 +65,7 @@ const renderPage = async (req, res) => {
     resComponents,
     resFiles,
     resSources,
+    refBranch,
   } = res.locals;
 
   // console.log('resComponents in responseAction:', resComponents);
@@ -81,7 +82,7 @@ const renderPage = async (req, res) => {
    * - functions: https://stackoverflow.com/a/58542933
    * - changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
-  const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8);
+  const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8, refBranch);
 
   // console.log('markdownWithModifiedImgSources:', markdownWithModifiedImgSources);
 
@@ -129,7 +130,7 @@ const allCoursesController = {
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     const allCourses = await getAllCourses(teamSlug);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    console.log('allCoursesActive1:', allCoursesActive);
+    // console.log('allCoursesActive1:', allCoursesActive);
     return res.render('dashboard', {
       courses: allCoursesActive,
       user: req.user,
@@ -147,29 +148,71 @@ const allCoursesController = {
     // console.log('req.params.contentSlug:', contentSlug);
     // console.log('req.params.componentSlug:', componentSlug);
 
+    let teamSlug;
+    if (req.user.team.slug) teamSlug = req.user.team.slug;
+
     /**
      * Get all available courses
      */
-    const allCourses2 = await getAllCourses(req.user.team.slug);
+    const allCourses2 = await getAllCourses(teamSlug);
     // console.log('allCourses2:', allCourses2);
     /**
      * Get active course
      */
     const course = allCourses2.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
 
+    console.log('course1:', course);
+    res.locals.course = course;
+    console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
+
     /**
      * Save routepath for the active course to cache its config file
      */
-    const routePath = `${req.url}+config`;
+    let routePath = '';
+    if (teamSlug) {
+      routePath = `${req.url}+config+${teamSlug}`;
+    } else {
+      routePath = `${req.url}+config`;
+    }
     // console.log('routePath1:', routePath);
 
+    /**
+     * Check if course Repo has a branch that matches user team's slug.
+     * -- If yes, then all Github requests must refer to this branch. The App user must see data only from the branch that has a matching Team name. E.g. user in team "rif20" should only see course information from branch "rif20" for any course, if such branch exists.
+     * -- If such branch doesn't exist, then read data from the master/main branch.
+     */
+    let refBranch;
+    try {
+      // get all branches in selected course Repo
+      const branches = await apiRequests.branchesService(res.locals, req);
+
+      /**
+       *  if repo has a branch that matches teamSlug (e.g. "rif20"), then save this to refBranch variable.
+       * This variable is added to the end of Github API requests, e.g:
+       * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
+       */
+      if (branches.includes(teamSlug)) refBranch = `ref=${teamSlug}`;
+      // console.log('isBranch2:', isBranch);
+    } catch (error) {
+      console.error(error);
+    }
+
+    /**
+     * Save refBranch to res.locals. This is used by coursesService.js file.
+     */
+    res.locals.refBranch = refBranch;
+
+    // console.log('cache.has(routePath)1:', cache.has(routePath));
+    // console.log('cache.get(routePath)1:', cache.get(routePath));
     let config;
     if (cache.has(routePath) && cache.get(routePath) !== undefined) {
-      config = res.locals.cache;
-      // console.log('config from cache');
+      config = cache.get(routePath);
+      // console.log('res.locals.cache2:', res.locals.cache);
+      console.log('config from cache');
     } else {
+      console.log('config is NOT from cache');
       try {
-        config = await getConfig(course.coursePathInGithub);
+        config = await getConfig(course.coursePathInGithub, teamSlug, refBranch);
       } catch (error) {
         /**
          * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
@@ -180,6 +223,14 @@ const allCoursesController = {
       cache.set(routePath, config);
       // console.log('config from api');
     }
+
+    if (refBranch) {
+      console.log(`reading data from ${refBranch} branch`);
+    } else {
+      console.log('reading data from branch');
+    }
+
+    console.log('config2:', config);
 
     res.locals.course = course;
     res.locals.config = config;

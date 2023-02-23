@@ -146,7 +146,7 @@ const getTeamAssignments = (async (req, res, next) => {
   cache.set(cacheName, getAllTeamAssignments);
   res.locals[cacheName] = getAllTeamAssignments;
   delete res.locals.cacheName;
-  console.log('res.locals4:', res.locals);
+  // console.log('res.locals4:', res.locals);
 
   // console.log('res.locals.teamAssignments1:', res.locals.teamAssignments);
 

@@ -7,10 +7,10 @@ const {
   requestConfig,
 } = require('./githubReposRequests');
 
-const getRepoResponse = async (selectedCourse) => {
+const getRepoResponse = async (selectedCourse, team, refBranch) => {
   let response = '';
   try {
-    response = await axios.get(requestConfig(selectedCourse), authToken);
+    response = await axios.get(requestConfig(selectedCourse, team, refBranch), authToken);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -18,11 +18,11 @@ const getRepoResponse = async (selectedCourse) => {
   return response;
 };
 
-const getConfig = async (selectedCourse) => {
-  const config = await getRepoResponse(selectedCourse);
+const getConfig = async (selectedCourse, team, refBranch) => {
+  const config = await getRepoResponse(selectedCourse, team, refBranch);
   const configDecoded = base64.decode(config.data.content);
   const configDecodedUtf8 = utf8.decode(configDecoded);
-  console.log('configDecodedUtf8', configDecodedUtf8);
+  // console.log('configDecodedUtf8', configDecodedUtf8);
 
   const configJSON = JSON.parse(configDecodedUtf8);
 
