@@ -84,9 +84,35 @@ const renderPage = async (req, res) => {
    */
   const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8, refBranch);
 
-  // console.log('markdownWithModifiedImgSources:', markdownWithModifiedImgSources);
+  /**
+   * Add Table of Contents markdown element to Markdown before rendering
+   */
+  const markdownWithModifiedImgSourcesToc = markdownWithModifiedImgSources.concat('\n\n ${toc} \n');
+  // console.log('markdownWithModifiedImgSourcesToc:', markdownWithModifiedImgSourcesToc);
 
-  const componentMarkdown = await MarkdownIt.render(markdownWithModifiedImgSources);
+  /**
+   * Render Markdown
+   */
+  const componentMarkdown = await MarkdownIt.render(markdownWithModifiedImgSourcesToc);
+  // console.log('componentMarkdown:', componentMarkdown);
+
+  /**
+   * Select rendered Markdown html, excluding table of contents
+   */
+  const componentMarkdownWithoutTOC = componentMarkdown.substring(0, componentMarkdown.indexOf('<nav class="table-of-contents-from-markdown-123">'));
+
+  /**
+   * Select rendered Markdown table of contents, excluding preceding contents.
+   */
+  function getStringBetween(str, start, end) {
+    const result = str.match(new RegExp(`${start}(.*)${end}`));
+    return result[1];
+  }
+  const componentMarkdownOnlyTOCWithoutNav = getStringBetween(componentMarkdown, '<nav class="table-of-contents-from-markdown-123">', '</nav>');
+  const componentMarkdownOnlyTOC = `<nav class="table-of-contents">${componentMarkdownOnlyTOCWithoutNav}</nav>`;
+
+  // console.log('componentMarkdownWithoutTOC:', componentMarkdownWithoutTOC);
+  // console.log('componentMarkdownOnlyTOC:', componentMarkdownOnlyTOC);
 
   // define sources as NULL by default.
   let sourcesJSON = null;
@@ -99,7 +125,7 @@ const renderPage = async (req, res) => {
   }
 
   res.render('course', {
-    component: componentMarkdown,
+    component: componentMarkdownWithoutTOC,
     docs: config.docs,
     additionalMaterials: config.additionalMaterials,
     concepts: config.concepts,
@@ -115,6 +141,7 @@ const renderPage = async (req, res) => {
     config,
     files: resFiles,
     user: req.user,
+    ToC: componentMarkdownOnlyTOC,
   });
 };
 
@@ -161,9 +188,9 @@ const allCoursesController = {
      */
     const course = allCourses2.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
 
-    console.log('course1:', course);
+    // console.log('course1:', course);
     res.locals.course = course;
-    console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
+    // console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
 
     /**
      * Save routepath for the active course to cache its config file
@@ -230,7 +257,7 @@ const allCoursesController = {
       console.log('reading data from branch');
     }
 
-    console.log('config2:', config);
+    // console.log('config2:', config);
 
     res.locals.course = course;
     res.locals.config = config;

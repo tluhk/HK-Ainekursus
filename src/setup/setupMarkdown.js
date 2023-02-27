@@ -36,6 +36,10 @@ const MarkdownIt = require('markdown-it')({
 // https://github.com/valeriangalliat/markdown-it-anchor
 const anchor = require('markdown-it-anchor');
 
+// Add anchors' table of contents for right sidebar
+// https://www.npmjs.com/package/markdown-it-toc-done-right
+const anchorToc = require('markdown-it-toc-done-right');
+
 //  Add certain classes to selected elements in markdown files, needed for CSS
 // https://github.com/HiroshiOkada/markdown-it-class
 const markdownItClass = require('@toycode/markdown-it-class');
@@ -70,6 +74,17 @@ MarkdownIt.use(mila, {
 MarkdownIt.use(anchor, {
   permalink: true,
   permalinkSymbol: '<span class="material-symbols-outlined">link</span>',
+});
+
+// Add anchors' table of contents for right sidebar
+// https://www.npmjs.com/package/markdown-it-toc-done-right
+MarkdownIt.use(anchorToc, {
+  containerClass: 'table-of-contents-from-markdown-123',
+  listClass: 'table-of-contents',
+  listType: 'ul',
+  itemClass: 'table-of-contents',
+  linkClass: 'table-of-contents',
+  level: 1,
 });
 
 // Add embed video support

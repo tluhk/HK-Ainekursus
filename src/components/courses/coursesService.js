@@ -38,7 +38,7 @@ const apiRequests = {
 
       // console.log('branchesRaw2:', branchesRaw);
       branches = branchesRaw.data.map((branch) => branch.name);
-      console.log('branches2:', branches);
+      // console.log('branches2:', branches);
       // console.log('Axioscomponents1:', components);
       cache.set(routePath, branches);
     } else {
