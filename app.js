@@ -148,7 +148,7 @@ const getTeamAssignments = (async (req, res, next) => {
   delete res.locals.cacheName;
   // console.log('res.locals4:', res.locals);
 
-  // console.log('res.locals.teamAssignments1:', res.locals.teamAssignments);
+  console.log('res.locals.teamAssignments1:', res.locals.teamAssignments);
 
   return next();
 });
@@ -231,7 +231,7 @@ passport.use(
         console.log('user exists in tluhk org');
 
         // getUser();
-        // saveUser(); 
+        // saveUser();
         // console.log('userInOrgMembers1:', userInOrgMembers);
         // console.log('profile1:', profile);
         // console.log('Logged in');
@@ -322,6 +322,32 @@ app.use(getTeamAssignments, async (req, res, next) => {
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
   }
+
+  /**
+   * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
+   * FOR TESTING, THE APP IS BY DEFAULT LOGGED IN AS seppkh IN TEAM rif20
+   */
+  else {
+    req.user = {
+      id: '62253084',
+      nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
+      displayName: null,
+      username: 'seppkh',
+      profileUrl: 'https://github.com/seppkh',
+      provider: 'github',
+      _json: {
+        avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
+        type: 'User',
+      },
+      team: {
+        name: 'rif20',
+        id: 6514564,
+        node_id: 'T_kwDOBqxQ5c4AY2eE',
+        slug: 'rif20',
+      },
+    };
+  }
+
   next();
 });
 
@@ -332,7 +358,6 @@ app.use(getTeamAssignments, async (req, res, next) => {
 //   back to this application at /github-callback
 app.get(
   '/login',
-  getTeamAssignments,
   (req, res) => {
     let message = '';
     if (req.query.email) message = 'Emaili sisestamine pole lubatud';
@@ -354,7 +379,6 @@ app.get(
 app.post('/login', (req, res, next) => {
   console.log('req.body.login1:', req.body.login);
   if (!req.body.login) {
-    console.log('hey');
     return res.sendStatus(400);
   }
 
@@ -381,11 +405,12 @@ app.post('/login', (req, res, next) => {
   }),
 ); */
 
-// GET /github-callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function will be called,
-//   which, in this example, will redirect the user to the home page.
+/**
+ * // Github callback
+ * Use passport.authenticate() as route middleware to authenticate the callback request.
+ * If authentication fails, the user will be redirected back to the "/noauth" page.
+ * Otherwise, the primary route function will be called, which will redirect the user to the "/" homepage.
+ */
 app.get(
   '/github-callback',
   passport.authenticate('github', {
