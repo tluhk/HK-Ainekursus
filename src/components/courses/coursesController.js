@@ -84,21 +84,31 @@ const renderPage = async (req, res) => {
    */
   const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8, refBranch);
 
-
+  /**
+   * Add Table of Contents markdown element to Markdown before rendering
+   */
   const markdownWithModifiedImgSourcesToc = markdownWithModifiedImgSources.concat('\n\n ${toc} \n');
   // console.log('markdownWithModifiedImgSourcesToc:', markdownWithModifiedImgSourcesToc);
 
+  /**
+   * Render Markdown
+   */
   const componentMarkdown = await MarkdownIt.render(markdownWithModifiedImgSourcesToc);
   // console.log('componentMarkdown:', componentMarkdown);
 
+  /**
+   * Select rendered Markdown html, excluding table of contents
+   */
   const componentMarkdownWithoutTOC = componentMarkdown.substring(0, componentMarkdown.indexOf('<nav class="table-of-contents-from-markdown-123">'));
 
+  /**
+   * Select rendered Markdown table of contents, excluding preceding contents.
+   */
   function getStringBetween(str, start, end) {
     const result = str.match(new RegExp(`${start}(.*)${end}`));
     return result[1];
   }
   const componentMarkdownOnlyTOCWithoutNav = getStringBetween(componentMarkdown, '<nav class="table-of-contents-from-markdown-123">', '</nav>');
-
   const componentMarkdownOnlyTOC = `<nav class="table-of-contents">${componentMarkdownOnlyTOCWithoutNav}</nav>`;
 
   // console.log('componentMarkdownWithoutTOC:', componentMarkdownWithoutTOC);

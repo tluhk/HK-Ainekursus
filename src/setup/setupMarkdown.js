@@ -76,6 +76,8 @@ MarkdownIt.use(anchor, {
   permalinkSymbol: '<span class="material-symbols-outlined">link</span>',
 });
 
+// Add anchors' table of contents for right sidebar
+// https://www.npmjs.com/package/markdown-it-toc-done-right
 MarkdownIt.use(anchorToc, {
   containerClass: 'table-of-contents-from-markdown-123',
   listClass: 'table-of-contents',
