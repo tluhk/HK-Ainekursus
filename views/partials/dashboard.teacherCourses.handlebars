@@ -1,0 +1,24 @@
+<div class='reading_content'>
+  <h1>Õppejõud</h1>
+  {{#each teacherCourses }}
+  <div class="flex flex-col gap-y-2">
+    {{#with (findTeacher @key ../teachers)}}
+      <div class="flex flex-row gap-4 items-center">
+        <div>
+          <img src="{{ this.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%" class="">
+        </div>
+        <div class="inline-block">
+          <h4 class="mt-0 mb-1">{{ this.login }}</h4>
+          <p class="m-0 mb-1">email@tlu.ee</p>
+        </div>
+      </div>
+    {{/with }}
+    <ul>
+    {{#each this }}
+      <li><a href="/course/{{this.courseSlug}}/about">{{this.courseName}}</a></li>
+    {{/each }}
+    </ul>
+  </div>
+  {{/each }}
+  
+</div>

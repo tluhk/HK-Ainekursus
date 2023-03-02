@@ -4,7 +4,13 @@ const { apiRequests } = require('./teamsService');
 const { cache } = require('../../setup/setupCache');
 
 const getOneTeamMembers = async (team) => {
-  const members = await apiRequests.getTeamMembersService(team.slug);
+  let members;
+  if (typeof team === 'string') {
+    members = await apiRequests.getTeamMembersService(team);
+  }
+  if (typeof team === 'object') {
+    members = await apiRequests.getTeamMembersService(team.slug);
+  }
   return members;
 };
 
@@ -38,7 +44,7 @@ const teamsController = {
 
     // Map each team.slug to a promise that eventually fulfills with each teams members
     const promises = teams.map(async (team) => {
-      const members = await getOneTeamMembers(team);
+      const members = await getOneTeamMembers(team.slug);
       return members;
     });
 
@@ -84,6 +90,12 @@ const teamsController = {
 
     // console.log('foundTeam1:', foundTeam);
     return foundTeam;
+  },
+  getUsersInTeam: async (team) => {
+    const usersPromise = await getOneTeamMembers(team);
+    const users = await Promise.all(usersPromise);
+
+    return users;
   },
 };
 
