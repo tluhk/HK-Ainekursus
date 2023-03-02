@@ -37,6 +37,7 @@
     "connect": "^3.7.0",
     "connect-livereload": "^0.6.1",
     "copy-text-to-clipboard": "^3.0.1",
+    "core-js": "^3.29.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",

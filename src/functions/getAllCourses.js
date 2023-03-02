@@ -26,7 +26,7 @@ const getAllCourses = (async (teamSlug) => {
    * Set conditions, which Repositories (Courses) are read from tluhk org github account
    */
   const filter1 = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
-  // console.log('filter1', filter1);
+  console.log('filter1', filter1);
 
   const map1 = filter1.map((y) => {
     const coursePromise = (param) => getConfig(param.full_name)
@@ -64,6 +64,7 @@ const getAllCourses = (async (teamSlug) => {
 
         return {
           courseUrl: result.courseUrl,
+          teacherUsername: result.teacherUsername,
           courseIsActive: result.active,
           courseName: result.courseName || oisContent.name,
           courseSlug: oisContent.code, // || result.slug,

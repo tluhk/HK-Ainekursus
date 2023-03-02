@@ -21,6 +21,7 @@
                 <div class="!text-white py-2 pr-2">{{../this.courseCode}}</div>
                 <div class="!text-white py-2 pr-2">EAP: {{../this.courseEAP}}</div>
                 <div class="!text-white py-2 pr-2">Hindamine: {{capitalize ../this.courseGrading}}</div>
+                <div class="!text-white py-2 pr-2">Õppejõud: {{#with (findTeacher ../this.teacherUsername ../../teachers)}}{{ this.login }}{{/with}}</div>
               </div>
             {{/if_equal}}
           {{/each}}

@@ -28,7 +28,10 @@ const apiRequests = {
       console.log(error);
     });
 
-    const teamMembersMapped = teamMembersRaw.data.map((member) => (
+    // console.log('teamMembersRaw1.data:', teamMembersRaw.data);
+
+    const teamMembersMapped = teamMembersRaw.data.map((member) => member,
+    /* (
       {
         login: member.login,
         id: member.id,
@@ -36,7 +39,9 @@ const apiRequests = {
         url: member.url,
         type: member.type,
         site_admin: member.site_admin,
-      }));
+        avatar_url: member.avatar_url,
+      }) */
+    );
     // console.log('teamMembersMapped1:', teamMembersMapped);
 
     const teamMembers = teamMembersMapped;

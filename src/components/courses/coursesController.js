@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
+require('core-js/actual/array/group-by');
 const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 
 // Enable in-memory cache
@@ -10,6 +11,7 @@ const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
 const { verifyCache } = require('./coursesVerifyCache');
 const { apiRequests } = require('./coursesService');
+const { getOneTeamMembers, teamsController } = require('../teams/teamsController');
 
 /**
  * Define what to do after info about couse and course page is received.
@@ -59,6 +61,7 @@ const renderPage = async (req, res) => {
     allCourses,
     singleCoursePaths,
     coursePathInGithub,
+    teachers,
   } = res.locals;
 
   const {
@@ -124,6 +127,7 @@ const renderPage = async (req, res) => {
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
+  console.log('teachers3:', teachers);
   res.render('course', {
     component: componentMarkdownWithoutTOC,
     docs: config.docs,
@@ -142,6 +146,7 @@ const renderPage = async (req, res) => {
     files: resFiles,
     user: req.user,
     ToC: componentMarkdownOnlyTOC,
+    teachers,
   });
 };
 
@@ -157,11 +162,23 @@ const allCoursesController = {
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     const allCourses = await getAllCourses(teamSlug);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    // console.log('allCoursesActive1:', allCoursesActive);
+    console.log('allCoursesActive1:', allCoursesActive);
+
+    const allCoursesGroupedByTeacher = allCoursesActive.groupBy(({ teacherUsername }) => teacherUsername);
+    console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+
+    const allTeachers = await teamsController.getUsersInTeam('teachers');
+    console.log('allTeachers1:', allTeachers);
+
     return res.render('dashboard', {
       courses: allCoursesActive,
       user: req.user,
+      teacherCourses: allCoursesGroupedByTeacher,
+      teachers: allTeachers,
     });
+  },
+  getCoursesOwners: async (req, res, next) => {
+
   },
   /**
    * for '/course/:courseSlug/:contentSlug?/:componentSlug?' route
@@ -188,9 +205,14 @@ const allCoursesController = {
      */
     const course = allCourses2.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
 
-    // console.log('course1:', course);
+    console.log('course1:', course);
     res.locals.course = course;
     // console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
+
+    const allTeachers = await teamsController.getUsersInTeam('teachers');
+    console.log('allTeachers0:', allTeachers);
+
+    res.locals.teachers = allTeachers;
 
     /**
      * Save routepath for the active course to cache its config file
