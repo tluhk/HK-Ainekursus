@@ -164,7 +164,13 @@ const allCoursesController = {
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     console.log('allCoursesActive1:', allCoursesActive);
 
-    const allCoursesGroupedByTeacher = allCoursesActive.groupBy(({ teacherUsername }) => teacherUsername);
+    /**
+     * First, sort by teacherUsername values,
+     * Second, group by teacherUsername values
+     */
+    const allCoursesGroupedByTeacher = allCoursesActive
+      .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
+      .groupBy(({ teacherUsername }) => teacherUsername);
     console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
     const allTeachers = await teamsController.getUsersInTeam('teachers');

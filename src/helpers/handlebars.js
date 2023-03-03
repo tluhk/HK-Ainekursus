@@ -72,14 +72,25 @@ module.exports = function hbsHelpers(hbs) {
       },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
-        console.log('teacherName1:', teacherName);
-        console.log('teachers2:', teachers);
+        // console.log('teacherName1:', teacherName);
+        // console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
-        const teacher = {
-          login: teacherData.login,
-          avatar_url: teacherData.avatar_url,
-        };
-        console.log('teacher1:', teacher);
+        let teacher;
+        /**
+         * Kui config-failis kirjutatud teacherUsername ei vasta ühegi kasutaja login-nimele teachers tiimis, siis kuva "Määramata õppejõud" nime ja neutraalset avatari
+         */
+        if (!teacherData) {
+          teacher = {
+            login: 'Määramata õppejõud',
+            avatar_url: '/images/anonymous-avatar.png',
+          };
+        } else {
+          teacher = {
+            login: teacherData.login,
+            avatar_url: teacherData.avatar_url,
+          };
+        }
+        // console.log('teacher1:', teacher);
         return teacher;
       },
     },
