@@ -71,7 +71,7 @@ const getAllCourses = (async (teamSlug) => {
           courseCode: oisContent.code, // || result.courseCode,
           courseSlugInGithub: y.name,
           coursePathInGithub: y.full_name,
-          courseEAP: oisContent.EAP,
+          courseEAP: Math.round(oisContent.EAP),
           courseGrading: oisContent.grading,
           courseEesmargid: oisContent.eesmargid,
           courseSummary: oisContent.summary,

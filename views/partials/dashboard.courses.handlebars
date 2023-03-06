@@ -1,22 +1,33 @@
-<div class='reading_content'>
+  <div class="max-w-md">
+    <h2>Minu kursused</h2>
+      <div class=''>
+        {{#unless courses }}  
+          <div class='text-md font-bold mt-4 ml-4'>Sul pole ligipääsu ühelegi kursusele.</div>
+          <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
+        {{/unless }}
+        {{#if courses }}
+          {{#each courses}}
+            <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
+              <a
+                class='!no-underline uppercase w-full'
+                href='/course/{{this.courseSlug}}/about'
+              ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
 
-  <h1>Eelseisvad ülesanded</h1>
-  <h2>Uurimistöö I</h2>
-  <p>Uurida iseseisvalt erinevaid lahendusi, tee ise valitud näite põhjal
-    analoogne lahendus ja esita</p>
-  <p>Tähtaeg: 25.11.2022</p>
+                <div>
+                  <progress id='{{this.courseCode}}' value='32' max='100'>
+                    32%
+                  </progress>
+                </div>
+                <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                  <p class="m-0 p-0">{{this.courseCode}}</p>
+                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span> {{this.courseEAP}}</p>
+                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span> {{this.courseGrading}}</p>
+                  </div>
+                </a>
 
-  <strong class='text-success flex'><span
-      class='material-symbols-outlined pr-1'
-    >check_circle</span>Esitatud</strong>
-  <hr class='text-secondary-400' />
-  <br />
+            </div>
+          {{/each}}
 
-  <h2>Riistvara ja operatsiooni&shy;süsteemide alused</h2>
-  <p>Uurida iseseisvalt erinevaid lahendusi, tee ise valitud näite põhjal
-    analoogne lahendus ja esita</p>
-  <p>Tähtaeg: 25.11.2023</p>
-  <strong class='text-brand_red flex'><span
-      class='material-symbols-outlined pr-1'
-    >radio_button_unchecked</span>Esitamata</strong>
-</div>
+        {{/if }}
+    </div>
+  </div> 

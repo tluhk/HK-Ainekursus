@@ -156,6 +156,12 @@ a {
   margin: 0 auto;
 }
 
+.dashboard_content {
+  max-width: 100%;
+  width: 85ch;
+  margin: 0 auto;
+}
+
 /* List and links stiles with classname "markdown".
 "markdown" class will added in src/setup/SetupMarkdown.js
 */
