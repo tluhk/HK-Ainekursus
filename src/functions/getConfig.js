@@ -19,8 +19,8 @@ const getRepoResponse = async (selectedCourse, team, refBranch) => {
 };
 
 const getConfig = async (selectedCourse, team, refBranch) => {
-  // console.log('team1:', team);
-  // console.log('refBranch1:', refBranch);
+  console.log('team1:', team);
+  console.log('refBranch1:', refBranch);
   const config = await getRepoResponse(selectedCourse, team, refBranch);
   const configDecoded = base64.decode(config.data.content);
   const configDecodedUtf8 = utf8.decode(configDecoded);
