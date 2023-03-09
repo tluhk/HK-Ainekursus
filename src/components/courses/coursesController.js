@@ -157,31 +157,81 @@ const allCoursesController = {
    */
   getAllCourses: async (req, res) => {
     // console.log('req3:', req);
-
     let teamSlug;
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
-    const allCourses = await getAllCourses(teamSlug);
-    const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    console.log('allCoursesActive1:', allCoursesActive);
 
     /**
-     * First, sort by teacherUsername values,
-     * Second, group by teacherUsername values
+     * Check if teamSlug is 'teachers'
+     * If yes, then get teacher courses info
+     * If not, then get user courses info
      */
-    const allCoursesGroupedByTeacher = allCoursesActive
-      .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
-      .groupBy(({ teacherUsername }) => teacherUsername);
-    console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
-    const allTeachers = await teamsController.getUsersInTeam('teachers');
-    console.log('allTeachers1:', allTeachers);
+    const isTeacher = teamSlug === 'teachers';
 
-    return res.render('dashboard', {
-      courses: allCoursesActive,
-      user: req.user,
-      teacherCourses: allCoursesGroupedByTeacher,
-      teachers: allTeachers,
-    });
+    if (isTeacher) {
+      const allCourses = await getAllCourses(teamSlug);
+      const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+      console.log('allCoursesActive1:', allCoursesActive);
+
+      allCoursesActive
+        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
+        .groupBy(({ teacherUsername }) => teacherUsername);
+
+      console.log('allCoursesActive1:', allCoursesActive);
+      console.log('req.user3:', req.user);
+
+      allTeacherCourses = allCoursesActive.filter((course) => course.teacherUsername === req.user.username);
+
+      console.log('allTeacherCourses1:', allTeacherCourses);
+      /**
+       * First, sort by teacherUsername values,
+       * Second, group by teacherUsername values
+       */
+      const allCoursesGroupedByTeacher = allCoursesActive
+        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
+        .groupBy(({ teacherUsername }) => teacherUsername);
+      console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+
+      delete allCoursesGroupedByTeacher[req.user.username];
+      console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
+
+      const allTeachers = await teamsController.getUsersInTeam('teachers');
+      console.log('allTeachers1:', allTeachers);
+
+      return res.render('dashboard-teacher', {
+        courses: allTeacherCourses,
+        user: req.user,
+        teacherCourses: allCoursesGroupedByTeacher,
+        teachers: allTeachers,
+      });
+    }
+
+    if (!isTeacher) {
+      const allCourses = await getAllCourses(teamSlug);
+      const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+      // console.log('allCoursesActive1:', allCoursesActive);
+
+      /**
+       * First, sort by teacherUsername values,
+       * Second, group by teacherUsername values
+       */
+      const allCoursesGroupedByTeacher = allCoursesActive
+        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
+        .groupBy(({ teacherUsername }) => teacherUsername);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+
+      const allTeachers = await teamsController.getUsersInTeam('teachers');
+      // console.log('allTeachers1:', allTeachers);
+
+      return res.render('dashboard', {
+        courses: allCoursesActive,
+        user: req.user,
+        teacherCourses: allCoursesGroupedByTeacher,
+        teachers: allTeachers,
+      });
+    }
+    console.log('isTeacher is neither true/false');
+    return false;
   },
   getCoursesOwners: async (req, res, next) => {
 
@@ -267,7 +317,7 @@ const allCoursesController = {
     } else {
       console.log('config is NOT from cache');
       try {
-        config = await getConfig(course.coursePathInGithub, teamSlug, refBranch);
+        config = await getConfig(course.coursePathInGithub, refBranch);
       } catch (error) {
         /**
          * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.

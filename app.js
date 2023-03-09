@@ -315,6 +315,7 @@ const getUsernameToEmail = ((email) => axios.get({
  * I recommend the middleware route, I use such a function to add last visit date-time to the req.session, and am also developing middleware in using app.all('*') to do IP request tracking
  */
 app.use(getTeamAssignments, async (req, res, next) => {
+  console.log('req.user5:', req.user);
   if (req.user && !req.user.team) {
     const { user } = req;
     const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
@@ -326,8 +327,13 @@ app.use(getTeamAssignments, async (req, res, next) => {
   /**
    * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
    * FOR TESTING, THE APP IS BY DEFAULT LOGGED IN AS seppkh IN TEAM rif20
+   *
+   * IF YOU WANT TO LOG IN AS seppkh AND USE ITS TRUE GITHUB TEAM:
+   * 1. ENABLE FULL else STATEMENT
+   * 2. COMMENT OUT team: {} KEY.
+   * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  else {
+  /* else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -339,14 +345,22 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      team: {
+      /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
-    };
-  }
+      }, */
+  /* };
+
+    if (req.user && !req.user.team) {
+      const { user } = req;
+      const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
+      // console.log('user1:', user);
+      // console.log('userTeam1:', userTeam);
+      req.user.team = userTeam;
+    }
+  } */
 
   next();
 });

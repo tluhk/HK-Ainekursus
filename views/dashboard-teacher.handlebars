@@ -1,0 +1,36 @@
+<div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
+  
+  <!-- <aside class="flex aside bg-neutral-100"> -->
+
+    <!-- sticky: sticky h-screen top-0 -->
+    <!-- refers to side.handlebars fail in /partials folder -->
+  {{!-- {{> side.dashboard }} --}}
+  <!-- </aside> -->
+
+  <main id="main-content" class="w-full px-4 py-16 dashboard_content">
+    <div class="flex flex-row flex-wrap grow justify-between">
+      {{#unless user }}  
+        <h3 class='mt-4 ml-4'>Logi sisse, et näha töölauda</h3>
+      {{/unless }}
+
+      {{#if user }} 
+        <!-- refers to content.handlebars fail in /partials folder -->
+        <div class="">
+          {{> dashboard-teacher.courses }} <br>
+        </div>
+        <div class="">
+          {{> dashboard-teacher.teacherCourses }} <br>
+        </div>
+      {{/if }}
+    </div>
+
+  </main>
+  <aside class="lg:hidden 2xl:block">
+   
+   
+    <!-- Datepicker -->
+
+    <!-- {{> calendar }} -->
+
+  </aside>
+</div>

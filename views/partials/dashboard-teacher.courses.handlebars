@@ -1,0 +1,33 @@
+  <div class="max-w-md">
+    <h2>Õpetatavad kursused</h2>
+      <div class=''>
+        {{#unless courses }}  
+          <div class='text-md font-bold mt-4 ml-4'>Sul pole ligipääsu ühelegi kursusele.</div>
+          <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
+        {{/unless }}
+        {{#if courses }}
+          {{#each courses}}
+            <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
+              <a
+                class='!no-underline uppercase w-full'
+                href='/course/{{this.courseSlug}}/about'
+              ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
+
+                <div>
+                  <progress id='{{this.courseCode}}' value='32' max='100'>
+                    32%
+                  </progress>
+                </div>
+                <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                  <p class="m-0 p-0">{{this.courseCode}}</p>
+                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
+                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
+                  </div>
+                </a>
+
+            </div>
+          {{/each}}
+
+        {{/if }}
+    </div>
+  </div> 

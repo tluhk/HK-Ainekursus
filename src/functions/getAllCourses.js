@@ -1,27 +1,28 @@
 /* eslint-disable camelcase */
 const cheerio = require('cheerio');
 const { axios, authToken } = require('../setup/setupGithub');
-const { requestTeamCourses } = require('./githubReposRequests');
+const { requestTeamCourses, requestRepos } = require('./githubReposRequests');
 const { getConfig } = require('./getConfig');
 
 const getAllCourses = (async (teamSlug) => {
-  let courses;
-  // console.log('teamSlug1:', teamSlug);
+  console.log('teamSlug4:', teamSlug);
   /**
    * If user exists, they're in a team and team.slug exists, only then read Course repos.
    * Otherwise load courses array as empty (no courses to show).
    */
-  if (teamSlug) {
+  let courses = { data: [] };
+
+  if (teamSlug && teamSlug === 'teachers') {
+    courses = await axios.get(requestRepos, authToken).catch((error) => {
+      console.log(error);
+    });
+  } if (teamSlug && teamSlug !== 'teachers') {
     courses = await axios.get(requestTeamCourses(teamSlug), authToken).catch((error) => {
       console.log(error);
     });
-  } else {
-    courses = { data: [] };
-    /* await axios.get(requestRepos, authToken).catch((error) => {
-      console.log(error);
-    }); */
   }
 
+  console.log('courses2:', courses);
   /**
    * Set conditions, which Repositories (Courses) are read from tluhk org github account
    */
@@ -29,7 +30,7 @@ const getAllCourses = (async (teamSlug) => {
   console.log('filter1', filter1);
 
   const map1 = filter1.map((y) => {
-    const coursePromise = (param) => getConfig(param.full_name)
+    const coursePromise = (param) => getConfig(param.full_name, teamSlug)
       .then(async (result) => {
         /**
          * Read course information from ÕIS Ainekaart

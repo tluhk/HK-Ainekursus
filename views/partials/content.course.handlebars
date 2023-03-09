@@ -27,7 +27,9 @@
 
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
-  {{{component}}}
+  <div id="markdown-content">
+    {{{component}}}
+  </div>
 
   <!-- NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad"" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed. -->
   {{#if sources}}
