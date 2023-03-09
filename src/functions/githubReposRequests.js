@@ -13,25 +13,15 @@ module.exports = {
   ),
   // config
   requestConfig: (
-    (coursePathInGithub, team, refBranch) => {
-      /**
-       * if user has team:
-       * - check if repo has branch with same name
-       * if yes, get the config from that branch
-       * if not, get the config from main branch
-       */
-      // console.log('team2:', team);
-      // console.log('refBranch2:', refBranch);
-
-      if (team && refBranch) {
-        try {
-          return `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?${refBranch}`;
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      return `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?${refBranch}`;
-    }
+    /**
+     * if usrefBrancher is provided:
+     * - check if repo has branch with same name
+     * if yes, get the config from that branch
+     * if not, get the config from main branch
+     */
+    // console.log('team2:', team);
+    // console.log('refBranch2:', refBranch);
+    (coursePathInGithub, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?${refBranch}`
   ),
   // docs related
   requestDocs: (

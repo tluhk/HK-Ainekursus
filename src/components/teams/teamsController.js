@@ -30,7 +30,8 @@ const teamsController = {
      */
 
     const teams = allTeams.filter((x) => // x.name === 'rif20-valikpraktika-1' ||
-      x.name.startsWith('rif') && !x.name.includes('-'),
+      (x.slug.startsWith('rif') && !x.slug.includes('-'))
+      || (x.slug.startsWith('teachers') && !x.slug.includes('-')),
       /* || (x.name.startsWith('HK_') && !x.name.includes('-'))) */
     );
 
@@ -61,34 +62,61 @@ const teamsController = {
   getUserTeam: async (userIDString, teamAssignments) => {
     const userID = parseInt(userIDString, 10);
 
+    console.log('teamAssignments1:', teamAssignments);
     /**
    * This code uses the some method of Array instead of forEach. The some method also loops over all elements, but stops when a true value is returned. The foundMember variable is used to store the return value of find, which is either undefined if nothing is found, or the first found element. If foundMember is truthy, it means the user was found and the loop stops.
    */
     let foundTeam;
-    // console.log('teamAssignments1:', teamAssignments);
-    teamAssignments.some((team) => {
-      // console.log('team1:', team);
-      const foundMember = team.members.find((member) => {
-        // let userTeam;
-        // console.log('id1:', member.id);
-        if (member.id === userID) {
-          // console.log('user found');
-          // console.log('team2:', team);
-          foundTeam = team;
-          console.log(`userId found from team: ${team.name}`);
-          return true;
-        }
-        return false;
-      });
-      if (foundMember) {
-        // console.log('foundMember1:', foundMember);
-        // console.log('foundTeam1:', foundTeam);
+    let foundMember;
+    /**
+     * Check if user in teachers team
+     */
+    const teachers = teamAssignments.find(({ slug }) => slug === 'teachers');
+    foundMember = teachers.members.find((member) => {
+      // let userTeam;
+      // console.log('id1:', member.id);
+      if (member.id === userID) {
+        // console.log('user found');
+        // console.log('team2:', team);
+        foundTeam = teachers;
+        console.log(`userId found from team: ${teachers.slug}`);
         return true;
       }
-      // console.log('userId not found from teamAssignments');
+      return false;
     });
+    // console.log('userId not found from teamAssignments');
+    /**
+     * If not in teacher team, check which other team they're in.
+     * Get only first team they're found from, don't allow multiple teams.
+     */
+    // console.log('teamAssignments1:', teamAssignments);
+    if (!foundTeam) {
+      teamAssignments.some((team) => {
+        console.log('team1:', team);
 
-    // console.log('foundTeam1:', foundTeam);
+        if (team.slug === 'teachers') return false;
+        foundMember = team.members.find((member) => {
+        // let userTeam;
+        // console.log('id1:', member.id);
+          if (member.id === userID) {
+          // console.log('user found');
+          // console.log('team2:', team);
+            foundTeam = team;
+            console.log(`userId found from team: ${team.slug}`);
+            return true;
+          }
+          return false;
+        });
+        if (foundMember) {
+        // console.log('foundMember1:', foundMember);
+        // console.log('foundTeam1:', foundTeam);
+          return true;
+        }
+      // console.log('userId not found from teamAssignments');
+      });
+    }
+
+    console.log('foundTeam1:', foundTeam);
     return foundTeam;
   },
   getUsersInTeam: async (team) => {
