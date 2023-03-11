@@ -1,5 +1,7 @@
 const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
+const forms = require('@tailwindcss/forms');
+
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
@@ -94,6 +96,10 @@ module.exports = {
           marginTop: '1.25rem',
         },
       });
+    }),
+    forms({
+      strategy: 'base', // only generate global styles
+      // strategy: 'class', // only generate classes
     }),
   ],
 };

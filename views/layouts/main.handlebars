@@ -53,8 +53,13 @@
 
     <script src='/js/js.js'></script>
 
-    <!-- Jquery script iframe'i suuruse laadimiseks. Hetkel ei tööta, kommenteerin välja.
-      <script src='../../src/jquery.js'></script> -->
+    <script>
+    function handleRadioClick(value) {
+      console.log('value1:', value);
+      document.getElementById("selectedVersion").value = value;
+      document.getElementById("my-form").submit();
+    }
+    </script>
 
   </body>
 

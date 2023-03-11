@@ -154,6 +154,25 @@ const getTeamAssignments = (async (req, res, next) => {
 });
 
 /**
+ * Clear selectedVersion value when leaving any course page.
+ */
+const resetSelectedVersion = ((req, res, next) => {
+  // console.log('req.params.courseSlug1:', req.params.courseSlug);
+  // console.log('req.path.courseSlug1:', req.session.courseSlug);
+
+  /**
+   * If visited page is from the same course, keep the courseSlug and selectedVersion info in req.session.
+   * Otherwise, if another course or any other page is visited , clear courseSlug and selectedVersion info from req.session
+   */
+  if (req.params.courseSlug === req.session.courseSlug) {
+    return next();
+  }
+  req.session.courseSlug = null;
+  req.session.selectedVersion = null;
+  return next();
+});
+
+/**
  * Initialize Passport!
  * Also use passport.session() middleware, to support persistent login sessions (recommended).
  */
@@ -315,7 +334,7 @@ const getUsernameToEmail = ((email) => axios.get({
  * I recommend the middleware route, I use such a function to add last visit date-time to the req.session, and am also developing middleware in using app.all('*') to do IP request tracking
  */
 app.use(getTeamAssignments, async (req, res, next) => {
-  console.log('req.user5:', req.user);
+  // console.log('req.user5:', req.user);
   if (req.user && !req.user.team) {
     const { user } = req;
     const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
@@ -333,7 +352,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  /* else {
+  else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -351,7 +370,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
       }, */
-  /* };
+    };
 
     if (req.user && !req.user.team) {
       const { user } = req;
@@ -360,7 +379,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
   next();
 });
@@ -444,18 +463,36 @@ app.get(
 /**
   * Available endpoints without login
   */
-app.get('/', allCoursesController.getAllCourses);
-app.get('/courses', allCoursesController.getAllCourses);
+app.get('/', resetSelectedVersion, allCoursesController.getAllCourses);
+app.get('/courses', resetSelectedVersion, allCoursesController.getAllCourses);
 
 /**
  * Available endpoints with login
  */
-app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', ensureAuthenticated, verifyCache, allCoursesController.getSpecificCourse, responseAction, renderPage);
+app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', resetSelectedVersion, ensureAuthenticated, verifyCache, allCoursesController.getSpecificCourse, responseAction, renderPage);
+
+app.post('/save-selected-version', (req, res) => {
+  console.log('req.body1:', req.body);
+
+  // Store the selectedValue in the session
+  req.session.selectedVersion = req.body.selectedVersion;
+  req.session.courseSlug = req.body.courseSlug;
+
+  // console.log('req.session.selectedVersion1:', req.session.selectedVersion);
+
+  // console.log('req.session.currentPath1:', req.body.currentPath);
+
+  /**
+   * Stores selectedVersion correctly,
+   * but I need to make the original GET request again to reload same page with selectedVersion value.
+   */
+  res.redirect(req.body.currentPath);
+});
 
 /**
  * 404 page for wrong links
  */
-app.get('/notfound', otherController.notFound);
+app.get('/notfound', resetSelectedVersion, otherController.notFound);
 
 /**
  * Page for not authorized login attempt (github user not part of tluhk organisation)
@@ -467,7 +504,7 @@ app.get('/noauth', otherController.noAuth);
  * https://www.tabnine.com/code/javascript/functions/express/Request/logout
  */
 
-app.get('/logout', (req, res, next) => {
+app.get('/logout', resetSelectedVersion, (req, res, next) => {
   // console.log('req.user3:', req.user);
 
   /**
@@ -510,7 +547,7 @@ app.get('/logout', (req, res, next) => {
 /**
  * Redirect all unknown paths to 404 page
  */
-app.all('*', otherController.notFound);
+app.all('*', resetSelectedVersion, otherController.notFound);
 
 /**
  * Start a server and listen on port 3000
