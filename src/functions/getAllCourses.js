@@ -5,7 +5,7 @@ const { requestTeamCourses, requestRepos } = require('./githubReposRequests');
 const { getConfig } = require('./getConfig');
 
 const getAllCourses = (async (teamSlug) => {
-  console.log('teamSlug4:', teamSlug);
+  // console.log('teamSlug4:', teamSlug);
   /**
    * If user exists, they're in a team and team.slug exists, only then read Course repos.
    * Otherwise load courses array as empty (no courses to show).
@@ -22,12 +22,12 @@ const getAllCourses = (async (teamSlug) => {
     });
   }
 
-  console.log('courses2:', courses);
+  // console.log('courses2:', courses);
   /**
    * Set conditions, which Repositories (Courses) are read from tluhk org github account
    */
   const filter1 = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
-  console.log('filter1', filter1);
+  // console.log('filter1', filter1);
 
   const map1 = filter1.map((y) => {
     const coursePromise = (param) => getConfig(param.full_name, teamSlug)

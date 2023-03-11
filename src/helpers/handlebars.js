@@ -4,6 +4,7 @@
 // CommonJS export Alternative:
 
 const path = require('path');
+const { checkServerIdentity } = require('tls');
 
 // Siin saab defineerida handlebarsiga seotud detaile.
 // Helpers objekti alla saab lisada funktsioone, mida kasutada lisaks built-in helpersitele
@@ -92,6 +93,49 @@ module.exports = function hbsHelpers(hbs) {
         }
         // console.log('teacher1:', teacher);
         return teacher;
+      },
+      /**
+       * Set behaviours on which cases the Version dropdown option should get a checked mark.
+       */
+      setDefaultChecked: (branchSlug, teamSlug, selectedVersion, branches) => {
+        // console.log('teamSlug5:', teamSlug);
+        // console.log('branchSlug5:', branchSlug);
+        // console.log('selectedVersion5:', selectedVersion);
+        // console.log('branches5:', branches);
+
+        /**
+         * For teachers
+         */
+        if (teamSlug === 'teachers') {
+          if (branchSlug === selectedVersion) {
+            return 'checked';
+          }
+          if (!selectedVersion && branchSlug === 'master') {
+            return 'checked';
+          } return '';
+        }
+
+        /**
+         * For students
+         */
+        if (teamSlug !== 'teachers') {
+          if (branchSlug === selectedVersion) {
+            return 'checked';
+          }
+          if (!selectedVersion && branchSlug === teamSlug && branchSlug !== 'master') {
+            return 'checked';
+          }
+          if (!selectedVersion && !branches.includes(teamSlug) && branchSlug === 'master') {
+            return 'checked';
+          } return '';
+        }
+      },
+      createPath: (currentPath) => {
+        const { courseSlug, contentSlug, componentSlug } = currentPath;
+
+        if (courseSlug && contentSlug && componentSlug) return `/course/${courseSlug}/${contentSlug}/${componentSlug}`;
+        if (courseSlug && contentSlug && !componentSlug) return `/course/${courseSlug}/${contentSlug}`;
+        if (courseSlug && !contentSlug && !componentSlug) return `/course/${courseSlug}`;
       },
     },
     /*

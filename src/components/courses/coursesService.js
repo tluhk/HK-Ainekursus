@@ -54,12 +54,20 @@ const apiRequests = {
       coursePathInGithub,
     } = locals.course;
     const {
+      selectedVersion,
+      teamSlug,
       refBranch,
     } = locals;
 
-    // console.log('request.url1:', request.url);
+    let routePath;
+    if (selectedVersion) {
+      routePath = `${request.url}+components+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePath = `${request.url}+components+team+${teamSlug}`;
+    } else {
+      routePath = `${request.url}+components`;
+    }
 
-    const routePath = `${request.url}+components`;
     // console.log('routePath2:', routePath);
 
     let components;
@@ -82,11 +90,27 @@ const apiRequests = {
       coursePathInGithub,
     } = locals.course;
     const {
+      selectedVersion,
+      teamSlug,
       refBranch,
     } = locals;
 
-    const routePath = `${request.url}+components`;
-    const routePathFiles = `${request.url}+files`;
+    let routePath;
+    if (selectedVersion) {
+      routePath = `${request.url}+components+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePath = `${request.url}+components+team+${teamSlug}`;
+    } else {
+      routePath = `${request.url}+components`;
+    }
+    let routePathFiles;
+    if (selectedVersion) {
+      routePathFiles = `${request.url}+files+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePathFiles = `${request.url}+files+team+${teamSlug}`;
+    } else {
+      routePathFiles = `${request.url}+files`;
+    }
 
     let components;
     let files;
@@ -131,10 +155,19 @@ const apiRequests = {
     } = locals.course;
     const {
       path,
+      selectedVersion,
+      teamSlug,
       refBranch,
     } = locals;
 
-    const routePath = `${request.url}+components`;
+    let routePath;
+    if (selectedVersion) {
+      routePath = `${request.url}+components+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePath = `${request.url}+components+team+${teamSlug}`;
+    } else {
+      routePath = `${request.url}+components`;
+    }
 
     let components;
 
@@ -154,11 +187,27 @@ const apiRequests = {
     } = locals.course;
     const {
       path,
+      selectedVersion,
+      teamSlug,
       refBranch,
     } = locals;
 
-    const routePath = `${request.url}+components`;
-    const routePathFiles = `${request.url}+files`;
+    let routePath;
+    if (selectedVersion) {
+      routePath = `${request.url}+components+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePath = `${request.url}+components+team+${teamSlug}`;
+    } else {
+      routePath = `${request.url}+components`;
+    }
+    let routePathFiles;
+    if (selectedVersion) {
+      routePathFiles = `${request.url}+files+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePathFiles = `${request.url}+files+team+${teamSlug}`;
+    } else {
+      routePathFiles = `${request.url}+files`;
+    }
 
     let components;
     let files;
@@ -198,11 +247,27 @@ const apiRequests = {
     } = locals.course;
     const {
       path,
+      selectedVersion,
+      teamSlug,
       refBranch,
     } = locals;
 
-    const routePath = `${request.url}+components`;
-    const routePathSources = `${request.url}+sources`;
+    let routePath;
+    if (selectedVersion) {
+      routePath = `${request.url}+components+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePath = `${request.url}+components+team+${teamSlug}`;
+    } else {
+      routePath = `${request.url}+components`;
+    }
+    let routePathSources;
+    if (selectedVersion) {
+      routePathSources = `${request.url}+sources+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePathSources = `${request.url}+sources+team+${teamSlug}`;
+    } else {
+      routePathSources = `${request.url}+sources`;
+    }
 
     let components;
     let sources;

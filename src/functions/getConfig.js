@@ -19,10 +19,10 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
 };
 
 const getConfig = async (selectedCourse, refBranch) => {
-  console.log('selectedCourse1:', selectedCourse);
-  console.log('refBranch1:', refBranch);
+  // console.log('selectedCourse1:', selectedCourse);
+  // console.log('refBranch1:', refBranch);
   const config = await getRepoResponse(selectedCourse, refBranch);
-  console.log('config2:', config);
+  // console.log('config2:', config);
   const configDecoded = base64.decode(config.data.content);
   const configDecodedUtf8 = utf8.decode(configDecoded);
   // console.log('configDecodedUtf8', configDecodedUtf8);

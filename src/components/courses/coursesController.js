@@ -62,6 +62,8 @@ const renderPage = async (req, res) => {
     singleCoursePaths,
     coursePathInGithub,
     teachers,
+    branches,
+    selectedVersion,
   } = res.locals;
 
   const {
@@ -127,7 +129,7 @@ const renderPage = async (req, res) => {
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
-  console.log('teachers3:', teachers);
+  // console.log('teachers3:', teachers);
   res.render('course', {
     component: componentMarkdownWithoutTOC,
     docs: config.docs,
@@ -147,6 +149,8 @@ const renderPage = async (req, res) => {
     user: req.user,
     ToC: componentMarkdownOnlyTOC,
     teachers,
+    branches,
+    selectedVersion,
   });
 };
 
@@ -171,18 +175,18 @@ const allCoursesController = {
     if (isTeacher) {
       const allCourses = await getAllCourses(teamSlug);
       const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      console.log('allCoursesActive1:', allCoursesActive);
+      // console.log('allCoursesActive1:', allCoursesActive);
 
       allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
 
-      console.log('allCoursesActive1:', allCoursesActive);
-      console.log('req.user3:', req.user);
+      // console.log('allCoursesActive1:', allCoursesActive);
+      // console.log('req.user3:', req.user);
 
       allTeacherCourses = allCoursesActive.filter((course) => course.teacherUsername === req.user.username);
 
-      console.log('allTeacherCourses1:', allTeacherCourses);
+      // console.log('allTeacherCourses1:', allTeacherCourses);
       /**
        * First, sort by teacherUsername values,
        * Second, group by teacherUsername values
@@ -190,13 +194,13 @@ const allCoursesController = {
       const allCoursesGroupedByTeacher = allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
-      console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      console.log;// ('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
-      console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
+      // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const allTeachers = await teamsController.getUsersInTeam('teachers');
-      console.log('allTeachers1:', allTeachers);
+      // console.log('allTeachers1:', allTeachers);
 
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
@@ -233,9 +237,6 @@ const allCoursesController = {
     console.log('isTeacher is neither true/false');
     return false;
   },
-  getCoursesOwners: async (req, res, next) => {
-
-  },
   /**
    * for '/course/:courseSlug/:contentSlug?/:componentSlug?' route
    */
@@ -243,13 +244,41 @@ const allCoursesController = {
     /**
      * Read parameters sent with endpoint
      */
-    const { courseSlug, contentSlug, componentSlug } = req.params;
-    // console.log('req.params.courseSlug:', courseSlug);
-    // console.log('req.params.contentSlug:', contentSlug);
-    // console.log('req.params.componentSlug:', componentSlug);
+    const {
+      courseSlug, contentSlug, componentSlug,
+    } = req.params;
+
+    const selectedVersion = req.session.selectedVersion || null;
+    console.log('selectedVersion1:', selectedVersion);
 
     let teamSlug;
     if (req.user.team.slug) teamSlug = req.user.team.slug;
+
+    res.locals.selectedVersion = selectedVersion;
+    res.locals.teamSlug = teamSlug;
+
+    /**
+     * You need to add an event listener to your radio buttons to update the value of the hidden input whenever a radio button is clicked. Here's an example:
+     *
+      <!-- Radio buttons -->
+      <input type="radio" name="default-radio" value="value1" onclick="handleRadioClick('value1')">
+      <input type="radio" name="default-radio" value="value2" onclick="handleRadioClick('value2')">
+      <input type="radio" name="default-radio" value="value3" onclick="handleRadioClick('value3')">
+
+      <!-- Hidden form -->
+      <form id="my-form" style="display:none;" method="GET" action="/course/{{courseSlug}}/{{contentSlug}}/{{componentSlug}}">
+        <input type="hidden" name="selectedValue" id="selectedValue">
+      </form>
+
+      <script>
+      function handleRadioClick(value) {
+        document.getElementById("selectedValue").value = value;
+        document.getElementById("my-form").submit();
+      }
+      </script>
+
+      This code sets the value of the hidden input to the value of the clicked radio button, and then submits the form using JavaScript's submit() method. The form will then perform a GET request to your server with the selected value as a query parameter.
+     */
 
     /**
      * Get all available courses
@@ -261,12 +290,12 @@ const allCoursesController = {
      */
     const course = allCourses2.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
 
-    console.log('course1:', course);
+    // console.log('course1:', course);
     res.locals.course = course;
     // console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
 
     const allTeachers = await teamsController.getUsersInTeam('teachers');
-    console.log('allTeachers0:', allTeachers);
+    // console.log('allTeachers0:', allTeachers);
 
     res.locals.teachers = allTeachers;
 
@@ -274,12 +303,14 @@ const allCoursesController = {
      * Save routepath for the active course to cache its config file
      */
     let routePath = '';
-    if (teamSlug) {
-      routePath = `${req.url}+config+${teamSlug}`;
+    if (selectedVersion) {
+      routePath = `${req.url}+config+version+${selectedVersion}`;
+    } else if (teamSlug) {
+      routePath = `${req.url}+config+team+${teamSlug}`;
     } else {
       routePath = `${req.url}+config`;
     }
-    // console.log('routePath1:', routePath);
+    console.log('routePath1:', routePath);
 
     /**
      * Check if course Repo has a branch that matches user team's slug.
@@ -287,32 +318,62 @@ const allCoursesController = {
      * -- If such branch doesn't exist, then read data from the master/main branch.
      */
     let refBranch;
-    try {
-      // get all branches in selected course Repo
-      const branches = await apiRequests.branchesService(res.locals, req);
+    let branches;
 
-      /**
-       *  if repo has a branch that matches teamSlug (e.g. "rif20"), then save this to refBranch variable.
-       * This variable is added to the end of Github API requests, e.g:
-       * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
-       */
-      if (branches.includes(teamSlug)) refBranch = `ref=${teamSlug}`;
-      // console.log('isBranch2:', isBranch);
-    } catch (error) {
-      console.error(error);
+    /**
+     * Check if branchSlug has been given with endpoint
+     * If yes, read info from the matching branch.
+     * If not, continue checking user's teamSlug.
+     */
+    if (selectedVersion) {
+      try {
+        // get all branches in selected course Repo
+        branches = await apiRequests.branchesService(res.locals, req);
+
+        /**
+         * if repo has a branch that matches branchSlug (e.g. "rif20"), then save this to refBranch variable.
+         * This variable is added to the end of Github API requests, e.g:
+         * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
+         */
+        if (branches.includes(selectedVersion)) refBranch = `ref=${selectedVersion}`;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    /**
+     * If branchSlug was not given with endpoint, check if user's teamSlug is part of course repo branches.
+     * If yes, then read info from the matching branch.
+     * If not, then rean info from master branch (without reference to any branch).
+     * */
+    else if (!selectedVersion) {
+      try {
+        // get all branches in selected course Repo
+        branches = await apiRequests.branchesService(res.locals, req);
+
+        /**
+         *  if repo has a branch that matches teamSlug (e.g. "rif20"), then save this to refBranch variable.
+         * This variable is added to the end of Github API requests, e.g:
+         * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
+         */
+        if (branches.includes(teamSlug)) refBranch = `ref=${teamSlug}`;
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
     res.locals.refBranch = refBranch;
+    res.locals.branches = branches;
 
     // console.log('cache.has(routePath)1:', cache.has(routePath));
-    // console.log('cache.get(routePath)1:', cache.get(routePath));
+    console.log('cache.get(routePath)1:', cache.get(routePath));
+
     let config;
     if (cache.has(routePath) && cache.get(routePath) !== undefined) {
       config = cache.get(routePath);
-      // console.log('res.locals.cache2:', res.locals.cache);
       console.log('config from cache');
     } else {
       console.log('config is NOT from cache');
@@ -332,10 +393,10 @@ const allCoursesController = {
     if (refBranch) {
       console.log(`reading data from ${refBranch} branch`);
     } else {
-      console.log('reading data from branch');
+      console.log('reading data without ref, directly from master branch');
     }
 
-    // console.log('config2:', config);
+    console.log('config2:', config);
 
     res.locals.course = course;
     res.locals.config = config;

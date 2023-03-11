@@ -62,7 +62,7 @@ const teamsController = {
   getUserTeam: async (userIDString, teamAssignments) => {
     const userID = parseInt(userIDString, 10);
 
-    console.log('teamAssignments1:', teamAssignments);
+    // console.log('teamAssignments1:', teamAssignments);
     /**
    * This code uses the some method of Array instead of forEach. The some method also loops over all elements, but stops when a true value is returned. The foundMember variable is used to store the return value of find, which is either undefined if nothing is found, or the first found element. If foundMember is truthy, it means the user was found and the loop stops.
    */
@@ -116,7 +116,7 @@ const teamsController = {
       });
     }
 
-    console.log('foundTeam1:', foundTeam);
+    // console.log('foundTeam1:', foundTeam);
     return foundTeam;
   },
   getUsersInTeam: async (team) => {

@@ -25,6 +25,7 @@
   "dependencies": {
     "-": "^0.0.1",
     "@peaceroad/markdown-it-renderer-image": "^0.1.9",
+    "@tailwindcss/forms": "^0.5.3",
     "@toycode/markdown-it-class": "^1.2.4",
     "alert": "^5.1.1",
     "axios": "^0.27.2",
@@ -43,6 +44,7 @@
     "express-handlebars": "^6.0.6",
     "express-passport-logout": "^0.1.0",
     "express-session": "^1.17.3",
+    "flowbite": "^1.6.3",
     "handlebars-utils": "^1.0.6",
     "helmet": "^6.0.1",
     "highlight.js": "^11.7.0",
