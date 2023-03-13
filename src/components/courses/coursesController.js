@@ -376,7 +376,7 @@ const allCoursesController = {
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
     res.locals.refBranch = refBranch;
-    res.locals.branches = allActiveBranches;
+    res.locals.branches = branches;
 
     // console.log('cache.has(routePath)1:', cache.has(routePath));
     console.log('cache.get(routePath)1:', cache.get(routePath));
