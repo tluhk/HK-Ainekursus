@@ -6,7 +6,7 @@ const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 // Enable in-memory cache
 const { cache } = require('../../setup/setupCache');
 const { getAllCourses } = require('../../functions/getAllCourses');
-const { getConfig } = require('../../functions/getConfig');
+const { getConfig, getConfigAndValidateActive } = require('../../functions/getConfig');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
 const { verifyCache } = require('./coursesVerifyCache');
@@ -163,14 +163,13 @@ const allCoursesController = {
     // console.log('req3:', req);
     let teamSlug;
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
-
     /**
      * Check if teamSlug is 'teachers'
      * If yes, then get teacher courses info
      * If not, then get user courses info
      */
-
     const isTeacher = teamSlug === 'teachers';
+    res.locals.teamSlug = teamSlug;
 
     if (isTeacher) {
       const allCourses = await getAllCourses(teamSlug);
@@ -194,7 +193,7 @@ const allCoursesController = {
       const allCoursesGroupedByTeacher = allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
-      console.log;// ('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
       // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
@@ -319,6 +318,7 @@ const allCoursesController = {
      */
     let refBranch;
     let branches;
+    let allActiveBranches = {};
 
     /**
      * Check if branchSlug has been given with endpoint
@@ -327,15 +327,30 @@ const allCoursesController = {
      */
     if (selectedVersion) {
       try {
-        // get all branches in selected course Repo
-        branches = await apiRequests.branchesService(res.locals, req);
+        // get all active branches in selected course Repo
+        branches = await apiRequests.branchesService(course.coursePathInGithub);
+
+        // get config for each active branch, to check if the config has active:true
+        allActiveBranchesPromises = branches.map(async (branch) => {
+          try {
+            const config = await getConfigAndValidateActive(course.coursePathInGithub, branch);
+
+            return config;
+          } catch (error) {
+            console.error(error);
+          }
+        });
+
+        const allActiveBranchesConfigs = await Promise.all(allActiveBranchesPromises);
+
+        allActiveBranches = allActiveBranchesConfigs.filter((branch) => branch.active);
 
         /**
          * if repo has a branch that matches branchSlug (e.g. "rif20"), then save this to refBranch variable.
          * This variable is added to the end of Github API requests, e.g:
          * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
          */
-        if (branches.includes(selectedVersion)) refBranch = `ref=${selectedVersion}`;
+        if (allActiveBranches.includes(selectedVersion)) refBranch = selectedVersion;
       } catch (error) {
         console.error(error);
       }
@@ -347,26 +362,21 @@ const allCoursesController = {
      * If not, then rean info from master branch (without reference to any branch).
      * */
     else if (!selectedVersion) {
+      // get all active branches in selected course Repo
       try {
-        // get all branches in selected course Repo
-        branches = await apiRequests.branchesService(res.locals, req);
-
-        /**
-         *  if repo has a branch that matches teamSlug (e.g. "rif20"), then save this to refBranch variable.
-         * This variable is added to the end of Github API requests, e.g:
-         * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
-         */
-        if (branches.includes(teamSlug)) refBranch = `ref=${teamSlug}`;
+        branches = await apiRequests.branchesService(course.coursePathInGithub);
       } catch (error) {
         console.error(error);
       }
+      console.log('branches0:', branches);
     }
 
+    console.log('allActiveBranches4:', allActiveBranches);
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
     res.locals.refBranch = refBranch;
-    res.locals.branches = branches;
+    res.locals.branches = allActiveBranches;
 
     // console.log('cache.has(routePath)1:', cache.has(routePath));
     console.log('cache.get(routePath)1:', cache.get(routePath));
@@ -378,7 +388,7 @@ const allCoursesController = {
     } else {
       console.log('config is NOT from cache');
       try {
-        config = await getConfig(course.coursePathInGithub, refBranch);
+        config = await getConfigAndValidateActive(course.coursePathInGithub, refBranch);
       } catch (error) {
         /**
          * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.

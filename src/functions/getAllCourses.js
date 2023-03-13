@@ -2,7 +2,7 @@
 const cheerio = require('cheerio');
 const { axios, authToken } = require('../setup/setupGithub');
 const { requestTeamCourses, requestRepos } = require('./githubReposRequests');
-const { getConfig } = require('./getConfig');
+const { getConfig, getConfigAndValidateActive } = require('./getConfig');
 
 const getAllCourses = (async (teamSlug) => {
   // console.log('teamSlug4:', teamSlug);
@@ -12,11 +12,14 @@ const getAllCourses = (async (teamSlug) => {
    */
   let courses = { data: [] };
 
-  if (teamSlug && teamSlug === 'teachers') {
+  /**
+   * SIIN PEAD KONTROLLIMA, KAS SAADUD REPODES ON MÕNI BRANCH ÜLDSE AKTIIVNE
+   */
+  if (teamSlug && teamSlug === 'master' && teamSlug === 'teachers') {
     courses = await axios.get(requestRepos, authToken).catch((error) => {
       console.log(error);
     });
-  } if (teamSlug && teamSlug !== 'teachers') {
+  } if (teamSlug && teamSlug !== 'master' && teamSlug !== 'teachers') {
     courses = await axios.get(requestTeamCourses(teamSlug), authToken).catch((error) => {
       console.log(error);
     });
@@ -30,7 +33,7 @@ const getAllCourses = (async (teamSlug) => {
   // console.log('filter1', filter1);
 
   const map1 = filter1.map((y) => {
-    const coursePromise = (param) => getConfig(param.full_name, teamSlug)
+    const coursePromise = (param) => getConfigAndValidateActive(param.full_name, teamSlug)
       .then(async (result) => {
         /**
          * Read course information from ÕIS Ainekaart
