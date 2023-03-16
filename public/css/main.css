@@ -1145,6 +1145,14 @@ input:checked ~ .tab-label {
   width: 100%;
 }
 
+.w-3\/5 {
+  width: 60%;
+}
+
+.w-2\/5 {
+  width: 40%;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -1174,8 +1182,9 @@ input:checked ~ .tab-label {
   min-width: max-content;
 }
 
-.max-w-md {
-  max-width: 28rem;
+.max-w-fit {
+  max-width: -moz-fit-content;
+  max-width: fit-content;
 }
 
 .max-w-full {
@@ -1444,6 +1453,10 @@ input:checked ~ .tab-label {
   padding-left: 1rem;
 }
 
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
 .pr-1 {
   padding-right: 0.25rem;
 }
@@ -1669,7 +1682,7 @@ a {
 
 .dashboard_content {
   max-width: 100%;
-  width: 85ch;
+  width: 100ch;
   margin: 0 auto;
 }
 

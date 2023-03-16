@@ -15,10 +15,11 @@
 
       {{#if user }} 
         <!-- refers to content.handlebars fail in /partials folder -->
-        <div class="">
+        <div class="w-3/5">
           {{> dashboard.courses }} <br>
         </div>
-        <div class="">
+        <div class="w-2/5">
+          {{> dashboard.notifications }} <br>
           {{> dashboard.teacherCourses }} <br>
         </div>
       {{/if }}

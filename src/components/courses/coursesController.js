@@ -176,14 +176,14 @@ const allCoursesController = {
 
     res.locals.teamSlug = teamSlug;
 
-    console.log('teamSlug2:', teamSlug);
-    console.log('isTeacher2:', isTeacher);
+    // console.log('teamSlug2:', teamSlug);
+    // console.log('isTeacher2:', isTeacher);
 
     if (isTeacher) {
       const allCourses = await getAllCoursesData(teamSlug);
-      console.log('allCourses1:', allCourses);
+      // console.log('allCourses1:', allCourses);
       const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      console.log('allCoursesActive1:', allCoursesActive);
+      // console.log('allCoursesActive1:', allCoursesActive);
 
       allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
@@ -197,7 +197,7 @@ const allCoursesController = {
 
       allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
-      console.log('allTeacherCourses1:', allTeacherCourses);
+      // console.log('allTeacherCourses1:', allTeacherCourses);
       /**
        * First, sort by teacherUsername values,
        * Second, group by teacherUsername values
@@ -211,9 +211,9 @@ const allCoursesController = {
       // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const allTeachers = await teamsController.getUsersInTeam('teachers');
-      console.log('allTeacherCourses1:', allTeacherCourses);
-      console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
-      console.log('allTeachers1:', allTeachers);
+      // console.log('allTeacherCourses1:', allTeacherCourses);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      // console.log('allTeachers1:', allTeachers);
 
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
@@ -246,7 +246,17 @@ const allCoursesController = {
       // console.log('allTeachers1:', allTeachers);
 
       allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
-      // console.log('allCoursesActive5:', allCoursesActive);
+
+      /**
+      * NOTIFICATIONS
+      */
+      console.log('allCoursesActive5:', allCoursesActive);
+      console.log('teamSlug5:', teamSlug);
+      console.log('isTeacher5:', isTeacher);
+
+      /**
+       * END OF NOTIFICATIONS
+       */
 
       return res.render('dashboard', {
         courses: allCoursesActive,
