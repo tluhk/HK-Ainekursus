@@ -8,7 +8,10 @@ const {
   requestDocs, requestCourseAdditionalMaterials, requestCourseFiles, requestLessons, requestLessonAdditionalMaterials, requestLessonFiles, requestConcepts, requestSources, requestPractices, requestRepoBranches,
 } = require('../../functions/githubReposRequests');
 const { authToken } = require('../../setup/setupGithub');
-const { getConfig } = require('../../functions/getConfig');
+const { getConfig } = require('../../functions/getConfigFuncs');
+
+console.log('typeof getConfig2:', typeof getConfig);
+console.log('typeof requestRepoBranches2:', typeof requestRepoBranches);
 
 /**
  * Define files to ignore from /files folders
@@ -19,11 +22,8 @@ const ignoreFiles = ['.DS_Store', '.gitkeep'];
  * Define all API requests that are done to GitHub API
  */
 const apiRequests = {
-  branchesService: async (coursePathInGithub) => {
-    // console.log('request.url1:', request.url);
+  activeBranchesService: async (coursePathInGithub) => {
     const routePath = `${coursePathInGithub}+branches`;
-    // console.log('routePath2:', routePath);
-
     /**
      * Get list of repo branches
      * Then validate branches where config has active:true
@@ -32,43 +32,49 @@ const apiRequests = {
 
     let branches;
     let activeBranches;
-    // console.log('cache.has(routePath)1:', cache.has(routePath));
-    /// console.log('cache.get(routePath)1:', cache.get(routePath));
 
     if (!cache.has(routePath)) {
       const branchesRaw = await axios.get(requestRepoBranches(coursePathInGithub), authToken);
 
-      // console.log('branchesRaw2:', branchesRaw);
-
       branches = branchesRaw.data.map((branch) => branch.name);
-      console.log('coursePathInGithub4:', coursePathInGithub);
-      console.log('truebranches4:', branches);
+      console.log('coursePathInGithub5:', coursePathInGithub);
+      console.log('truebranches5:', branches);
 
-      // get config for each active branch, to check if the config has active:true
-      await branches.map((branch) => {
-        try {
-          console.log('coursePathInGithub5:', coursePathInGithub);
-          console.log('branch5:', branch);
-          console.log('typeof getConfig:', typeof getConfig);
-          const config = getConfig(coursePathInGithub, branch);
+      const branchPromises = await branches.reduce((acc, branch) => {
+        acc[branch] = getConfig(coursePathInGithub, branch);
+        return acc;
+      }, {});
 
-          console.log('config7:', config);
-        } catch (error) {
-          console.error(error);
-        }
-      });
+      console.log('branchPromises5:', branchPromises);
 
-      // console.log('allBranchesConfigs3:', allBranchesConfigs);
+      const branchesWithConfig = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
+        .then((resolvedArr) => {
+          const resolvedObj = Object.fromEntries(resolvedArr);
+          console.log('resolvedObj5:', resolvedObj);
+          return resolvedObj;
+        })
+        .catch((error) => {
+          console.log(error); // handle error
+        });
 
-      // console.log('Axioscomponents1:', components);
-      cache.set(routePath, branches);
+      // console.log('branchesWithConfig5:', branchesWithConfig);
+      // if (config.active) return branch;
+      const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
+
+      activeBranches = activeBranchesRaw.map((x) => x[0]);
+
+      console.log('coursePathInGithub1:', coursePathInGithub);
+      // console.log('activeBranchesRaw1:', activeBranchesRaw);
+      console.log('activeBranches1:', activeBranches);
+
+      cache.set(routePath, activeBranches);
     } else {
       // console.log('taken from cache');
-      branches = cache.get(routePath);
+      activeBranches = cache.get(routePath);
       // console.log('Cachecomponents2:', components);
     }
 
-    return branches;
+    return activeBranches;
   },
   docsService: async (locals, request) => {
     const {

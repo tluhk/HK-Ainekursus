@@ -6,6 +6,6 @@ const baseUrl = 'https://api.github.com';
 module.exports = {
   requestTeams: 'https://api.github.com/orgs/tluhk/teams?per_page=1000',
   requestTeamMembers: (
-    (teamSlug) => `${baseUrl}/orgs/tluhk/teams/${teamSlug}/members?per_page=100`
+    (teamSlug) => `${baseUrl}/orgs/tluhk/teams/${teamSlug}/members?per_page=1000`
   ),
 };
