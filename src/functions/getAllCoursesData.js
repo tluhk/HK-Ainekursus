@@ -92,6 +92,7 @@ const getAllCoursesData = (async (teamSlug) => {
           courseName: result.courseName || oisContent.name,
           courseSlug: oisContent.code, // || result.slug,
           courseCode: oisContent.code, // || result.courseCode,
+          courseSemester: result.semester,
           courseSlugInGithub: y.name,
           coursePathInGithub: y.full_name,
           courseEAP: Math.round(oisContent.EAP),

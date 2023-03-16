@@ -1,6 +1,6 @@
-  <div class="max-w-md">
+  <div class="max-w-fit">
     <h2>Minu kursused</h2>
-      <div class=''>
+      <div class='max-w-30'>
         {{#unless courses }}  
           <div class='text-md font-bold mt-4 ml-4'>Sul pole ligipääsu ühelegi kursusele.</div>
           <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
@@ -22,7 +22,11 @@
                   <p class="m-0 p-0">{{this.courseCode}}</p>
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
-                  </div>
+                </div>
+                <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
+                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../teachers)}}{{this.login}}{{/with }}</p>
+                </div>
                 </a>
 
             </div>

@@ -139,7 +139,10 @@ const getTeamAssignments = (async (req, res, next) => {
   if (res.locals[cacheName]) return next();
 
   // console.log('res.locals3:', res.locals);
-  const { teams } = await teamsController.getAllValidTeams();
+  const { teams } = await teamsController.getAllValidTeams().catch((error) => {
+    console.error(error);
+    return res.redirect('/notfound');
+  });
   const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
   // console.log('getAllTeamAssignments1:', getAllTeamAssignments);
 
