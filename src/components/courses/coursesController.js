@@ -5,13 +5,13 @@ const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 
 // Enable in-memory cache
 const { cache } = require('../../setup/setupCache');
-const { getAllCourses } = require('../../functions/getAllCourses');
-const { getConfig } = require('../../functions/getConfig');
+const { getAllCoursesData } = require('../../functions/getAllCoursesData');
+const { getConfig } = require('../../functions/getConfigFuncs');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
 const { verifyCache } = require('./coursesVerifyCache');
 const { apiRequests } = require('./coursesService');
-const { getOneTeamMembers, teamsController } = require('../teams/teamsController');
+const { teamsController } = require('../teams/teamsController');
 
 /**
  * Define what to do after info about couse and course page is received.
@@ -129,6 +129,8 @@ const renderPage = async (req, res) => {
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
+  console.log('config7:', config);
+
   // console.log('teachers3:', teachers);
   res.render('course', {
     component: componentMarkdownWithoutTOC,
@@ -151,6 +153,7 @@ const renderPage = async (req, res) => {
     teachers,
     branches,
     selectedVersion,
+    refBranch,
   });
 };
 
@@ -163,19 +166,24 @@ const allCoursesController = {
     // console.log('req3:', req);
     let teamSlug;
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
-
     /**
      * Check if teamSlug is 'teachers'
      * If yes, then get teacher courses info
      * If not, then get user courses info
      */
+    let isTeacher = false;
+    if (teamSlug === 'teachers') isTeacher = true;
 
-    const isTeacher = teamSlug === 'teachers';
+    res.locals.teamSlug = teamSlug;
+
+    console.log('teamSlug2:', teamSlug);
+    console.log('isTeacher2:', isTeacher);
 
     if (isTeacher) {
-      const allCourses = await getAllCourses(teamSlug);
+      const allCourses = await getAllCoursesData(teamSlug);
+      console.log('allCourses1:', allCourses);
       const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      // console.log('allCoursesActive1:', allCoursesActive);
+      console.log('allCoursesActive1:', allCoursesActive);
 
       allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
@@ -184,9 +192,12 @@ const allCoursesController = {
       // console.log('allCoursesActive1:', allCoursesActive);
       // console.log('req.user3:', req.user);
 
-      allTeacherCourses = allCoursesActive.filter((course) => course.teacherUsername === req.user.username);
+      allTeacherCourses = allCoursesActive
+        .filter((course) => course.teacherUsername === req.user.username);
 
-      // console.log('allTeacherCourses1:', allTeacherCourses);
+      allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
+
+      console.log('allTeacherCourses1:', allTeacherCourses);
       /**
        * First, sort by teacherUsername values,
        * Second, group by teacherUsername values
@@ -194,13 +205,15 @@ const allCoursesController = {
       const allCoursesGroupedByTeacher = allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
-      console.log;// ('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
       // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const allTeachers = await teamsController.getUsersInTeam('teachers');
-      // console.log('allTeachers1:', allTeachers);
+      console.log('allTeacherCourses1:', allTeacherCourses);
+      console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      console.log('allTeachers1:', allTeachers);
 
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
@@ -211,9 +224,10 @@ const allCoursesController = {
     }
 
     if (!isTeacher) {
-      const allCourses = await getAllCourses(teamSlug);
+      const allCourses = await getAllCoursesData(teamSlug);
       const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      // console.log('allCoursesActive1:', allCoursesActive);
+
+      // eslint-disable-next-line no-nested-ternary
 
       /**
        * First, sort by teacherUsername values,
@@ -222,10 +236,17 @@ const allCoursesController = {
       const allCoursesGroupedByTeacher = allCoursesActive
         .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
-      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+
+      Object.keys(allCoursesGroupedByTeacher).forEach((teacher) => {
+        allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
+      });
+      // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
 
       const allTeachers = await teamsController.getUsersInTeam('teachers');
       // console.log('allTeachers1:', allTeachers);
+
+      allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+      // console.log('allCoursesActive5:', allCoursesActive);
 
       return res.render('dashboard', {
         courses: allCoursesActive,
@@ -283,12 +304,21 @@ const allCoursesController = {
     /**
      * Get all available courses
      */
-    const allCourses2 = await getAllCourses(teamSlug);
-    // console.log('allCourses2:', allCourses2);
+    const allCourses = await getAllCoursesData(teamSlug);
+    const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+
+    console.log('allCoursesActive2:', allCoursesActive);
+    allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+
     /**
      * Get active course
      */
-    const course = allCourses2.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
+    const course = allCoursesActive.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
+
+    /**
+     * If no course is found (none of the branches is active), but the course URL is still visited by the user, then redirect to /notfound page.
+     */
+    if (!course) return res.redirect('/notfound');
 
     // console.log('course1:', course);
     res.locals.course = course;
@@ -310,7 +340,7 @@ const allCoursesController = {
     } else {
       routePath = `${req.url}+config`;
     }
-    console.log('routePath1:', routePath);
+    // console.log('routePath1:', routePath);
 
     /**
      * Check if course Repo has a branch that matches user team's slug.
@@ -318,58 +348,42 @@ const allCoursesController = {
      * -- If such branch doesn't exist, then read data from the master/main branch.
      */
     let refBranch;
-    let branches;
+    let activeBranches;
+
+    try {
+      activeBranches = await apiRequests.activeBranchesService(course.coursePathInGithub);
+    } catch (error) {
+      console.error(error);
+    }
 
     /**
-     * Check if branchSlug has been given with endpoint
-     * If yes, read info from the matching branch.
-     * If not, continue checking user's teamSlug.
+     * Check if selectedVersion has been given with endpoint
+     * If yes, check if selectedVersion is part of course repo active branches.
+     * - If yes, then read info from the matching branch.
+     * If not, check if teamSlug is part of course repo active branches.
+     * - If yes, then read info from the matching branch.
+     * If not, read info from master branch.
      */
-    if (selectedVersion) {
-      try {
-        // get all branches in selected course Repo
-        branches = await apiRequests.branchesService(res.locals, req);
-
-        /**
-         * if repo has a branch that matches branchSlug (e.g. "rif20"), then save this to refBranch variable.
-         * This variable is added to the end of Github API requests, e.g:
-         * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
-         */
-        if (branches.includes(selectedVersion)) refBranch = `ref=${selectedVersion}`;
-      } catch (error) {
-        console.error(error);
-      }
+    if (activeBranches && teamSlug === 'teachers') {
+      refBranch = activeBranches[0];
+    } else if (selectedVersion && activeBranches.includes(selectedVersion)) {
+      refBranch = selectedVersion;
+    } else if (!selectedVersion && activeBranches.includes(teamSlug)) {
+      refBranch = teamSlug;
+    } else {
+      refBranch = 'master';
     }
 
-    /**
-     * If branchSlug was not given with endpoint, check if user's teamSlug is part of course repo branches.
-     * If yes, then read info from the matching branch.
-     * If not, then rean info from master branch (without reference to any branch).
-     * */
-    else if (!selectedVersion) {
-      try {
-        // get all branches in selected course Repo
-        branches = await apiRequests.branchesService(res.locals, req);
-
-        /**
-         *  if repo has a branch that matches teamSlug (e.g. "rif20"), then save this to refBranch variable.
-         * This variable is added to the end of Github API requests, e.g:
-         * api.github.com/repos/tluhk/HK_Ainekursuse-mall/contents/config.json?${refBranch}`
-         */
-        if (branches.includes(teamSlug)) refBranch = `ref=${teamSlug}`;
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    console.log('refBranch3:', refBranch);
 
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
     res.locals.refBranch = refBranch;
-    res.locals.branches = branches;
+    res.locals.branches = activeBranches;
 
     // console.log('cache.has(routePath)1:', cache.has(routePath));
-    console.log('cache.get(routePath)1:', cache.get(routePath));
+    // console.log('cache.get(routePath)1:', cache.get(routePath));
 
     let config;
     if (cache.has(routePath) && cache.get(routePath) !== undefined) {
@@ -390,18 +404,16 @@ const allCoursesController = {
       // console.log('config from api');
     }
 
-    if (refBranch) {
-      console.log(`reading data from ${refBranch} branch`);
-    } else {
-      console.log('reading data without ref, directly from master branch');
-    }
+    console.log(`reading data from ${refBranch} branch`);
 
-    console.log('config2:', config);
+    // console.log('config2:', config);
 
     res.locals.course = course;
     res.locals.config = config;
-    res.locals.allCourses = allCourses2;
+    res.locals.allCourses = allCoursesActive;
     res.locals.singleCoursePaths = setSingleCoursePaths(config);
+
+    console.log('res.locals.allCourses1:', res.locals.allCourses);
 
     /**
      * Find from multiple object arrays

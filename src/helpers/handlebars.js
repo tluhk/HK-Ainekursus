@@ -97,38 +97,24 @@ module.exports = function hbsHelpers(hbs) {
       /**
        * Set behaviours on which cases the Version dropdown option should get a checked mark.
        */
-      setDefaultChecked: (branchSlug, teamSlug, selectedVersion, branches) => {
-        // console.log('teamSlug5:', teamSlug);
-        // console.log('branchSlug5:', branchSlug);
-        // console.log('selectedVersion5:', selectedVersion);
-        // console.log('branches5:', branches);
-
-        /**
-         * For teachers
-         */
-        if (teamSlug === 'teachers') {
-          if (branchSlug === selectedVersion) {
-            return 'checked';
-          }
-          if (!selectedVersion && branchSlug === 'master') {
-            return 'checked';
-          } return '';
-        }
+      setDefaultChecked: (branchSlug, refBranch, selectedVersion, branches) => {
+        console.log('branchSlug5:', branchSlug);
+        console.log('refBranch5:', refBranch);
+        console.log('selectedVersion5:', selectedVersion);
+        console.log('branches5:', branches);
 
         /**
          * For students
          */
-        if (teamSlug !== 'teachers') {
-          if (branchSlug === selectedVersion) {
-            return 'checked';
-          }
-          if (!selectedVersion && branchSlug === teamSlug && branchSlug !== 'master') {
-            return 'checked';
-          }
-          if (!selectedVersion && !branches.includes(teamSlug) && branchSlug === 'master') {
-            return 'checked';
-          } return '';
+        if (selectedVersion && branchSlug === selectedVersion) {
+          return 'checked';
         }
+        if (!selectedVersion && branchSlug === refBranch) {
+          return 'checked';
+        }
+        if (!selectedVersion && !branches.includes(refBranch) && branchSlug === 'master') {
+          return 'checked';
+        } return '';
       },
       createPath: (currentPath) => {
         const { courseSlug, contentSlug, componentSlug } = currentPath;

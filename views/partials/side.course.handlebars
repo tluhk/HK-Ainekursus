@@ -23,7 +23,9 @@
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{../this.courseEAP}} EAP</p>
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize ../this.courseGrading}}</p>
                 </div>
-                <div class="!text-white py-2 pr-2">Õppejõud: {{#with (findTeacher ../this.teacherUsername ../../teachers)}}{{ this.login }}{{/with}}</div>
+                <div class="!text-white py-2 pr-2">Õppejõud: {{../../config.teacherUsername }} <br>
+                   {{!-- {{#with (findTeacher ../this.teacherUsername ../../teachers)}}{{ this.login }}{{/with}} --}}
+                   </div>
               </div>
             {{/if_equal}}
           {{/each}}
