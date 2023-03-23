@@ -16,23 +16,17 @@
       {{#if user }} 
         <!-- refers to content.handlebars fail in /partials folder -->
         <div class="w-3/5">
-          {{> dashboard.courses }} <br>
+          {{> dashboard-student.courses }} <br>
         </div>
         <div class="w-2/5">
-          {{> dashboard.notifications }} <br>
-          {{> dashboard.teacherCourses }} <br>
+          {{> dashboard-student.notifications }} <br>
+          {{> dashboard-student.teacherCourses }} <br>
         </div>
       {{/if }}
     </div>
-    <!-- {{> dashboard.homework }} <br> -->
+
+    {{!-- {{> dashboard-student.homework }} --}}
 
   </main>
-  <aside class="lg:hidden 2xl:block">
-   
-   
-    <!-- Datepicker -->
 
-    <!-- {{> calendar }} -->
-
-  </aside>
 </div>

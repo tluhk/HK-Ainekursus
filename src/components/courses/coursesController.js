@@ -42,6 +42,8 @@ const responseAction = async (req, res, next) => {
   // console.log('resComponents3:', apiResponse);
 
   const { components, files, sources } = apiResponse;
+  console.log('components1:', components);
+  console.log('files1:', files);
   res.locals.resComponents = components;
   res.locals.resFiles = files;
   res.locals.resSources = sources;
@@ -179,38 +181,47 @@ const allCoursesController = {
     // console.log('teamSlug2:', teamSlug);
     // console.log('isTeacher2:', isTeacher);
 
+    const allCourses = await getAllCoursesData(teamSlug);
+    // console.log('allCourses1:', allCourses);
+    const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+    // console.log('allCoursesActive1:', allCoursesActive);
+
+    /** Save all teachers in a variable, needed for rendering */
+    const allTeachers = await teamsController.getUsersInTeam('teachers');
+
+
     if (isTeacher) {
-      const allCourses = await getAllCoursesData(teamSlug);
-      // console.log('allCourses1:', allCourses);
-      const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      // console.log('allCoursesActive1:', allCoursesActive);
-
-      allCoursesActive
-        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
-        .groupBy(({ teacherUsername }) => teacherUsername);
-
-      // console.log('allCoursesActive1:', allCoursesActive);
-      // console.log('req.user3:', req.user);
-
+      /*
+      * Filter allCoursesActive where the teacher is logged in user
+      */
       allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
-
-      allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
-
       // console.log('allTeacherCourses1:', allTeacherCourses);
-      /**
-       * First, sort by teacherUsername values,
-       * Second, group by teacherUsername values
-       */
+
+      /*
+      * Sort allTeacherCourses, these are teacher's own courses
+      */
+      allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
+      // console.log('allTeacherCourses2:', allTeacherCourses);
+
+      /* These are teachers of all other courses.
+      * 1) group by teacher name
+      * 2) remove logged in user from the list
+      * 3) then sort by teacher name and by each teacher's courses
+      * */
       const allCoursesGroupedByTeacher = allCoursesActive
-        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
       // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
-      const allTeachers = await teamsController.getUsersInTeam('teachers');
+      const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
+        .sort()
+        .reduce((acc, teacher) => {
+          acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          return acc;
+        }, {});
       // console.log('allTeacherCourses1:', allTeacherCourses);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
       // console.log('allTeachers1:', allTeachers);
@@ -218,34 +229,32 @@ const allCoursesController = {
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
         user: req.user,
-        teacherCourses: allCoursesGroupedByTeacher,
+        teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
       });
     }
 
     if (!isTeacher) {
-      const allCourses = await getAllCoursesData(teamSlug);
-      const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-
-      // eslint-disable-next-line no-nested-ternary
-
-      /**
-       * First, sort by teacherUsername values,
-       * Second, group by teacherUsername values
-       */
-      const allCoursesGroupedByTeacher = allCoursesActive
-        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
-        .groupBy(({ teacherUsername }) => teacherUsername);
-
-      Object.keys(allCoursesGroupedByTeacher).forEach((teacher) => {
-        allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
-      });
-      // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
-
-      const allTeachers = await teamsController.getUsersInTeam('teachers');
-      // console.log('allTeachers1:', allTeachers);
-
+      /*
+      * Sort allCoursesActive, these are student's courses
+      */
       allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+
+      /* These are teachers of student's courses.
+      * 1) group by teacher name
+      * 2) then sort by teacher name and by each teacher's courses
+      * */
+      const allCoursesGroupedByTeacher = allCoursesActive
+        .groupBy(({ teacherUsername }) => teacherUsername);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+
+      const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
+        .sort()
+        .reduce((acc, teacher) => {
+          acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          return acc;
+        }, {});
+      // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
 
       /**
       * NOTIFICATIONS
@@ -253,15 +262,29 @@ const allCoursesController = {
       console.log('allCoursesActive5:', allCoursesActive);
       console.log('teamSlug5:', teamSlug);
       console.log('isTeacher5:', isTeacher);
-
       /**
+       * Get commits per branch
+       * -- and per path? (only main folders and config file):
+       * https://api.github.com/repos/tluhk/HK_Riistvara-alused/commits?per_page=10&sha=rif20&path=docs
+       * 
+       * Get commit SHAs where comment_count > 0
+       * Get all comments and user.login for each commit SHA:
+       * https://api.github.com/repos/tluhk/HK_Riistvara-alused/commits/70b72e7f38430ba8c3f883510990e10fb11cefd3/comments
+       * 
+       * Save all comments, sort by created_at / updated_at
+       * 
+       * "Mrtrvl uuendas ainet ..." 
+       * "Kommentaar"
+       * //aeg väikselt
+       * 
+       * 
        * END OF NOTIFICATIONS
        */
 
-      return res.render('dashboard', {
+      return res.render('dashboard-student', {
         courses: allCoursesActive,
         user: req.user,
-        teacherCourses: allCoursesGroupedByTeacher,
+        teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
       });
     }
@@ -279,12 +302,12 @@ const allCoursesController = {
       courseSlug, contentSlug, componentSlug,
     } = req.params;
 
+    if (!req.user.team.slug) return res.redirect('/notfound');
+
+    const teamSlug = req.user.team.slug;
+
     const selectedVersion = req.session.selectedVersion || null;
     console.log('selectedVersion1:', selectedVersion);
-
-    let teamSlug;
-    if (req.user.team.slug) teamSlug = req.user.team.slug;
-
     res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
 

@@ -26,18 +26,20 @@ const getAllCoursesData = (async (teamSlug) => {
     });
   }
 
+  console.log('courses1:', courses);
+
   /*
   * Set conditions, which Repositories (Courses) are read from tluhk org github account
    */
-  const filter1 = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
+  const coursesStartingWithHK = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
   // console.log('filter1', filter1);
 
   /**
    * Return empty array if tluhk org doesn't have any repos starting with "HK_"
    */
-  if (!filter1) return [];
+  if (!coursesStartingWithHK) return [];
 
-  const map1 = filter1.map(async (y) => {
+  const map1 = coursesStartingWithHK.map(async (y) => {
     const activeBranches = await apiRequests.activeBranchesService(y.full_name);
 
     console.log('y.full_name4:', y.full_name);

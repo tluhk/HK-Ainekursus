@@ -57,7 +57,7 @@ const apiRequests = {
           console.log(error); // handle error
         });
 
-      // console.log('branchesWithConfig5:', branchesWithConfig);
+      console.log('branchesWithConfig5:', branchesWithConfig);
       // if (config.active) return branch;
       const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
 
@@ -159,7 +159,7 @@ const apiRequests = {
       // Github raw download_url juhend:
       // https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
       //  Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
-      const filesRaw = await axios.get(requestCourseFiles(coursePathInGithub), authToken);
+      const filesRaw = await axios.get(requestCourseFiles(coursePathInGithub, branch), authToken);
 
       await axios
         .all([componentsRaw, filesRaw])
@@ -185,6 +185,9 @@ const apiRequests = {
       // console.log('Cachecomponents2:', components);
       // console.log('CacheFiles2:', files);
     }
+
+    // console.log('components2:', components);
+    // console.log('files2:', files);
 
     return { components, files };
   },
