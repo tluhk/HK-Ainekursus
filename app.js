@@ -43,12 +43,13 @@ app.use(connectLivereload());
 const { cache } = require('./src/setup/setupCache');
 
 const {
-  allCoursesController, verifyCache, responseAction, renderPage,
+  allCoursesController, responseAction, renderPage,
 } = require('./src/components/courses/coursesController');
 const { otherController } = require('./src/components/other/otherController');
 const { membersController } = require('./src/components/members/membersController');
 const { teamsController } = require('./src/components/teams/teamsController');
 const { authController } = require('./src/components/auth/authController');
+const { verifyCache } = require('./src/components/courses/coursesVerifyCache');
 
 /**
  *  Import handlebars helpers: https://stackoverflow.com/a/32707476
@@ -413,7 +414,7 @@ app.get(
 );
 
 app.post('/login', (req, res, next) => {
-  console.log('req.body.login1:', req.body.login);
+  // console.log('req.body.login1:', req.body.login);
   if (!req.body.login) {
     return res.sendStatus(400);
   }
@@ -472,10 +473,10 @@ app.get('/courses', resetSelectedVersion, allCoursesController.getAllCourses);
 /**
  * Available endpoints with login
  */
-app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', resetSelectedVersion, ensureAuthenticated, verifyCache, allCoursesController.getSpecificCourse, responseAction, renderPage);
+app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', resetSelectedVersion, ensureAuthenticated, allCoursesController.getSpecificCourse, responseAction, renderPage);
 
 app.post('/save-selected-version', (req, res) => {
-  console.log('req.body1:', req.body);
+  // console.log('req.body1:', req.body);
 
   // Store the selectedValue in the session
   req.session.selectedVersion = req.body.selectedVersion;

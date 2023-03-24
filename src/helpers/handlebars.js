@@ -55,10 +55,6 @@ module.exports = function hbsHelpers(hbs) {
         }
       },
       showComponentType: (component, concepts, practices) => {
-        /* console.log('component:', component);
-        console.log('concepts:', concepts);
-        console.log('practices:', practices); */
-
         // https://stackoverflow.com/a/50909930
         const checkMatch = (obj) => obj.slug === component;
         if (concepts.some(checkMatch)) return 'sticky_note_2';
@@ -73,10 +69,10 @@ module.exports = function hbsHelpers(hbs) {
       },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
-        console.log('teacherName2:', teacherName);
-        console.log('teachers2:', teachers);
+        // console.log('teacherName2:', teacherName);
+        // console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
-        console.log('teacherData2:', teacherData);
+        // console.log('teacherData2:', teacherData);
 
         let teacher;
         /**
@@ -100,10 +96,10 @@ module.exports = function hbsHelpers(hbs) {
        * Set behaviours on which cases the Version dropdown option should get a checked mark.
        */
       setDefaultChecked: (branchSlug, refBranch, selectedVersion, branches) => {
-        console.log('branchSlug5:', branchSlug);
-        console.log('refBranch5:', refBranch);
-        console.log('selectedVersion5:', selectedVersion);
-        console.log('branches5:', branches);
+        // console.log('branchSlug5:', branchSlug);
+        // console.log('refBranch5:', refBranch);
+        // console.log('selectedVersion5:', selectedVersion);
+        // console.log('branches5:', branches);
 
         /**
          * For students

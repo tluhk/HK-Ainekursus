@@ -4,12 +4,10 @@ require('core-js/actual/array/group-by');
 const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 
 // Enable in-memory cache
-const { cache } = require('../../setup/setupCache');
 const { getAllCoursesData } = require('../../functions/getAllCoursesData');
 const { getConfig } = require('../../functions/getConfigFuncs');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
-const { verifyCache } = require('./coursesVerifyCache');
 const { apiRequests } = require('./coursesService');
 const { teamsController } = require('../teams/teamsController');
 
@@ -42,8 +40,6 @@ const responseAction = async (req, res, next) => {
   // console.log('resComponents3:', apiResponse);
 
   const { components, files, sources } = apiResponse;
-  console.log('components1:', components);
-  console.log('files1:', files);
   res.locals.resComponents = components;
   res.locals.resFiles = files;
   res.locals.resSources = sources;
@@ -89,7 +85,10 @@ const renderPage = async (req, res) => {
    * - functions: https://stackoverflow.com/a/58542933
    * - changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
+  const start1 = performance.now();
   const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8, refBranch);
+  const end1 = performance.now();
+  console.log(`Execution time markdownWithModifiedImgSources: ${end1 - start1} ms`);
 
   /**
    * Add Table of Contents markdown element to Markdown before rendering
@@ -100,7 +99,10 @@ const renderPage = async (req, res) => {
   /**
    * Render Markdown
    */
+  const start2 = performance.now();
   const componentMarkdown = await MarkdownIt.render(markdownWithModifiedImgSourcesToc);
+  const end2 = performance.now();
+  console.log(`Execution time componentMarkdown: ${end2 - start2} ms`);
   // console.log('componentMarkdown:', componentMarkdown);
 
   /**
@@ -130,8 +132,6 @@ const renderPage = async (req, res) => {
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
-
-  console.log('config7:', config);
 
   // console.log('teachers3:', teachers);
   res.render('course', {
@@ -181,14 +181,19 @@ const allCoursesController = {
     // console.log('teamSlug2:', teamSlug);
     // console.log('isTeacher2:', isTeacher);
 
+    const start3 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug);
+    const end3 = performance.now();
+    console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     // console.log('allCourses1:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     // console.log('allCoursesActive1:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
+    const start4 = performance.now();
     const allTeachers = await teamsController.getUsersInTeam('teachers');
-
+    const end4 = performance.now();
+    console.log(`Execution time allTeachers: ${end4 - start4} ms`);
 
     if (isTeacher) {
       /*
@@ -259,9 +264,9 @@ const allCoursesController = {
       /**
       * NOTIFICATIONS
       */
-      console.log('allCoursesActive5:', allCoursesActive);
-      console.log('teamSlug5:', teamSlug);
-      console.log('isTeacher5:', isTeacher);
+      // console.log('allCoursesActive5:', allCoursesActive);
+      // console.log('teamSlug5:', teamSlug);
+      // console.log('isTeacher5:', isTeacher);
       /**
        * Get commits per branch
        * -- and per path? (only main folders and config file):
@@ -307,7 +312,7 @@ const allCoursesController = {
     const teamSlug = req.user.team.slug;
 
     const selectedVersion = req.session.selectedVersion || null;
-    console.log('selectedVersion1:', selectedVersion);
+    // console.log('selectedVersion1:', selectedVersion);
     res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
 
@@ -337,11 +342,15 @@ const allCoursesController = {
     /**
      * Get all available courses
      */
+    const start7 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug);
+    const end7 = performance.now();
+    console.log(`Execution time allCourses: ${end7 - start7} ms`);
+
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
 
-    console.log('allCoursesActive2:', allCoursesActive);
-    allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+    // console.log('allCoursesActive2:', allCoursesActive);
+    await allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
     /**
      * Get active course
@@ -361,19 +370,6 @@ const allCoursesController = {
     // console.log('allTeachers0:', allTeachers);
 
     res.locals.teachers = allTeachers;
-
-    /**
-     * Save routepath for the active course to cache its config file
-     */
-    let routePath = '';
-    if (selectedVersion) {
-      routePath = `${req.url}+config+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${req.url}+config+team+${teamSlug}`;
-    } else {
-      routePath = `${req.url}+config`;
-    }
-    // console.log('routePath1:', routePath);
 
     /**
      * Check if course Repo has a branch that matches user team's slug.
@@ -407,7 +403,7 @@ const allCoursesController = {
       refBranch = 'master';
     }
 
-    console.log('refBranch3:', refBranch);
+    // console.log('refBranch3:', refBranch);
 
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
@@ -419,25 +415,18 @@ const allCoursesController = {
     // console.log('cache.get(routePath)1:', cache.get(routePath));
 
     let config;
-    if (cache.has(routePath) && cache.get(routePath) !== undefined) {
-      config = cache.get(routePath);
-      console.log('config from cache');
-    } else {
-      console.log('config is NOT from cache');
-      try {
-        config = await getConfig(course.coursePathInGithub, refBranch);
-      } catch (error) {
-        /**
-         * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
-         * Redirect back to homepage
-         */
-        return res.redirect('/notfound');
-      }
-      cache.set(routePath, config);
-      // console.log('config from api');
+
+    try {
+      config = await getConfig(course.coursePathInGithub, refBranch);
+    } catch (error) {
+      /**
+       * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
+       * Redirect to /notfound page
+       */
+      return res.redirect('/notfound');
     }
 
-    console.log(`reading data from ${refBranch} branch`);
+    console.log(`reading content data for ${course.coursePathInGithub} from ${refBranch} branch`);
 
     // console.log('config2:', config);
 
@@ -446,7 +435,7 @@ const allCoursesController = {
     res.locals.allCourses = allCoursesActive;
     res.locals.singleCoursePaths = setSingleCoursePaths(config);
 
-    console.log('res.locals.allCourses1:', res.locals.allCourses);
+    // console.log('res.locals.allCourses1:', res.locals.allCourses);
 
     /**
      * Find from multiple object arrays
@@ -605,5 +594,5 @@ const allCoursesController = {
 };
 
 module.exports = {
-  allCoursesController, verifyCache, responseAction, renderPage,
+  allCoursesController, responseAction, renderPage,
 };
