@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 
 const { default: axios } = require('axios');
+
 const { requestMembers } = require('../../functions/githubMembersRequests');
 
 const { authToken } = require('../../setup/setupGithub');

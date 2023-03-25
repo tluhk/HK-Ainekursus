@@ -11,7 +11,7 @@ const verifyCache = (req, res, next) => {
   let routePath;
   try {
     if (selectedVersion) {
-      routePath = `${req.url}+config+version+${selectedVersion}`
+      routePath = `${req.url}+version+${selectedVersion}`
       || `${req.url}+components+version+${selectedVersion}`;
     } else if (teamSlug) {
       routePath = `${req.url}+config+team+${teamSlug}`
@@ -20,7 +20,7 @@ const verifyCache = (req, res, next) => {
       routePath = `${req.url}+config`
         || `${req.url}+components`;
     }
-    console.log('cache.get(routePath)2:', cache.get(routePath));
+    // console.log('cache.get(routePath)2:', cache.get(routePath));
     if (cache.has(routePath) && cache.get(routePath) !== undefined) {
       console.log(`courseContent loaded with CACHE: ${routePath}`);
       res.locals.cache = cache.get(routePath);

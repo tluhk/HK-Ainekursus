@@ -10,9 +10,6 @@ const {
 const { authToken } = require('../../setup/setupGithub');
 const { getConfig } = require('../../functions/getConfigFuncs');
 
-console.log('typeof getConfig2:', typeof getConfig);
-console.log('typeof requestRepoBranches2:', typeof requestRepoBranches);
-
 /**
  * Define files to ignore from /files folders
  */
@@ -34,42 +31,45 @@ const apiRequests = {
     let activeBranches;
 
     if (!cache.has(routePath)) {
+      console.log(`❌❌ branches IS NOT from cache: ${routePath}`);
+
       const branchesRaw = await axios.get(requestRepoBranches(coursePathInGithub), authToken);
 
       branches = branchesRaw.data.map((branch) => branch.name);
-      console.log('coursePathInGithub5:', coursePathInGithub);
-      console.log('truebranches5:', branches);
+      // console.log('coursePathInGithub5:', coursePathInGithub);
+      // console.log('truebranches5:', branches);
 
       const branchPromises = await branches.reduce((acc, branch) => {
         acc[branch] = getConfig(coursePathInGithub, branch);
         return acc;
       }, {});
 
-      console.log('branchPromises5:', branchPromises);
+      // console.log('branchPromises5:', branchPromises);
 
-      const branchesWithConfig = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
+      const activeBranchesRaw = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
         .then((resolvedArr) => {
           const resolvedObj = Object.fromEntries(resolvedArr);
-          console.log('resolvedObj5:', resolvedObj);
-          return resolvedObj;
+          // console.log('resolvedObj5:', resolvedObj);
+          const response = Object.entries(resolvedObj).filter(([key, value]) => value.active);
+          return response;
         })
         .catch((error) => {
           console.log(error); // handle error
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
-      // if (config.active) return branch;
-      const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
+
+      // const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
 
       activeBranches = activeBranchesRaw.map((x) => x[0]);
 
-      console.log('coursePathInGithub1:', coursePathInGithub);
+      // console.log('coursePathInGithub1:', coursePathInGithub);
       // console.log('activeBranchesRaw1:', activeBranchesRaw);
       console.log('activeBranches1:', activeBranches);
 
       cache.set(routePath, activeBranches);
     } else {
-      // console.log('taken from cache');
+      console.log(`✅✅ branches FROM CACHE: ${routePath}`);
       activeBranches = cache.get(routePath);
       // console.log('Cachecomponents2:', components);
     }
@@ -81,40 +81,23 @@ const apiRequests = {
       coursePathInGithub,
     } = locals.course;
     const {
-      selectedVersion,
-      teamSlug,
       refBranch,
     } = locals;
 
-    let branch;
-    if (refBranch) {
-      branch = refBranch;
-    } else branch = 'master';
+    console.log('refBranch8:', refBranch);
 
-    console.log('branch8:', branch);
-
-    let routePath;
-    if (selectedVersion) {
-      routePath = `${request.url}+components+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${request.url}+components+team+${teamSlug}`;
-    } else {
-      routePath = `${request.url}+components`;
-    }
-
-    // console.log('routePath2:', routePath);
+    const routePath = `${request.url}+${refBranch}+components`;
 
     let components;
 
     if (!cache.has(routePath)) {
-      components = await axios.get(requestDocs(coursePathInGithub, branch), authToken);
+      console.log(`❌❌ docs components IS NOT from cache: ${routePath}`);
+      components = await axios.get(requestDocs(coursePathInGithub, refBranch), authToken);
 
-      // console.log('Axioscomponents1:', components);
       cache.set(routePath, components);
     } else {
-      // console.log('taken from cache');
+      console.log(`✅✅ docs components FROM CACHE: ${routePath}`);
       components = cache.get(routePath);
-      // console.log('Cachecomponents2:', components);
     }
 
     return { components };
@@ -124,42 +107,26 @@ const apiRequests = {
       coursePathInGithub,
     } = locals.course;
     const {
-      selectedVersion,
-      teamSlug,
       refBranch,
     } = locals;
 
-    let routePath;
-    if (selectedVersion) {
-      routePath = `${request.url}+components+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${request.url}+components+team+${teamSlug}`;
-    } else {
-      routePath = `${request.url}+components`;
-    }
-    let routePathFiles;
-    if (selectedVersion) {
-      routePathFiles = `${request.url}+files+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePathFiles = `${request.url}+files+team+${teamSlug}`;
-    } else {
-      routePathFiles = `${request.url}+files`;
-    }
+    console.log('refBranch8:', refBranch);
+
+    const routePath = `${request.url}+${refBranch}+components`;
+    const routePathFiles = `${request.url}+${refBranch}+files`;
 
     let components;
     let files;
 
-    let branch;
-    if (refBranch) {
-      branch = refBranch;
-    } else branch = 'master';
-
     if (!cache.get(routePath) || !cache.get(routePathFiles)) {
-      const componentsRaw = await axios.get(requestCourseAdditionalMaterials(coursePathInGithub, branch), authToken);
+      console.log(`❌❌ courseAdditionalMaterials components IS NOT from cache: ${routePath}`);
+      console.log(`❌❌ courseAdditionalMaterials files IS NOT from cache: ${routePathFiles}`);
+
+      const componentsRaw = await axios.get(requestCourseAdditionalMaterials(coursePathInGithub, refBranch), authToken);
       // Github raw download_url juhend:
       // https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
       //  Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
-      const filesRaw = await axios.get(requestCourseFiles(coursePathInGithub), authToken);
+      const filesRaw = await axios.get(requestCourseFiles(coursePathInGithub, refBranch), authToken);
 
       await axios
         .all([componentsRaw, filesRaw])
@@ -179,12 +146,16 @@ const apiRequests = {
           console.error(error);
         });
     } else {
-      // console.log('taken from cache');
+      console.log(`✅✅ courseAdditionalMaterials components FROM CACHE: ${routePath}`);
+      console.log(`✅✅ courseAdditionalMaterials files FROM CACHE: ${routePathFiles}`);
       components = cache.get(routePath);
       files = cache.get(routePathFiles);
       // console.log('Cachecomponents2:', components);
       // console.log('CacheFiles2:', files);
     }
+
+    // console.log('components2:', components);
+    // console.log('files2:', files);
 
     return { components, files };
   },
@@ -194,32 +165,24 @@ const apiRequests = {
     } = locals.course;
     const {
       path,
-      selectedVersion,
-      teamSlug,
       refBranch,
     } = locals;
 
-    let routePath;
-    if (selectedVersion) {
-      routePath = `${request.url}+components+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${request.url}+components+team+${teamSlug}`;
-    } else {
-      routePath = `${request.url}+components`;
-    }
+    console.log('refBranch8:', refBranch);
+
+    const routePath = `${request.url}+${refBranch}+components`;
 
     let components;
 
-    let branch;
-    if (refBranch) {
-      branch = refBranch;
-    } else branch = 'master';
-
     if (!cache.get(routePath)) {
-      components = await axios.get(requestLessons(coursePathInGithub, `${path.contentSlug}`, branch), authToken);
+      console.log(`❌❌ lessons components IS NOT from cache: ${routePath}`);
+
+      components = await axios.get(requestLessons(coursePathInGithub, `${path.contentSlug}`, refBranch), authToken);
 
       cache.set(routePath, components);
     } else {
+      console.log(`✅✅ lessons components FROM CACHE: ${routePath}`);
+
       components = cache.get(routePath);
     }
 
@@ -231,42 +194,24 @@ const apiRequests = {
     } = locals.course;
     const {
       path,
-      selectedVersion,
-      teamSlug,
       refBranch,
     } = locals;
 
-    let routePath;
-    if (selectedVersion) {
-      routePath = `${request.url}+components+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${request.url}+components+team+${teamSlug}`;
-    } else {
-      routePath = `${request.url}+components`;
-    }
-    let routePathFiles;
-    if (selectedVersion) {
-      routePathFiles = `${request.url}+files+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePathFiles = `${request.url}+files+team+${teamSlug}`;
-    } else {
-      routePathFiles = `${request.url}+files`;
-    }
+    const routePath = `${request.url}+${refBranch}+components`;
+    const routePathFiles = `${request.url}+${refBranch}+files`;
 
     let components;
     let files;
 
-    let branch;
-    if (refBranch) {
-      branch = refBranch;
-    } else branch = 'master';
-
     if (!cache.get(routePath) || !cache.get(routePathFiles)) {
-      const componentsRaw = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`, branch), authToken);
+      console.log(`❌❌ lessonAdditionalMaterials components IS NOT from cache: ${routePath}`);
+      console.log(`❌❌ lessonAdditionalMaterials files IS NOT from cache: ${routePathFiles}`);
+
+      const componentsRaw = await axios.get(requestLessonAdditionalMaterials(coursePathInGithub, `${path.contentSlug}`, refBranch), authToken);
       // Github raw download_url juhend:
       // https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
       // Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866
-      const filesRaw = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`, branch), authToken);
+      const filesRaw = await axios.get(requestLessonFiles(coursePathInGithub, `${path.contentSlug}`, refBranch), authToken);
 
       await axios
         .all([componentsRaw, filesRaw])
@@ -284,6 +229,8 @@ const apiRequests = {
           console.error(error);
         });
     } else {
+      console.log(`✅✅ lessonAdditionalMaterials components FROM CACHE: ${routePath}`);
+      console.log(`✅✅ lessonAdditionalMaterials files FROM CACHE: ${routePathFiles}`);
       components = cache.get(routePath);
       files = cache.get(routePathFiles);
     }
@@ -296,40 +243,23 @@ const apiRequests = {
     } = locals.course;
     const {
       path,
-      selectedVersion,
-      teamSlug,
       refBranch,
     } = locals;
 
-    let routePath;
-    if (selectedVersion) {
-      routePath = `${request.url}+components+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${request.url}+components+team+${teamSlug}`;
-    } else {
-      routePath = `${request.url}+components`;
-    }
-    let routePathSources;
-    if (selectedVersion) {
-      routePathSources = `${request.url}+sources+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePathSources = `${request.url}+sources+team+${teamSlug}`;
-    } else {
-      routePathSources = `${request.url}+sources`;
-    }
+    console.log('refBranch8:', refBranch);
+
+    const routePath = `${request.url}+${refBranch}+components`;
+    const routePathSources = `${request.url}+${refBranch}+sources`;
 
     let components;
     let sources;
 
-    let branch;
-    if (refBranch) {
-      branch = refBranch;
-    } else branch = 'master';
-
     if (path.type === 'concept') {
       if (!cache.get(routePath) || !cache.get(routePathSources)) {
-        const componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`, branch), authToken);
-        const sourcesRaw = await axios.get(requestSources(coursePathInGithub, `${path.componentSlug}`, branch), authToken);
+        console.log(`❌❌ concept components IS NOT from cache: ${routePath}`);
+        console.log(`❌❌ concept sources IS NOT from cache: ${routePathSources}`);
+        const componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
+        const sourcesRaw = await axios.get(requestSources(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
 
         await axios
           .all([componentsRaw, sourcesRaw])
@@ -346,17 +276,21 @@ const apiRequests = {
             console.error(error);
           });
       } else {
+        console.log(`✅✅ concept components FROM CACHE: ${routePath}`);
+        console.log(`✅✅ concept sources FROM CACHE: ${routePathSources}`);
         components = cache.get(routePath);
         sources = cache.get(routePathSources);
       }
     }
 
     if (path.type === 'practice') {
-      if (!cache.get(routePath) || !cache.get(routePathSources)) {
-        components = await axios.get(requestPractices(coursePathInGithub, `${path.componentSlug}`, branch), authToken);
+      if (!cache.get(routePath)) {
+        console.log(`❌❌ practice components IS NOT from cache: ${routePath}`);
+        components = await axios.get(requestPractices(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
 
         cache.set(routePath, components);
       } else {
+        console.log(`✅✅ practice components FROM CACHE: ${routePath}`);
         components = cache.get(routePath);
       }
     }

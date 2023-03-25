@@ -4,13 +4,12 @@ require('core-js/actual/array/group-by');
 const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
 
 // Enable in-memory cache
-const { cache } = require('../../setup/setupCache');
 const { getAllCoursesData } = require('../../functions/getAllCoursesData');
 const { getConfig } = require('../../functions/getConfigFuncs');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
-const { verifyCache } = require('./coursesVerifyCache');
 const { apiRequests } = require('./coursesService');
+const { apiRequestsCommits } = require('../commits/commitsService');
 const { teamsController } = require('../teams/teamsController');
 
 /**
@@ -87,7 +86,10 @@ const renderPage = async (req, res) => {
    * - functions: https://stackoverflow.com/a/58542933
    * - changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
+  const start1 = performance.now();
   const markdownWithModifiedImgSources = await function1(coursePathInGithub, path, componentDecodedUtf8, refBranch);
+  const end1 = performance.now();
+  console.log(`Execution time markdownWithModifiedImgSources: ${end1 - start1} ms`);
 
   /**
    * Add Table of Contents markdown element to Markdown before rendering
@@ -98,7 +100,10 @@ const renderPage = async (req, res) => {
   /**
    * Render Markdown
    */
+  const start2 = performance.now();
   const componentMarkdown = await MarkdownIt.render(markdownWithModifiedImgSourcesToc);
+  const end2 = performance.now();
+  console.log(`Execution time componentMarkdown: ${end2 - start2} ms`);
   // console.log('componentMarkdown:', componentMarkdown);
 
   /**
@@ -128,8 +133,6 @@ const renderPage = async (req, res) => {
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
-
-  console.log('config7:', config);
 
   // console.log('teachers3:', teachers);
   res.render('course', {
@@ -173,44 +176,57 @@ const allCoursesController = {
      */
     let isTeacher = false;
     if (teamSlug === 'teachers') isTeacher = true;
-
     res.locals.teamSlug = teamSlug;
 
     // console.log('teamSlug2:', teamSlug);
     // console.log('isTeacher2:', isTeacher);
 
+    const start3 = performance.now();
+    const allCourses = await getAllCoursesData(teamSlug);
+    const end3 = performance.now();
+    console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
+    // console.log('allCourses1:', allCourses);
+    const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+    console.log('allCoursesActive1:', allCoursesActive);
+
+    /** Save all teachers in a variable, needed for rendering */
+    const start4 = performance.now();
+    const allTeachers = await teamsController.getUsersInTeam('teachers');
+    const end4 = performance.now();
+    console.log(`Execution time allTeachers: ${end4 - start4} ms`);
+
     if (isTeacher) {
-      const allCourses = await getAllCoursesData(teamSlug);
-      // console.log('allCourses1:', allCourses);
-      const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      // console.log('allCoursesActive1:', allCoursesActive);
-
-      allCoursesActive
-        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
-        .groupBy(({ teacherUsername }) => teacherUsername);
-
-      // console.log('allCoursesActive1:', allCoursesActive);
-      // console.log('req.user3:', req.user);
-
+      /*
+      * Filter allCoursesActive where the teacher is logged in user
+      */
       allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
-
-      allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
-
       // console.log('allTeacherCourses1:', allTeacherCourses);
-      /**
-       * First, sort by teacherUsername values,
-       * Second, group by teacherUsername values
-       */
+
+      /*
+      * Sort allTeacherCourses, these are teacher's own courses
+      */
+      allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
+      // console.log('allTeacherCourses2:', allTeacherCourses);
+
+      /* These are teachers of all other courses.
+      * 1) group by teacher name
+      * 2) remove logged in user from the list
+      * 3) then sort by teacher name and by each teacher's courses
+      * */
       const allCoursesGroupedByTeacher = allCoursesActive
-        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
         .groupBy(({ teacherUsername }) => teacherUsername);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
       // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
-      const allTeachers = await teamsController.getUsersInTeam('teachers');
+      const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
+        .sort()
+        .reduce((acc, teacher) => {
+          acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          return acc;
+        }, {});
       // console.log('allTeacherCourses1:', allTeacherCourses);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
       // console.log('allTeachers1:', allTeachers);
@@ -218,51 +234,111 @@ const allCoursesController = {
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
         user: req.user,
-        teacherCourses: allCoursesGroupedByTeacher,
+        teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
       });
     }
 
     if (!isTeacher) {
-      const allCourses = await getAllCoursesData(teamSlug);
-      const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-
-      // eslint-disable-next-line no-nested-ternary
-
-      /**
-       * First, sort by teacherUsername values,
-       * Second, group by teacherUsername values
-       */
-      const allCoursesGroupedByTeacher = allCoursesActive
-        .sort((a, b) => ((a.teacherUsername > b.teacherUsername) ? 1 : -1))
-        .groupBy(({ teacherUsername }) => teacherUsername);
-
-      Object.keys(allCoursesGroupedByTeacher).forEach((teacher) => {
-        allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
-      });
-      // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
-
-      const allTeachers = await teamsController.getUsersInTeam('teachers');
-      // console.log('allTeachers1:', allTeachers);
-
+      /*
+      * Sort allCoursesActive, these are student's courses
+      */
       allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+
+      /* These are teachers of student's courses.
+      * 1) group by teacher name
+      * 2) then sort by teacher name and by each teacher's courses
+      * */
+      const allCoursesGroupedByTeacher = allCoursesActive
+        .groupBy(({ teacherUsername }) => teacherUsername);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+
+      const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
+        .sort()
+        .reduce((acc, teacher) => {
+          acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          return acc;
+        }, {});
+      // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
 
       /**
       * NOTIFICATIONS
       */
-      console.log('allCoursesActive5:', allCoursesActive);
-      console.log('teamSlug5:', teamSlug);
-      console.log('isTeacher5:', isTeacher);
-
+      // console.log('allCoursesActive5:', allCoursesActive);
+      // console.log('teamSlug5:', teamSlug);
+      // console.log('isTeacher5:', isTeacher);
       /**
+       * Get commits per branch
+       * -- and per path? (only main folders and config file):
+       * https://api.github.com/repos/tluhk/HK_Riistvara-alused/commits?per_page=10&sha=rif20&path=docs
+       * 
+       * Get commit SHAs where comment_count > 0
+       * Get all comments and user.login for each commit SHA:
+       * https://api.github.com/repos/tluhk/HK_Riistvara-alused/commits/70b72e7f38430ba8c3f883510990e10fb11cefd3/comments
+       * 
+       * Save all comments, sort by created_at / updated_at
+       * 
+       * "Mrtrvl uuendas ainet ..." 
+       * "Kommentaar"
+       * //aeg väikselt
+       * 
+       * 
        * END OF NOTIFICATIONS
        */
 
-      return res.render('dashboard', {
+      console.log('allCoursesActive2:', allCoursesActive);
+
+      const commentsWithCourses = await Promise.all(allCoursesActive.map(async (activeCourse) => {
+        const commitsRaw = await apiRequestsCommits.commitsService(activeCourse.coursePathInGithub, activeCourse.refBranch);
+        const commitsWithComments = commitsRaw.data.filter((commit) => commit.commit.comment_count > 0);
+        // console.log('commitsWithComments2:', commitsWithComments);
+
+        const commitSHAsWithComments = commitsWithComments.map((commit) => commit.sha);
+        // console.log('commitSHAsWithComments2:', commitSHAsWithComments);
+
+        const commitCommentsPromises = commitSHAsWithComments.map((commitSHA) => apiRequestsCommits.getCommitComments(activeCourse.coursePathInGithub, commitSHA));
+        const commitCommentsRaw = await Promise.all(commitCommentsPromises);
+        // console.log('commitCommentsRaw2:', commitCommentsRaw);
+
+        const commentsArray = commitCommentsRaw.flatMap((item) => item.data.map((comment) => ({
+          url: comment.url,
+          html_url: comment.html_url,
+          id: comment.id,
+          node_id: comment.node_id,
+          user: comment.user,
+          position: comment.position,
+          line: comment.line,
+          path: comment.path,
+          commit_id: comment.commit_id,
+          created_at: comment.created_at,
+          updated_at: comment.updated_at,
+          author_association: comment.author_association,
+          body: comment.body,
+          reactions: comment.reactions,
+        })));
+        // console.log('commentsArray2:', commentsArray);
+
+        commentsArray.forEach((comment) => {
+          comment.course = activeCourse;
+        });
+
+        return commentsArray;
+      }));
+
+      // console.log('commentsWithCourses1:', commentsWithCourses);
+
+      const commentsWithCoursesFlattened = commentsWithCourses.flatMap((arr) => arr);
+      // eslint-disable-next-line no-nested-ternary
+      commentsWithCoursesFlattened.sort((b, a) => ((a.created_at > b.created_at) ? 1 : ((b.created_at > a.created_at) ? -1 : 0)));
+
+      console.log('commentsWithCoursesFlattened1:', commentsWithCoursesFlattened);
+
+      return res.render('dashboard-student', {
         courses: allCoursesActive,
         user: req.user,
-        teacherCourses: allCoursesGroupedByTeacher,
+        teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
+        commentsWithCourses: commentsWithCoursesFlattened,
       });
     }
     console.log('isTeacher is neither true/false');
@@ -279,12 +355,12 @@ const allCoursesController = {
       courseSlug, contentSlug, componentSlug,
     } = req.params;
 
+    if (!req.user.team.slug) return res.redirect('/notfound');
+
+    const teamSlug = req.user.team.slug;
+
     const selectedVersion = req.session.selectedVersion || null;
-    console.log('selectedVersion1:', selectedVersion);
-
-    let teamSlug;
-    if (req.user.team.slug) teamSlug = req.user.team.slug;
-
+    // console.log('selectedVersion1:', selectedVersion);
     res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
 
@@ -314,11 +390,15 @@ const allCoursesController = {
     /**
      * Get all available courses
      */
+    const start7 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug);
+    const end7 = performance.now();
+    console.log(`Execution time allCourses: ${end7 - start7} ms`);
+
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
 
-    console.log('allCoursesActive2:', allCoursesActive);
-    allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+    // console.log('allCoursesActive2:', allCoursesActive);
+    await allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
     /**
      * Get active course
@@ -338,19 +418,6 @@ const allCoursesController = {
     // console.log('allTeachers0:', allTeachers);
 
     res.locals.teachers = allTeachers;
-
-    /**
-     * Save routepath for the active course to cache its config file
-     */
-    let routePath = '';
-    if (selectedVersion) {
-      routePath = `${req.url}+config+version+${selectedVersion}`;
-    } else if (teamSlug) {
-      routePath = `${req.url}+config+team+${teamSlug}`;
-    } else {
-      routePath = `${req.url}+config`;
-    }
-    // console.log('routePath1:', routePath);
 
     /**
      * Check if course Repo has a branch that matches user team's slug.
@@ -384,7 +451,7 @@ const allCoursesController = {
       refBranch = 'master';
     }
 
-    console.log('refBranch3:', refBranch);
+    // console.log('refBranch3:', refBranch);
 
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
@@ -396,25 +463,18 @@ const allCoursesController = {
     // console.log('cache.get(routePath)1:', cache.get(routePath));
 
     let config;
-    if (cache.has(routePath) && cache.get(routePath) !== undefined) {
-      config = cache.get(routePath);
-      console.log('config from cache');
-    } else {
-      console.log('config is NOT from cache');
-      try {
-        config = await getConfig(course.coursePathInGithub, refBranch);
-      } catch (error) {
-        /**
-         * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
-         * Redirect back to homepage
-         */
-        return res.redirect('/notfound');
-      }
-      cache.set(routePath, config);
-      // console.log('config from api');
+
+    try {
+      config = await getConfig(course.coursePathInGithub, refBranch);
+    } catch (error) {
+      /**
+       * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
+       * Redirect to /notfound page
+       */
+      return res.redirect('/notfound');
     }
 
-    console.log(`reading data from ${refBranch} branch`);
+    console.log(`reading content data for ${course.coursePathInGithub} from ${refBranch} branch`);
 
     // console.log('config2:', config);
 
@@ -423,7 +483,7 @@ const allCoursesController = {
     res.locals.allCourses = allCoursesActive;
     res.locals.singleCoursePaths = setSingleCoursePaths(config);
 
-    console.log('res.locals.allCourses1:', res.locals.allCourses);
+    // console.log('res.locals.allCourses1:', res.locals.allCourses);
 
     /**
      * Find from multiple object arrays
@@ -582,5 +642,5 @@ const allCoursesController = {
 };
 
 module.exports = {
-  allCoursesController, verifyCache, responseAction, renderPage,
+  allCoursesController, responseAction, renderPage,
 };

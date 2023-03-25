@@ -92,7 +92,7 @@ const teamsController = {
     // console.log('teamAssignments1:', teamAssignments);
     if (!foundTeam) {
       teamAssignments.some((team) => {
-        console.log('team1:', team);
+        // console.log('team1:', team);
 
         if (team.slug === 'teachers') return false;
         foundMember = team.members.find((member) => {
@@ -120,8 +120,18 @@ const teamsController = {
     return foundTeam;
   },
   getUsersInTeam: async (team) => {
-    const usersPromise = await getOneTeamMembers(team);
-    const users = await Promise.all(usersPromise);
+    let users;
+    const routePath = `usersInTeam+${team}`;
+
+    if (!cache.has(routePath)) {
+      console.log(`❌❌ users in team IS NOT from cache: ${routePath}`);
+      const usersPromise = await getOneTeamMembers(team);
+      users = await Promise.all(usersPromise);
+      cache.set(routePath, users);
+    } else {
+      console.log(`✅✅ users in team FROM CACHE: ${routePath}`);
+      users = cache.get(routePath);
+    }
 
     return users;
   },

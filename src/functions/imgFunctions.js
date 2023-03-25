@@ -1,19 +1,35 @@
 /* eslint-disable max-len */
 const { default: axios } = require('axios');
+
+const { cache } = require('../setup/setupCache');
+
 const { requestImgURL } = require('./githubReposRequests');
 const { authToken } = require('../setup/setupGithub');
 
-const getImgResponse = async (coursePathInGithub, componentSlug, url, refBranch) => {
-  let response = '';
+const getImgResponse = async (coursePathInGithub, path, url, refBranch) => {
+  let image = '';
 
-  // code without image cache:
-  try {
-    response = await axios.get(requestImgURL(coursePathInGithub, componentSlug, url, refBranch), authToken);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
+  /**
+   * Check if cache has img.
+   * If yes, read img from cache.
+   * If not, make request to Github and save to cache.
+   */
+
+  // console.log('coursePathInGithub1:', coursePathInGithub);
+  // console.log('path1:', path);
+  // console.log('url1:', url);
+  const routePath = `${coursePathInGithub}+${path.componentSlug}+${url}`;
+
+  if (!cache.has(routePath)) {
+    console.log(`❌❌ image IS NOT from cache: ${routePath}`);
+    image = await axios.get(requestImgURL(coursePathInGithub, path, url, refBranch), authToken);
+
+    cache.set(routePath, image);
+  } else {
+    console.log(`✅✅ image FROM CACHE: ${routePath}`);
+    image = cache.get(routePath);
   }
-  return response;
+  return image;
 };
 
 const function2 = async (coursePathInGithub, path, img, refBranch) => {
