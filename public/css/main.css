@@ -1449,6 +1449,10 @@ input:checked ~ .tab-label {
   padding-top: 1rem;
 }
 
+.pr-1 {
+  padding-right: 0.25rem;
+}
+
 .pl-4 {
   padding-left: 1rem;
 }
@@ -1457,8 +1461,20 @@ input:checked ~ .tab-label {
   padding-bottom: 1rem;
 }
 
-.pr-1 {
-  padding-right: 0.25rem;
+.pb-2 {
+  padding-bottom: 0.5rem;
+}
+
+.pl-3 {
+  padding-left: 0.75rem;
+}
+
+.pr-2 {
+  padding-right: 0.5rem;
+}
+
+.pt-0 {
+  padding-top: 0px;
 }
 
 .pr-8 {
@@ -1471,10 +1487,6 @@ input:checked ~ .tab-label {
 
 .pl-2 {
   padding-left: 0.5rem;
-}
-
-.pr-2 {
-  padding-right: 0.5rem;
 }
 
 .\!pt-3 {

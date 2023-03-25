@@ -9,6 +9,7 @@ const { getConfig } = require('../../functions/getConfigFuncs');
 const { function1 } = require('../../functions/imgFunctions');
 const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
 const { apiRequests } = require('./coursesService');
+const { apiRequestsCommits } = require('../commits/commitsService');
 const { teamsController } = require('../teams/teamsController');
 
 /**
@@ -175,7 +176,6 @@ const allCoursesController = {
      */
     let isTeacher = false;
     if (teamSlug === 'teachers') isTeacher = true;
-
     res.locals.teamSlug = teamSlug;
 
     // console.log('teamSlug2:', teamSlug);
@@ -187,7 +187,7 @@ const allCoursesController = {
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     // console.log('allCourses1:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    // console.log('allCoursesActive1:', allCoursesActive);
+    console.log('allCoursesActive1:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
@@ -286,11 +286,59 @@ const allCoursesController = {
        * END OF NOTIFICATIONS
        */
 
+      console.log('allCoursesActive2:', allCoursesActive);
+
+      const commentsWithCourses = await Promise.all(allCoursesActive.map(async (activeCourse) => {
+        const commitsRaw = await apiRequestsCommits.commitsService(activeCourse.coursePathInGithub, activeCourse.refBranch);
+        const commitsWithComments = commitsRaw.data.filter((commit) => commit.commit.comment_count > 0);
+        // console.log('commitsWithComments2:', commitsWithComments);
+
+        const commitSHAsWithComments = commitsWithComments.map((commit) => commit.sha);
+        // console.log('commitSHAsWithComments2:', commitSHAsWithComments);
+
+        const commitCommentsPromises = commitSHAsWithComments.map((commitSHA) => apiRequestsCommits.getCommitComments(activeCourse.coursePathInGithub, commitSHA));
+        const commitCommentsRaw = await Promise.all(commitCommentsPromises);
+        // console.log('commitCommentsRaw2:', commitCommentsRaw);
+
+        const commentsArray = commitCommentsRaw.flatMap((item) => item.data.map((comment) => ({
+          url: comment.url,
+          html_url: comment.html_url,
+          id: comment.id,
+          node_id: comment.node_id,
+          user: comment.user,
+          position: comment.position,
+          line: comment.line,
+          path: comment.path,
+          commit_id: comment.commit_id,
+          created_at: comment.created_at,
+          updated_at: comment.updated_at,
+          author_association: comment.author_association,
+          body: comment.body,
+          reactions: comment.reactions,
+        })));
+        // console.log('commentsArray2:', commentsArray);
+
+        commentsArray.forEach((comment) => {
+          comment.course = activeCourse;
+        });
+
+        return commentsArray;
+      }));
+
+      // console.log('commentsWithCourses1:', commentsWithCourses);
+
+      const commentsWithCoursesFlattened = commentsWithCourses.flatMap((arr) => arr);
+      // eslint-disable-next-line no-nested-ternary
+      commentsWithCoursesFlattened.sort((b, a) => ((a.created_at > b.created_at) ? 1 : ((b.created_at > a.created_at) ? -1 : 0)));
+
+      console.log('commentsWithCoursesFlattened1:', commentsWithCoursesFlattened);
+
       return res.render('dashboard-student', {
         courses: allCoursesActive,
         user: req.user,
         teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
+        commentsWithCourses: commentsWithCoursesFlattened,
       });
     }
     console.log('isTeacher is neither true/false');

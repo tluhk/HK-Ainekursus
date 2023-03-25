@@ -46,25 +46,26 @@ const apiRequests = {
 
       // console.log('branchPromises5:', branchPromises);
 
-      const branchesWithConfig = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
+      const activeBranchesRaw = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
         .then((resolvedArr) => {
           const resolvedObj = Object.fromEntries(resolvedArr);
           // console.log('resolvedObj5:', resolvedObj);
-          return resolvedObj;
+          const response = Object.entries(resolvedObj).filter(([key, value]) => value.active);
+          return response;
         })
         .catch((error) => {
           console.log(error); // handle error
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
-      // if (config.active) return branch;
-      const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
+
+      // const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
 
       activeBranches = activeBranchesRaw.map((x) => x[0]);
 
       // console.log('coursePathInGithub1:', coursePathInGithub);
       // console.log('activeBranchesRaw1:', activeBranchesRaw);
-      // console.log('activeBranches1:', activeBranches);
+      console.log('activeBranches1:', activeBranches);
 
       cache.set(routePath, activeBranches);
     } else {
