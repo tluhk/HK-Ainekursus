@@ -61,6 +61,8 @@ const apiRequests = {
 
       // const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
 
+      if (!activeBranchesRaw) return [];
+
       activeBranches = activeBranchesRaw.map((x) => x[0]);
 
       // console.log('coursePathInGithub1:', coursePathInGithub);

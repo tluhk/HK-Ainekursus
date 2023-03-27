@@ -34,6 +34,8 @@ const getAllCoursesData = (async (teamSlug) => {
     // console.log('Cachecomponents2:', components);
   }
 
+  if (!courses) return [];
+
   // console.log('courses1:', courses);
 
   /*

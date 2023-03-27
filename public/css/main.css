@@ -1044,6 +1044,10 @@ input:checked ~ .tab-label {
   margin-left: 1rem;
 }
 
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -1054,10 +1058,6 @@ input:checked ~ .tab-label {
 
 .mt-2 {
   margin-top: 0.5rem;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
 }
 
 .mt-0 {
@@ -1255,16 +1255,20 @@ input:checked ~ .tab-label {
   justify-content: space-between;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
 .justify-items-start {
   justify-items: start;
 }
 
-.gap-4 {
-  gap: 1rem;
-}
-
 .gap-2 {
   gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .gap-x-4 {
@@ -1373,6 +1377,10 @@ input:checked ~ .tab-label {
   background-clip: padding-box;
 }
 
+.p-0 {
+  padding: 0px;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -1387,10 +1395,6 @@ input:checked ~ .tab-label {
 
 .p-1 {
   padding: 0.25rem;
-}
-
-.p-0 {
-  padding: 0px;
 }
 
 .p-8 {
@@ -1441,16 +1445,8 @@ input:checked ~ .tab-label {
   padding-right: 1.5rem;
 }
 
-.pb-8 {
-  padding-bottom: 2rem;
-}
-
 .pt-4 {
   padding-top: 1rem;
-}
-
-.pr-1 {
-  padding-right: 0.25rem;
 }
 
 .pl-4 {
@@ -1477,6 +1473,18 @@ input:checked ~ .tab-label {
   padding-top: 0px;
 }
 
+.pb-8 {
+  padding-bottom: 2rem;
+}
+
+.pr-1 {
+  padding-right: 0.25rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
+}
+
 .pr-8 {
   padding-right: 2rem;
 }
@@ -1501,16 +1509,16 @@ input:checked ~ .tab-label {
   text-align: center;
 }
 
-.text-lg {
-  font-size: 1.44rem;
+.text-md {
+  font-size: 1.2rem;
 }
 
 .text-sm {
   font-size: 0.833rem;
 }
 
-.text-md {
-  font-size: 1.2rem;
+.text-lg {
+  font-size: 1.44rem;
 }
 
 .text-xxl {
@@ -1833,14 +1841,14 @@ a.table-of-contents:hover {
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-neutral-300:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(187 192 197 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-neutral-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-neutral-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(187 192 197 / var(--tw-bg-opacity));
 }
 
 .hover\:underline:hover {

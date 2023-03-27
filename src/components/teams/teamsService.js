@@ -17,7 +17,8 @@ const apiRequests = {
     const teamsRaw = await axios.get(requestTeams, authToken).catch((error) => {
       console.log(error);
     });
-    // console.log('teamsRaw0:', teamsRaw);
+    if (!teamsRaw) return [];
+    console.log('teamsRaw0:', teamsRaw);
     const teams = teamsRaw.data;
     // console.log('teams0:', teams);
 
@@ -29,6 +30,7 @@ const apiRequests = {
       console.log(error);
     });
 
+    if (!teamMembersRaw) return [];
     // console.log('teamMembersRaw1.data:', teamMembersRaw.data);
 
     const teamMembersMapped = teamMembersRaw.data.map((member) => member,
