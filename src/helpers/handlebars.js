@@ -4,6 +4,7 @@
 // CommonJS export Alternative:
 
 const path = require('path');
+const moment = require('moment');
 const { checkServerIdentity } = require('tls');
 
 // Siin saab defineerida handlebarsiga seotud detaile.
@@ -121,18 +122,59 @@ module.exports = function hbsHelpers(hbs) {
         if (courseSlug && contentSlug && !componentSlug) return `/course/${courseSlug}/${contentSlug}`;
         if (courseSlug && !contentSlug && !componentSlug) return `/course/${courseSlug}`;
       },
-    },
-    /*
-    {{#showComponentType this ../../concepts ../../practices}}
-                  {{/showComponentType }}
-    */
-  /* ifIn: (elem, objects) => {
-        console.log('objects', objects);
-        const index = objects.findIndex((object) => object.path === elem);
-        if (index > -1) {
-          return true;
+      limit: (arr, limit) => {
+        if (!Array.isArray(arr)) { return []; }
+        return arr.slice(0, limit);
+      },
+      timeSince: (date) => {
+        const seconds = Math.floor((new Date() - Date.parse(date)) / 1000);
+        console.log('moment1:', moment(Date.parse(date)).locale('et').startOf('day'));
+
+        let interval = seconds / 31536000;
+        if (interval > 1) {
+          const years = Math.floor(interval);
+          if (years === 1) return `${years} aasta tagasi`;
+          return `${years} aastat tagasi`;
         }
-        return false;
-      }, */
+
+        interval = seconds / 2592000;
+        if (interval > 1) {
+          const months = Math.floor(interval);
+          if (months === 1) return `${months} kuu tagasi`;
+          return `${months} kuud tagasi`;
+        }
+
+        interval = seconds / 604800;
+        if (interval > 1) {
+          const weeks = Math.floor(interval);
+          if (weeks === 1) return `${weeks} nädal tagasi`;
+          return `${weeks} nädalat tagasi`;
+        }
+
+        interval = seconds / 86400;
+        if (interval > 1) {
+          const days = Math.floor(interval);
+          if (days === 1) return `${days} päev tagasi`;
+          return `${days} päeva tagasi`;
+        }
+
+        interval = seconds / 3600;
+        if (interval > 1) {
+          const hours = Math.floor(interval);
+          if (hours === 1) return `${hours} tund tagasi`;
+          return `${hours} tundi tagasi`;
+        }
+
+        interval = seconds / 60;
+        if (interval > 1) {
+          const minutes = Math.floor(interval);
+          if (minutes === 1) return `${minutes} minut tagasi`;
+          return `${minutes} minutit tagasi`;
+        }
+
+        Math.floor(interval);
+        return 'vähem kui 1 minut tagasi';
+      },
+    },
   });
 };

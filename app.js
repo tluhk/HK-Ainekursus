@@ -49,7 +49,7 @@ const { otherController } = require('./src/components/other/otherController');
 const { membersController } = require('./src/components/members/membersController');
 const { teamsController } = require('./src/components/teams/teamsController');
 const { authController } = require('./src/components/auth/authController');
-const { verifyCache } = require('./src/components/courses/coursesVerifyCache');
+const { allNotificationsController } = require('./src/components/notifications/notificationsController');
 
 /**
  *  Import handlebars helpers: https://stackoverflow.com/a/32707476
@@ -452,23 +452,17 @@ app.get(
   '/github-callback',
   passport.authenticate('github', {
     // prompt: 'login',
-    successRedirect: '/',
+    successRedirect: '/dashboard',
     failureRedirect: '/noauth',
     scope: ['user'],
   }),
-  /* ,
-  (req, res) => {
-    console.log('Logged in');
-
-    res.redirect('/');
-  }, */
 );
 
 /**
   * Available endpoints without login
   */
 app.get('/', resetSelectedVersion, allCoursesController.getAllCourses);
-app.get('/courses', resetSelectedVersion, allCoursesController.getAllCourses);
+app.get('/dashboard', resetSelectedVersion, allCoursesController.getAllCourses);
 
 /**
  * Available endpoints with login
@@ -492,6 +486,16 @@ app.post('/save-selected-version', (req, res) => {
    */
   res.redirect(req.body.currentPath);
 });
+
+/**
+ * Notifications page
+ */
+app.get('/notifications', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
+
+/**
+ * Courses page
+ */
+app.get('/courses', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
 
 /**
  * 404 page for wrong links

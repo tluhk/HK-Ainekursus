@@ -11,6 +11,7 @@ const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('..
 const { apiRequests } = require('./coursesService');
 const { apiRequestsCommits } = require('../commits/commitsService');
 const { teamsController } = require('../teams/teamsController');
+const { allNotificationsController } = require('../notifications/notificationsController');
 
 /**
  * Define what to do after info about couse and course page is received.
@@ -163,7 +164,7 @@ const renderPage = async (req, res) => {
 const allCoursesController = {
 
   /**
-   * for '/' and '/courses' routes
+   * for '/' and '/dashboard' routes
    */
   getAllCourses: async (req, res) => {
     // console.log('req3:', req);
@@ -194,6 +195,9 @@ const allCoursesController = {
     const allTeachers = await teamsController.getUsersInTeam('teachers');
     const end4 = performance.now();
     console.log(`Execution time allTeachers: ${end4 - start4} ms`);
+
+    res.locals.allCoursesActive = allCoursesActive;
+    res.locals.allTeacher = allTeachers;
 
     if (isTeacher) {
       /*
@@ -286,59 +290,14 @@ const allCoursesController = {
        * END OF NOTIFICATIONS
        */
 
-      console.log('allCoursesActive2:', allCoursesActive);
-
-      const commentsWithCourses = await Promise.all(allCoursesActive.map(async (activeCourse) => {
-        const commitsRaw = await apiRequestsCommits.commitsService(activeCourse.coursePathInGithub, activeCourse.refBranch);
-        const commitsWithComments = commitsRaw.data.filter((commit) => commit.commit.comment_count > 0);
-        // console.log('commitsWithComments2:', commitsWithComments);
-
-        const commitSHAsWithComments = commitsWithComments.map((commit) => commit.sha);
-        // console.log('commitSHAsWithComments2:', commitSHAsWithComments);
-
-        const commitCommentsPromises = commitSHAsWithComments.map((commitSHA) => apiRequestsCommits.getCommitComments(activeCourse.coursePathInGithub, commitSHA));
-        const commitCommentsRaw = await Promise.all(commitCommentsPromises);
-        // console.log('commitCommentsRaw2:', commitCommentsRaw);
-
-        const commentsArray = commitCommentsRaw.flatMap((item) => item.data.map((comment) => ({
-          url: comment.url,
-          html_url: comment.html_url,
-          id: comment.id,
-          node_id: comment.node_id,
-          user: comment.user,
-          position: comment.position,
-          line: comment.line,
-          path: comment.path,
-          commit_id: comment.commit_id,
-          created_at: comment.created_at,
-          updated_at: comment.updated_at,
-          author_association: comment.author_association,
-          body: comment.body,
-          reactions: comment.reactions,
-        })));
-        // console.log('commentsArray2:', commentsArray);
-
-        commentsArray.forEach((comment) => {
-          comment.course = activeCourse;
-        });
-
-        return commentsArray;
-      }));
-
-      // console.log('commentsWithCourses1:', commentsWithCourses);
-
-      const commentsWithCoursesFlattened = commentsWithCourses.flatMap((arr) => arr);
-      // eslint-disable-next-line no-nested-ternary
-      commentsWithCoursesFlattened.sort((b, a) => ((a.created_at > b.created_at) ? 1 : ((b.created_at > a.created_at) ? -1 : 0)));
-
-      console.log('commentsWithCoursesFlattened1:', commentsWithCoursesFlattened);
+      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive);
 
       return res.render('dashboard-student', {
         courses: allCoursesActive,
         user: req.user,
         teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
-        commentsWithCourses: commentsWithCoursesFlattened,
+        courseUpdates,
       });
     }
     console.log('isTeacher is neither true/false');
@@ -638,6 +597,9 @@ const allCoursesController = {
     // console.log('res.locals1:', res.locals);
     return next();
   },
+  renderAllCoursesPage: async(req, res) => {
+
+  }
 
 };
 

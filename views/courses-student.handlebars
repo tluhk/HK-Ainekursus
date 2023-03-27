@@ -1,0 +1,32 @@
+<div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
+  <main id="main-content" class="w-full px-4 py-16 dashboard_content">
+    <div class="flex flex-col flex-nowrap grow justify-between">
+      {{#unless user }}  
+        <h3 class='mt-4 ml-4'>Logi sisse, et näha kursuseid</h3>
+      {{/unless }}
+
+      {{#if user }}
+        <h2>Kõik kursused</h2>
+        <div class="">
+          <div class="pt-4 pl-4 pb-4">
+            {{#unless courseUpdates }}
+              <div class='text-md'>Hiljutised teated puuduvad.</div>
+            {{/unless }}
+            {{#each courseUpdates }} 
+              <div>
+                <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{this.created_at }}</p></div>
+                <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0"><b>{{this.user.login}}</b> uuendas <a href="/course/{{this.course.courseSlug}}/about"><b>{{this.course.courseName}}</b></a> {{this.course.refBranch}} haru: <br></p></div>
+                <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
+              </div>
+              {{#unless @last}}
+                <hr class="mt-4 mb-4">
+              {{/unless}}
+            {{/each }}
+          </div>
+        </div>
+      {{/if }}
+    </div>
+
+  </main>
+
+</div>
