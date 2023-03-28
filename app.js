@@ -1,74 +1,81 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
-require('dotenv').config();
-const { default: axios } = require('axios');
-
 /**
  * Import express framework
  */
-const express = require('express');
-const path = require('path');
-const exphbs = require('express-handlebars');
-
-/**
-  * Create express app
-  */
-const app = express();
-const port = process.env.PORT || 3000;
-const favicon = require('serve-favicon');
+import express from 'express';
+import path, { join } from 'path';
+import exphbs from 'express-handlebars';
+import favicon from 'serve-favicon';
 
 /**
  * Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
  */
-const session = require('express-session');
-const passport = require('passport');
-const GitHubStrategy = require('passport-github2').Strategy;
-const bodyParser = require('body-parser');
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as GitHubStrategy } from 'passport-github2';
+import pkg from 'body-parser';
 
 /* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
-const livereload = require('livereload');
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, '/views'));
-liveReloadServer.watch(path.join(__dirname, 'public'));
+import { createServer } from 'livereload';
+import connectLivereload from 'connect-livereload';
+
+import dotenv from 'dotenv';
+
+import { fileURLToPath } from 'url';
+import cache from './src/setup/setupCache';
+
+import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController';
+import otherController from './src/components/other/otherController';
+import membersController from './src/components/members/membersController';
+import teamsController from './src/components/teams/teamsController';
+import allNotificationsController from './src/components/notifications/notificationsController';
+
+/**
+ *  Import handlebars helpers: https://stackoverflow.com/a/32707476
+ */
+import handlebarsFactory from './src/helpers/handlebars';
+
+dotenv.config();
+
+const { urlencoded } = pkg;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+  * Create express app
+  */
+const app = express();
+const port = process.env.PORT || 3000;
+
+const liveReloadServer = createServer();
+liveReloadServer.watch(join(__dirname, '/views'));
+liveReloadServer.watch(join(__dirname, 'public'));
 liveReloadServer.server.once('connection', () => {
   setTimeout(() => {
     liveReloadServer.refresh('/');
   }, 100);
 });
-const connectLivereload = require('connect-livereload');
 app.use(connectLivereload());
 
-const { cache } = require('./src/setup/setupCache');
-
-const {
-  allCoursesController, responseAction, renderPage,
-} = require('./src/components/courses/coursesController');
-const { otherController } = require('./src/components/other/otherController');
-const { membersController } = require('./src/components/members/membersController');
-const { teamsController } = require('./src/components/teams/teamsController');
-const { authController } = require('./src/components/auth/authController');
-const { allNotificationsController } = require('./src/components/notifications/notificationsController');
-
-/**
- *  Import handlebars helpers: https://stackoverflow.com/a/32707476
- */
-const handlebars = require('./src/helpers/handlebars')(exphbs);
+const handlebars = handlebarsFactory(exphbs);
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', join(__dirname, '/views'));
 
 /**
  *  Define application static folder
  */
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(join(__dirname, '/public')));
 
 /**
  *  Define favicon file
  */
-app.use(favicon(path.join(__dirname, '/public/images', 'favicon.ico')));
+app.use(favicon(join(__dirname, '/public/images', 'favicon.ico')));
 
 /**
   * Testing API endpoints
@@ -117,12 +124,12 @@ const cacheService = (async (req, res, next) => {
       delete res.locals.cacheName;
       // console.log('res.locals2:', res.locals);
 
-      return;
+      return next();
     }
-    console.log(`${cacheName} loaded with API`);
+    return console.log(`${cacheName} loaded with API`);
   } catch (err) {
-    console.error('err');
-    throw new Error(err);
+    return console.error('err');
+    // throw new Error(err);
   }
 });
 
@@ -196,7 +203,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 
 GitHubStrategy.prototype.authorizationParams = function (options) {
   return options || {};
@@ -216,6 +223,23 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
+
+/** LOGIN LOGIC
+   * check if githubUserID exists in tluhk Github organisation members
+   * if not, redirect to /noauth page, showing you must ask access from tluhk
+   * -- if yes:
+   * get all tluhk teams
+   * get all githubUserID teams
+   * get all tluhk HK_ team assignments
+   * check if githubUserID exists in tluhk Github organisation teams
+   * -- if not, redirect to /noauth page, showing you must ask access from tluhk
+   * -- if yes:
+   * check which teams it exists in
+   * check if githubID exists in users
+   * -- if yes, check that user is up-to-date with github user?? + update??
+   * -- if yes, read user info from database? github?
+   * -- if not, add githubUser to users
+   */
 
 // Use the GitHubStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
@@ -261,23 +285,6 @@ passport.use(
         return done(null, profile);
       });
 
-      /**
-       * check if githubUserID exists in tluhk Github organisation members
-       * if not, redirect to /noauth page, showing you must ask access from tluhk
-       * -- if yes:
-       * get all tluhk teams
-       * get all githubUserID teams
-       * get all tluhk HK_ team assignments
-       * check if githubUserID exists in tluhk Github organisation teams
-       * -- if not, redirect to /noauth page, showing you must ask access from tluhk
-       * -- if yes:
-       * check which teams it exists in
-       * check if githubID exists in users
-       * -- if yes, check that user is up-to-date with github user?? + update??
-       * -- if yes, read user info from database? github?
-       * -- if not, add githubUser to users
-       */
-
       // an example of how you might save a user
       // new User({ username: profile.username }).fetch().then(user => {
       //   if (!user) {
@@ -289,47 +296,6 @@ passport.use(
       // })
     }),
   ),
-);
-
-// Make a request to the GitHub API to retrieve a list of email addresses associated with the user's account
-
-const getUsernameToEmail = ((email) => axios.get({
-  url: 'https://api.github.com/user/emails',
-  headers: {
-    'User-Agent': 'request',
-    Authorization: `Bearer ${accessToken}`,
-  },
-}, (error, response, body) => {
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  const emails = JSON.parse(body);
-  const matchingEmail = emails.find((emailObj) => emailObj.email === email);
-
-  if (matchingEmail) {
-  // If the email address is associated with a GitHub account, retrieve the username for that account
-    axios.get({
-      url: 'https://api.github.com/user',
-      headers: {
-        'User-Agent': 'request',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }, (error, response, body) => {
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const userData = JSON.parse(body);
-      const username = userData.login;
-      console.log(`The email address ${email} is associated with the GitHub account ${username}`);
-    });
-  } else {
-    console.log(`The email address ${email} is not associated with a GitHub account`);
-  }
-})
 );
 
 /**
@@ -345,6 +311,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
     // console.log('user1:', user);
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
+  // eslint-disable-next-line brace-style
   }
 
   /**
@@ -430,7 +397,7 @@ app.post('/login', (req, res, next) => {
    */
   if (isEmail) return res.redirect('/login?email=true');
 
-  passport.authenticate('github', {
+  return passport.authenticate('github', {
     login: req.body.login,
   })(req, res, next);
 });
@@ -540,14 +507,14 @@ app.get('/logout', resetSelectedVersion, (req, res, next) => {
   console.log('Logging out process');
   req.logout((err) => {
     if (err) { return next(err); }
-    req.session.destroy((err2) => {
+    return req.session.destroy((err2) => {
       if (err2) { return next(err2); }
       console.log('Logged out');
       // localStorage.removeItem('accessToken');
       res.clearCookie('HK_e-kursused');
       // console.log('req.session2:', req.session);
       // console.log('req2:', req);
-      res.redirect('/');
+      return res.redirect('/');
     });
   });
 });

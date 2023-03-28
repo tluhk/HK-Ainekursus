@@ -1,11 +1,14 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
-const cheerio = require('cheerio');
-const { axios, authToken } = require('../setup/setupGithub');
-const { cache } = require('../setup/setupCache');
-const { requestTeamCourses, requestRepos } = require('./githubReposRequests');
-const { getConfig } = require('./getConfigFuncs');
-const { apiRequests } = require('../components/courses/coursesService');
+import cheerio from 'cheerio';
+
+import { axios, authToken } from '../setup/setupGithub';
+import cache from '../setup/setupCache';
+import githubReposRequests from './githubReposRequests';
+import getConfig from './getConfigFuncs';
+import apiRequests from '../components/courses/coursesService';
+
+const { requestTeamCourses, requestRepos } = githubReposRequests;
 
 const getAllCoursesData = (async (teamSlug) => {
   // console.log('teamSlug4:', teamSlug);
@@ -62,6 +65,7 @@ const getAllCoursesData = (async (teamSlug) => {
     if (activeBranches && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
     } else if (activeBranches.length && teamSlug === 'teachers') {
+      // eslint-disable-next-line prefer-destructuring
       refBranch = activeBranches[0];
     } else {
       refBranch = 'master';
@@ -140,10 +144,7 @@ const getAllCoursesData = (async (teamSlug) => {
   });
   // console.log('map1:', map1);
 
-  return Promise.all(map1).then((results) => {
-    // console.log('results1:', results);
-    return results;
-  });
+  return Promise.all(map1).then((results) => results);
 });
 
-module.exports = { getAllCoursesData };
+export default getAllCoursesData;

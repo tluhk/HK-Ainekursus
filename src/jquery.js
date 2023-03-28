@@ -1,15 +1,20 @@
 /* eslint-disable import/newline-after-import */
 // Set up JQuery
 // https://stackoverflow.com/questions/1801160/can-i-use-jquery-with-node-js
-const jsdom = require('jsdom');
+import jsdom from 'jsdom';
+
+// global.document = document;
+import $Factory from 'jquery';
+
+// const jQuery = require('jquery')(window);
+
+import iFrameResize from 'iframe-resizer';
+
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
-// global.document = document;
-const $ = require('jquery')(window);
-// const jQuery = require('jquery')(window);
 
-const iFrameResize = require('iframe-resizer');
+const $ = $Factory(window);
 
 // https://stackoverflow.com/a/52894409
 

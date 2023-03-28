@@ -69,7 +69,7 @@ Vaikimisi on Tailwind nagu 0-stiil, tema eripäraks ongi see, et sa ehitad üles
   Värvid on defineeritud `tailwind.config.js`-is, kuid kasutatud ka Tailwindi enda värve:
 
 ```javascript
-module.exports = {
+export {
   content: ['./views/**/*.{handlebars,html,js}', './views/home.handlebars'],
   theme: {
     colors: {
@@ -94,7 +94,7 @@ Komponendid võib luua nii `tailwind.config.js`-is kui ka `main.css`-is. Esimese
 ```javascript
 const plugin = require('tailwindcss/plugin');
 
-module.exports = {
+export {
   plugins: [
     plugin(function ({ addComponents }) {
       addComponents({

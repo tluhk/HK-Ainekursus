@@ -3,7 +3,7 @@
 const baseUrl = 'https://api.github.com';
 
 // Github API request endpoints
-module.exports = {
+const githubReposRequests = {
   requestRepos: 'https://api.github.com/orgs/tluhk/repos',
   requestTeamCourses: (
     (teamSlug) => `${baseUrl}/orgs/tluhk/teams/${teamSlug}/repos`
@@ -63,6 +63,9 @@ module.exports = {
       if (path.type === 'docs') return `${baseUrl}/repos/${coursePathInGithub}/contents/docs/${url}?ref=${refBranch}`;
       if (path.type === 'concept') return `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${path.componentSlug}/${url}?ref=${refBranch}`;
       if (path.type === 'practice') return `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${path.componentSlug}/${url}?ref=${refBranch}`;
+      return '';
     }
   ),
 };
+
+export default githubReposRequests;

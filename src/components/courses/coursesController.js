@@ -1,17 +1,18 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
-require('core-js/actual/array/group-by');
-const { base64, utf8, MarkdownIt } = require('../../setup/setupMarkdown');
+import 'core-js/actual/array/group-by';
+
+import { base64, utf8, markdown } from '../../setup/setupMarkdown';
 
 // Enable in-memory cache
-const { getAllCoursesData } = require('../../functions/getAllCoursesData');
-const { getConfig } = require('../../functions/getConfigFuncs');
-const { function1 } = require('../../functions/imgFunctions');
-const { returnPreviousPage, returnNextPage, setSingleCoursePaths } = require('../../functions/navButtonFunctions');
-const { apiRequests } = require('./coursesService');
-const { apiRequestsCommits } = require('../commits/commitsService');
-const { teamsController } = require('../teams/teamsController');
-const { allNotificationsController } = require('../notifications/notificationsController');
+import getAllCoursesData from '../../functions/getAllCoursesData';
+
+import getConfig from '../../functions/getConfigFuncs';
+import { function1 } from '../../functions/imgFunctions';
+import { returnPreviousPage, returnNextPage, setSingleCoursePaths } from '../../functions/navButtonFunctions';
+import apiRequests from './coursesService';
+import teamsController from '../teams/teamsController';
+import allNotificationsController from '../notifications/notificationsController';
 
 /**
  * Define what to do after info about couse and course page is received.
@@ -28,7 +29,7 @@ const responseAction = async (req, res, next) => {
   let apiResponse;
   // eslint-disable-next-line no-prototype-builtins
   if (apiRequests.hasOwnProperty(githubRequest)) {
-    func = await apiRequests[githubRequest];
+    const func = await apiRequests[githubRequest];
     // console.log('func1:', func);
     await func(res.locals, req).then((response) => {
       // console.log('response1:', response);
@@ -102,7 +103,7 @@ const renderPage = async (req, res) => {
    * Render Markdown
    */
   const start2 = performance.now();
-  const componentMarkdown = await MarkdownIt.render(markdownWithModifiedImgSourcesToc);
+  const componentMarkdown = await markdown.render(markdownWithModifiedImgSourcesToc);
   const end2 = performance.now();
   console.log(`Execution time componentMarkdown: ${end2 - start2} ms`);
   // console.log('componentMarkdown:', componentMarkdown);
@@ -203,7 +204,7 @@ const allCoursesController = {
       /*
       * Filter allCoursesActive where the teacher is logged in user
       */
-      allTeacherCourses = allCoursesActive
+      const allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
       // console.log('allTeacherCourses1:', allTeacherCourses);
 
@@ -313,6 +314,11 @@ const allCoursesController = {
       courseSlug, contentSlug, componentSlug,
     } = req.params;
 
+    console.log('courseSlug1:', courseSlug);
+    console.log('contentSlug1:', contentSlug);
+    console.log('componentSlug1:', componentSlug);
+    console.log('req.user.team.slug1:', req.user.team.slug);
+
     if (!req.user.team.slug) return res.redirect('/notfound');
 
     const teamSlug = req.user.team.slug;
@@ -366,6 +372,7 @@ const allCoursesController = {
     /**
      * If no course is found (none of the branches is active), but the course URL is still visited by the user, then redirect to /notfound page.
      */
+    console.log('course1:', course);
     if (!course) return res.redirect('/notfound');
 
     // console.log('course1:', course);
@@ -422,13 +429,17 @@ const allCoursesController = {
 
     let config;
 
+    console.log('course.coursePathInGithub3:', course.coursePathInGithub);
+    console.log('refBranch3:', refBranch);
     try {
       config = await getConfig(course.coursePathInGithub, refBranch);
+      console.log();
     } catch (error) {
       /**
        * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
        * Redirect to /notfound page
        */
+      console.log('no config found');
       return res.redirect('/notfound');
     }
 
@@ -527,6 +538,7 @@ const allCoursesController = {
      */
     if ((contentSlug && !contentName)
     || (contentSlug && contentName && componentSlug && !componentName)) {
+      console.log('no contentName or componentName found');
       return res.redirect('/notfound');
     }
     /**
@@ -596,12 +608,11 @@ const allCoursesController = {
     // console.log('res.locals1:', res.locals);
     return next();
   },
-  renderAllCoursesPage: async(req, res) => {
-
-  }
+  // renderAllCoursesPage: async(req, res) => {
+  // }
 
 };
 
-module.exports = {
+export {
   allCoursesController, responseAction, renderPage,
 };

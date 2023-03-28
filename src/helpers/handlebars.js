@@ -1,11 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable no-script-url */
 // https://stackoverflow.com/a/40956931
 // CommonJS export Alternative:
 
-const path = require('path');
-const moment = require('moment');
-const { checkServerIdentity } = require('tls');
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import moment from 'moment';
+// import { checkServerIdentity } from 'tls';
 
 moment.locale('et');
 
@@ -13,7 +19,7 @@ moment.locale('et');
 // Helpers objekti alla saab lisada funktsioone, mida kasutada lisaks built-in helpersitele
 
 // handlebar options: https://stackoverflow.com/a/40898191
-module.exports = function hbsHelpers(hbs) {
+export default function hbsHelpers(hbs) {
   return hbs.create({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, '../..', '/views/layouts'),
@@ -123,15 +129,13 @@ module.exports = function hbsHelpers(hbs) {
         if (courseSlug && contentSlug && componentSlug) return `/course/${courseSlug}/${contentSlug}/${componentSlug}`;
         if (courseSlug && contentSlug && !componentSlug) return `/course/${courseSlug}/${contentSlug}`;
         if (courseSlug && !contentSlug && !componentSlug) return `/course/${courseSlug}`;
+        return '';
       },
       limit: (arr, limit) => {
         if (!Array.isArray(arr)) { return []; }
         return arr.slice(0, limit);
       },
-      timeSince: (date) => {
-        // console.log('moment2:', moment(date).fromNow());
-        return moment(date).fromNow();
-      },
+      timeSince: (date) => moment(date).fromNow(),
     },
   });
-};
+}

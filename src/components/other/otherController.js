@@ -12,4 +12,4 @@ const otherController = {
   })),
 };
 
-module.exports = { otherController };
+export default otherController;

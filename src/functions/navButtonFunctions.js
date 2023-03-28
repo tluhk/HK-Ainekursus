@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
-/**
- * 
- */
+
 const returnPreviousPage = (currentPath, paths) => {
   // console.log('paths', paths);
   // console.log('currentPath', currentPath);
@@ -48,4 +46,4 @@ const setSingleCoursePaths = (config) => {
   return singleCoursePaths;
 };
 
-module.exports = { returnPreviousPage, returnNextPage, setSingleCoursePaths };
+export { returnPreviousPage, returnNextPage, setSingleCoursePaths };

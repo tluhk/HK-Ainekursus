@@ -1,18 +1,32 @@
 /* eslint-disable max-len */
 /* eslint-disable no-empty */
 /* eslint-disable import/newline-after-import */
-const base64 = require('base-64');
-const utf8 = require('utf8');
-const mila = require('markdown-it-link-attributes');
-const blockEmbedPlugin = require('markdown-it-block-embed');
-const playgroundPlugin = require('markdown-it-playground');
-const hljs = require('highlight.js');
-const iframe = require('markdown-it-iframe');
-const mdImagination = require('markdown-it-imagination');
+import base64 from 'base-64';
+
+import utf8 from 'utf8';
+import mila from 'markdown-it-link-attributes';
+import blockEmbedPlugin from 'markdown-it-block-embed';
+import playgroundPlugin from 'markdown-it-playground';
+import hljs from 'highlight.js';
+import iframe from 'markdown-it-iframe';
+import markdownImagination from 'markdown-it-imagination';
+import MarkdownIt from 'markdown-it';
 
 // Enable markdown file parser
 // https://github.com/markdown-it/markdown-it
-const MarkdownIt = require('markdown-it')({
+
+// Add anchors to markdown headings
+// https://github.com/valeriangalliat/markdown-it-anchor
+import anchor from 'markdown-it-anchor';
+
+// Add anchors' table of contents for right sidebar
+// https://www.npmjs.com/package/markdown-it-toc-done-right
+import anchorToc from 'markdown-it-toc-done-right';
+
+//  Add certain classes to selected elements in markdown files, needed for CSS
+// https://github.com/HiroshiOkada/markdown-it-class
+import markdownItClass from '@toycode/markdown-it-class';
+const markdown = new MarkdownIt({
   html: true, // Enable HTML tags in source
   xhtmlOut: true, // Use '/' to close single tags (<br />).
   linkify: true, // Autoconvert URL-like text to links
@@ -28,21 +42,10 @@ const MarkdownIt = require('markdown-it')({
       } catch (__) {}
     }
 
-    return `<pre class="markdown-pre"><code>${MarkdownIt.utils.escapeHtml(str)}</code></pre>`;
+    return `<pre class="markdown-pre"><code>${markdown.utils.escapeHtml(str)}</code></pre>`;
   },
 }).enable('image');
 
-// Add anchors to markdown headings
-// https://github.com/valeriangalliat/markdown-it-anchor
-const anchor = require('markdown-it-anchor');
-
-// Add anchors' table of contents for right sidebar
-// https://www.npmjs.com/package/markdown-it-toc-done-right
-const anchorToc = require('markdown-it-toc-done-right');
-
-//  Add certain classes to selected elements in markdown files, needed for CSS
-// https://github.com/HiroshiOkada/markdown-it-class
-const markdownItClass = require('@toycode/markdown-it-class');
 const mapContent = {
   ol: 'markdown',
   ul: 'markdown',
@@ -54,11 +57,11 @@ const mapContent = {
   iframe: 'markdown-iframe',
   img: 'markdown-iframe',
 };
-MarkdownIt.use(markdownItClass, mapContent);
+markdown.use(markdownItClass, mapContent);
 
 // Add attributes to href links in markdown file
 // https://www.npmjs.com/package/markdown-it-link-attributes
-MarkdownIt.use(mila, {
+markdown.use(mila, {
   // Don't add attributes to links that start with '#', e.g. anchor links: https://www.npmjs.com/package/markdown-it-link-attributes
   matcher(href) {
     return !href.startsWith('#');
@@ -71,14 +74,14 @@ MarkdownIt.use(mila, {
 
 // Add anchor links to headings in markdown file
 // https://github.com/valeriangalliat/markdown-it-anchor
-MarkdownIt.use(anchor, {
+markdown.use(anchor, {
   permalink: true,
   permalinkSymbol: '<span class="material-symbols-outlined">link</span>',
 });
 
 // Add anchors' table of contents for right sidebar
 // https://www.npmjs.com/package/markdown-it-toc-done-right
-MarkdownIt.use(anchorToc, {
+markdown.use(anchorToc, {
   containerClass: 'table-of-contents-from-markdown-123',
   listClass: 'table-of-contents',
   listType: 'ul',
@@ -89,7 +92,7 @@ MarkdownIt.use(anchorToc, {
 
 // Add embed video support
 // https://github.com/rotorz/markdown-it-block-embed
-MarkdownIt.use(blockEmbedPlugin, {
+markdown.use(blockEmbedPlugin, {
   containerClassName: 'video-embed',
   /* services: {
     sisuloome: {
@@ -101,13 +104,13 @@ MarkdownIt.use(blockEmbedPlugin, {
 
 // Enable embedded code demo environments like JSFiddle and CodePen
 // https://www.npmjs.com/package/markdown-it-playground
-MarkdownIt.use(playgroundPlugin, {
+markdown.use(playgroundPlugin, {
   allowFullScreen: true,
 });
 
 // Enable embedded iframes
 // https://github.com/rjriel/markdown-it-iframe
-MarkdownIt.use(iframe, {
+markdown.use(iframe, {
   allowfullscreen: false,
   frameborder: 0, // default: 0
   renderIframe: true, // default: true
@@ -117,12 +120,12 @@ MarkdownIt.use(iframe, {
 
 // Specify image rendering
 // https://www.npmjs.com/package/markdown-it-imagination
-MarkdownIt.use(mdImagination, {
+markdown.use(markdownImagination, {
   lazy: true,
 });
 
-module.exports = {
+export {
   base64,
   utf8,
-  MarkdownIt,
+  markdown,
 };

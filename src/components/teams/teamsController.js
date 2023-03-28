@@ -1,7 +1,9 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable max-len */
-const { apiRequests } = require('./teamsService');
+import apiRequests from './teamsService';
 
-const { cache } = require('../../setup/setupCache');
+import cache from '../../setup/setupCache';
 
 const getOneTeamMembers = async (team) => {
   let members;
@@ -54,6 +56,7 @@ const teamsController = {
     // console.log('allMembers1:', allMembersByTeam);
 
     const teamsWithMembers = teams;
+    // eslint-disable-next-line no-return-assign
     teamsWithMembers.forEach((team, i) => teamsWithMembers[i].members = allMembersByTeam[i]);
     // console.log('teamsWithMembers1:', teamsWithMembers);
 
@@ -137,4 +140,4 @@ const teamsController = {
   },
 };
 
-module.exports = { teamsController };
+export default teamsController;

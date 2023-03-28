@@ -1,5 +1,6 @@
 {
   "name": "rif20-valikpraktika-1",
+  "type": "module",
   "version": "1.0.0",
   "description": "NB repo täiendades palun rangelt tegutseda oma \"branchis\"   nt `git checkout -b <sinu branchi nimi>`   Edaspidi \"branchide\" vahel liikumiseks `git checkout <sinu branchi nimi>`   Okstega mässamiseks juhend [siin](https://www.varonis.com/blog/git-branching):",
   "main": "index.js",
@@ -8,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ext js,mjs,json,css,handlebars app.js",
+    "start": "nodemon --ext js,mjs,json,css,handlebars --es-module-specifier-resolution=node app.js",
     "build-css": "tailwindcss -i ./src/main.css -o ./public/css/main.css",
     "lint": "eslint"
   },
@@ -56,6 +57,7 @@
     "json": "^11.0.0",
     "just-handlebars-helpers": "^1.0.19",
     "livereload": "^0.9.3",
+    "mariadb": "^3.1.1",
     "markdown-it": "^13.0.1",
     "markdown-it-anchor": "^8.6.5",
     "markdown-it-block-embed": "^0.0.3",

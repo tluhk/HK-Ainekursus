@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { cache } = require('../setup/setupCache');
+import cache from '../setup/setupCache';
+import githubReposRequests from './githubReposRequests';
+import { authToken } from '../setup/setupGithub';
 
-const { requestImgURL } = require('./githubReposRequests');
-const { authToken } = require('../setup/setupGithub');
+const { requestImgURL } = githubReposRequests;
 
 const getImgResponse = async (coursePathInGithub, path, url, refBranch) => {
   let image = '';
@@ -107,4 +108,4 @@ const function1 = async (coursePathInGithub, path, componentDecodedUtf8, refBran
   return function3(markdownText, finishedPromises);
 };
 
-module.exports = { function1, function2, function3 };
+export { function1, function2, function3 };

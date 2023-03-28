@@ -2,12 +2,11 @@
 
 const baseUrl = 'https://api.github.com';
 
-// Github API request endpoints
-module.exports = {
-  deleteAppAuthorization: (
-    (clientID) => `${baseUrl}/applications/${clientID}/grant`
-  ),
+const githubAuthRequests = {
   searchUsers: (
     (email) => `${baseUrl}/search/users?q=${email}`
   ),
 };
+
+// Github API request endpoints
+export default githubAuthRequests;

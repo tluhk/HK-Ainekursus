@@ -1,4 +1,4 @@
-const { apiRequests } = require('./membersService');
+import apiRequests from './membersService';
 
 const membersController = {
 
@@ -23,4 +23,4 @@ const membersController = {
   },
 };
 
-module.exports = { membersController };
+export default membersController;

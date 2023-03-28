@@ -1,14 +1,26 @@
 /* eslint-disable max-len */
 
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { cache } = require('../../setup/setupCache');
+import cache from '../../setup/setupCache';
+
+import githubReposRequests from '../../functions/githubReposRequests';
+
+import { authToken } from '../../setup/setupGithub';
+import getConfig from '../../functions/getConfigFuncs';
 
 const {
-  requestDocs, requestCourseAdditionalMaterials, requestCourseFiles, requestLessons, requestLessonAdditionalMaterials, requestLessonFiles, requestConcepts, requestSources, requestPractices, requestRepoBranches,
-} = require('../../functions/githubReposRequests');
-const { authToken } = require('../../setup/setupGithub');
-const { getConfig } = require('../../functions/getConfigFuncs');
+  requestDocs,
+  requestCourseAdditionalMaterials,
+  requestCourseFiles,
+  requestLessons,
+  requestLessonAdditionalMaterials,
+  requestLessonFiles,
+  requestConcepts,
+  requestSources,
+  requestPractices,
+  requestRepoBranches,
+} = githubReposRequests;
 
 /**
  * Define files to ignore from /files folders
@@ -301,4 +313,4 @@ const apiRequests = {
   },
 };
 
-module.exports = { apiRequests };
+export default apiRequests;

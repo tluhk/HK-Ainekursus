@@ -1,6 +1,6 @@
-const { getAllCoursesData } = require("../../functions/getAllCoursesData");
-const { apiRequestsCommits } = require("../commits/commitsService");
-const { teamsController } = require("../teams/teamsController");
+import getAllCoursesData from '../../functions/getAllCoursesData';
+import apiRequestsCommits from '../commits/commitsService';
+import teamsController from '../teams/teamsController';
 
 /* eslint-disable max-len */
 const allNotificationsController = {
@@ -36,6 +36,7 @@ const allNotificationsController = {
       // console.log('commentsArray2:', commentsArray);
 
       commentsArray.forEach((comment) => {
+        // eslint-disable-next-line no-param-reassign
         comment.course = activeCourse;
       });
 
@@ -105,6 +106,4 @@ const allNotificationsController = {
   },
 };
 
-module.exports = {
-  allNotificationsController,
-};
+export default allNotificationsController;
