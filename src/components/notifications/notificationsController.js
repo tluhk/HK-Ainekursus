@@ -71,13 +71,6 @@ const allNotificationsController = {
     if (!allCoursesActive) {
       let teamSlug;
       if (req.user && req.user.team) teamSlug = req.user.team.slug;
-      /**
-       * Check if teamSlug is 'teachers'
-       * If yes, then get teacher courses info
-       * If not, then get user courses info
-       */
-      let isTeacher = false;
-      if (teamSlug === 'teachers') isTeacher = true;
       res.locals.teamSlug = teamSlug;
 
       const start3 = performance.now();
@@ -103,7 +96,7 @@ const allNotificationsController = {
     const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive);
     // console.log('courseUpdates4:', courseUpdates);
 
-    return res.render('notifications-student', {
+    return res.render('notifications', {
       courses: allCoursesActive,
       user: req.user,
       teachers: allTeachers,

@@ -235,11 +235,14 @@ const allCoursesController = {
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
       // console.log('allTeachers1:', allTeachers);
 
+      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive);
+
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
         user: req.user,
         teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
+        courseUpdates,
       });
     }
 
@@ -267,10 +270,6 @@ const allCoursesController = {
 
       /**
       * NOTIFICATIONS
-      */
-      // console.log('allCoursesActive5:', allCoursesActive);
-      // console.log('teamSlug5:', teamSlug);
-      // console.log('isTeacher5:', isTeacher);
       /**
        * Get commits per branch
        * -- and per path? (only main folders and config file):
