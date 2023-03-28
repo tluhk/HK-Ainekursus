@@ -21,7 +21,6 @@ module.exports = {
       const date = new Date();
       date.setDate(date.getDate() - 30);
       const dateISO = date.toISOString();
-      console.log('dateISO:', dateISO);
       return `${baseUrl}/repos/${coursePathInGithub}/commits?per_page=100&sha=${refBranch}&since=${dateISO}`;
     }
   ),

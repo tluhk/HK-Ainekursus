@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 const cheerio = require('cheerio');
 const { axios, authToken } = require('../setup/setupGithub');
@@ -97,9 +98,9 @@ const getAllCoursesData = (async (teamSlug) => {
                 if (yldaine_c1 && yldaine_c1 === 'Õppeaine nimetus eesti k') oisContent.name = yldaine_c2;
                 if (yldaine_c1 && yldaine_c1 === 'Õppeaine maht EAP') oisContent.EAP = yldaine_c2;
                 if (yldaine_c1 && yldaine_c1 === 'Kontrollivorm') oisContent.grading = yldaine_c2;
-                if (yldaine_c1 && yldaine_c1 === 'Õppeaine eesmärgid') oisContent.eesmargid = yldaine_c2;
-                if (yldaine_c1 && yldaine_c1 === 'Õppeaine sisu lühikirjeldus') oisContent.summary = yldaine_c2;
-                if (yldaine_c1 && yldaine_c1 === 'Õppeaine õpiväljundid') oisContent.opivaljundid = yldaine_c2;
+                // if (yldaine_c1 && yldaine_c1 === 'Õppeaine eesmärgid') oisContent.eesmargid = yldaine_c2;
+                // if (yldaine_c1 && yldaine_c1 === 'Õppeaine sisu lühikirjeldus') oisContent.summary = yldaine_c2;
+                // if (yldaine_c1 && yldaine_c1 === 'Õppeaine õpiväljundid') oisContent.opivaljundid = yldaine_c2;
               });
             });
           } catch (error) {
@@ -127,9 +128,9 @@ const getAllCoursesData = (async (teamSlug) => {
           refBranch,
           courseEAP: Math.round(oisContent.EAP),
           courseGrading: oisContent.grading,
-          courseEesmargid: oisContent.eesmargid,
-          courseSummary: oisContent.summary,
-          courseOpivaljundid: oisContent.opivaljundid,
+          // courseEesmargid: oisContent.eesmargid,
+          // courseSummary: oisContent.summary,
+          // courseOpivaljundid: oisContent.opivaljundid,
         };
       });
 
