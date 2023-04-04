@@ -185,7 +185,7 @@ const allCoursesController = {
     // console.log('isTeacher2:', isTeacher);
 
     const start3 = performance.now();
-    const allCourses = await getAllCoursesData(teamSlug);
+    const allCourses = await getAllCoursesData(teamSlug, req);
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     // console.log('allCourses1:', allCourses);
@@ -233,7 +233,7 @@ const allCoursesController = {
           acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
           return acc;
         }, {});
-      // console.log('allTeacherCourses1:', allTeacherCourses);
+      console.log('allTeacherCourses5:', allTeacherCourses);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
       // console.log('allTeachers1:', allTeachers);
       console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
@@ -316,6 +316,10 @@ const allCoursesController = {
       courseSlug, contentSlug, componentSlug,
     } = req.params;
 
+    const {
+      ref,
+    } = req.query;
+
     /* console.log('courseSlug1:', courseSlug);
     console.log('contentSlug1:', contentSlug);
     console.log('componentSlug1:', componentSlug);
@@ -357,7 +361,7 @@ const allCoursesController = {
      * Get all available courses
      */
     const start7 = performance.now();
-    const allCourses = await getAllCoursesData(teamSlug);
+    const allCourses = await getAllCoursesData(teamSlug, req);
     const end7 = performance.now();
     console.log(`Execution time allCourses: ${end7 - start7} ms`);
 
@@ -408,12 +412,27 @@ const allCoursesController = {
      * - If yes, then read info from the matching branch.
      * If not, read info from master branch.
      */
-    if (activeBranches && teamSlug === 'teachers') {
-      refBranch = activeBranches[0];
-    } else if (selectedVersion && activeBranches.includes(selectedVersion)) {
+    if (selectedVersion && activeBranches.includes(selectedVersion)) {
       refBranch = selectedVersion;
     } else if (!selectedVersion && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
+    } else if (!selectedVersion && !activeBranches.includes(teamSlug) && teamSlug === 'teachers') {
+      if (ref) {
+        refBranch = ref;
+      } else {
+        const branchConfigPromises = activeBranches.map(async (branch) => {
+          const config = await getConfig(course.coursePathInGithub, branch);
+          return config;
+        });
+        // console.log('branchConfigPromises1:', branchConfigPromises);
+        const branchConfigs = await Promise.all(branchConfigPromises);
+        const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === req.user.username);
+        // console.log('branchConfigs1:', branchConfigs);
+        // console.log('correctBranchIndex1:', correctBranchIndex);
+        if (correctBranchIndex > -1) {
+          refBranch = activeBranches[correctBranchIndex];
+        } else refBranch = 'master';
+      }
     } else {
       refBranch = 'master';
     }
@@ -597,6 +616,7 @@ const allCoursesController = {
       courseSlug,
       contentSlug,
       componentSlug,
+      refBranch,
       fullPath: getFullPath(contentSlug, componentSlug),
       type: getType(contentSlug, componentSlug),
     };

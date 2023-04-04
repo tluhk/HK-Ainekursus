@@ -78,8 +78,8 @@ const apiRequests = {
       activeBranches = activeBranchesRaw.map((x) => x[0]);
 
       // console.log('coursePathInGithub1:', coursePathInGithub);
-      // console.log('activeBranchesRaw1:', activeBranchesRaw);
-      // console.log('activeBranches1:', activeBranches);
+      // console.log('activeBranchesRaw0:', activeBranchesRaw);
+      // console.log('activeBranches0:', activeBranches);
 
       cache.set(routePath, activeBranches);
     } else {

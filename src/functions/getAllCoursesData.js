@@ -12,12 +12,16 @@ import apiRequests from '../components/courses/coursesService';
 
 const { requestTeamCourses, requestRepos } = githubReposRequests;
 
-const getAllCoursesData = (async (teamSlug) => {
+const getAllCoursesData = (async (teamSlug, req) => {
   // console.log('teamSlug4:', teamSlug);
   /**
    * If user exists, they're in a team and team.slug exists, only then read Course repos.
    * Otherwise load courses array as empty (no courses to show).
    */
+  const { user } = req;
+
+  console.log('user55:', user);
+
   let courses = { data: [] };
   const routePath = `allCoursesData+${teamSlug}`;
 
@@ -70,7 +74,22 @@ const getAllCoursesData = (async (teamSlug) => {
       // eslint-disable-next-line prefer-destructuring
 
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
-      refBranch = activeBranches[0];
+
+      const branchConfigPromises = activeBranches.map(async (branch) => {
+        const config = await getConfig(y.full_name, branch);
+        return config;
+      });
+
+      // console.log('branchConfigPromises1:', branchConfigPromises);
+      const branchConfigs = await Promise.all(branchConfigPromises);
+      const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === user.username);
+
+      // console.log('branchConfigs1:', branchConfigs);
+      // console.log('correctBranchIndex1:', correctBranchIndex);
+
+      if (correctBranchIndex > -1) {
+        refBranch = activeBranches[correctBranchIndex];
+      } else refBranch = 'master';
     } else {
       refBranch = 'master';
     }

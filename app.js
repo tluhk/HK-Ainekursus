@@ -385,7 +385,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  /* else {
+  else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -397,12 +397,12 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      team: {
+      /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
+      }, */
     };
 
     if (req.user && !req.user.team) {
@@ -412,7 +412,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
   next();
 });
@@ -649,13 +649,13 @@ app.post('/save-selected-version', (req, res) => {
 
   // console.log('req.session.selectedVersion1:', req.session.selectedVersion);
 
-  // console.log('req.session.currentPath1:', req.body.currentPath);
+  console.log('req.session.currentPath1:', req.body.currentPath);
 
   /**
    * Stores selectedVersion correctly,
    * but I need to make the original GET request again to reload same page with selectedVersion value.
    */
-  res.redirect(req.body.currentPath);
+  res.redirect(`${req.body.currentPath}?ref=${req.session.selectedVersion}`);
 });
 
 /**

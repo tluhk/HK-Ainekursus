@@ -4,23 +4,21 @@
     {{#if breadcrumb.courseName}}
       <a
         class='hover:underline'
-        href='/course/{{path.courseSlug}}/about'
+        href='/course/{{path.courseSlug}}/about?ref={{path.refBranch}}'
       >{{breadcrumb.courseName}}</a>
     {{/if}}
-    {{#if_not_equal path.contentSlug 'about' }}
-      {{#if ../breadcrumb.contentName }}
-        >
-        <a
-          class='hover:underline'
-          href='/course/{{../path.courseSlug}}/{{../path.contentSlug}}'
-        >{{../breadcrumb.contentName}}</a>
-      {{/if}}
-    {{/if_not_equal}}
+    {{#if breadcrumb.contentName }}
+      >
+      <a
+        class='hover:underline'
+        href='/course/{{path.courseSlug}}/{{path.contentSlug}}?ref={{path.refBranch}}'
+      >{{breadcrumb.contentName}}</a>
+    {{/if}}
     {{#if breadcrumb.componentName}}
       >
       <a
         class='hover:underline'
-        href='/course/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}'
+        href='/course/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}?ref={{path.refBranch}}'
       >{{breadcrumb.componentName}}</a>
     {{/if}}
   </div>
@@ -86,13 +84,13 @@
   <div class='flex gap-4 justify-center'>
     {{#if_not_equal ../path.fullPath ../singleCoursePaths.[0].path }}
       <input type="button" class="btn btn-secondary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}?ref={{../path.refBranch}}';" 
       value="Eelmine" />
     {{/if_not_equal }}
 
     {{#if_not_equal ../path.fullPath (last ../singleCoursePaths) }}
       <input type="button" class="btn btn-primary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine" />
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}?ref={{../path.refBranch}}';" value="Järgmine" />
     {{/if_not_equal }}
   </div>
   {{/ifIn }}

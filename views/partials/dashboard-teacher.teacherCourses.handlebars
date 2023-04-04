@@ -17,7 +17,7 @@
         {{/with }}
         <ul class="list-none mt-2">
         {{#each this }}
-          <li ><a href="/course/{{this.courseSlug}}/about">{{this.courseName}}</a></li>
+          <li ><a href="/course/{{this.courseSlug}}/about?ref={{this.refBranch}}">{{this.courseName}}</a></li>
         {{/each }}
         </ul>
       </div>

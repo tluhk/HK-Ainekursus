@@ -78,7 +78,7 @@ const allNotificationsController = {
       res.locals.teamSlug = teamSlug;
 
       const start3 = performance.now();
-      const allCourses = await getAllCoursesData(teamSlug);
+      const allCourses = await getAllCoursesData(teamSlug, req);
       const end3 = performance.now();
       console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
       // console.log('allCourses1:', allCourses);
