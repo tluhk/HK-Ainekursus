@@ -15,10 +15,10 @@ const apiRequests = {
   getTeamsService: async () => {
     // console.log('starting to get members');
     const teamsRaw = await axios.get(requestTeams, authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
-    console.log('authToken0:', authToken);
-    console.log('teamsRaw0:', teamsRaw);
+    // console.log('authToken0:', authToken);
+    // console.log('teamsRaw0:', teamsRaw);
     if (!teamsRaw) return [];
     const teams = teamsRaw.data;
     // console.log('teams0:', teams);
@@ -28,7 +28,7 @@ const apiRequests = {
   getTeamMembersService: async (teamSlug) => {
     // console.log('starting to get teamMembers');
     const teamMembersRaw = await axios.get(requestTeamMembers(teamSlug), authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 
     if (!teamMembersRaw) return [];

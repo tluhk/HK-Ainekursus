@@ -78,8 +78,8 @@ export default function hbsHelpers(hbs) {
       },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
-        // console.log('teacherName2:', teacherName);
-        // console.log('teachers2:', teachers);
+        console.log('teacherName2:', teacherName);
+        console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
         // console.log('teacherData2:', teacherData);
 
@@ -90,15 +90,18 @@ export default function hbsHelpers(hbs) {
         if (!teacherData) {
           teacher = {
             login: 'Määramata',
+            displayName: 'Määramata õppejõud',
             avatar_url: '/images/anonymous-avatar.png',
           };
         } else {
           teacher = {
             login: teacherData.login,
+            displayName: teacherData.displayName,
+            email: teacherData.email,
             avatar_url: teacherData.avatar_url,
           };
         }
-        // console.log('teacher1:', teacher);
+        console.log('teacher1:', teacher);
         return teacher;
       },
       /**

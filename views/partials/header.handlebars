@@ -42,11 +42,22 @@
       <div class="flex flex-col justify-items-start">
         {{#if user}}
           <ul>
-            <li>User ID: {{ user.id }}</li>
-            <li>Nimi: {{ user.username }}</li>
+            <li>GitHubi ID: {{ user.id }}</li>
+            <li>GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
             <li>Grupp: {{ user.team.name }}</li>
+            {{#if user.displayName}}
+              <li>Profiilinimi: {{ user.displayName }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">edit</span></a></li>
+            {{else }}
+              <li><a href="/save-displayName" class="!text-white">Lisa profiilinimi</a></li>
+            {{/if }}
+            {{#if user.email}}
+              <li>Email: {{ user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">edit</span></a></li>
+            {{else }}
+              <li><a href="/save-email" class="!text-white">Lisa email</a></li>
+            {{/if }}
           </ul>
         {{/if}}
+
         {{#unless user}}
           <a href="/login" class="!text-white">Logi sisse</a>
           

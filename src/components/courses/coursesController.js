@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import 'core-js/actual/array/group-by';
 
+import { performance } from 'perf_hooks';
 import { base64, utf8, markdown } from '../../setup/setupMarkdown';
 
 // Enable in-memory cache
@@ -206,13 +207,13 @@ const allCoursesController = {
       */
       const allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
-      // console.log('allTeacherCourses1:', allTeacherCourses);
+      console.log('allTeacherCourses1:', allTeacherCourses);
 
       /*
       * Sort allTeacherCourses, these are teacher's own courses
       */
       allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
-      // console.log('allTeacherCourses2:', allTeacherCourses);
+      console.log('allTeacherCourses2:', allTeacherCourses);
 
       /* These are teachers of all other courses.
       * 1) group by teacher name
@@ -221,10 +222,10 @@ const allCoursesController = {
       * */
       const allCoursesGroupedByTeacher = allCoursesActive
         .groupBy(({ teacherUsername }) => teacherUsername);
-      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
-      // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
+      console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
         .sort()
@@ -235,8 +236,9 @@ const allCoursesController = {
       // console.log('allTeacherCourses1:', allTeacherCourses);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
       // console.log('allTeachers1:', allTeachers);
+      console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
 
-      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive);
+      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
@@ -290,7 +292,7 @@ const allCoursesController = {
        * END OF NOTIFICATIONS
        */
 
-      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive);
+      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
       return res.render('dashboard-student', {
         courses: allCoursesActive,
@@ -314,10 +316,10 @@ const allCoursesController = {
       courseSlug, contentSlug, componentSlug,
     } = req.params;
 
-    console.log('courseSlug1:', courseSlug);
+    /* console.log('courseSlug1:', courseSlug);
     console.log('contentSlug1:', contentSlug);
     console.log('componentSlug1:', componentSlug);
-    console.log('req.user.team.slug1:', req.user.team.slug);
+    console.log('req.user.team.slug1:', req.user.team.slug); */
 
     if (!req.user.team.slug) return res.redirect('/notfound');
 
@@ -372,7 +374,7 @@ const allCoursesController = {
     /**
      * If no course is found (none of the branches is active), but the course URL is still visited by the user, then redirect to /notfound page.
      */
-    console.log('course1:', course);
+    // console.log('course1:', course);
     if (!course) return res.redirect('/notfound');
 
     // console.log('course1:', course);
@@ -429,11 +431,10 @@ const allCoursesController = {
 
     let config;
 
-    console.log('course.coursePathInGithub3:', course.coursePathInGithub);
-    console.log('refBranch3:', refBranch);
+    // console.log('course.coursePathInGithub3:', course.coursePathInGithub);
+    // console.log('refBranch3:', refBranch);
     try {
       config = await getConfig(course.coursePathInGithub, refBranch);
-      console.log();
     } catch (error) {
       /**
        * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.

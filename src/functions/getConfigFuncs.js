@@ -11,8 +11,8 @@ import githubReposRequests from './githubReposRequests';
 const { requestConfig } = githubReposRequests;
 
 const getRepoResponse = async (selectedCourse, refBranch) => {
-  console.log('selectedCourse2:', selectedCourse);
-  console.log('refBranch2:', refBranch);
+  // console.log('selectedCourse2:', selectedCourse);
+  // console.log('refBranch2:', refBranch);
   let response = '';
   try {
     response = await axios.get(requestConfig(selectedCourse, refBranch), authToken);
@@ -20,7 +20,7 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
     // Handle Error Here
     console.error(err);
   }
-  console.log('response2:', response);
+  // console.log('response2:', response);
   return response;
 };
 
@@ -32,8 +32,8 @@ const getConfig = async (selectedCourse, refBranch) => {
  * If yes, read config from cache.
  * If not, make new github request for config and cache it.
  */
-  console.log('selectedCourse1:', selectedCourse);
-  console.log('refBranch1:', refBranch);
+  // console.log('selectedCourse1:', selectedCourse);
+  // console.log('refBranch1:', refBranch);
 
   const routePath = `getConfig:${selectedCourse}+${refBranch}`;
   // console.log('routePath1:', routePath);
@@ -53,7 +53,7 @@ const getConfig = async (selectedCourse, refBranch) => {
     // console.log('config from api');
   }
 
-  console.log('config.data2:', config.data);
+  // console.log('config.data2:', config.data);
 
   if (!config.data) return null;
   // console.log('config2:', config);
@@ -63,7 +63,6 @@ const getConfig = async (selectedCourse, refBranch) => {
 
   const configJSON = JSON.parse(configDecodedUtf8);
 
-  console.log('configJSON2:', configJSON);
   return configJSON;
 };
 

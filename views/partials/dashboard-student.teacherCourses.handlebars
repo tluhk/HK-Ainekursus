@@ -10,8 +10,8 @@
               <img src="{{ this.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%" class="">
             </div>
             <div class="inline-block">
-              <h4 class="mt-0 mb-1">{{ this.login }}</h4>
-              <p class="m-0 mb-1">email@tlu.ee</p>
+              <h4 class="mt-0 mb-1">{{this.displayName}}</h4>
+              <p class="m-0 mb-1">{{#if this.email}}{{this.email}}{{else}}email@tlu.ee{{/if}}</p>
             </div>
           </div>
         {{/with }}

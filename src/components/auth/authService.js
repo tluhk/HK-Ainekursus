@@ -13,7 +13,7 @@ const { searchUsers } = githubAuthRequests;
 const apiRequests = {
   getUsernameLinkedToPublicEmail: async (email) => {
     const usernameRaw = await axios.get(searchUsers(email), authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
     // console.log('usernameRaw1:', usernameRaw);
     const user = usernameRaw.data;

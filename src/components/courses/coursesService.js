@@ -66,7 +66,7 @@ const apiRequests = {
           return response;
         })
         .catch((error) => {
-          console.log(error); // handle error
+          console.error(error); // handle error
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
@@ -79,7 +79,7 @@ const apiRequests = {
 
       // console.log('coursePathInGithub1:', coursePathInGithub);
       // console.log('activeBranchesRaw1:', activeBranchesRaw);
-      console.log('activeBranches1:', activeBranches);
+      // console.log('activeBranches1:', activeBranches);
 
       cache.set(routePath, activeBranches);
     } else {
@@ -98,7 +98,7 @@ const apiRequests = {
       refBranch,
     } = locals;
 
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
     const routePath = `${request.url}+${refBranch}+components`;
 
@@ -124,7 +124,7 @@ const apiRequests = {
       refBranch,
     } = locals;
 
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
     const routePath = `${request.url}+${refBranch}+components`;
     const routePathFiles = `${request.url}+${refBranch}+files`;
@@ -156,7 +156,6 @@ const apiRequests = {
           }),
         )
         .catch((error) => {
-          console.log('siin on addMat error');
           console.error(error);
         });
     } else {
@@ -182,7 +181,7 @@ const apiRequests = {
       refBranch,
     } = locals;
 
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
     const routePath = `${request.url}+${refBranch}+components`;
 
@@ -239,7 +238,6 @@ const apiRequests = {
           }),
         )
         .catch((error) => {
-          console.log('siin on addMat error');
           console.error(error);
         });
     } else {
@@ -260,7 +258,7 @@ const apiRequests = {
       refBranch,
     } = locals;
 
-    console.log('refBranch8:', refBranch);
+    // ('refBranch8:', refBranch);
 
     const routePath = `${request.url}+${refBranch}+components`;
     const routePathSources = `${request.url}+${refBranch}+sources`;
@@ -286,7 +284,6 @@ const apiRequests = {
             }),
           )
           .catch((error) => {
-            console.log('siin on addMat error');
             console.error(error);
           });
       } else {

@@ -26,6 +26,7 @@ import connectLivereload from 'connect-livereload';
 import dotenv from 'dotenv';
 
 import { fileURLToPath } from 'url';
+import pool from './db';
 import cache from './src/setup/setupCache';
 
 import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController';
@@ -241,6 +242,46 @@ passport.deserializeUser((obj, done) => {
    * -- if not, add githubUser to users
    */
 
+async function userDBFunction(userData) {
+  const {
+    githubID, username, displayName, email,
+  } = userData;
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    console.log('Connected to MariaDB1');
+
+    console.log(`connected ! connection id is ${conn.threadId}`);
+
+    const users1 = await conn.query('SELECT * FROM users;');
+    console.log('users1:', users1);
+
+    const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [githubID]);
+    console.log('user1:', user);
+
+    /**
+     * If user exists in DB, don't insert, return saved data in DB
+     * If user doesn't exist in DB, insert those to DB based on values in github. Return same github values you inserted to DB.
+     */
+
+    if (user[0]) return user[0];
+
+    if (displayName) {
+      await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, displayName, email]);
+      return userData;
+    }
+    await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, username, email]);
+    userData.displayName = username;
+    return userData;
+  } catch (err) {
+    console.log('Unable to connect to MariaDB1');
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+}
+
 // Use the GitHubStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and GitHub
@@ -254,15 +295,13 @@ passport.use(
       // proxy: true,
     },
     (async (accessToken, refreshToken, profile, done) => {
-      process.nextTick(() => {
+      process.nextTick(async () => {
         // asynchronous verification, for effect...
         // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
         // console.log('accessToken1:', accessToken);
 
         // eslint-disable-next-line no-param-reassign
         // profile.token = accessToken;
-
-        console.log({ profile });
 
         /**
          * Check if Github user is part of tluhk Github org members.
@@ -277,6 +316,29 @@ passport.use(
         }
         console.log('user exists in tluhk org');
 
+        console.log('profile1:', profile);
+        const {
+          id, username, displayName, _json,
+        } = profile;
+        const { email } = _json;
+
+        const userData = {
+          githubID: id, username, displayName, email,
+        };
+
+        /* console.log('id1:', id);
+        console.log('username1:', username);
+        console.log('displayName1:', displayName);
+        console.log('_json.email1:', _json.email); */
+
+        const userDataAfterDB = await userDBFunction(userData);
+
+        if (userDataAfterDB) {
+          if (userDataAfterDB.displayName && profile.displayName !== userDataAfterDB.displayName) profile.displayName = userDataAfterDB.displayName;
+          if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
+        }
+
+        // INSERT INTO users (githubID, username, displayName, email) VALUES (1234, 'seppkh', NULL, NULL);
         // getUser();
         // saveUser();
         // console.log('userInOrgMembers1:', userInOrgMembers);
@@ -323,7 +385,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  else {
+  /* else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -350,9 +412,133 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }
+  } */
 
   next();
+});
+
+app.get(
+  '/save-displayName',
+  (req, res) => {
+    let { displayName } = req.user;
+    if (!displayName) displayName = 'Ees- ja perekonnanimi';
+    let message = '';
+    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik';
+
+    res.send(`
+        <html>
+        <body>
+            <a href="/dashboard"">Tagasi avalehele</a><br>
+            <form action="/save-displayName" method="post">
+                <span>Sisesta enda profiilinimi:</span>
+                <input name="displayName" type="text" placeholder="${displayName}"/><br>
+                <input type="submit" value="Save"/>
+            </form>
+            <p style="color:red;">${message}</p>
+        </body>
+        </html>
+    `);
+  },
+);
+
+app.post('/save-displayName', async (req, res, next) => {
+  const { user } = req;
+  // console.log('req.body.login1:', req.body.login);
+  if (!req.body.displayName) {
+    return res.redirect('/save-displayName?displayName=true');
+  }
+
+  if (req.body.displayName) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      console.log('Connected to MariaDB!');
+
+      const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
+      console.log('res1:', res1);
+      req.user.displayName = req.body.displayName;
+      console.log('cache.keys1:', cache.keys());
+
+      cache.flushAll();
+    } catch (err) {
+      console.log('Unable to connect to MariaDB');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  console.log('req.user1:', req.user);
+  console.log('user.id1:', user.id);
+  console.log('req.body.displayName1:', req.body.displayName);
+
+  return res.redirect('/dashboard');
+});
+
+app.get(
+  '/save-email',
+  (req, res) => {
+    let { email } = req.user;
+    if (!email) email = 'email@gmail.com';
+    let message = '';
+    if (req.query && req.query.email) message = 'Sisestatud email pole korrektne';
+
+    res.send(`
+        <html>
+        <body>
+            <a href="/dashboard"">Tagasi avalehele</a><br>
+            <form action="/save-email" method="post">
+                <span>Sisesta enda email:</span>
+                <input name="email" type="email" placeholder="${email}"/><br>
+                <input type="submit" value="Save"/>
+            </form>
+            <p style="color:red;">${message}</p>
+        </body>
+        </html>
+    `);
+  },
+);
+
+app.post('/save-email', async (req, res, next) => {
+  const { user } = req;
+  // console.log('req.body.login1:', req.body.login);
+  if (!req.body.email) {
+    return res.redirect('/save-email?email=true');
+  }
+
+  if (req.body.email) {
+    /**
+     * Check if entered value is email
+     */
+    // Regular expression to check if string is email
+    const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+    const isEmail = regexExp.test(req.body.email);
+    /**
+     * If entered value is email, redirect back to login and show "email is not allowed" message
+     */
+    if (!isEmail) return res.redirect('/dashboard?email=false');
+
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+      console.log('res2:', res2);
+      req.user.email = req.body.email;
+
+      cache.flushAll();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  console.log('req.user1:', req.user);
+  console.log('user.id1:', user.id);
+  console.log('req.body.email1:', req.body.email);
+
+  return res.redirect('/dashboard');
 });
 
 // GET /login
@@ -360,8 +546,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
 //   request.  The first step in GitHub authentication will involve redirecting
 //   the user to github.com.  After authorization, GitHub will redirect the user
 //   back to this application at /github-callback
-app.get(
-  '/login',
+app.get('/login',
   (req, res) => {
     let message = '';
     if (req.query.email) message = 'Emaili sisestamine pole lubatud';
@@ -430,6 +615,25 @@ app.get(
   */
 app.get('/', resetSelectedVersion, allCoursesController.getAllCourses);
 app.get('/dashboard', resetSelectedVersion, allCoursesController.getAllCourses);
+
+app.get('/desserts', async (req, res) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    const sql = 'SELECT * FROM desserts';
+    const result = await conn.query(sql);
+
+    res.send(result);
+  } catch (error) {
+    console.log('error.code:', error.code);
+    throw error;
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
 
 /**
  * Available endpoints with login
@@ -501,7 +705,7 @@ app.get('/logout', resetSelectedVersion, (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   } */
 
   console.log('Logging out process');
@@ -528,5 +732,6 @@ app.all('*', resetSelectedVersion, otherController.notFound);
  * Start a server and listen on port 3000
  */
 app.listen(port, () => {
+  console.log('Hei');
   console.log(`Listening on port ${port}`);
 });

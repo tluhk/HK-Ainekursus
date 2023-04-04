@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
+import { performance } from 'perf_hooks';
+
 import cheerio from 'cheerio';
 
 import { axios, authToken } from '../setup/setupGithub';
@@ -24,11 +26,11 @@ const getAllCoursesData = (async (teamSlug) => {
 
     if (teamSlug && (teamSlug === 'master' || teamSlug === 'teachers')) {
       courses = await axios.get(requestRepos, authToken).catch((error) => {
-        console.log(error);
+        console.error(error);
       });
     } if (teamSlug && teamSlug !== 'master' && teamSlug !== 'teachers') {
       courses = await axios.get(requestTeamCourses(teamSlug), authToken).catch((error) => {
-        console.log(error);
+        console.error(error);
       });
     }
     cache.set(routePath, courses);
@@ -66,6 +68,8 @@ const getAllCoursesData = (async (teamSlug) => {
       refBranch = teamSlug;
     } else if (activeBranches.length && teamSlug === 'teachers') {
       // eslint-disable-next-line prefer-destructuring
+
+      // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
       refBranch = activeBranches[0];
     } else {
       refBranch = 'master';
@@ -108,7 +112,7 @@ const getAllCoursesData = (async (teamSlug) => {
               });
             });
           } catch (error) {
-            console.log(error, error.message);
+            console.error(error);
           }
 
           cache.set(routePathOisContent, oisContent);

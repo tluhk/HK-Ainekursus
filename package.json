@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ext js,mjs,json,css,handlebars --es-module-specifier-resolution=node app.js",
+    "start": "bash setup-docker.sh && npm run start-app",
+    "start-app": "nodemon --ext js,mjs,json,css,handlebars --es-module-specifier-resolution=node app.js",
     "build-css": "tailwindcss -i ./src/main.css -o ./public/css/main.css",
     "lint": "eslint"
   },
@@ -78,10 +79,13 @@
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth": "^2.0.0",
+    "perf_hooks": "^0.0.1",
+    "performance": "^1.4.0",
     "popover": "^2.4.1",
     "popups": "^1.1.3",
     "read-markdown": "^1.0.2",
     "serve-favicon": "^2.5.0",
+    "shelljs": "^0.8.5",
     "tailwindcss": "^3.2.1",
     "tooltip": "^1.6.1",
     "use": "^3.1.1",

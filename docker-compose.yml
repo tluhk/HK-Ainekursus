@@ -1,0 +1,40 @@
+version: "3"
+services: 
+  node:
+    image: haapsalu
+    container_name: haapsalu-app
+    ports:
+      - "3000:3000"
+    networks:
+      - docker-service
+    depends_on: 
+      - mariadb
+    command: npm run start-app
+    volumes:
+      - type: bind
+        source: ./
+        target: /opt/app/static
+
+  mariadb:
+    image: mariadb:latest
+    container_name: haapsalu-mariadb
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: "password"
+    networks:
+      - docker-service
+    volumes:
+      - maria-data:/data/db
+
+networks:
+  docker-service:
+    driver: bridge
+    name: backend-network
+
+volumes:
+  maria-data:
+    driver: local
+    name: backend-volume
+  myapp:
+

@@ -17,3 +17,50 @@
        * -- if yes, read user info from database? github?
        * -- if not, add githubUser to users
        */
+
+
+echo "$DOCKER_CONTAINER" 2>&1
+echo "$MYSQL_ROOT_PASSWORD" 2>&1
+
+echo "Copying SQL queries to container..." 2>&1
+docker cp ./db_queries.sql haapsalu-mariadb:/tmp/db_queries.sql
+docker exec haapsalu-mariadb chmod 777 /tmp/db_queries.sql
+
+echo "Creating database and table..." 2>&1
+docker exec -i "$DOCKER_CONTAINER" mysql -uroot -p"$MYSQL_ROOT_PASSWORD" < /tmp/db_queries.sql
+
+docker exec -it haapsalu-mariadb mysql -uroot -ppassword < /tmp/db_queries.sql
+docker exec -i "$DOCKER_CONTAINER" mysql -uroot -p"$MYSQL_ROOT_PASSWORD" < /tmp/db_queries.sql
+
+docker exec haapsalu-mariadb ls -la
+docker exec haapsalu-mariadb ls -la /tmp/db_queries.sql
+
+docker exec haapsalu-mariadb cat /tmp/db_queries2.sql
+
+docker exec -it haapsalu-mariadb mysql -uroot -ppassword -e "CREATE DATABASE course_management;"
+
+docker exec -i haapsalu-mariadb mysql -uroot -ppassword -D course_management < ./db_queries.sql
+
+docker exec -it haapsalu-mariadb mysql -uroot -ppassword -h 172.24.0.2 -P 3306
+
+
+SEE TÖÖTAB:
+docker exec -i "$DOCKER_CONTAINER" mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -h $ip_address -P 3306 <<< "CREATE DATABASE \`course_management\`; USE \`course_management\`; CREATE TABLE \`users\` ( \`id\` INT NOT NULL AUTO_INCREMENT, \`githubID\` CHAR(12) NOT NULL DEFAULT '' UNIQUE, \`username\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', \`displayName\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, \`email\` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci, PRIMARY KEY (\`id\`) ); INSERT INTO \`users\` (\`githubID\`, \`username\`, \`displayName\`, \`email\`) VALUES (1234, 'seppkh', NULL, NULL);"
+
+node:
+    image: haapsalu
+    container_name: haapsalu-app
+    ports:
+      - "3000:3000"
+    networks:
+      - docker-service
+    depends_on: 
+      - mariadb
+    command: npm run start-app
+
+docker container IP address:
+  docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' haapsalu-mariadb
+
+  docker exec -it haapsalu-mariadb mysql -uroot -ppassword -h 192.168.240.2 -P 3306
+
+  docker exec -i "$DOCKER_CONTAINER" mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -h "$DOCKER_CONTAINER" -P 3306 <<< "CREATE DATABASE \`course_management\`; USE \`course_management\`; CREATE TABLE \`users\` ( \`id\` INT NOT NULL AUTO_INCREMENT, \`githubID\` CHAR(12) NOT NULL DEFAULT '' UNIQUE, \`username\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', \`displayName\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, \`email\` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci, PRIMARY KEY (\`id\`) ); INSERT INTO \`users\` (\`githubID\`, \`username\`, \`displayName\`, \`email\`) VALUES (1234, 'seppkh', NULL, NULL), (62253084, 'seppkh', 'Krister Sepp', 'email@gmail.com');"

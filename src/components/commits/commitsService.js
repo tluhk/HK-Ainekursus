@@ -53,7 +53,7 @@ const apiRequestsCommits = {
           return response;
         })
         .catch((error) => {
-          console.log(error); // handle error
+          console.error(error); // handle error
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);

@@ -16,7 +16,7 @@ const apiRequests = {
 
     // console.log('starting to get members');
     const membersRaw = await axios.get(requestMembers, authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
     // console.log('membersRaw2:', membersRaw);
 
