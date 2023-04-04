@@ -10,7 +10,7 @@ import getAllCoursesData from '../../functions/getAllCoursesData';
 
 import getConfig from '../../functions/getConfigFuncs';
 import { function1 } from '../../functions/imgFunctions';
-import { returnPreviousPage, returnNextPage, setSingleCoursePaths } from '../../functions/navButtonFunctions';
+import { returnPreviousPage, returnNextPage, setCourseButtonPaths } from '../../functions/navButtonFunctions';
 import apiRequests from './coursesService';
 import teamsController from '../teams/teamsController';
 import allNotificationsController from '../notifications/notificationsController';
@@ -61,7 +61,8 @@ const renderPage = async (req, res) => {
     breadcrumbNames,
     path,
     allCourses,
-    singleCoursePaths,
+    backAndForwardPaths,
+    markAsDonePaths,
     coursePathInGithub,
     teachers,
     branches,
@@ -74,6 +75,8 @@ const renderPage = async (req, res) => {
     resSources,
     refBranch,
   } = res.locals;
+
+  console.log('req.user55:', req.user);
 
   // console.log('resComponents in responseAction:', resComponents);
   // console.log('resFiles in responseAction:', resComponents);
@@ -148,7 +151,8 @@ const renderPage = async (req, res) => {
     sources: sourcesJSON,
     breadcrumb: breadcrumbNames,
     path,
-    singleCoursePaths,
+    backAndForwardPaths,
+    markAsDonePaths,
     courses: allCourses,
     returnPreviousPage,
     returnNextPage,
@@ -470,7 +474,12 @@ const allCoursesController = {
     res.locals.course = course;
     res.locals.config = config;
     res.locals.allCourses = allCoursesActive;
-    res.locals.singleCoursePaths = setSingleCoursePaths(config);
+
+    const { backAndForwardPaths, markAsDonePaths } = setCourseButtonPaths(config);
+    console.log('backAndForwardPaths4:', backAndForwardPaths);
+    console.log('markAsDonePaths4:', markAsDonePaths);
+    res.locals.backAndForwardPaths = backAndForwardPaths;
+    res.locals.markAsDonePaths = markAsDonePaths;
 
     // console.log('res.locals.allCourses1:', res.locals.allCourses);
 

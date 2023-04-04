@@ -17,33 +17,38 @@ const returnNextPage = (currentPath, paths) => {
 };
 
 // *** BUTTONS – FORWARD/BACK PATH SETTINGS ***
-const setSingleCoursePaths = (config) => {
+const setCourseButtonPaths = (config) => {
   // For Forward/Back buttons, push all possible paths in one course to an Array:
-  const singleCoursePaths = [];
+  const backAndForwardPaths = [];
+  const markAsDonePaths = [];
+
   // *** Comment out config.docs.map() if you don't want to show buttons on Ainekursusest pages ***
-  config.docs.map((x) => singleCoursePaths.push({
+  config.docs.map((x) => backAndForwardPaths.push({
     path: x.slug,
   }));
   config.lessons.map((x) => {
-    // *** Comment out singleCoursePaths.push() if you don't want to show buttons on Lesson pages ***
-    singleCoursePaths.push({
+    // *** Comment out backAndForwardPaths.push() if you don't want to show buttons on Lesson pages ***
+    backAndForwardPaths.push({
       path: x.slug,
     });
-    // *** Shows buttons on each Components page (teemalehed ja praktikumid) ***
-    x.components.map((y) => singleCoursePaths.push({
+    // *** Comment out x.components.map() if you don't want to show buttons on Components pages (sisulehed ja praktikumid) ***
+    x.components.map((y) => backAndForwardPaths.push({
+      path: `${x.slug}/${y}`,
+    }));
+    x.components.map((y) => markAsDonePaths.push({
       path: `${x.slug}/${y}`,
     }));
     // *** Comment out x.additionalMaterials.map() if you don't want to show buttons on Aine Lisamaterjalid pages ***
-    x.additionalMaterials.map((z) => singleCoursePaths.push({
+    x.additionalMaterials.map((z) => backAndForwardPaths.push({
       path: `${x.slug}/${z.slug}`,
     }));
   });
   // *** Comment out config.additionalMaterials.map() if you don't want to show buttons on Aine Lisamaterjalid page ***
-  config.additionalMaterials.map((x) => singleCoursePaths.push({
+  config.additionalMaterials.map((x) => backAndForwardPaths.push({
     path: x.slug,
   }));
 
-  return singleCoursePaths;
+  return { backAndForwardPaths, markAsDonePaths };
 };
 
-export { returnPreviousPage, returnNextPage, setSingleCoursePaths };
+export { returnPreviousPage, returnNextPage, setCourseButtonPaths };

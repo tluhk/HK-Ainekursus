@@ -76,24 +76,31 @@
   
   <br> <br>
   <!-- 
-  {{singleCoursePaths }}
+  {{backAndForwardPaths }}
   {{path.fullPath }} 
   -->
-
-  {{#ifIn path.fullPath singleCoursePaths }}
   <div class='flex gap-4 justify-center'>
-    {{#if_not_equal ../path.fullPath ../singleCoursePaths.[0].path }}
+  {{#ifIn path.fullPath backAndForwardPaths }}
+    {{#if_not_equal ../path.fullPath ../backAndForwardPaths.[0].path }}
       <input type="button" class="btn btn-secondary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}?ref={{../path.refBranch}}';" 
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" 
       value="Eelmine" />
     {{/if_not_equal }}
 
-    {{#if_not_equal ../path.fullPath (last ../singleCoursePaths) }}
+    {{#if_not_equal ../path.fullPath (last ../backAndForwardPaths) }}
       <input type="button" class="btn btn-primary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}?ref={{../path.refBranch}}';" value="Järgmine" />
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" value="Järgmine" />
     {{/if_not_equal }}
-  </div>
   {{/ifIn }}
+
+  {{#ifIn path.fullPath markAsDonePaths }}
+    {{#if_not_equal ../user.team.slug 'teachers'}}
+      <input type="button" class="btn btn-primary"
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" value="Märgi loetuks ja edasi" />
+    {{/if_not_equal }}
+  {{/ifIn }}
+
+  </div>
 
 </div>
 
