@@ -41,7 +41,21 @@ const responseAction = async (req, res, next) => {
   // console.log('githubRequest1:', githubRequest);
   // console.log('githubRequest1type:', typeof githubRequest);
 
-  // console.log('resComponents3:', apiResponse);
+  console.log('resComponents3:', apiResponse);
+
+  /**
+   * name: 'about.md',
+    path: 'concepts/emaplaadid/about.md',
+    sha: 'a1c74cf1ea13c19cc9c08bcec5bb6f6f693c4450',
+
+    name: 'about.md',
+    path: 'docs/about.md',
+    sha: '08343c30068205a54d6736b25199c7791f2ca655',
+
+    name: 'about.md',
+    path: 'concepts/emaplaadid/about.md',
+    sha: 'a1c74cf1ea13c19cc9c08bcec5bb6f6f693c4450',
+   */
 
   const { components, files, sources } = apiResponse;
   res.locals.resComponents = components;
@@ -82,13 +96,21 @@ const renderPage = async (req, res) => {
   // console.log('resFiles in responseAction:', resComponents);
 
   // console.log('resComponents1:', resComponents);
+  /**
+   * Sisulehe sisu lugemine
+   */
   const resComponentsContent = resComponents.data.content;
-
   const componentDecoded = base64.decode(resComponentsContent);
   const componentDecodedUtf8 = utf8.decode(componentDecoded);
 
   /**
-   * Sisuteema piltide kuvamine
+   * Sisulehe unikaalse SHA lugemine, andmebaasis sisulehe märkimiseks
+   */
+  const componentSHA = resComponents.data.sha;
+  console.log('componentSHA1:', componentSHA);
+
+  /**
+   * Sisulehe piltide kuvamine
    * - functions: https://stackoverflow.com/a/58542933
    * - changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
@@ -164,6 +186,7 @@ const renderPage = async (req, res) => {
     branches,
     selectedVersion,
     refBranch,
+    componentSHA,
   });
 };
 
@@ -324,10 +347,12 @@ const allCoursesController = {
       ref,
     } = req.query;
 
-    /* console.log('courseSlug1:', courseSlug);
-    console.log('contentSlug1:', contentSlug);
-    console.log('componentSlug1:', componentSlug);
-    console.log('req.user.team.slug1:', req.user.team.slug); */
+    /*
+    * console.log('courseSlug1:', courseSlug);
+    * console.log('contentSlug1:', contentSlug);
+    * console.log('componentSlug1:', componentSlug);
+    * console.log('ref1:', ref);
+    * console.log('req.user.team.slug1:', req.user.team.slug); */
 
     if (!req.user.team.slug) return res.redirect('/notfound');
 
@@ -337,29 +362,6 @@ const allCoursesController = {
     // console.log('selectedVersion1:', selectedVersion);
     res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
-
-    /**
-     * You need to add an event listener to your radio buttons to update the value of the hidden input whenever a radio button is clicked. Here's an example:
-     *
-      <!-- Radio buttons -->
-      <input type="radio" name="default-radio" value="value1" onclick="handleRadioClick('value1')">
-      <input type="radio" name="default-radio" value="value2" onclick="handleRadioClick('value2')">
-      <input type="radio" name="default-radio" value="value3" onclick="handleRadioClick('value3')">
-
-      <!-- Hidden form -->
-      <form id="my-form" style="display:none;" method="GET" action="/course/{{courseSlug}}/{{contentSlug}}/{{componentSlug}}">
-        <input type="hidden" name="selectedValue" id="selectedValue">
-      </form>
-
-      <script>
-      function handleRadioClick(value) {
-        document.getElementById("selectedValue").value = value;
-        document.getElementById("my-form").submit();
-      }
-      </script>
-
-      This code sets the value of the hidden input to the value of the clicked radio button, and then submits the form using JavaScript's submit() method. The form will then perform a GET request to your server with the selected value as a query parameter.
-     */
 
     /**
      * Get all available courses
@@ -416,11 +418,17 @@ const allCoursesController = {
      * - If yes, then read info from the matching branch.
      * If not, read info from master branch.
      */
-    if (selectedVersion && activeBranches.includes(selectedVersion)) {
+    console.log('selectedVersion4:', selectedVersion);
+    console.log('activeBranches4:', activeBranches);
+    console.log('teamSlug:4', teamSlug);
+
+    if (ref && activeBranches.includes(ref)) {
+      refBranch = ref;
+    } else if (selectedVersion && activeBranches.includes(selectedVersion)) {
       refBranch = selectedVersion;
     } else if (!selectedVersion && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
-    } else if (!selectedVersion && !activeBranches.includes(teamSlug) && teamSlug === 'teachers') {
+    } else if (!selectedVersion && !activeBranches.includes(teamSlug)) {
       if (ref) {
         refBranch = ref;
       } else {
@@ -469,15 +477,16 @@ const allCoursesController = {
 
     console.log(`reading content data for ${course.coursePathInGithub} from ${refBranch} branch`);
 
-    // console.log('config2:', config);
+    console.log('config2:', config);
+    console.log('config.lessons2:', config.lessons);
 
     res.locals.course = course;
     res.locals.config = config;
     res.locals.allCourses = allCoursesActive;
 
     const { backAndForwardPaths, markAsDonePaths } = setCourseButtonPaths(config);
-    console.log('backAndForwardPaths4:', backAndForwardPaths);
-    console.log('markAsDonePaths4:', markAsDonePaths);
+    // console.log('backAndForwardPaths4:', backAndForwardPaths);
+    // console.log('markAsDonePaths4:', markAsDonePaths);
     res.locals.backAndForwardPaths = backAndForwardPaths;
     res.locals.markAsDonePaths = markAsDonePaths;
 
@@ -512,14 +521,14 @@ const allCoursesController = {
         // console.log('Slug found in config.docs');
       }
     });
-    config.additionalMaterials.forEach(async (x) => {
+    config.additionalMaterials.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'courseAdditionalMaterialsService';
         // console.log('Slug found in config.additionalMaterials');
       }
     });
-    config.lessons.forEach(async (x) => {
+    config.lessons.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'lessonsService';
@@ -534,30 +543,52 @@ const allCoursesController = {
     let componentName;
     let componentType;
 
-    config.concepts.forEach(async (x) => {
-      if (x.slug === componentSlug && contentSlug) {
-        componentName = x.name;
-        componentType = 'concept';
-        githubRequest = 'lessonComponentsService';
-        // console.log('Slug found in config.concepts');
+    config.concepts.forEach((x) => {
+      if (x.slug === componentSlug) {
+        const lesson = config.lessons.find((les) => les.components.includes(componentSlug));
+        console.log('lesson1:', lesson);
+
+        if (lesson && lesson.slug === contentSlug) {
+          componentName = x.name;
+          componentType = 'concept';
+          githubRequest = 'lessonComponentsService';
+          // console.log('Slug found in config.concepts');
+        }
       }
     });
-    config.practices.forEach(async (x) => {
-      if (x.slug === componentSlug && contentSlug) {
-        componentName = x.name;
-        componentType = 'practice';
-        githubRequest = 'lessonComponentsService';
-        // console.log('Slug found in config.practices');
+    config.practices.forEach((x) => {
+      if (x.slug === componentSlug) {
+        const lesson = config.lessons.find((les) => les.components.includes(componentSlug));
+        console.log('lesson1:', lesson);
+
+        if (lesson && lesson.slug === contentSlug) {
+          componentName = x.name;
+          componentType = 'practice';
+          githubRequest = 'lessonComponentsService';
+          // console.log('Slug found in config.concepts');
+        }
       }
     });
-    config.lessons.forEach(async (x) => {
-      if (x.additionalMaterials[0].slug === componentSlug && contentSlug) {
+    config.lessons.forEach((x) => {
+      if (x.additionalMaterials[0].slug === componentSlug && x.slug === contentSlug) {
         componentName = x.additionalMaterials[0].name;
         componentType = 'docs';
         githubRequest = 'lessonAdditionalMaterialsService';
         // console.log('Slug found in config.lessons.additionalMaterials');
       }
     });
+
+    /**
+     * You can check values:
+     *
+    */
+    console.log('courseSlug1:', courseSlug);
+    console.log('course.courseName1:', course.courseName);
+    console.log('contentSlug1:', contentSlug);
+    console.log('contentName1:', contentName);
+    console.log('componentSlug1:', componentSlug);
+    console.log('componentName1:', componentName);
+    console.log('githubRequest1:', githubRequest);
 
     /**
      * IF contentSlug exists, but contentName is not returned
@@ -570,17 +601,6 @@ const allCoursesController = {
       console.log('no contentName or componentName found');
       return res.redirect('/notfound');
     }
-    /**
-     * You can check values:
-     *
-      console.log('courseSlug1:', courseSlug);
-      console.log('course.courseName1:', course.courseName);
-      console.log('contentSlug1:', contentSlug);
-      console.log('contentName1:', contentName);
-      console.log('componentSlug1:', componentSlug);
-      console.log('componentName1:', componentName);
-      console.log('githubRequest1:', githubRequest);
-    */
 
     /**
      * Function to set correct fullPath, depending on if componentSlug and/or contentSlug exist.

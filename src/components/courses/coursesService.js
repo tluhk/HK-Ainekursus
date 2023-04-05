@@ -258,7 +258,7 @@ const apiRequests = {
       refBranch,
     } = locals;
 
-    // ('refBranch8:', refBranch);
+    console.log('refBranch8:', refBranch);
 
     const routePath = `${request.url}+${refBranch}+components`;
     const routePathSources = `${request.url}+${refBranch}+sources`;
@@ -267,7 +267,7 @@ const apiRequests = {
     let sources;
 
     if (path.type === 'concept') {
-      if (!cache.get(routePath) || !cache.get(routePathSources)) {
+      if (!cache.get(routePath)) {
         console.log(`❌❌ concept components IS NOT from cache: ${routePath}`);
         console.log(`❌❌ concept sources IS NOT from cache: ${routePathSources}`);
         const componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);

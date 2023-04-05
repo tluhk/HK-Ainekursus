@@ -53,11 +53,12 @@ ip_address=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}
 # Create database inside the container's mysql server
 echo "Create database..."
 
-docker exec -i "$DOCKER_CONTAINER" mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -h "$DOCKER_CONTAINER" -P 3306 <<< "CREATE DATABASE \`course_management\`; USE \`course_management\`; CREATE TABLE \`users\` ( \`id\` INT NOT NULL AUTO_INCREMENT, \`githubID\` CHAR(12) NOT NULL DEFAULT '' UNIQUE, \`username\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', \`displayName\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, \`email\` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci, PRIMARY KEY (\`id\`) ); INSERT INTO \`users\` (\`githubID\`, \`username\`, \`displayName\`, \`email\`) VALUES (1234, 'seppkh', NULL, NULL), (62253084, 'seppkh', 'Krister Sepp', 'email@gmail.com');"
+docker exec -i "$DOCKER_CONTAINER" mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -h "$DOCKER_CONTAINER" -P 3306 <<< "CREATE DATABASE \`course_management\`; 
+  USE \`course_management\`; CREATE TABLE \`users\` ( \`id\` INT NOT NULL AUTO_INCREMENT, \`githubID\` CHAR(12) NOT NULL DEFAULT '' UNIQUE, \`username\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', \`displayName\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, \`email\` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci, PRIMARY KEY (\`id\`) ); INSERT INTO \`users\` (\`githubID\`, \`username\`, \`displayName\`, \`email\`) VALUES ('1234', 'seppkh', NULL, NULL), ('62253084', 'seppkh', 'Krister Sepp', 'email@gmail.com'); CREATE TABLE \`users_progress\` (\`githubID\` CHAR(12) NOT NULL DEFAULT '',\`courseCode\` CHAR(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',\`markedAsDoneComponents\` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '{}', PRIMARY KEY (\`githubID\`)); INSERT INTO \`users_progress\` (\`githubID\`, \`courseCode\`, \`markedAsDoneComponents\`) VALUES ('1234', 'HKI5085.HK', '["name1", "name2", "name3"]'), ('62253084', 'HKI5085.HK', '["name1", "name2"]');"
 
-# Wait for 10 seconds before starting containers again
+# Wait for 30 seconds before starting containers again
 echo "Waiting for database to initialize..."
-sleep 20
+sleep 30
 
 # Start the Docker containers again
 echo "Starting Docker containers again..." 2>&1

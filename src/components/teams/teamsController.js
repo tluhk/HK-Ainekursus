@@ -133,7 +133,7 @@ const teamsController = {
       const usersPromise = await getOneTeamMembers(team);
       users = await Promise.all(usersPromise);
 
-      console.log('users2:', users);
+      // console.log('users2:', users);
 
       let conn;
 
@@ -142,8 +142,8 @@ const teamsController = {
         try {
           conn = await pool.getConnection();
           response = await conn.query('SELECT username, displayName, email FROM users WHERE githubID = ?;', [user.id]);
-          console.log('response3:', response);
-          console.log('users[index]3:', users[index]);
+          // console.log('response3:', response);
+          // console.log('users[index]3:', users[index]);
         } catch (err) {
           console.log('getUsersInTeam error:');
           console.error(err);
@@ -151,7 +151,7 @@ const teamsController = {
           if (conn) conn.release(); // release to pool
         }
 
-        console.log('response4:', response);
+        // console.log('response4:', response);
         let displayName;
         let email;
         if (response && response[0]) {
@@ -159,20 +159,19 @@ const teamsController = {
           email = response[0].email;
         }
 
-        console.log('displayName3:', displayName);
-        console.log('email3:', email);
+        // console.log('displayName3:', displayName);
+        // console.log('email3:', email);
 
         if (!users[index].displayName && displayName) {
           users[index].displayName = displayName;
         } else users[index].displayName = users[index].login;
 
         users[index].email = email;
-        console.log('users5:', users);
+        // console.log('users5:', users);
       });
 
       await Promise.all(promises);
-
-      console.log('users4:', users);
+      // console.log('users4:', users);
 
       cache.set(routePath, users);
     } else {
@@ -180,7 +179,7 @@ const teamsController = {
       users = cache.get(routePath);
     }
 
-    console.log('users3:', users);
+    // console.log('users3:', users);
     return users;
   },
 };
