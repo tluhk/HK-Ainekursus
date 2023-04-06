@@ -43,19 +43,25 @@ DB_PASSWORD=''
 
 Terminid:
 
+Esimene muutuja on sinu Githubi token, [juhend](https://github.com/tluhk/rif20-valikpraktika-1/#github-tokeni-lisamine-rakendusse).
 ```
-Sinu Githubi token, [juhend](https://github.com/tluhk/rif20-valikpraktika-1/#github-tokeni-lisamine-rakendusse).
 AUTH=''
+```
 
 Järgnevad 3 muutujat leiad tluhk organisatsiooni Githubi kontolt: Settings -> Developer settings -> OAuth Apps -> Haapsalu kolledži e-õppe keskkond. [Otselink](https://github.com/organizations/tluhk/settings/applications/2100214).
+```
 GITHUB_CLIENT_ID=''
 GITHUB_CLIENT_SECRET=''
 GITHUB_CALLBACK_URL=''
+```
 
 Järnevale muutujale viitab setup-docker.sh fail Dockeri pilte ja konteinereid luues.
+```
 MYSQL_ROOT_PASSWORD=''
+```
 
 Järgnevale 3 muutujale viitavad rakenduses funktsioonid, mis loovad ühenduse, loevad ja uuendavad andmeid MariaDB andmebaasiga.
+```
 DB_HOST=''
 DB_USER=''
 DB_PASSWORD=''
