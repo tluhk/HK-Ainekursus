@@ -5,7 +5,7 @@ TLU HK RIF20 Valikpraktika raames loodud rakendus ainekursuste haldamiseks läbi
 ## <a href="https://rif.up.railway.app" target="_blank">Rakenduse demoversioon "lives"</a>
 
 
-## Rakenduse kasutamine ja käivitamine
+## Rakenduse käivitamine
 
 Rakendus eeldab NODE olemasolu arendusmasinas: [Node paigaldamisjuhised](https://nodejs.org/en/download/)
 
@@ -23,6 +23,97 @@ cd rif20-valikpraktika-1
 npm install
 ```
 
+### .env faili struktuur ja terminid
+
+Struktuur:
+
+```
+AUTH=''
+
+GITHUB_CLIENT_ID=''
+GITHUB_CLIENT_SECRET=''
+GITHUB_CALLBACK_URL=''
+
+MYSQL_ROOT_PASSWORD=''
+
+DB_HOST=''
+DB_USER=''
+DB_PASSWORD=''
+```
+
+Terminid:
+
+```
+Sinu Githubi token, [juhend](https://github.com/tluhk/rif20-valikpraktika-1/#github-tokeni-lisamine-rakendusse).
+AUTH=''
+
+Järgnevad 3 muutujat leiad tluhk organisatsiooni Githubi kontolt: Settings -> Developer settings -> OAuth Apps -> Haapsalu kolledži e-õppe keskkond. [Otselink](https://github.com/organizations/tluhk/settings/applications/2100214).
+GITHUB_CLIENT_ID=''
+GITHUB_CLIENT_SECRET=''
+GITHUB_CALLBACK_URL=''
+
+Järnevale muutujale viitab setup-docker.sh fail Dockeri pilte ja konteinereid luues.
+MYSQL_ROOT_PASSWORD=''
+
+Järgnevale 3 muutujale viitavad rakenduses funktsioonid, mis loovad ühenduse, loevad ja uuendavad andmeid MariaDB andmebaasiga.
+DB_HOST=''
+DB_USER=''
+DB_PASSWORD=''
+```
+
+### Dockeri ülesseadmine
+
+Lae alla [Dockeri desktop rakendus](https://www.docker.com/products/docker-desktop/).
+
+Andmebaas ja rakendus jooksevad Dockeri konteinerites nimedega haapsalu-mariadb ja haapsalu-app.
+Andmebaasi konteiner haapsalu-mariadb luuakse [MariaDB Dockeri pildi](https://hub.docker.com/_/mariadb) põhjal. 
+Rakenduse konteiner haapsalu-app luuakse haapsalu-nimelise pildi põhjal, mis luuakse rakenduse käivitamiskäsuga. Selleni jõuame järgmises punktis.
+
+Esmalt installi endale MariaDB Dockeri pilt:
+```
+docker pull mariadb:latest
+```
+
+Seejärel lisa .env faili vajalikud muutujat (vaata .env faili juhendit).
+
+#### Muud Dockeri käsud:
+
+Ainult andmebaasi ligipääsemiseks võid käivitada haapsalu-mariadb konteineri ja sellesse siseneda:
+```
+docker compose up haapsalu-mariadb -d
+docker exec -it haapsalu-mariadb bash
+```
+Sisene andmebaasi:
+```
+mysql -u root -p
+```
+
+Vajadusel saad kontrollida Dockeri poolt kasutusel olevat mälumahtu:
+```
+docker system df
+```
+
+Kui rakenduse käivitamisel tuleb teade, et Dockeris pole piisavalt mälumahtu, või kui haapsalu-mariadb konteinerit ei õnnestu käivitada, siis puhasta Dockeri vahemälu ja kasutuseta komponendid järgmiste käskudega:
+```
+docker builder prune
+docker container prune
+docker image prune
+docker volume prune
+docker network prune
+```
+
+Või kasuta üldist käsku:
+```
+docker system prune
+```
+
+Kui tahad Dockeri konteinereid kustutada, siis kasuta käsku:
+```
+docker rm haapsalu-mariadb haapsalu-app
+```
+
+Lisainfo dockeri kasutamise kohta: [https://mariadb.com/kb/en/installing-and-using-mariadb-via-docker/](https://mariadb.com/kb/en/installing-and-using-mariadb-via-docker/).
+
 ### Github tokeni lisamine rakendusse
 
 Githubiga ühenduse loomiseks on vajalik Githubi tokeni loomine ja selle lisamine juurkataloogi .env faili.
@@ -36,13 +127,20 @@ Githubiga ühenduse loomiseks on vajalik Githubi tokeni loomine ja selle lisamin
 
 ### Rakenduse käivitamine
 
-Seejärel võib rakenduse käivitada:
+Rakenduse käivitamiseks läbi Dockeri (koos andmebaasiga) kasuta käsku:
 
-```bash
+```
 npm start
 ```
 
+Rakenduse käivitamiseks ilma Dockerit kasutamata (ilma andmebaasita) kasuta käsku:
+
+```
+npm run start-app
+```
+
 Rakendus hakkab tööle lokaalses serveris: [localhost:3000](http://localhost:3000).
+
 
 ## Ainekursuste lisamine rakendusse
 
