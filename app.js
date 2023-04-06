@@ -251,29 +251,38 @@ async function userDBFunction(userData) {
   try {
     conn = await pool.getConnection();
     console.log('Connected to MariaDB1');
-
     console.log(`connected ! connection id is ${conn.threadId}`);
 
-    const users1 = await conn.query('SELECT * FROM users;');
-    console.log('users1:', users1);
+    // const users1 = await conn.query('SELECT * FROM users;');
+    // console.log('users1:', users1);
+
+    /**
+     * If user exists in DB, don't insert new user. Check if DB data matches with BE data. If not, get users' displayName and email data from DB.
+     * If user doesn't exist in DB, insert it to DB based on values in github. If displayName doesn't exist, use username to save this to DB. Return same github values you insert to DB.
+     */
 
     const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [githubID]);
     console.log('user1:', user);
 
-    /**
-     * If user exists in DB, don't insert, return saved data in DB
-     * If user doesn't exist in DB, insert those to DB based on values in github. Return same github values you inserted to DB.
-     */
-
-    if (user[0]) return user[0];
-
-    if (displayName) {
-      await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, displayName, email]);
+    if (user[0]) {
+      if (user[0].displayName && displayName !== user[0].displayName) {
+        userData.displayName = user[0].displayName;
+      }
+      if (user[0].email && email !== user[0].email) {
+        userData.email = user[0].email;
+      }
       return userData;
     }
-    await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, username, email]);
-    userData.displayName = username;
-    return userData;
+
+    if (!user[0]) {
+      if (displayName) {
+        await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, displayName, email]);
+        return userData;
+      }
+      await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, username, email]);
+      userData.displayName = username;
+      return userData;
+    }
   } catch (err) {
     console.log('Unable to connect to MariaDB1');
     console.error(err);
@@ -338,9 +347,6 @@ passport.use(
           if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
         }
 
-        // INSERT INTO users (githubID, username, displayName, email) VALUES (1234, 'seppkh', NULL, NULL);
-        // getUser();
-        // saveUser();
         // console.log('userInOrgMembers1:', userInOrgMembers);
         // console.log('profile1:', profile);
         // console.log('Logged in');
@@ -441,38 +447,126 @@ app.get(
   },
 );
 
-app.post('/save-displayName', async (req, res, next) => {
-  const { user } = req;
-  // console.log('req.body.login1:', req.body.login);
-  if (!req.body.displayName) {
-    return res.redirect('/save-displayName?displayName=true');
+app.post('/mark-component-as-done', async (req, res) => {
+  const { courseSlug, componentSlug, componentUUID } = req.body;
+
+  const githubID = req.user.id;
+  console.log('req.body6:', req.body);
+
+  console.log('githubID6:', githubID);
+  console.log('courseSlug6:', courseSlug);
+  console.log('componentSlug6:', componentSlug);
+  console.log('componentUUID6:', componentUUID);
+  if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
+    return res.redirect('/notfound');
   }
 
-  if (req.body.displayName) {
+  if (githubID && courseSlug && componentSlug && componentUUID) {
     let conn;
     try {
       conn = await pool.getConnection();
-      console.log('Connected to MariaDB!');
+      console.log('Connected to MariaDB 1!');
 
-      const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
+      const res0 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      console.log('res0:', res0);
+      const res1 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
       console.log('res1:', res1);
-      req.user.displayName = req.body.displayName;
-      console.log('cache.keys1:', cache.keys());
 
-      cache.flushAll();
+      if (!res1[0]) {
+        const keyValue = {};
+        keyValue[componentUUID] = componentSlug;
+        console.log('keyValue1:', keyValue);
+
+        const res2 = await conn.query('INSERT INTO users_progress (githubID, courseCode, markedAsDoneComponents) VALUES (?, ?, ?);', [githubID, courseSlug, keyValue]);
+        console.log('res2:', res2);
+      } else {
+        const res3 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT('$.', ?), ?) WHERE githubID = ? AND courseCode = ?;", [componentUUID, componentSlug, githubID, courseSlug]);
+        console.log('res3:', res3);
+      }
+
+      // cache.flushAll();
     } catch (err) {
-      console.log('Unable to connect to MariaDB');
+      console.log('Unable to connect to MariaDB 1');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
     }
   }
 
-  console.log('req.user1:', req.user);
-  console.log('user.id1:', user.id);
-  console.log('req.body.displayName1:', req.body.displayName);
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    console.log('Connected to MariaDB 2!');
 
-  return res.redirect('/dashboard');
+    const res4 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+    console.log('res4:', res4);
+    const res5 = await conn.query('SELECT * FROM users_progress;');
+    console.log('res5:', res5);
+  } catch (err) {
+    console.log('Unable to connect to MariaDB 2');
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+
+  return res.redirect('back');
+});
+
+app.post('/remove-component-as-done', async (req, res) => {
+  const { courseSlug, componentSlug, componentUUID } = req.body;
+
+  const githubID = req.user.id;
+  console.log('req.body7:', req.body);
+
+  console.log('githubID7:', githubID);
+  console.log('courseSlug7:', courseSlug);
+  console.log('componentSlug7:', componentSlug);
+  console.log('componentUUID7:', componentUUID);
+  if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
+    return res.redirect('/notfound');
+  }
+
+  if (githubID && courseSlug && componentSlug && componentUUID) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      console.log('Connected to MariaDB 3!');
+
+      const res6 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      console.log('res6:', res6);
+
+      if (res6[0]) {
+        const componentUUIDQuoted = `"${componentUUID}"`;
+        const res7 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', ?)) WHERE githubID = ? AND courseCode = ?;", [componentUUID, githubID, courseSlug]);
+        console.log('res7:', res7);
+      }
+
+      // cache.flushAll();
+    } catch (err) {
+      console.log('Unable to connect to MariaDB 3');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    console.log('Connected to MariaDB 4!');
+
+    const res8 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+    console.log('res8:', res8);
+    const res9 = await conn.query('SELECT * FROM users_progress;');
+    console.log('res9:', res9);
+  } catch (err) {
+    console.log('Unable to connect to MariaDB 4');
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+
+  return res.redirect('back');
 });
 
 app.get(
@@ -682,32 +776,8 @@ app.get('/noauth', otherController.noAuth);
  * Logout
  * https://www.tabnine.com/code/javascript/functions/express/Request/logout
  */
-
 app.get('/logout', resetSelectedVersion, (req, res, next) => {
   // console.log('req.user3:', req.user);
-
-  /**
-   * Try deleting github App Authorization when logging out. Gives 404 error.
-   */
-  /* try {
-    axios.create({
-      method: 'delete',
-      url: 'https://api.github.com/applications/' + process.env.GITHUB_CLIENT_ID + '/grant',
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: {
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
-        },
-      },
-      data: {
-        access_token: req.user.token, // This is the body part
-      },
-    });
-  } catch (error) {
-    console.error(error);
-  } */
-
   console.log('Logging out process');
   req.logout((err) => {
     if (err) { return next(err); }

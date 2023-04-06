@@ -74,7 +74,7 @@ docker container IP address:
 	PRIMARY KEY (\`githubID\`));
   INSERT INTO \`users_progress\` (\`githubID\`, \`courseCode\`, \`markedAsDoneComponents\`) VALUES ('1234', 'HKI5085.HK', '["name1", "name2", "name3"]'), ('62253084', 'HKI5085.HK', '["name1", "name2"]');"
 
-  INSERT INTO `users_progress` (`githubID`, `courseCode`, `markedAsDoneComponents`) VALUES ('1234', 'HKI5085.HK', '["name1", "name2", "name3"]'), ('62253084', 'HKI5085.HK', '["name1", "name2"]');
+  INSERT INTO `users_progress` (`githubID`, `courseCode`, `markedAsDoneComponents`) VALUES ('3423', 'HKI5085.HK', '{"name1":"ekfelfjewoi", "name2":"adqwjdqdijdoqd"}'), ('7457', 'HKI5085.HK', '{"name1":"fweocopkw", "name2":"rkeoprdkwop", "name3":"lkfekfjle"}');
 
   CREATE TABLE `users_progress` (
 	`githubID` CHAR(12) NOT NULL DEFAULT '',
@@ -82,3 +82,10 @@ docker container IP address:
 	`markedAsDoneComponents` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '{}',
 	PRIMARY KEY (`githubID`)
 );
+
+
+UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, '$.a1c74cf1ea13c19cc9c08bcec5bb6f6f693c4450', 'emaplaadid') WHERE githubID = '62253084' AND courseCode = 'HKI5084.HK';
+
+UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', 2233ae16-1f1e-4bdf-bcc7-cc3bbd3a350c)) WHERE githubID = 62253084 AND courseCode = HKI6001.HK;
+
+UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', a9833c0a-9276-4c6a-93b8-71b5460b03b5, '''')) WHERE githubID = '62253084' AND courseCode = 'HKI6001.HK';

@@ -30,9 +30,16 @@ const responseAction = async (req, res, next) => {
   let apiResponse;
   // eslint-disable-next-line no-prototype-builtins
   if (apiRequests.hasOwnProperty(githubRequest)) {
-    const func = await apiRequests[githubRequest];
+    let func;
+
+    try {
+      func = await apiRequests[githubRequest];
+    } catch (error) {
+      console.log(`Unable to get ${githubRequest}`);
+      console.error(error);
+    }
     // console.log('func1:', func);
-    await func(res.locals, req).then((response) => {
+    await func(req, res).then((response) => {
       // console.log('response1:', response);
       apiResponse = response;
     });
@@ -55,6 +62,9 @@ const responseAction = async (req, res, next) => {
     name: 'about.md',
     path: 'concepts/emaplaadid/about.md',
     sha: 'a1c74cf1ea13c19cc9c08bcec5bb6f6f693c4450',
+
+    28aee17fe750820f1d0dd1012380f5befab998bc
+    07d766e4ada35aa6f3794a213fd6d5cf70519b9f
    */
 
   const { components, files, sources } = apiResponse;
@@ -102,12 +112,6 @@ const renderPage = async (req, res) => {
   const resComponentsContent = resComponents.data.content;
   const componentDecoded = base64.decode(resComponentsContent);
   const componentDecodedUtf8 = utf8.decode(componentDecoded);
-
-  /**
-   * Sisulehe unikaalse SHA lugemine, andmebaasis sisulehe märkimiseks
-   */
-  const componentSHA = resComponents.data.sha;
-  console.log('componentSHA1:', componentSHA);
 
   /**
    * Sisulehe piltide kuvamine
@@ -186,7 +190,7 @@ const renderPage = async (req, res) => {
     branches,
     selectedVersion,
     refBranch,
-    componentSHA,
+    currentPath: req.body.currentPath,
   });
 };
 
@@ -513,6 +517,12 @@ const allCoursesController = {
     let contentName;
     let githubRequest;
 
+    /**
+   * Sisulehe content ja componenti UUID lugemine config failist, andmebaasis sisulehe märkimiseks
+   */
+    let contentUUID;
+    let componentUUID;
+
     config.docs.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
@@ -531,6 +541,7 @@ const allCoursesController = {
     config.lessons.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
+        contentUUID = x.uuid;
         githubRequest = 'lessonsService';
         // console.log('Slug found in config.lessons');
       }
@@ -550,6 +561,7 @@ const allCoursesController = {
 
         if (lesson && lesson.slug === contentSlug) {
           componentName = x.name;
+          componentUUID = x.uuid;
           componentType = 'concept';
           githubRequest = 'lessonComponentsService';
           // console.log('Slug found in config.concepts');
@@ -563,6 +575,7 @@ const allCoursesController = {
 
         if (lesson && lesson.slug === contentSlug) {
           componentName = x.name;
+          componentUUID = x.uuid;
           componentType = 'practice';
           githubRequest = 'lessonComponentsService';
           // console.log('Slug found in config.concepts');
@@ -586,8 +599,10 @@ const allCoursesController = {
     console.log('course.courseName1:', course.courseName);
     console.log('contentSlug1:', contentSlug);
     console.log('contentName1:', contentName);
+    console.log('contentUUID1:', contentUUID);
     console.log('componentSlug1:', componentSlug);
     console.log('componentName1:', componentName);
+    console.log('componentUUID1:', componentUUID);
     console.log('githubRequest1:', githubRequest);
 
     /**
@@ -646,6 +661,8 @@ const allCoursesController = {
       contentSlug,
       componentSlug,
       refBranch,
+      contentUUID,
+      componentUUID,
       fullPath: getFullPath(contentSlug, componentSlug),
       type: getType(contentSlug, componentSlug),
     };

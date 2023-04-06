@@ -26,7 +26,11 @@
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   <div id="markdown-content">
-    {{componentSHA}}
+    <br>
+    {{path.courseSlug}} <br>
+    {{path.componentSlug}} <br>
+    {{path.componentUUID}} <br>
+    
     {{{component}}}
   </div>
 
@@ -96,11 +100,27 @@
 
   {{#ifIn path.fullPath markAsDonePaths }}
     {{#if_not_equal ../user.team.slug 'teachers'}}
-      <input type="button" class="btn btn-primary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" value="Märgi loetuks ja edasi" />
+      <form id="my-form2" method="POST" action="/mark-component-as-done" name="markComponentAsDone" id="markComponentAsDone">
+        <!-- Hidden form inputs to send req.body values -->
+        <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
+        <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}" >
+        <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}" >
+        <button name="markAsDone" class="btn btn-primary">Märgi loetuks ja edasi</button>
+      </form>
+      <form id="my-form3" method="POST" action="/remove-component-as-done" name="removeComponentAsDone" id="removeComponentAsDone">
+        <!-- Hidden form inputs to send req.body values -->
+        <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
+        <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}" >
+        <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}" >
+        <button name="markAsDone" class="btn btn-primary">Eemalda märge ja edasi</button>
+      </form>
+      <br>
+      {{../path.courseSlug}} <br>
+      {{../path.componentSlug}} <br>
+      {{../path.componentUUID}} <br>
+
     {{/if_not_equal }}
   {{/ifIn }}
-
   </div>
 
 </div>
