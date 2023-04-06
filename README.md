@@ -86,7 +86,7 @@ Seejärel lisa .env faili vajalikud muutujat (vaata .env faili juhendit).
 
 Ainult andmebaasi ligipääsemiseks võid käivitada haapsalu-mariadb konteineri ja sellesse siseneda:
 ```
-docker compose up haapsalu-mariadb -d
+docker start haapsalu-mariadb
 docker exec -it haapsalu-mariadb bash
 ```
 Sisene andmebaasi:
