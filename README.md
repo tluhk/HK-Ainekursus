@@ -25,7 +25,7 @@ npm install
 
 ### .env faili struktuur ja terminid
 
-Struktuur:
+**Struktuur:**
 
 ```
 AUTH=''
@@ -41,7 +41,7 @@ DB_USER=''
 DB_PASSWORD=''
 ```
 
-Terminid:
+**Terminid:**
 
 Esimene muutuja on sinu Githubi token, [juhend](https://github.com/tluhk/rif20-valikpraktika-1/#github-tokeni-lisamine-rakendusse).
 ```
