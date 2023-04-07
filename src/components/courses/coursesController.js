@@ -14,6 +14,7 @@ import { returnPreviousPage, returnNextPage, setCourseButtonPaths } from '../../
 import apiRequests from './coursesService';
 import teamsController from '../teams/teamsController';
 import allNotificationsController from '../notifications/notificationsController';
+import pool from '../../../db';
 
 /**
  * Define what to do after info about couse and course page is received.
@@ -47,8 +48,6 @@ const responseAction = async (req, res, next) => {
 
   // console.log('githubRequest1:', githubRequest);
   // console.log('githubRequest1type:', typeof githubRequest);
-
-  console.log('resComponents3:', apiResponse);
 
   /**
    * name: 'about.md',
@@ -91,6 +90,7 @@ const renderPage = async (req, res) => {
     teachers,
     branches,
     selectedVersion,
+    markedAsDoneComponentsArr,
   } = res.locals;
 
   const {
@@ -166,6 +166,7 @@ const renderPage = async (req, res) => {
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
+  console.log('markedAsDoneComponentsArr9:', markedAsDoneComponentsArr);
   // console.log('teachers3:', teachers);
   res.render('course', {
     component: componentMarkdownWithoutTOC,
@@ -191,7 +192,66 @@ const renderPage = async (req, res) => {
     selectedVersion,
     refBranch,
     currentPath: req.body.currentPath,
+    markedAsDoneComponentsArr,
   });
+};
+
+const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
+  // console.log('githubID10:', githubID);
+  // console.log('courseSlug10:', courseSlug);
+  let res10;
+  let keysArray = [];
+
+  // read markedAsDoneComponents value from database
+  if (githubID && courseSlug) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      console.log('Connected to MariaDB 5!');
+
+      res10 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+    } catch (err) {
+      console.log('Unable to connect to MariaDB 5');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+    // console.log('res10:', res10);
+    // console.log('typeof res10:', typeof res10);
+
+    // if nothing has been saved to databse yet, return empty array
+    if (!res10[0]) return keysArray;
+    // console.log('typeof res10[0].markedAsDoneComponents:', typeof res10[0].markedAsDoneComponents);
+
+    // if sth had been saved to DB before, but then removed and DB now returns empty object, return empty array
+    if (res10[0].markedAsDoneComponents === '{}') {
+      return keysArray;
+    } 
+
+    // console.log('res10[0].markedAsDoneComponents:', res10[0].markedAsDoneComponents);
+
+    // remove the curly braces around DB entry (that's string type)
+    const string = res10[0].markedAsDoneComponents.slice(1, -1); 
+
+    // convert DB string entry to object
+    const obj = {};
+
+    string.split(',').forEach((pair) => {
+      const [key, value] = pair.trim().split(':');
+      // console.log('key:', key);
+      // console.log('value:', value);
+      const keyUnqouted = key.slice(1, -1);
+      const valueUnquoted = value.slice(1, -1);
+      obj[keyUnqouted] = valueUnquoted;
+    });
+    // console.log('obj:', obj);
+
+    // console.log('Object.keys(obj)', Object.keys(obj));
+    // Finally, save keys from object to array and return the array of keys.
+    keysArray = Object.keys(obj);
+    // console.log('keysArray:', keysArray);
+  }
+  return keysArray;
 };
 
 const allCoursesController = {
@@ -221,7 +281,7 @@ const allCoursesController = {
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     // console.log('allCourses1:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    console.log('allCoursesActive1:', allCoursesActive);
+    // console.log('allCoursesActive1:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
@@ -238,13 +298,13 @@ const allCoursesController = {
       */
       const allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
-      console.log('allTeacherCourses1:', allTeacherCourses);
+      // console.log('allTeacherCourses1:', allTeacherCourses);
 
       /*
       * Sort allTeacherCourses, these are teacher's own courses
       */
       allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
-      console.log('allTeacherCourses2:', allTeacherCourses);
+      // console.log('allTeacherCourses2:', allTeacherCourses);
 
       /* These are teachers of all other courses.
       * 1) group by teacher name
@@ -253,10 +313,10 @@ const allCoursesController = {
       * */
       const allCoursesGroupedByTeacher = allCoursesActive
         .groupBy(({ teacherUsername }) => teacherUsername);
-      console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
-      console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
+      // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
         .sort()
@@ -264,10 +324,10 @@ const allCoursesController = {
           acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
           return acc;
         }, {});
-      console.log('allTeacherCourses5:', allTeacherCourses);
+      // console.log('allTeacherCourses5:', allTeacherCourses);
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
       // console.log('allTeachers1:', allTeachers);
-      console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
+      // console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
 
       const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
@@ -366,6 +426,13 @@ const allCoursesController = {
     // console.log('selectedVersion1:', selectedVersion);
     res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
+
+    /**
+     * Get getMarkedAsDoneComponents data – this is array of UUID-s of components  that have been marked as done by the user
+     */
+    const markedAsDoneComponentsArr = await getMarkedAsDoneComponents(req.user.id, courseSlug);
+    console.log ('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
+    res.locals.markedAsDoneComponentsArr = markedAsDoneComponentsArr;
 
     /**
      * Get all available courses
@@ -481,8 +548,8 @@ const allCoursesController = {
 
     console.log(`reading content data for ${course.coursePathInGithub} from ${refBranch} branch`);
 
-    console.log('config2:', config);
-    console.log('config.lessons2:', config.lessons);
+    // console.log('config2:', config);
+    // console.log('config.lessons2:', config.lessons);
 
     res.locals.course = course;
     res.locals.config = config;
@@ -557,7 +624,7 @@ const allCoursesController = {
     config.concepts.forEach((x) => {
       if (x.slug === componentSlug) {
         const lesson = config.lessons.find((les) => les.components.includes(componentSlug));
-        console.log('lesson1:', lesson);
+        // console.log('lesson1:', lesson);
 
         if (lesson && lesson.slug === contentSlug) {
           componentName = x.name;
@@ -571,7 +638,7 @@ const allCoursesController = {
     config.practices.forEach((x) => {
       if (x.slug === componentSlug) {
         const lesson = config.lessons.find((les) => les.components.includes(componentSlug));
-        console.log('lesson1:', lesson);
+        // console.log('lesson1:', lesson);
 
         if (lesson && lesson.slug === contentSlug) {
           componentName = x.name;

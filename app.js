@@ -129,7 +129,8 @@ const cacheService = (async (req, res, next) => {
     }
     return console.log(`${cacheName} loaded with API`);
   } catch (err) {
-    return console.error('err');
+    console.log('err with cacheService:');
+    return console.error(err);
     // throw new Error(err);
   }
 });
@@ -465,20 +466,19 @@ app.post('/mark-component-as-done', async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      console.log('Connected to MariaDB 1!');
+      // console.log('Connected to MariaDB 1!');
 
       const res0 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-      console.log('res0:', res0);
+      // console.log('res0:', res0);
       const res1 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-      console.log('res1:', res1);
+      // console.log('res1:', res1);
 
       if (!res1[0]) {
         const keyValue = {};
         keyValue[componentUUID] = componentSlug;
-        console.log('keyValue1:', keyValue);
 
         const res2 = await conn.query('INSERT INTO users_progress (githubID, courseCode, markedAsDoneComponents) VALUES (?, ?, ?);', [githubID, courseSlug, keyValue]);
-        console.log('res2:', res2);
+        // console.log('res2:', res2);
       } else {
         const res3 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT('$.', ?), ?) WHERE githubID = ? AND courseCode = ?;", [componentUUID, componentSlug, githubID, courseSlug]);
         console.log('res3:', res3);
@@ -496,12 +496,12 @@ app.post('/mark-component-as-done', async (req, res) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    console.log('Connected to MariaDB 2!');
+    // console.log('Connected to MariaDB 2!');
 
     const res4 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-    console.log('res4:', res4);
+    // console.log('res4:', res4);
     const res5 = await conn.query('SELECT * FROM users_progress;');
-    console.log('res5:', res5);
+    // console.log('res5:', res5);
   } catch (err) {
     console.log('Unable to connect to MariaDB 2');
     console.error(err);
@@ -530,15 +530,14 @@ app.post('/remove-component-as-done', async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      console.log('Connected to MariaDB 3!');
+      // console.log('Connected to MariaDB 3!');
 
       const res6 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-      console.log('res6:', res6);
+      // console.log('res6:', res6);
 
       if (res6[0]) {
-        const componentUUIDQuoted = `"${componentUUID}"`;
         const res7 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', ?)) WHERE githubID = ? AND courseCode = ?;", [componentUUID, githubID, courseSlug]);
-        console.log('res7:', res7);
+        // console.log('res7:', res7);
       }
 
       // cache.flushAll();
@@ -553,12 +552,12 @@ app.post('/remove-component-as-done', async (req, res) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    console.log('Connected to MariaDB 4!');
+    // console.log('Connected to MariaDB 4!');
 
     const res8 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-    console.log('res8:', res8);
+    // console.log('res8:', res8);
     const res9 = await conn.query('SELECT * FROM users_progress;');
-    console.log('res9:', res9);
+    // console.log('res9:', res9);
   } catch (err) {
     console.log('Unable to connect to MariaDB 4');
     console.error(err);

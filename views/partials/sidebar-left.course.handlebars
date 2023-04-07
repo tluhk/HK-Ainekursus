@@ -73,8 +73,11 @@
                       {{{showComponentName this ../../concepts ../../practices}}}
                     </div>
                   </a>
+                  {{#ifInMarkedComponents (showComponentUUID this ../../concepts ../../practices) ../../markedAsDoneComponentsArr }}
+                  <span class="!pt-3 material-symbols-outlined">task_alt</span>
+                  {{else }}
                   <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
-
+                  {{/ifInMarkedComponents }}
               </div>
             {{/each}}
 

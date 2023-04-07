@@ -40,7 +40,7 @@ export default function hbsHelpers(hbs) {
       last: (array) => array[array.length - 1].path,
 
       concatActivePath: (arg1, arg2) => `${arg1}/${arg2}`,
-      ifIn: (elem, list, options) => {
+      ifInPaths: (elem, list, options) => {
         if (list === undefined) return options.inverse(this);
         const listMap = list.map((a) => a.path);
         if (listMap.indexOf(elem) > -1) {
@@ -48,7 +48,22 @@ export default function hbsHelpers(hbs) {
         }
         return options.inverse(this);
       },
-      ifNotIn: (elem, list, options) => {
+      ifInMarkedComponents: (elem, list, options) => {
+        // console.log('elem:', elem);
+        // console.log('list:', list);
+        if (list === undefined) {
+          // console.log('list is undefined');
+          return options.inverse(this);
+        }
+        if (list.includes(elem)) {
+          // console.log('elem in list');
+          return options.fn(this);
+        }
+        // console.log('elem not in list');
+
+        return options.inverse(this);
+      },
+      ifNotInList: (elem, list, options) => {
         if (list.indexOf(elem) <= -1) {
           return options.fn(this);
         }
@@ -76,6 +91,12 @@ export default function hbsHelpers(hbs) {
         const comp = components.find((x) => (x.slug) === component);
         return comp.name;
       },
+      showComponentUUID: (componentUppercase, concepts, practices) => {
+        const component = componentUppercase;
+        const components = concepts.concat(practices);
+        const comp = components.find((x) => (x.slug) === component);
+        return comp.uuid;
+      },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
         // console.log('teacherName2:', teacherName);
@@ -101,7 +122,7 @@ export default function hbsHelpers(hbs) {
             avatar_url: teacherData.avatar_url,
           };
         }
-        console.log('teacher1:', teacher);
+        // console.log('teacher1:', teacher);
         return teacher;
       },
       /**
