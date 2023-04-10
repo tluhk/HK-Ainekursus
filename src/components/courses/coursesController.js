@@ -220,7 +220,7 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
     // console.log('typeof res10:', typeof res10);
 
     // if nothing has been saved to databse yet, return empty array
-    if (!res10[0]) return keysArray;
+    if (!res10 || !res10[0]) return keysArray;
     // console.log('typeof res10[0].markedAsDoneComponents:', typeof res10[0].markedAsDoneComponents);
 
     // if sth had been saved to DB before, but then removed and DB now returns empty object, return empty array
@@ -254,6 +254,31 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
   return keysArray;
 };
 
+/**
+ * allCoursesActiveWithComponentsData
+ * For each course, get arr of markedAsDoneComponents
+ * For each course, get arr of component UUIDs that match with the user's ref version
+ * Check how many markedAsDoneComponents match with allComponents
+ */
+
+const allCoursesActiveWithComponentsData = async (allCoursesActive, githubID) => {
+  /**
+     * Get getMarkedAsDoneComponents data – this is array of UUID-s of components  that have been marked as done by the user
+     */
+
+  const allCoursesActiveDoneComponentsPromises = allCoursesActive.map((course) => getMarkedAsDoneComponents(githubID, course.courseSlug));
+
+  const allCoursesActiveDoneComponentsArr = await Promise.all(allCoursesActiveDoneComponentsPromises);
+  console.log('allCoursesActiveDoneComponentsArr1:', allCoursesActiveDoneComponentsArr);
+
+  allCoursesActive.forEach((course, index) => {
+    allCoursesActive[index].markedAsDoneComponentsUUIDs = allCoursesActiveDoneComponentsArr[index];
+  });
+
+  console.log('allCoursesActive1:', allCoursesActive);
+  return allCoursesActive;
+};
+
 const allCoursesController = {
 
   /**
@@ -281,7 +306,7 @@ const allCoursesController = {
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     // console.log('allCourses1:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    // console.log('allCoursesActive1:', allCoursesActive);
+    console.log('allCoursesActive5:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
@@ -385,8 +410,16 @@ const allCoursesController = {
 
       const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
+      let courses;
+      if (req.user && req.user.id) {
+        courses = await allCoursesActiveWithComponentsData(allCoursesActive, req.user.id);
+      } else courses = allCoursesActive;
+
+      console.log('allCoursesActiveWithComponentsData1:', allCoursesActiveWithComponentsData);
+      res.locals.allCoursesActive = allCoursesActiveWithComponentsData;
+
       return res.render('dashboard-student', {
-        courses: allCoursesActive,
+        courses,
         user: req.user,
         teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
@@ -410,13 +443,6 @@ const allCoursesController = {
     const {
       ref,
     } = req.query;
-
-    /*
-    * console.log('courseSlug1:', courseSlug);
-    * console.log('contentSlug1:', contentSlug);
-    * console.log('componentSlug1:', componentSlug);
-    * console.log('ref1:', ref);
-    * console.log('req.user.team.slug1:', req.user.team.slug); */
 
     if (!req.user.team.slug) return res.redirect('/notfound');
 
@@ -444,7 +470,7 @@ const allCoursesController = {
 
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
 
-    // console.log('allCoursesActive2:', allCoursesActive);
+    console.log('allCoursesActive2:', allCoursesActive);
     await allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
     /**
@@ -489,6 +515,11 @@ const allCoursesController = {
      * - If yes, then read info from the matching branch.
      * If not, read info from master branch.
      */
+    console.log('courseSlug1:', courseSlug);
+    console.log('contentSlug1:', contentSlug);
+    console.log('componentSlug1:', componentSlug);
+    console.log('ref1:', ref);
+    console.log('req.user.team.slug1:', req.user.team.slug);
     console.log('selectedVersion4:', selectedVersion);
     console.log('activeBranches4:', activeBranches);
     console.log('teamSlug:4', teamSlug);
@@ -500,6 +531,9 @@ const allCoursesController = {
     } else if (!selectedVersion && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
     } else if (!selectedVersion && !activeBranches.includes(teamSlug)) {
+      /**
+       * SEE LOOGIKA VAJAB ÜLEVAATAMIST
+       */
       if (ref) {
         refBranch = ref;
       } else {

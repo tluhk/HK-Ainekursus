@@ -160,6 +160,13 @@ export default function hbsHelpers(hbs) {
         return arr.slice(0, limit);
       },
       timeSince: (date) => moment(date).fromNow(),
+      matchingDoneComponentsCount: (markedAsDoneComponentsUUIDs, courseAllComponentsUUIDs) => {
+        console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
+        console.log('courseAllComponentsUUIDs7:', courseAllComponentsUUIDs);
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseAllComponentsUUIDs.includes(item)).length;
+
+        return commonElementsCount;
+      },
     },
   });
 }

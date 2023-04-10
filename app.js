@@ -115,7 +115,7 @@ const ensureAuthenticated = ((req, res, next) => {
   return res.redirect('/');
 });
 
-const cacheService = (async (req, res, next) => {
+const cacheService = (async (req, res) => {
   const { cacheName } = res.locals;
   // console.log('cacheName1:', cacheName);
   try {
@@ -124,8 +124,6 @@ const cacheService = (async (req, res, next) => {
       res.locals[cacheName] = await cache.get(cacheName);
       delete res.locals.cacheName;
       // console.log('res.locals2:', res.locals);
-
-      return next();
     }
     return console.log(`${cacheName} loaded with API`);
   } catch (err) {
@@ -392,7 +390,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  else {
+  /* else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -419,34 +417,10 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }
+  } */
 
   next();
 });
-
-app.get(
-  '/save-displayName',
-  (req, res) => {
-    let { displayName } = req.user;
-    if (!displayName) displayName = 'Ees- ja perekonnanimi';
-    let message = '';
-    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik';
-
-    res.send(`
-        <html>
-        <body>
-            <a href="/dashboard"">Tagasi avalehele</a><br>
-            <form action="/save-displayName" method="post">
-                <span>Sisesta enda profiilinimi:</span>
-                <input name="displayName" type="text" placeholder="${displayName}"/><br>
-                <input type="submit" value="Save"/>
-            </form>
-            <p style="color:red;">${message}</p>
-        </body>
-        </html>
-    `);
-  },
-);
 
 app.post('/mark-component-as-done', async (req, res) => {
   const { courseSlug, componentSlug, componentUUID } = req.body;
@@ -569,6 +543,64 @@ app.post('/remove-component-as-done', async (req, res) => {
 });
 
 app.get(
+  '/save-displayName',
+  (req, res) => {
+    let { displayName } = req.user;
+    if (!displayName) displayName = 'Ees- ja perekonnanimi';
+    let message = '';
+    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik';
+
+    res.send(`
+        <html>
+        <body>
+            <a href="/dashboard"">Tagasi avalehele</a><br>
+            <form action="/save-displayName" method="post">
+                <span>Sisesta enda profiilinimi:</span>
+                <input name="displayName" type="text" placeholder="${displayName}"/><br>
+                <input type="submit" value="Save displayName"/>
+            </form>
+            <p style="color:red;">${message}</p>
+        </body>
+        </html>
+    `);
+  },
+);
+
+app.post('/save-displayName', async (req, res) => {
+  const { user } = req;
+  // console.log('req.body.login1:', req.body.login);
+  if (!req.body.displayName) {
+    return res.redirect('/save-displayName?displayName=true');
+  }
+
+  if (req.body.displayName) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      console.log('Connected to MariaDB!');
+
+      const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
+      console.log('res1:', res1);
+      req.user.displayName = req.body.displayName;
+      console.log('cache.keys1:', cache.keys());
+
+      cache.flushAll();
+    } catch (err) {
+      console.log('Unable to connect to MariaDB');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  console.log('req.user1:', req.user);
+  console.log('user.id1:', user.id);
+  console.log('req.body.displayName1:', req.body.displayName);
+
+  return res.redirect('/dashboard');
+});
+
+app.get(
   '/save-email',
   (req, res) => {
     let { email } = req.user;
@@ -592,7 +624,7 @@ app.get(
   },
 );
 
-app.post('/save-email', async (req, res, next) => {
+app.post('/save-email', async (req, res) => {
   const { user } = req;
   // console.log('req.body.login1:', req.body.login);
   if (!req.body.email) {
@@ -606,6 +638,9 @@ app.post('/save-email', async (req, res, next) => {
     // Regular expression to check if string is email
     const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
     const isEmail = regexExp.test(req.body.email);
+
+    console.log('isEmail:', isEmail);
+
     /**
      * If entered value is email, redirect back to login and show "email is not allowed" message
      */

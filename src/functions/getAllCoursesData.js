@@ -96,7 +96,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
     // console.log('refBranch4:', refBranch);
 
     const coursePromise = (param) => getConfig(param.full_name, refBranch)
-      .then(async (result) => {
+      .then(async (config) => {
         /**
          * Read course information from ÕIS Ainekaart
          * https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
@@ -111,7 +111,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
           console.log(`❌❌ oisContent IS NOT from cache: ${routePathOisContent}`);
 
           try {
-            await axios(result.courseUrl).then((response) => {
+            await axios(config.courseUrl).then((response) => {
               const { data } = response;
               const $ = cheerio.load(data);
 
@@ -142,14 +142,31 @@ const getAllCoursesData = (async (teamSlug, req) => {
         // const end6 = performance.now();
         // console.log(`Execution time oisContent: ${end6 - start6} ms`);
 
+        console.log('oisContent.name5:', oisContent.name);
+
+        const allComponentSlugs = [];
+        config.lessons.forEach((lesson) => {
+          allComponentSlugs.push(lesson.components);
+        });
+
+        const allComponentSlugsFlat = [].concat(...allComponentSlugs);
+        console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
+
+        const allComponentsUUIDs = [
+          ...config.concepts.filter((concept) => allComponentSlugsFlat.includes(concept.slug)).map((concept) => concept.uuid),
+          ...config.practices.filter((practice) => allComponentSlugsFlat.includes(practice.slug)).map((practice) => practice.uuid),
+        ];
+
+        console.log('allComponentsUUIDs5:', allComponentsUUIDs);
+
         return {
-          courseUrl: result.courseUrl,
-          teacherUsername: result.teacherUsername,
-          courseIsActive: result.active,
-          courseName: result.courseName || oisContent.name,
+          courseUrl: config.courseUrl,
+          teacherUsername: config.teacherUsername,
+          courseIsActive: config.active,
+          courseName: config.courseName || oisContent.name,
           courseSlug: oisContent.code, // || result.slug,
           courseCode: oisContent.code, // || result.courseCode,
-          courseSemester: result.semester,
+          courseSemester: config.semester,
           courseSlugInGithub: y.name,
           coursePathInGithub: y.full_name,
           refBranch,
@@ -158,6 +175,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
           // courseEesmargid: oisContent.eesmargid,
           // courseSummary: oisContent.summary,
           // courseOpivaljundid: oisContent.opivaljundid,
+          courseAllComponentsUUIDs: allComponentsUUIDs,
         };
       });
 
