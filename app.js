@@ -39,6 +39,7 @@ import allNotificationsController from './src/components/notifications/notificat
  *  Import handlebars helpers: https://stackoverflow.com/a/32707476
  */
 import handlebarsFactory from './src/helpers/handlebars';
+import allOverviewController from './src/components/progress-overview/overviewController';
 
 dotenv.config();
 
@@ -390,7 +391,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  /* else {
+  else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -417,7 +418,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
   next();
 });
@@ -790,6 +791,11 @@ app.post('/save-selected-version', (req, res) => {
  * Notifications page
  */
 app.get('/notifications', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
+
+/**
+ * Progress overview page
+ */
+/* app.get('/progress-overview', resetSelectedVersion, allOverviewController.allOverviewController); */
 
 /**
  * Courses page

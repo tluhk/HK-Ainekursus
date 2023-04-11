@@ -46,7 +46,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
 
   if (!courses) return [];
 
-  // console.log('courses1:', courses);
+  console.log('courses1:', courses);
 
   /*
   * Set conditions, which Repositories (Courses) are read from tluhk org github account
@@ -65,8 +65,8 @@ const getAllCoursesData = (async (teamSlug, req) => {
     // const end5 = performance.now();
     // console.log(`Execution time activeBranches: ${end5 - start5} ms`);
 
-    // console.log('y.full_name4:', y.full_name);
-    // console.log('activeBranches4:', activeBranches);
+    console.log('y.full_name4:', y.full_name);
+    console.log('activeBranches4:', activeBranches);
     let refBranch;
     if (activeBranches && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
@@ -89,6 +89,9 @@ const getAllCoursesData = (async (teamSlug, req) => {
 
       if (correctBranchIndex > -1) {
         refBranch = activeBranches[correctBranchIndex];
+      } else if (correctBranchIndex <= -1) {
+        const firstActiveBranchIndex = branchConfigs.findIndex((config) => config.active === true);
+        refBranch = activeBranches[firstActiveBranchIndex];
       } else refBranch = 'master';
     } else {
       refBranch = 'master';

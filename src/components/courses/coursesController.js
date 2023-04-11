@@ -323,7 +323,7 @@ const allCoursesController = {
       */
       const allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
-      // console.log('allTeacherCourses1:', allTeacherCourses);
+      console.log('allTeacherCourses1:', allTeacherCourses);
 
       /*
       * Sort allTeacherCourses, these are teacher's own courses
@@ -341,7 +341,7 @@ const allCoursesController = {
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
-      // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
+      console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
         .sort()
@@ -448,9 +448,11 @@ const allCoursesController = {
 
     const teamSlug = req.user.team.slug;
 
-    const selectedVersion = req.session.selectedVersion || null;
-    // console.log('selectedVersion1:', selectedVersion);
+    const selectedVersion = req.session.selectedVersion || ref || null;
     res.locals.selectedVersion = selectedVersion;
+    // const selectedVersion = req.session.selectedVersion || null;
+    console.log('selectedVersion1:', selectedVersion);
+    // res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
 
     /**
@@ -489,7 +491,7 @@ const allCoursesController = {
     // console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
 
     const allTeachers = await teamsController.getUsersInTeam('teachers');
-    // console.log('allTeachers0:', allTeachers);
+    console.log('allTeachers0:', allTeachers);
 
     res.locals.teachers = allTeachers;
 
@@ -524,35 +526,58 @@ const allCoursesController = {
     console.log('activeBranches4:', activeBranches);
     console.log('teamSlug:4', teamSlug);
 
-    if (ref && activeBranches.includes(ref)) {
-      refBranch = ref;
-    } else if (selectedVersion && activeBranches.includes(selectedVersion)) {
+    /**
+     * ÕIGETE KURSUSE VERSIOONIDE NÄITAMISE LOOGIKA:
+     * 1. Kui on antud selectedVersion ja kursuse aktiivsete branchide all on sama nimega branch, siis loe infot sellest branchist
+     * 2. Kui on antud selectedVersion, ja kursuse aktiivsete branchide all EI OLE sama nimega branchi, siis suuna /notfound lehele. St, et kasutaja püüdis URLi ligi pääseda kursusele versioonile, mis ei ole aktiivne.
+     * 3. Kui pole antud selectedVersion, siis vaata, kas kursuse aktiivsete branchide all on kasutaja tiiminimega sama branch. Kui jah, siis loe infot sellest branchist
+     * 4. Kui pole antud selectedVersion, ja kui kursuse aktiivsete branchide all EI OLE kasutaja tiiminimega sama nimega branchi, siis pead kontrollima, kas kasutaja on äkki 'teachers' tiimis (NB! ('teachers') tiimil pole enda nimega branche).
+     * -- 4a. Kui kasutaja ON 'teachers' tiimis, siis sa pead leidma aktiivsete branchide alt esimese kursuse, mille teacherUsername on kasutaja username. Kui kursusel nii master kui ka rif20 branchid aktiivsed, aga masteri teacher on muu kasutaja, siis peab sisseloginud kasutajale kuvama rif20 branchi, kus tema on määratud õpetaja. St, tagasta kursuse esimene aktiivne branch, mille lingitud õpetaja on sisseloginud õpetaja.
+     * -- 4b. Kui kasutaja ON 'teachers' tiimis, ja kui aktiivsete branchide all pole ühtegi versioon, mille teacherUsername on sisseloginud kasutaja, siis tagasta kursuse esimene aktiivne branch.
+     * -- 4c. Kui kursuse all pole ühtegi aktiivset branchi, suuna "/notfound" lehele.
+     * 5. Kui kasutaja EI OLE 'teachers' tiimis, aga kui aktiivsete branchide all on mõni versioon, siis tagasta esimene aktiivne versioon.
+     * 6. Kui kasutaja EI OLE 'teachers' tiimis, pole antud selectedVersion ja kasutaja tiim pole activeBranches hulgas, siis suuna "/notfound" lehele.
+     */
+
+    // 1.
+    if (selectedVersion && activeBranches.includes(selectedVersion)) {
       refBranch = selectedVersion;
+    // 2.
+    } else if (selectedVersion && !activeBranches.includes(selectedVersion)) {
+      return res.redirect('/notfound');
+    // 3.
     } else if (!selectedVersion && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
+    // 4.
     } else if (!selectedVersion && !activeBranches.includes(teamSlug)) {
-      /**
-       * SEE LOOGIKA VAJAB ÜLEVAATAMIST
-       */
-      if (ref) {
-        refBranch = ref;
-      } else {
-        const branchConfigPromises = activeBranches.map(async (branch) => {
-          const config = await getConfig(course.coursePathInGithub, branch);
-          return config;
-        });
-        // console.log('branchConfigPromises1:', branchConfigPromises);
-        const branchConfigs = await Promise.all(branchConfigPromises);
-        const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === req.user.username);
-        // console.log('branchConfigs1:', branchConfigs);
+      const activeBranchConfigPromises = activeBranches.map(async (branch) => {
+        const config = await getConfig(course.coursePathInGithub, branch);
+        return config;
+      });
+      const activeBranchConfigs = await Promise.all(activeBranchConfigPromises);
+      // console.log('activeBranchConfigs1:', activeBranchConfigs);
+
+      if (allTeachers.find((teacher) => teacher.login === req.user.username)) {
+        const correctBranchIndex = activeBranchConfigs.findIndex((config) => config.teacherUsername === req.user.username);
+        // console.log('activeBranchConfigs1:', activeBranchConfigs1);
         // console.log('correctBranchIndex1:', correctBranchIndex);
+
+        // 4a.
         if (correctBranchIndex > -1) {
           refBranch = activeBranches[correctBranchIndex];
-        } else refBranch = 'master';
+        // 4b.
+        } else if (correctBranchIndex <= -1 && activeBranches.length >= 0) {
+          refBranch = activeBranches[0];
+        // 4c.
+        } return res.redirect('/notfound');
       }
-    } else {
-      refBranch = 'master';
-    }
+      // 5.
+      if (activeBranches.length >= 0) {
+        const firstActiveBranchIndex = activeBranchConfigs.findIndex((config) => config.active === true);
+        refBranch = activeBranches[firstActiveBranchIndex];
+      }
+    // 6.
+    } else return res.redirect('/notfound');
 
     // console.log('refBranch3:', refBranch);
 
