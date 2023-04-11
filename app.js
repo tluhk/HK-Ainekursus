@@ -1,74 +1,83 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
-require('dotenv').config();
-const { default: axios } = require('axios');
-
 /**
  * Import express framework
  */
-const express = require('express');
-const path = require('path');
-const exphbs = require('express-handlebars');
-
-/**
-  * Create express app
-  */
-const app = express();
-const port = process.env.PORT || 3000;
-const favicon = require('serve-favicon');
+import express from 'express';
+import path, { join } from 'path';
+import exphbs from 'express-handlebars';
+import favicon from 'serve-favicon';
 
 /**
  * Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
  */
-const session = require('express-session');
-const passport = require('passport');
-const GitHubStrategy = require('passport-github2').Strategy;
-const bodyParser = require('body-parser');
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as GitHubStrategy } from 'passport-github2';
+import pkg from 'body-parser';
 
 /* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
-const livereload = require('livereload');
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, '/views'));
-liveReloadServer.watch(path.join(__dirname, 'public'));
+import { createServer } from 'livereload';
+import connectLivereload from 'connect-livereload';
+
+import dotenv from 'dotenv';
+
+import { fileURLToPath } from 'url';
+import pool from './db';
+import cache from './src/setup/setupCache';
+
+import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController';
+import otherController from './src/components/other/otherController';
+import membersController from './src/components/members/membersController';
+import teamsController from './src/components/teams/teamsController';
+import allNotificationsController from './src/components/notifications/notificationsController';
+
+/**
+ *  Import handlebars helpers: https://stackoverflow.com/a/32707476
+ */
+import handlebarsFactory from './src/helpers/handlebars';
+import allOverviewController from './src/components/progress-overview/overviewController';
+
+dotenv.config();
+
+const { urlencoded } = pkg;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+  * Create express app
+  */
+const app = express();
+const port = process.env.PORT || 3000;
+
+/* const liveReloadServer = createServer();
+liveReloadServer.watch(join(__dirname, '/views'));
+liveReloadServer.watch(join(__dirname, 'public'));
 liveReloadServer.server.once('connection', () => {
   setTimeout(() => {
     liveReloadServer.refresh('/');
   }, 100);
 });
-const connectLivereload = require('connect-livereload');
-app.use(connectLivereload());
+app.use(connectLivereload()); */
 
-const { cache } = require('./src/setup/setupCache');
-
-const {
-  allCoursesController, responseAction, renderPage,
-} = require('./src/components/courses/coursesController');
-const { otherController } = require('./src/components/other/otherController');
-const { membersController } = require('./src/components/members/membersController');
-const { teamsController } = require('./src/components/teams/teamsController');
-const { authController } = require('./src/components/auth/authController');
-const { allNotificationsController } = require('./src/components/notifications/notificationsController');
-
-/**
- *  Import handlebars helpers: https://stackoverflow.com/a/32707476
- */
-const handlebars = require('./src/helpers/handlebars')(exphbs);
+const handlebars = handlebarsFactory(exphbs);
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', join(__dirname, '/views'));
 
 /**
  *  Define application static folder
  */
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(join(__dirname, '/public')));
 
 /**
  *  Define favicon file
  */
-app.use(favicon(path.join(__dirname, '/public/images', 'favicon.ico')));
+app.use(favicon(join(__dirname, '/public/images', 'favicon.ico')));
 
 /**
   * Testing API endpoints
@@ -107,7 +116,7 @@ const ensureAuthenticated = ((req, res, next) => {
   return res.redirect('/');
 });
 
-const cacheService = (async (req, res, next) => {
+const cacheService = (async (req, res) => {
   const { cacheName } = res.locals;
   // console.log('cacheName1:', cacheName);
   try {
@@ -116,13 +125,12 @@ const cacheService = (async (req, res, next) => {
       res.locals[cacheName] = await cache.get(cacheName);
       delete res.locals.cacheName;
       // console.log('res.locals2:', res.locals);
-
-      return;
     }
-    console.log(`${cacheName} loaded with API`);
+    return console.log(`${cacheName} loaded with API`);
   } catch (err) {
-    console.error('err');
-    throw new Error(err);
+    console.log('err with cacheService:');
+    return console.error(err);
+    // throw new Error(err);
   }
 });
 
@@ -196,7 +204,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 
 GitHubStrategy.prototype.authorizationParams = function (options) {
   return options || {};
@@ -217,6 +225,72 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+/** LOGIN LOGIC
+   * check if githubUserID exists in tluhk Github organisation members
+   * if not, redirect to /noauth page, showing you must ask access from tluhk
+   * -- if yes:
+   * get all tluhk teams
+   * get all githubUserID teams
+   * get all tluhk HK_ team assignments
+   * check if githubUserID exists in tluhk Github organisation teams
+   * -- if not, redirect to /noauth page, showing you must ask access from tluhk
+   * -- if yes:
+   * check which teams it exists in
+   * check if githubID exists in users
+   * -- if yes, check that user is up-to-date with github user?? + update??
+   * -- if yes, read user info from database? github?
+   * -- if not, add githubUser to users
+   */
+
+async function userDBFunction(userData) {
+  const {
+    githubID, username, displayName, email,
+  } = userData;
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    console.log('Connected to MariaDB1');
+    console.log(`connected ! connection id is ${conn.threadId}`);
+
+    // const users1 = await conn.query('SELECT * FROM users;');
+    // console.log('users1:', users1);
+
+    /**
+     * If user exists in DB, don't insert new user. Check if DB data matches with BE data. If not, get users' displayName and email data from DB.
+     * If user doesn't exist in DB, insert it to DB based on values in github. If displayName doesn't exist, use username to save this to DB. Return same github values you insert to DB.
+     */
+
+    const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [githubID]);
+    console.log('user1:', user);
+
+    if (user[0]) {
+      if (user[0].displayName && displayName !== user[0].displayName) {
+        userData.displayName = user[0].displayName;
+      }
+      if (user[0].email && email !== user[0].email) {
+        userData.email = user[0].email;
+      }
+      return userData;
+    }
+
+    if (!user[0]) {
+      if (displayName) {
+        await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, displayName, email]);
+        return userData;
+      }
+      await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, username, email]);
+      userData.displayName = username;
+      return userData;
+    }
+  } catch (err) {
+    console.log('Unable to connect to MariaDB1');
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+}
+
 // Use the GitHubStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and GitHub
@@ -230,15 +304,13 @@ passport.use(
       // proxy: true,
     },
     (async (accessToken, refreshToken, profile, done) => {
-      process.nextTick(() => {
+      process.nextTick(async () => {
         // asynchronous verification, for effect...
         // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
         // console.log('accessToken1:', accessToken);
 
         // eslint-disable-next-line no-param-reassign
         // profile.token = accessToken;
-
-        console.log({ profile });
 
         /**
          * Check if Github user is part of tluhk Github org members.
@@ -253,30 +325,33 @@ passport.use(
         }
         console.log('user exists in tluhk org');
 
-        // getUser();
-        // saveUser();
+        console.log('profile1:', profile);
+        const {
+          id, username, displayName, _json,
+        } = profile;
+        const { email } = _json;
+
+        const userData = {
+          githubID: id, username, displayName, email,
+        };
+
+        /* console.log('id1:', id);
+        console.log('username1:', username);
+        console.log('displayName1:', displayName);
+        console.log('_json.email1:', _json.email); */
+
+        const userDataAfterDB = await userDBFunction(userData);
+
+        if (userDataAfterDB) {
+          if (userDataAfterDB.displayName && profile.displayName !== userDataAfterDB.displayName) profile.displayName = userDataAfterDB.displayName;
+          if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
+        }
+
         // console.log('userInOrgMembers1:', userInOrgMembers);
         // console.log('profile1:', profile);
         // console.log('Logged in');
         return done(null, profile);
       });
-
-      /**
-       * check if githubUserID exists in tluhk Github organisation members
-       * if not, redirect to /noauth page, showing you must ask access from tluhk
-       * -- if yes:
-       * get all tluhk teams
-       * get all githubUserID teams
-       * get all tluhk HK_ team assignments
-       * check if githubUserID exists in tluhk Github organisation teams
-       * -- if not, redirect to /noauth page, showing you must ask access from tluhk
-       * -- if yes:
-       * check which teams it exists in
-       * check if githubID exists in users
-       * -- if yes, check that user is up-to-date with github user?? + update??
-       * -- if yes, read user info from database? github?
-       * -- if not, add githubUser to users
-       */
 
       // an example of how you might save a user
       // new User({ username: profile.username }).fetch().then(user => {
@@ -289,47 +364,6 @@ passport.use(
       // })
     }),
   ),
-);
-
-// Make a request to the GitHub API to retrieve a list of email addresses associated with the user's account
-
-const getUsernameToEmail = ((email) => axios.get({
-  url: 'https://api.github.com/user/emails',
-  headers: {
-    'User-Agent': 'request',
-    Authorization: `Bearer ${accessToken}`,
-  },
-}, (error, response, body) => {
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  const emails = JSON.parse(body);
-  const matchingEmail = emails.find((emailObj) => emailObj.email === email);
-
-  if (matchingEmail) {
-  // If the email address is associated with a GitHub account, retrieve the username for that account
-    axios.get({
-      url: 'https://api.github.com/user',
-      headers: {
-        'User-Agent': 'request',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }, (error, response, body) => {
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const userData = JSON.parse(body);
-      const username = userData.login;
-      console.log(`The email address ${email} is associated with the GitHub account ${username}`);
-    });
-  } else {
-    console.log(`The email address ${email} is not associated with a GitHub account`);
-  }
-})
 );
 
 /**
@@ -345,6 +379,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
     // console.log('user1:', user);
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
+  // eslint-disable-next-line brace-style
   }
 
   /**
@@ -368,12 +403,12 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      team: {
+      /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
+      }, */
     };
 
     if (req.user && !req.user.team) {
@@ -386,6 +421,253 @@ app.use(getTeamAssignments, async (req, res, next) => {
   }
 
   next();
+});
+
+app.post('/mark-component-as-done', async (req, res) => {
+  const { courseSlug, componentSlug, componentUUID } = req.body;
+
+  const githubID = req.user.id;
+  console.log('req.body6:', req.body);
+
+  console.log('githubID6:', githubID);
+  console.log('courseSlug6:', courseSlug);
+  console.log('componentSlug6:', componentSlug);
+  console.log('componentUUID6:', componentUUID);
+  if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
+    return res.redirect('/notfound');
+  }
+
+  if (githubID && courseSlug && componentSlug && componentUUID) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      // console.log('Connected to MariaDB 1!');
+
+      const res0 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      // console.log('res0:', res0);
+      const res1 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      // console.log('res1:', res1);
+
+      if (!res1[0]) {
+        const keyValue = {};
+        keyValue[componentUUID] = componentSlug;
+
+        const res2 = await conn.query('INSERT INTO users_progress (githubID, courseCode, markedAsDoneComponents) VALUES (?, ?, ?);', [githubID, courseSlug, keyValue]);
+        // console.log('res2:', res2);
+      } else {
+        const res3 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT('$.', ?), ?) WHERE githubID = ? AND courseCode = ?;", [componentUUID, componentSlug, githubID, courseSlug]);
+        console.log('res3:', res3);
+      }
+
+      // cache.flushAll();
+    } catch (err) {
+      console.log('Unable to connect to MariaDB 1');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    // console.log('Connected to MariaDB 2!');
+
+    const res4 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+    // console.log('res4:', res4);
+    const res5 = await conn.query('SELECT * FROM users_progress;');
+    // console.log('res5:', res5);
+  } catch (err) {
+    console.log('Unable to connect to MariaDB 2');
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+
+  return res.redirect('back');
+});
+
+app.post('/remove-component-as-done', async (req, res) => {
+  const { courseSlug, componentSlug, componentUUID } = req.body;
+
+  const githubID = req.user.id;
+  console.log('req.body7:', req.body);
+
+  console.log('githubID7:', githubID);
+  console.log('courseSlug7:', courseSlug);
+  console.log('componentSlug7:', componentSlug);
+  console.log('componentUUID7:', componentUUID);
+  if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
+    return res.redirect('/notfound');
+  }
+
+  if (githubID && courseSlug && componentSlug && componentUUID) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      // console.log('Connected to MariaDB 3!');
+
+      const res6 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      // console.log('res6:', res6);
+
+      if (res6[0]) {
+        const res7 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', ?)) WHERE githubID = ? AND courseCode = ?;", [componentUUID, githubID, courseSlug]);
+        // console.log('res7:', res7);
+      }
+
+      // cache.flushAll();
+    } catch (err) {
+      console.log('Unable to connect to MariaDB 3');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    // console.log('Connected to MariaDB 4!');
+
+    const res8 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+    // console.log('res8:', res8);
+    const res9 = await conn.query('SELECT * FROM users_progress;');
+    // console.log('res9:', res9);
+  } catch (err) {
+    console.log('Unable to connect to MariaDB 4');
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+
+  return res.redirect('back');
+});
+
+app.get(
+  '/save-displayName',
+  (req, res) => {
+    let { displayName } = req.user;
+    if (!displayName) displayName = 'Ees- ja perekonnanimi';
+    let message = '';
+    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik';
+
+    res.send(`
+        <html>
+        <body>
+            <a href="/dashboard"">Tagasi avalehele</a><br>
+            <form action="/save-displayName" method="post">
+                <span>Sisesta enda profiilinimi:</span>
+                <input name="displayName" type="text" placeholder="${displayName}"/><br>
+                <input type="submit" value="Save displayName"/>
+            </form>
+            <p style="color:red;">${message}</p>
+        </body>
+        </html>
+    `);
+  },
+);
+
+app.post('/save-displayName', async (req, res) => {
+  const { user } = req;
+  // console.log('req.body.login1:', req.body.login);
+  if (!req.body.displayName) {
+    return res.redirect('/save-displayName?displayName=true');
+  }
+
+  if (req.body.displayName) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      console.log('Connected to MariaDB!');
+
+      const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
+      console.log('res1:', res1);
+      req.user.displayName = req.body.displayName;
+      console.log('cache.keys1:', cache.keys());
+
+      cache.flushAll();
+    } catch (err) {
+      console.log('Unable to connect to MariaDB');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  console.log('req.user1:', req.user);
+  console.log('user.id1:', user.id);
+  console.log('req.body.displayName1:', req.body.displayName);
+
+  return res.redirect('/dashboard');
+});
+
+app.get(
+  '/save-email',
+  (req, res) => {
+    let { email } = req.user;
+    if (!email) email = 'email@gmail.com';
+    let message = '';
+    if (req.query && req.query.email) message = 'Sisestatud email pole korrektne';
+
+    res.send(`
+        <html>
+        <body>
+            <a href="/dashboard"">Tagasi avalehele</a><br>
+            <form action="/save-email" method="post">
+                <span>Sisesta enda email:</span>
+                <input name="email" type="email" placeholder="${email}"/><br>
+                <input type="submit" value="Save"/>
+            </form>
+            <p style="color:red;">${message}</p>
+        </body>
+        </html>
+    `);
+  },
+);
+
+app.post('/save-email', async (req, res) => {
+  const { user } = req;
+  // console.log('req.body.login1:', req.body.login);
+  if (!req.body.email) {
+    return res.redirect('/save-email?email=true');
+  }
+
+  if (req.body.email) {
+    /**
+     * Check if entered value is email
+     */
+    // Regular expression to check if string is email
+    const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+    const isEmail = regexExp.test(req.body.email);
+
+    console.log('isEmail:', isEmail);
+
+    /**
+     * If entered value is email, redirect back to login and show "email is not allowed" message
+     */
+    if (!isEmail) return res.redirect('/dashboard?email=false');
+
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+      console.log('res2:', res2);
+      req.user.email = req.body.email;
+
+      cache.flushAll();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
+  }
+
+  console.log('req.user1:', req.user);
+  console.log('user.id1:', user.id);
+  console.log('req.body.email1:', req.body.email);
+
+  return res.redirect('/dashboard');
 });
 
 // GET /login
@@ -430,7 +712,7 @@ app.post('/login', (req, res, next) => {
    */
   if (isEmail) return res.redirect('/login?email=true');
 
-  passport.authenticate('github', {
+  return passport.authenticate('github', {
     login: req.body.login,
   })(req, res, next);
 });
@@ -464,6 +746,25 @@ app.get(
 app.get('/', resetSelectedVersion, allCoursesController.getAllCourses);
 app.get('/dashboard', resetSelectedVersion, allCoursesController.getAllCourses);
 
+app.get('/desserts', async (req, res) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    const sql = 'SELECT * FROM desserts';
+    const result = await conn.query(sql);
+
+    res.send(result);
+  } catch (error) {
+    console.log('error.code:', error.code);
+    throw error;
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
 /**
  * Available endpoints with login
  */
@@ -478,19 +779,33 @@ app.post('/save-selected-version', (req, res) => {
 
   // console.log('req.session.selectedVersion1:', req.session.selectedVersion);
 
-  // console.log('req.session.currentPath1:', req.body.currentPath);
+  console.log('req.session.currentPath1:', req.body.currentPath);
 
   /**
    * Stores selectedVersion correctly,
    * but I need to make the original GET request again to reload same page with selectedVersion value.
    */
-  res.redirect(req.body.currentPath);
+  res.redirect(`${req.body.currentPath}?ref=${req.session.selectedVersion}`);
 });
 
 /**
  * Notifications page
  */
 app.get('/notifications', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
+
+/**
+ * Progress overview page
+ */
+app.get('/progress-overview', resetSelectedVersion, allOverviewController.getOverview);
+
+app.post('/progress-overview', (req, res) => {
+  // console.log('req.body1:', req.body);
+
+  // Store the displayBy in the session
+  req.session.displayBy = req.body.displayBy;
+
+  res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
+});
 
 /**
  * Courses page
@@ -511,43 +826,19 @@ app.get('/noauth', otherController.noAuth);
  * Logout
  * https://www.tabnine.com/code/javascript/functions/express/Request/logout
  */
-
 app.get('/logout', resetSelectedVersion, (req, res, next) => {
   // console.log('req.user3:', req.user);
-
-  /**
-   * Try deleting github App Authorization when logging out. Gives 404 error.
-   */
-  /* try {
-    axios.create({
-      method: 'delete',
-      url: 'https://api.github.com/applications/' + process.env.GITHUB_CLIENT_ID + '/grant',
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: {
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
-        },
-      },
-      data: {
-        access_token: req.user.token, // This is the body part
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  } */
-
   console.log('Logging out process');
   req.logout((err) => {
     if (err) { return next(err); }
-    req.session.destroy((err2) => {
+    return req.session.destroy((err2) => {
       if (err2) { return next(err2); }
       console.log('Logged out');
       // localStorage.removeItem('accessToken');
       res.clearCookie('HK_e-kursused');
       // console.log('req.session2:', req.session);
       // console.log('req2:', req);
-      res.redirect('/');
+      return res.redirect('/');
     });
   });
 });
@@ -561,5 +852,6 @@ app.all('*', resetSelectedVersion, otherController.notFound);
  * Start a server and listen on port 3000
  */
 app.listen(port, () => {
+  console.log('Hei');
   console.log(`Listening on port ${port}`);
 });

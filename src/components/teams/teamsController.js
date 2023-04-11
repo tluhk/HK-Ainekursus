@@ -1,7 +1,11 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable max-len */
-const { apiRequests } = require('./teamsService');
+import pool from '../../../db';
 
-const { cache } = require('../../setup/setupCache');
+import apiRequests from './teamsService';
+
+import cache from '../../setup/setupCache';
 
 const getOneTeamMembers = async (team) => {
   let members;
@@ -54,6 +58,7 @@ const teamsController = {
     // console.log('allMembers1:', allMembersByTeam);
 
     const teamsWithMembers = teams;
+    // eslint-disable-next-line no-return-assign
     teamsWithMembers.forEach((team, i) => teamsWithMembers[i].members = allMembersByTeam[i]);
     // console.log('teamsWithMembers1:', teamsWithMembers);
 
@@ -127,14 +132,56 @@ const teamsController = {
       console.log(`❌❌ users in team IS NOT from cache: ${routePath}`);
       const usersPromise = await getOneTeamMembers(team);
       users = await Promise.all(usersPromise);
+
+      // console.log('users2:', users);
+
+      let conn;
+
+      const promises = users.map(async (user, index) => {
+        let response;
+        try {
+          conn = await pool.getConnection();
+          response = await conn.query('SELECT username, displayName, email FROM users WHERE githubID = ?;', [user.id]);
+          // console.log('response3:', response);
+          // console.log('users[index]3:', users[index]);
+        } catch (err) {
+          console.log('getUsersInTeam error:');
+          console.error(err);
+        } finally {
+          if (conn) conn.release(); // release to pool
+        }
+
+        // console.log('response4:', response);
+        let displayName;
+        let email;
+        if (response && response[0]) {
+          displayName = response[0].displayName;
+          email = response[0].email;
+        }
+
+        // console.log('displayName3:', displayName);
+        // console.log('email3:', email);
+
+        if (!users[index].displayName && displayName) {
+          users[index].displayName = displayName;
+        } else users[index].displayName = users[index].login;
+
+        users[index].email = email;
+        // console.log('users5:', users);
+      });
+
+      await Promise.all(promises);
+      // console.log('users4:', users);
+
       cache.set(routePath, users);
     } else {
       console.log(`✅✅ users in team FROM CACHE: ${routePath}`);
       users = cache.get(routePath);
     }
 
+    // console.log('users3:', users);
     return users;
   },
 };
 
-module.exports = { teamsController };
+export default teamsController;

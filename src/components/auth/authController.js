@@ -1,4 +1,4 @@
-const { apiRequests } = require('./authService');
+import apiRequests from './authService';
 
 const authController = {
 
@@ -8,4 +8,4 @@ const authController = {
   },
 };
 
-module.exports = { authController };
+export default authController;

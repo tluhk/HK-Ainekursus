@@ -4,23 +4,21 @@
     {{#if breadcrumb.courseName}}
       <a
         class='hover:underline'
-        href='/course/{{path.courseSlug}}/about'
+        href='/course/{{path.courseSlug}}/about?ref={{path.refBranch}}'
       >{{breadcrumb.courseName}}</a>
     {{/if}}
-    {{#if_not_equal path.contentSlug 'about' }}
-      {{#if ../breadcrumb.contentName }}
-        >
-        <a
-          class='hover:underline'
-          href='/course/{{../path.courseSlug}}/{{../path.contentSlug}}'
-        >{{../breadcrumb.contentName}}</a>
-      {{/if}}
-    {{/if_not_equal}}
+    {{#if breadcrumb.contentName }}
+      >
+      <a
+        class='hover:underline'
+        href='/course/{{path.courseSlug}}/{{path.contentSlug}}?ref={{path.refBranch}}'
+      >{{breadcrumb.contentName}}</a>
+    {{/if}}
     {{#if breadcrumb.componentName}}
       >
       <a
         class='hover:underline'
-        href='/course/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}'
+        href='/course/{{path.courseSlug}}/{{path.contentSlug}}/{{path.componentSlug}}?ref={{path.refBranch}}'
       >{{breadcrumb.componentName}}</a>
     {{/if}}
   </div>
@@ -28,6 +26,11 @@
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   <div id="markdown-content">
+    <br>
+    {{path.courseSlug}} <br>
+    {{path.componentSlug}} <br>
+    {{path.componentUUID}} <br>
+    
     {{{component}}}
   </div>
 
@@ -78,27 +81,46 @@
   
   <br> <br>
   <!-- 
-  {{singleCoursePaths }}
+  {{backAndForwardPaths }}
   {{path.fullPath }} 
   -->
-
-  {{#ifIn path.fullPath singleCoursePaths }}
   <div class='flex gap-4 justify-center'>
-    {{#if_not_equal ../path.fullPath ../singleCoursePaths.[0].path }}
+  {{#ifInPaths path.fullPath backAndForwardPaths }}
+    {{#if_not_equal ../path.fullPath ../backAndForwardPaths.[0].path }}
       <input type="button" class="btn btn-secondary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../singleCoursePaths}}';" 
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" 
       value="Eelmine" />
     {{/if_not_equal }}
 
-    {{#if_not_equal ../path.fullPath (last ../singleCoursePaths) }}
+    {{#if_not_equal ../path.fullPath (last ../backAndForwardPaths) }}
       <input type="button" class="btn btn-primary"
-      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../singleCoursePaths}}';" value="Järgmine" />
+      onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" value="Järgmine" />
     {{/if_not_equal }}
+  {{/ifInPaths }}
+
+  <br>
+  {{#ifInPaths path.fullPath markAsDonePaths }}
+    {{#if_not_equal ../user.team.slug 'teachers'}}
+      {{#ifInMarkedComponents ../path.componentUUID ../markedAsDoneComponentsArr }}
+        <form method="POST" action="/remove-component-as-done" name="removeComponentAsDone" id="removeComponentAsDone">
+          <!-- Hidden form inputs to send req.body values -->
+          <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
+          <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}" >
+          <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}" >
+          <button name="markAsDone" class="btn btn-primary">Eemalda märge</button>
+        </form>
+      {{else }} 
+        <form method="POST" action="/mark-component-as-done" name="markComponentAsDone" id="markComponentAsDone">
+        <!-- Hidden form inputs to send req.body values -->
+        <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
+        <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}" >
+        <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}" >
+        <button name="markAsDone" class="btn btn-primary">Märgi loetuks</button>
+      </form>
+      {{/ifInMarkedComponents }}
+    {{/if_not_equal }}
+  {{/ifInPaths }}
+  
   </div>
-  {{/ifIn }}
 
 </div>
-
-<!--
-  (ifIn ../path.fullPath ../
-  -->

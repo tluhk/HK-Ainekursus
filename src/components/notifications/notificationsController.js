@@ -1,10 +1,13 @@
-const { getAllCoursesData } = require("../../functions/getAllCoursesData");
-const { apiRequestsCommits } = require("../commits/commitsService");
-const { teamsController } = require("../teams/teamsController");
+import { performance } from 'perf_hooks';
+
+import getAllCoursesData from '../../functions/getAllCoursesData';
+import apiRequestsCommits from '../commits/commitsService';
+import teamsController from '../teams/teamsController';
 
 /* eslint-disable max-len */
 const allNotificationsController = {
-  getCoursesUpdates: async (allCoursesActive) => {
+  getCoursesUpdates: async (allCoursesActive, allTeachers) => {
+    console.log('allTeachers3:', allTeachers);
     const commentsWithCourses = await Promise.all(allCoursesActive.map(async (activeCourse) => {
       const commitsRaw = await apiRequestsCommits.commitsService(activeCourse.coursePathInGithub, activeCourse.refBranch);
       const commitsWithComments = commitsRaw.data.filter((commit) => commit.commit.comment_count > 0);
@@ -22,7 +25,7 @@ const allNotificationsController = {
         html_url: comment.html_url,
         id: comment.id,
         node_id: comment.node_id,
-        user: comment.user,
+        user: allTeachers.find((user) => user.login === comment.user.login) || { displayName: comment.user.login },
         position: comment.position,
         line: comment.line,
         path: comment.path,
@@ -33,9 +36,10 @@ const allNotificationsController = {
         body: comment.body,
         reactions: comment.reactions,
       })));
-      // console.log('commentsArray2:', commentsArray);
+      console.log('commentsArray2:', commentsArray);
 
       commentsArray.forEach((comment) => {
+        // eslint-disable-next-line no-param-reassign
         comment.course = activeCourse;
       });
 
@@ -74,7 +78,7 @@ const allNotificationsController = {
       res.locals.teamSlug = teamSlug;
 
       const start3 = performance.now();
-      const allCourses = await getAllCoursesData(teamSlug);
+      const allCourses = await getAllCoursesData(teamSlug, req);
       const end3 = performance.now();
       console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
       // console.log('allCourses1:', allCourses);
@@ -93,8 +97,8 @@ const allNotificationsController = {
     /**
      * Get notifications
      */
-    const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive);
-    // console.log('courseUpdates4:', courseUpdates);
+    const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
+    console.log('courseUpdates4:', courseUpdates);
 
     return res.render('notifications', {
       courses: allCoursesActive,
@@ -105,6 +109,4 @@ const allNotificationsController = {
   },
 };
 
-module.exports = {
-  allNotificationsController,
-};
+export default allNotificationsController;

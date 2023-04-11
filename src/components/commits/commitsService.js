@@ -1,20 +1,16 @@
 /* eslint-disable max-len */
 
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { cache } = require('../../setup/setupCache');
+import cache from '../../setup/setupCache';
+import githubReposRequests from '../../functions/githubReposRequests';
+import { authToken } from '../../setup/setupGithub';
+import getConfigFuncs from '../../functions/getConfigFuncs';
+import githubCommitsRequests from '../../functions/githubCommitsRequests';
 
-const {
-  requestDocs, requestRepoBranches,
-} = require('../../functions/githubReposRequests');
-const { authToken } = require('../../setup/setupGithub');
-const { getConfig } = require('../../functions/getConfigFuncs');
-const { requestCommits, requestCommitComments } = require('../../functions/githubCommitsRequests');
-
-/**
- * Define files to ignore from /files folders
- */
-const ignoreFiles = ['.DS_Store', '.gitkeep'];
+const { requestRepoBranches } = githubReposRequests;
+const { getConfig } = getConfigFuncs;
+const { requestCommits, requestCommitComments } = githubCommitsRequests;
 
 /**
  * Define all API requests that are done to GitHub API
@@ -51,12 +47,13 @@ const apiRequestsCommits = {
         .then((resolvedArr) => {
           const resolvedObj = Object.fromEntries(resolvedArr);
           // console.log('resolvedObj5:', resolvedObj);
+          // eslint-disable-next-line no-unused-vars
           const response = Object.entries(resolvedObj).filter(([key, value]) => value.active);
 
           return response;
         })
         .catch((error) => {
-          console.log(error); // handle error
+          console.error(error); // handle error
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
@@ -115,4 +112,4 @@ const apiRequestsCommits = {
   },
 };
 
-module.exports = { apiRequestsCommits };
+export default apiRequestsCommits;

@@ -3,7 +3,7 @@
 const baseUrl = 'https://api.github.com';
 
 // Github API request endpoints
-module.exports = {
+const githubCommitsRequests = {
   requestRepos: 'https://api.github.com/orgs/tluhk/repos',
   requestTeamCourses: (
     (teamSlug) => `${baseUrl}/orgs/tluhk/teams/${teamSlug}/repos`
@@ -28,3 +28,5 @@ module.exports = {
     (coursePathInGithub, commitSHA) => `${baseUrl}/repos/${coursePathInGithub}/commits/${commitSHA}/comments`
   ),
 };
+
+export default githubCommitsRequests;

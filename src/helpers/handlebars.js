@@ -1,11 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable no-script-url */
 // https://stackoverflow.com/a/40956931
 // CommonJS export Alternative:
 
-const path = require('path');
-const moment = require('moment');
-const { checkServerIdentity } = require('tls');
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import moment from 'moment';
+// import { checkServerIdentity } from 'tls';
 
 moment.locale('et');
 
@@ -13,7 +19,7 @@ moment.locale('et');
 // Helpers objekti alla saab lisada funktsioone, mida kasutada lisaks built-in helpersitele
 
 // handlebar options: https://stackoverflow.com/a/40898191
-module.exports = function hbsHelpers(hbs) {
+export default function hbsHelpers(hbs) {
   return hbs.create({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, '../..', '/views/layouts'),
@@ -34,7 +40,7 @@ module.exports = function hbsHelpers(hbs) {
       last: (array) => array[array.length - 1].path,
 
       concatActivePath: (arg1, arg2) => `${arg1}/${arg2}`,
-      ifIn: (elem, list, options) => {
+      ifInPaths: (elem, list, options) => {
         if (list === undefined) return options.inverse(this);
         const listMap = list.map((a) => a.path);
         if (listMap.indexOf(elem) > -1) {
@@ -42,7 +48,30 @@ module.exports = function hbsHelpers(hbs) {
         }
         return options.inverse(this);
       },
-      ifNotIn: (elem, list, options) => {
+      ifInMarkedComponents: (elem, list, options) => {
+        // console.log('elem:', elem);
+        // console.log('list:', list);
+        if (list === undefined) {
+          // console.log('list is undefined');
+          return options.inverse(this);
+        }
+        if (list.includes(elem)) {
+          // console.log('elem in list');
+          return options.fn(this);
+        }
+        // console.log('elem not in list');
+
+        return options.inverse(this);
+      },
+      ifTeamInTeamCourses: (elem, list, options) => {
+        if (list === undefined) return options.inverse(this);
+        const listMap = list.map((a) => a.path);
+        if (listMap.indexOf(elem) > -1) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
+      ifNotInList: (elem, list, options) => {
         if (list.indexOf(elem) <= -1) {
           return options.fn(this);
         }
@@ -70,6 +99,12 @@ module.exports = function hbsHelpers(hbs) {
         const comp = components.find((x) => (x.slug) === component);
         return comp.name;
       },
+      showComponentUUID: (componentUppercase, concepts, practices) => {
+        const component = componentUppercase;
+        const components = concepts.concat(practices);
+        const comp = components.find((x) => (x.slug) === component);
+        return comp.uuid;
+      },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
         // console.log('teacherName2:', teacherName);
@@ -84,16 +119,28 @@ module.exports = function hbsHelpers(hbs) {
         if (!teacherData) {
           teacher = {
             login: 'Määramata',
+            displayName: 'Määramata õppejõud',
             avatar_url: '/images/anonymous-avatar.png',
           };
         } else {
           teacher = {
             login: teacherData.login,
+            displayName: teacherData.displayName,
+            email: teacherData.email,
             avatar_url: teacherData.avatar_url,
           };
         }
         // console.log('teacher1:', teacher);
         return teacher;
+      },
+      findTeamCourses: (teamSlug, teamCourses) => {
+        console.log('teamSlug2:', teamSlug);
+        // console.log('teamCourses2:', teamCourses);
+        const coursesData = teamCourses[teamSlug];
+        console.log('coursesData2:', coursesData);
+
+        if (coursesData.length === 0) return false;
+        return coursesData;
       },
       /**
        * Set behaviours on which cases the Version dropdown option should get a checked mark.
@@ -123,15 +170,20 @@ module.exports = function hbsHelpers(hbs) {
         if (courseSlug && contentSlug && componentSlug) return `/course/${courseSlug}/${contentSlug}/${componentSlug}`;
         if (courseSlug && contentSlug && !componentSlug) return `/course/${courseSlug}/${contentSlug}`;
         if (courseSlug && !contentSlug && !componentSlug) return `/course/${courseSlug}`;
+        return '';
       },
       limit: (arr, limit) => {
         if (!Array.isArray(arr)) { return []; }
         return arr.slice(0, limit);
       },
-      timeSince: (date) => {
-        // console.log('moment2:', moment(date).fromNow());
-        return moment(date).fromNow();
+      timeSince: (date) => moment(date).fromNow(),
+      matchingDoneComponentsCount: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
+        console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
+        console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
+
+        return commonElementsCount;
       },
     },
   });
-};
+}

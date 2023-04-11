@@ -6,4 +6,4 @@ function fileFunc(param) {
   } */
 }
 
-module.export = fileFunc();
+export default fileFunc();

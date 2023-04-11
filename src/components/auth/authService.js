@@ -1,12 +1,11 @@
 /* eslint-disable max-len */
 
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { searchUsers } = require('../../functions/githubAuthRequests');
-const { requestMembers } = require('../../functions/githubMembersRequests');
-const { cache } = require('../../setup/setupCache');
+import githubAuthRequests from '../../functions/githubAuthRequests';
+import { authToken } from '../../setup/setupGithub';
 
-const { authToken } = require('../../setup/setupGithub');
+const { searchUsers } = githubAuthRequests;
 
 /**
  * Define all API requests that are done to GitHub API
@@ -14,7 +13,7 @@ const { authToken } = require('../../setup/setupGithub');
 const apiRequests = {
   getUsernameLinkedToPublicEmail: async (email) => {
     const usernameRaw = await axios.get(searchUsers(email), authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
     // console.log('usernameRaw1:', usernameRaw);
     const user = usernameRaw.data;
@@ -24,4 +23,4 @@ const apiRequests = {
   },
 };
 
-module.exports = { apiRequests };
+export default apiRequests;

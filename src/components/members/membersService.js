@@ -1,24 +1,24 @@
 /* eslint-disable max-len */
 
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { requestMembers } = require('../../functions/githubMembersRequests');
+import githubMembersRequests from '../../functions/githubMembersRequests';
+import { authToken } from '../../setup/setupGithub';
 
-const { authToken } = require('../../setup/setupGithub');
+const { requestMembers } = githubMembersRequests;
 
 /**
  * Define all API requests that are done to GitHub API
  */
 const apiRequests = {
-  getMembersService: async (req, res) => {
+  getMembersService: async () => {
     // const members = await axios.get(requestMembers, authToken);
 
     // console.log('starting to get members');
     const membersRaw = await axios.get(requestMembers, authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
     // console.log('membersRaw2:', membersRaw);
-
 
     const members = membersRaw.data;
     // console.log('members1:', members);
@@ -27,4 +27,4 @@ const apiRequests = {
   },
 };
 
-module.exports = { apiRequests };
+export default apiRequests;

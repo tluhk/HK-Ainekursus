@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
 
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { requestTeams, requestTeamMembers } = require('../../functions/githubTeamsRequests');
-const { cache } = require('../../setup/setupCache');
+import githubTeamsRequests from '../../functions/githubTeamsRequests';
+import { authToken } from '../../setup/setupGithub';
 
-const { authToken } = require('../../setup/setupGithub');
+const { requestTeams, requestTeamMembers } = githubTeamsRequests;
 
 /**
  * Define all API requests that are done to GitHub API
@@ -15,10 +15,11 @@ const apiRequests = {
   getTeamsService: async () => {
     // console.log('starting to get members');
     const teamsRaw = await axios.get(requestTeams, authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
+    // console.log('authToken0:', authToken);
+    // console.log('teamsRaw0:', teamsRaw);
     if (!teamsRaw) return [];
-    console.log('teamsRaw0:', teamsRaw);
     const teams = teamsRaw.data;
     // console.log('teams0:', teams);
 
@@ -27,13 +28,13 @@ const apiRequests = {
   getTeamMembersService: async (teamSlug) => {
     // console.log('starting to get teamMembers');
     const teamMembersRaw = await axios.get(requestTeamMembers(teamSlug), authToken).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 
     if (!teamMembersRaw) return [];
     // console.log('teamMembersRaw1.data:', teamMembersRaw.data);
 
-    const teamMembersMapped = teamMembersRaw.data.map((member) => member,
+    const teamMembersMapped = teamMembersRaw.data.map((member) => member);
     /* (
       {
         login: member.login,
@@ -44,7 +45,7 @@ const apiRequests = {
         site_admin: member.site_admin,
         avatar_url: member.avatar_url,
       }) */
-    );
+
     // console.log('teamMembersMapped1:', teamMembersMapped);
 
     const teamMembers = teamMembersMapped;
@@ -54,4 +55,4 @@ const apiRequests = {
   },
 };
 
-module.exports = { apiRequests };
+export default apiRequests;

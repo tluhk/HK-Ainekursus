@@ -1,5 +1,11 @@
+import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const auth = process.env.AUTH;
-const axios = require('axios').default;
+
+// console.log('auth0:', auth);
 
 // Github API token
 const authToken = {
@@ -9,7 +15,7 @@ const authToken = {
   },
 };
 
-module.exports = {
+export {
   axios,
   authToken,
 };

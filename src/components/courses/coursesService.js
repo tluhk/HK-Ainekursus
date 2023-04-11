@@ -1,14 +1,26 @@
 /* eslint-disable max-len */
 
-const { default: axios } = require('axios');
+import axios from 'axios';
 
-const { cache } = require('../../setup/setupCache');
+import cache from '../../setup/setupCache';
+
+import githubReposRequests from '../../functions/githubReposRequests';
+
+import { authToken } from '../../setup/setupGithub';
+import getConfig from '../../functions/getConfigFuncs';
 
 const {
-  requestDocs, requestCourseAdditionalMaterials, requestCourseFiles, requestLessons, requestLessonAdditionalMaterials, requestLessonFiles, requestConcepts, requestSources, requestPractices, requestRepoBranches,
-} = require('../../functions/githubReposRequests');
-const { authToken } = require('../../setup/setupGithub');
-const { getConfig } = require('../../functions/getConfigFuncs');
+  requestDocs,
+  requestCourseAdditionalMaterials,
+  requestCourseFiles,
+  requestLessons,
+  requestLessonAdditionalMaterials,
+  requestLessonFiles,
+  requestConcepts,
+  requestSources,
+  requestPractices,
+  requestRepoBranches,
+} = githubReposRequests;
 
 /**
  * Define files to ignore from /files folders
@@ -54,7 +66,7 @@ const apiRequests = {
           return response;
         })
         .catch((error) => {
-          console.log(error); // handle error
+          console.error(error); // handle error
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
@@ -66,8 +78,8 @@ const apiRequests = {
       activeBranches = activeBranchesRaw.map((x) => x[0]);
 
       // console.log('coursePathInGithub1:', coursePathInGithub);
-      // console.log('activeBranchesRaw1:', activeBranchesRaw);
-      console.log('activeBranches1:', activeBranches);
+      // console.log('activeBranchesRaw0:', activeBranchesRaw);
+      // console.log('activeBranches0:', activeBranches);
 
       cache.set(routePath, activeBranches);
     } else {
@@ -78,17 +90,17 @@ const apiRequests = {
 
     return activeBranches;
   },
-  docsService: async (locals, request) => {
+  docsService: async (req, res) => {
     const {
       coursePathInGithub,
-    } = locals.course;
+    } = res.locals.course;
     const {
       refBranch,
-    } = locals;
+    } = res.locals;
 
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
-    const routePath = `${request.url}+${refBranch}+components`;
+    const routePath = `${req.url}+${refBranch}+components`;
 
     let components;
 
@@ -104,18 +116,18 @@ const apiRequests = {
 
     return { components };
   },
-  courseAdditionalMaterialsService: async (locals, request) => {
+  courseAdditionalMaterialsService: async (req, res) => {
     const {
       coursePathInGithub,
-    } = locals.course;
+    } = res.locals.course;
     const {
       refBranch,
-    } = locals;
+    } = res.locals;
 
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
-    const routePath = `${request.url}+${refBranch}+components`;
-    const routePathFiles = `${request.url}+${refBranch}+files`;
+    const routePath = `${req.url}+${refBranch}+components`;
+    const routePathFiles = `${req.url}+${refBranch}+files`;
 
     let components;
     let files;
@@ -144,7 +156,6 @@ const apiRequests = {
           }),
         )
         .catch((error) => {
-          console.log('siin on addMat error');
           console.error(error);
         });
     } else {
@@ -161,18 +172,18 @@ const apiRequests = {
 
     return { components, files };
   },
-  lessonsService: async (locals, request) => {
+  lessonsService: async (req, res) => {
     const {
       coursePathInGithub,
-    } = locals.course;
+    } = res.locals.course;
     const {
       path,
       refBranch,
-    } = locals;
+    } = res.locals;
 
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
-    const routePath = `${request.url}+${refBranch}+components`;
+    const routePath = `${req.url}+${refBranch}+components`;
 
     let components;
 
@@ -190,17 +201,17 @@ const apiRequests = {
 
     return { components };
   },
-  lessonAdditionalMaterialsService: async (locals, request) => {
+  lessonAdditionalMaterialsService: async (req, res) => {
     const {
       coursePathInGithub,
-    } = locals.course;
+    } = res.locals.course;
     const {
       path,
       refBranch,
-    } = locals;
+    } = res.locals;
 
-    const routePath = `${request.url}+${refBranch}+components`;
-    const routePathFiles = `${request.url}+${refBranch}+files`;
+    const routePath = `${req.url}+${refBranch}+components`;
+    const routePathFiles = `${req.url}+${refBranch}+files`;
 
     let components;
     let files;
@@ -227,7 +238,6 @@ const apiRequests = {
           }),
         )
         .catch((error) => {
-          console.log('siin on addMat error');
           console.error(error);
         });
     } else {
@@ -239,29 +249,45 @@ const apiRequests = {
 
     return { components, files };
   },
-  lessonComponentsService: async (locals, request) => {
+  lessonComponentsService: async (req, res) => {
     const {
       coursePathInGithub,
-    } = locals.course;
+    } = res.locals.course;
     const {
       path,
       refBranch,
-    } = locals;
+    } = res.locals;
 
     console.log('refBranch8:', refBranch);
 
-    const routePath = `${request.url}+${refBranch}+components`;
-    const routePathSources = `${request.url}+${refBranch}+sources`;
+    const routePath = `${req.url}+${refBranch}+components`;
+    const routePathSources = `${req.url}+${refBranch}+sources`;
 
     let components;
     let sources;
+    let componentsRaw;
+    let sourcesRaw;
 
     if (path.type === 'concept') {
-      if (!cache.get(routePath) || !cache.get(routePathSources)) {
+      if (!cache.get(routePath)) {
         console.log(`❌❌ concept components IS NOT from cache: ${routePath}`);
         console.log(`❌❌ concept sources IS NOT from cache: ${routePathSources}`);
-        const componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
-        const sourcesRaw = await axios.get(requestSources(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
+
+        try {
+          componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
+        } catch (error) {
+          console.log('Unable to get componentsRar');
+          console.error(error);
+        }
+        try {
+          sourcesRaw = await axios.get(requestSources(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
+        } catch (error) {
+          console.log('Unable to get sourcesRaw');
+          console.error(error);
+        }
+
+        console.log('componentsRaw4:', componentsRaw);
+        console.log('sourcesRaw4:', sourcesRaw);
 
         await axios
           .all([componentsRaw, sourcesRaw])
@@ -269,14 +295,13 @@ const apiRequests = {
             axios.spread((...responses) => {
               [components, sources] = responses;
 
+              console.log('components4:', components);
+              console.log('sources4:', sources);
               cache.set(routePath, components);
               cache.set(routePathSources, sources);
             }),
           )
-          .catch((error) => {
-            console.log('siin on addMat error');
-            console.error(error);
-          });
+          .catch((error) => error);
       } else {
         console.log(`✅✅ concept components FROM CACHE: ${routePath}`);
         console.log(`✅✅ concept sources FROM CACHE: ${routePathSources}`);
@@ -289,7 +314,6 @@ const apiRequests = {
       if (!cache.get(routePath)) {
         console.log(`❌❌ practice components IS NOT from cache: ${routePath}`);
         components = await axios.get(requestPractices(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
-
         cache.set(routePath, components);
       } else {
         console.log(`✅✅ practice components FROM CACHE: ${routePath}`);
@@ -301,4 +325,4 @@ const apiRequests = {
   },
 };
 
-module.exports = { apiRequests };
+export default apiRequests;
