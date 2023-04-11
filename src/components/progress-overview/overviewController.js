@@ -16,11 +16,19 @@ const allOverviewController = {
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     if (teamSlug !== 'teachers') return res.redirect('/notfound');
 
-    console.log('req.user44:', req.user);
+    const { selectedTeam, courseSlug } = req.params;
+    const { selectedCourse } = req.session;
+    req.session.selectedCourse = null;
+
+    /* console.log('selectedTeam4:', selectedTeam);
+    console.log('courseSlug4:', courseSlug);
+    console.log('selectedCourse4:', selectedCourse);
+
+    console.log('req.user44:', req.user); */
     // By default set displayBy to 'teams'
     const displayBy = req.session.displayBy || 'teams';
     res.locals.displayBy = displayBy;
-    console.log('displayBy44:', displayBy);
+    // console.log('displayBy44:', displayBy);
 
     if (!displayBy) return res.redirect('/notfound');
     if (displayBy === 'teams') return allOverviewController.getOverviewByTeams(req, res);
@@ -38,7 +46,7 @@ const allOverviewController = {
 
     if (!teams) return res.redirect('/notfound');
     teams.sort((a, b) => a.slug.localeCompare(b.slug));
-    console.log('teams3:', teams);
+    // console.log('teams3:', teams);
 
     const teamsCourses = {};
 
@@ -49,7 +57,7 @@ const allOverviewController = {
 
     await Promise.all(teamsCoursesPromises);
 
-    console.log('teamsCourses3:', teamsCourses);
+    // console.log('teamsCourses3:', teamsCourses);
 
     /*
     * Get all users in each team
@@ -66,7 +74,7 @@ const allOverviewController = {
     const end4 = performance.now();
     console.log(`Execution time teamsUsers: ${end4 - start4} ms`);
 
-    console.log('teamsUsers3:', teamsUsers);
+    // console.log('teamsUsers3:', teamsUsers);
 
     return res.render('overview-teams', {
       user: req.user,

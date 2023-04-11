@@ -798,13 +798,22 @@ app.get('/notifications', resetSelectedVersion, allNotificationsController.rende
  */
 app.get('/progress-overview', resetSelectedVersion, allOverviewController.getOverview);
 
+app.get('/progress-overview/:team/:courseSlug', resetSelectedVersion, allOverviewController.getOverview);
+
 app.post('/progress-overview', (req, res) => {
-  // console.log('req.body1:', req.body);
+  /* console.log('req.body3:', req.body);
+  console.log('req.body.selectedTeam3:', req.body.selectedTeam);
+  console.log('req.body.selectedCourse3:', req.body.selectedCourse);
+  console.log('JSON.parse(req.body.selectedCourse3):', JSON.parse(req.body.selectedCourse)); */
+
+  req.session.selectedCourse = JSON.parse(req.body.selectedCourse);
+
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse.courseSlug}`);
 
   // Store the displayBy in the session
   req.session.displayBy = req.body.displayBy;
 
-  res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
+  return res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
 });
 
 /**

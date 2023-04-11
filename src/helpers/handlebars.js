@@ -134,10 +134,10 @@ export default function hbsHelpers(hbs) {
         return teacher;
       },
       findTeamCourses: (teamSlug, teamCourses) => {
-        console.log('teamSlug2:', teamSlug);
+        // console.log('teamSlug2:', teamSlug);
         // console.log('teamCourses2:', teamCourses);
         const coursesData = teamCourses[teamSlug];
-        console.log('coursesData2:', coursesData);
+        // console.log('coursesData2:', coursesData);
 
         if (coursesData.length === 0) return false;
         return coursesData;
@@ -184,6 +184,7 @@ export default function hbsHelpers(hbs) {
 
         return commonElementsCount;
       },
+      jsonStringify: (context) => JSON.stringify(context),
     },
   });
 }
