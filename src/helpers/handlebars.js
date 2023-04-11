@@ -63,6 +63,14 @@ export default function hbsHelpers(hbs) {
 
         return options.inverse(this);
       },
+      ifTeamInTeamCourses: (elem, list, options) => {
+        if (list === undefined) return options.inverse(this);
+        const listMap = list.map((a) => a.path);
+        if (listMap.indexOf(elem) > -1) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
       ifNotInList: (elem, list, options) => {
         if (list.indexOf(elem) <= -1) {
           return options.fn(this);
@@ -125,6 +133,15 @@ export default function hbsHelpers(hbs) {
         // console.log('teacher1:', teacher);
         return teacher;
       },
+      findTeamCourses: (teamSlug, teamCourses) => {
+        console.log('teamSlug2:', teamSlug);
+        // console.log('teamCourses2:', teamCourses);
+        const coursesData = teamCourses[teamSlug];
+        console.log('coursesData2:', coursesData);
+
+        if (coursesData.length === 0) return false;
+        return coursesData;
+      },
       /**
        * Set behaviours on which cases the Version dropdown option should get a checked mark.
        */
@@ -160,10 +177,10 @@ export default function hbsHelpers(hbs) {
         return arr.slice(0, limit);
       },
       timeSince: (date) => moment(date).fromNow(),
-      matchingDoneComponentsCount: (markedAsDoneComponentsUUIDs, courseAllComponentsUUIDs) => {
+      matchingDoneComponentsCount: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
         console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
-        console.log('courseAllComponentsUUIDs7:', courseAllComponentsUUIDs);
-        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseAllComponentsUUIDs.includes(item)).length;
+        console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
 
         return commonElementsCount;
       },

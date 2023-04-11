@@ -509,14 +509,6 @@ const allCoursesController = {
       console.error(error);
     }
 
-    /**
-     * Check if selectedVersion has been given with endpoint
-     * If yes, check if selectedVersion is part of course repo active branches.
-     * - If yes, then read info from the matching branch.
-     * If not, check if teamSlug is part of course repo active branches.
-     * - If yes, then read info from the matching branch.
-     * If not, read info from master branch.
-     */
     console.log('courseSlug1:', courseSlug);
     console.log('contentSlug1:', contentSlug);
     console.log('componentSlug1:', componentSlug);

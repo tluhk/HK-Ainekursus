@@ -1,111 +1,88 @@
 import { performance } from 'perf_hooks';
 
 import getAllCoursesData from '../../functions/getAllCoursesData';
-import apiRequestsCommits from '../commits/commitsService';
 import allNotificationsController from '../notifications/notificationsController';
 import teamsController from '../teams/teamsController';
 
 /* eslint-disable max-len */
 const allOverviewController = {
-  getCoursesUpdates: async (allCoursesActive, allTeachers) => {
-    console.log('allTeachers3:', allTeachers);
-    const commentsWithCourses = await Promise.all(allCoursesActive.map(async (activeCourse) => {
-      const commitsRaw = await apiRequestsCommits.commitsService(activeCourse.coursePathInGithub, activeCourse.refBranch);
-      const commitsWithComments = commitsRaw.data.filter((commit) => commit.commit.comment_count > 0);
-      // console.log('commitsWithComments2:', commitsWithComments);
-
-      const commitSHAsWithComments = commitsWithComments.map((commit) => commit.sha);
-      // console.log('commitSHAsWithComments2:', commitSHAsWithComments);
-
-      const commitCommentsPromises = commitSHAsWithComments.map((commitSHA) => apiRequestsCommits.getCommitComments(activeCourse.coursePathInGithub, commitSHA));
-      const commitCommentsRaw = await Promise.all(commitCommentsPromises);
-      // console.log('commitCommentsRaw2:', commitCommentsRaw);
-
-      const commentsArray = commitCommentsRaw.flatMap((item) => item.data.map((comment) => ({
-        url: comment.url,
-        html_url: comment.html_url,
-        id: comment.id,
-        node_id: comment.node_id,
-        user: allTeachers.find((user) => user.login === comment.user.login) || { displayName: comment.user.login },
-        position: comment.position,
-        line: comment.line,
-        path: comment.path,
-        commit_id: comment.commit_id,
-        created_at: comment.created_at,
-        updated_at: comment.updated_at,
-        author_association: comment.author_association,
-        body: comment.body,
-        reactions: comment.reactions,
-      })));
-      console.log('commentsArray2:', commentsArray);
-
-      commentsArray.forEach((comment) => {
-        // eslint-disable-next-line no-param-reassign
-        comment.course = activeCourse;
-      });
-
-      return commentsArray;
-    }));
-
-    // console.log('commentsWithCourses1:', commentsWithCourses);
-
-    const commentsWithCoursesFlattened = commentsWithCourses.flatMap((arr) => arr);
-    // eslint-disable-next-line no-nested-ternary
-    commentsWithCoursesFlattened.sort((b, a) => ((a.created_at > b.created_at) ? 1 : ((b.created_at > a.created_at) ? -1 : 0)));
-
-    // console.log('commentsWithCoursesFlattened1:', commentsWithCoursesFlattened);
-
+  getOverview: async (req, res) => {
     /**
-     * Limit notifications to max 30 days ago
+     * Check if user's team is 'teachers'
+     * If not, then reroute to "/notfound" page
+     * If yes, then continue to get overview info
      */
-    const date30DaysAgo = new Date();
-    date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
-    const dateISO30DaysAgo = date30DaysAgo.toISOString().substring(0, 10);
+    let teamSlug;
+    if (req.user && req.user.team) teamSlug = req.user.team.slug;
+    if (teamSlug !== 'teachers') return res.redirect('/notfound');
 
-    // console.log('dateISO30DaysAgo1:', dateISO30DaysAgo);
+    console.log('req.user44:', req.user);
+    // By default set displayBy to 'teams'
+    const displayBy = req.session.displayBy || 'teams';
+    res.locals.displayBy = displayBy;
+    console.log('displayBy44:', displayBy);
 
-    const courseUpdatesLessThan30Days = commentsWithCoursesFlattened.filter((entry) => entry.created_at >= dateISO30DaysAgo);
+    if (!displayBy) return res.redirect('/notfound');
+    if (displayBy === 'teams') return allOverviewController.getOverviewByTeams(req, res);
+    if (displayBy === 'courses') return allOverviewController.getOverviewByCourses(req, res);
 
-    return courseUpdatesLessThan30Days;
+    // By default return Teams overview
+    return allOverviewController.getOverviewByTeams(req, res);
   },
-  renderNotificationsPage: async (req, res) => {
-    let { allCoursesActive, allTeachers } = res.locals;
-    // console.log('allCoursesActive3:', allCoursesActive);
-    // console.log('allTeachers3:', allTeachers);
+  getOverviewByTeams: async (req, res) => {
+    const { displayBy } = res.locals;
+    const { teams } = await teamsController.getAllValidTeams().catch((error) => {
+      console.error(error);
+      return res.redirect('/notfound');
+    });
 
-    if (!allCoursesActive) {
-      let teamSlug;
-      if (req.user && req.user.team) teamSlug = req.user.team.slug;
-      res.locals.teamSlug = teamSlug;
+    if (!teams) return res.redirect('/notfound');
+    teams.sort((a, b) => a.slug.localeCompare(b.slug));
+    console.log('teams3:', teams);
 
-      const start3 = performance.now();
-      const allCourses = await getAllCoursesData(teamSlug, req);
-      const end3 = performance.now();
-      console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
-      // console.log('allCourses1:', allCourses);
-      allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-      // console.log('allCoursesActive1:', allCoursesActive);
-    }
+    const teamsCourses = {};
 
-    /** Save all teachers in a variable, needed for rendering */
-    if (!allTeachers) {
-      const start4 = performance.now();
-      allTeachers = await teamsController.getUsersInTeam('teachers');
-      const end4 = performance.now();
-      console.log(`Execution time allTeachers: ${end4 - start4} ms`);
-    }
+    const teamsCoursesPromises = teams.map(async (team) => {
+      const coursesData = await getAllCoursesData(team.slug, req);
+      teamsCourses[team.slug] = coursesData;
+    });
 
-    /**
-     * Get notifications
-     */
-    const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
-    console.log('courseUpdates4:', courseUpdates);
+    await Promise.all(teamsCoursesPromises);
 
-    return res.render('notifications', {
-      courses: allCoursesActive,
+    console.log('teamsCourses3:', teamsCourses);
+
+    /*
+    * Get all users in each team
+    * Save all teachers in a variable, needed for rendering 
+    */
+    const teamsUsers = {};
+    const start4 = performance.now();
+    const teamsUsersPromises = teams.map(async (team) => {
+      const usersData = await teamsController.getUsersInTeam(team.slug);
+      teamsUsers[team.slug] = usersData;
+    });
+
+    await Promise.all(teamsUsersPromises);
+    const end4 = performance.now();
+    console.log(`Execution time teamsUsers: ${end4 - start4} ms`);
+
+    console.log('teamsUsers3:', teamsUsers);
+
+    return res.render('overview-teams', {
       user: req.user,
-      teachers: allTeachers,
-      courseUpdates,
+      displayBy,
+      teams,
+      teamsCourses,
+      teamsUsers,
+      teachers: teamsUsers.teachers,
+    });
+  },
+
+  getOverviewByCourses: async (req, res) => {
+    console.log();
+
+    return res.render('overview-courses', {
+      user: req.user,
     });
   },
 };

@@ -12,6 +12,91 @@ import apiRequests from '../components/courses/coursesService';
 
 const { requestTeamCourses, requestRepos } = githubReposRequests;
 
+const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full_name, refBranch)
+  .then(async (config) => {
+    /**
+     * Read course information from ÕIS Ainekaart
+     * https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
+     */
+    let oisContent = {};
+
+    const routePathOisContent = `oisContent+${param.full_name}+${refBranch}`;
+
+    // const start6 = performance.now();
+
+    if (!cache.has(routePathOisContent)) {
+      console.log(`❌❌ oisContent IS NOT from cache: ${routePathOisContent}`);
+
+      try {
+        await axios(config.courseUrl).then((response) => {
+          const { data } = response;
+          const $ = cheerio.load(data);
+
+          $('.yldaine_r', data).each(function () {
+            const ryhmHeader = $(this).find('div.ryhmHeader').text();
+            const yldaine_c1 = $(this).find('div.yldaine_c1').text();
+            const yldaine_c2 = $(this).find('div.yldaine_c2').text();
+
+            if (ryhmHeader && ryhmHeader !== '') oisContent.oisName = ryhmHeader;
+            if (yldaine_c1 && yldaine_c1 === 'Õppeaine kood') oisContent.code = yldaine_c2;
+            if (yldaine_c1 && yldaine_c1 === 'Õppeaine nimetus eesti k') oisContent.name = yldaine_c2;
+            if (yldaine_c1 && yldaine_c1 === 'Õppeaine maht EAP') oisContent.EAP = yldaine_c2;
+            if (yldaine_c1 && yldaine_c1 === 'Kontrollivorm') oisContent.grading = yldaine_c2;
+            // if (yldaine_c1 && yldaine_c1 === 'Õppeaine eesmärgid') oisContent.eesmargid = yldaine_c2;
+            // if (yldaine_c1 && yldaine_c1 === 'Õppeaine sisu lühikirjeldus') oisContent.summary = yldaine_c2;
+            // if (yldaine_c1 && yldaine_c1 === 'Õppeaine õpiväljundid') oisContent.opivaljundid = yldaine_c2;
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+
+      cache.set(routePathOisContent, oisContent);
+    } else {
+      console.log(`✅✅ oisContent FROM CACHE: ${routePathOisContent}`);
+      oisContent = cache.get(routePathOisContent);
+    }
+    // const end6 = performance.now();
+    // console.log(`Execution time oisContent: ${end6 - start6} ms`);
+
+    console.log('oisContent.name5:', oisContent.name);
+
+    const allComponentSlugs = [];
+    config.lessons.forEach((lesson) => {
+      allComponentSlugs.push(lesson.components);
+    });
+
+    const allComponentSlugsFlat = [].concat(...allComponentSlugs);
+    console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
+
+    const allComponentsUUIDs = [
+      ...config.concepts.filter((concept) => allComponentSlugsFlat.includes(concept.slug)).map((concept) => concept.uuid),
+      ...config.practices.filter((practice) => allComponentSlugsFlat.includes(practice.slug)).map((practice) => practice.uuid),
+    ];
+
+    console.log('allComponentsUUIDs5:', allComponentsUUIDs);
+
+    return {
+      courseUrl: config.courseUrl,
+      teacherUsername: config.teacherUsername,
+      courseIsActive: config.active,
+      courseName: config.courseName || oisContent.name,
+      courseSlug: oisContent.code, // || result.slug,
+      courseCode: oisContent.code, // || result.courseCode,
+      courseSemester: config.semester,
+      courseSlugInGithub: param.name,
+      coursePathInGithub: param.full_name,
+      courseEAP: Math.round(oisContent.EAP),
+      courseGrading: oisContent.grading,
+      // courseEesmargid: oisContent.eesmargid,
+      // courseSummary: oisContent.summary,
+      // courseOpivaljundid: oisContent.opivaljundid,
+      refBranch,
+      courseBranchComponentsUUIDs: allComponentsUUIDs,
+      courseAllActiveBranches: activeBranches,
+    };
+  });
+
 const getAllCoursesData = (async (teamSlug, req) => {
   // console.log('teamSlug4:', teamSlug);
   /**
@@ -71,15 +156,11 @@ const getAllCoursesData = (async (teamSlug, req) => {
     if (activeBranches && activeBranches.includes(teamSlug)) {
       refBranch = teamSlug;
     } else if (activeBranches.length && teamSlug === 'teachers') {
-      // eslint-disable-next-line prefer-destructuring
-
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
-
       const branchConfigPromises = activeBranches.map(async (branch) => {
         const config = await getConfig(y.full_name, branch);
         return config;
       });
-
       // console.log('branchConfigPromises1:', branchConfigPromises);
       const branchConfigs = await Promise.all(branchConfigPromises);
       const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === user.username);
@@ -98,93 +179,11 @@ const getAllCoursesData = (async (teamSlug, req) => {
     }
     // console.log('refBranch4:', refBranch);
 
-    const coursePromise = (param) => getConfig(param.full_name, refBranch)
-      .then(async (config) => {
-        /**
-         * Read course information from ÕIS Ainekaart
-         * https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
-         */
-        let oisContent = {};
-
-        const routePathOisContent = `oisContent+${param.full_name}+${refBranch}`;
-
-        // const start6 = performance.now();
-
-        if (!cache.has(routePathOisContent)) {
-          console.log(`❌❌ oisContent IS NOT from cache: ${routePathOisContent}`);
-
-          try {
-            await axios(config.courseUrl).then((response) => {
-              const { data } = response;
-              const $ = cheerio.load(data);
-
-              $('.yldaine_r', data).each(function () {
-                const ryhmHeader = $(this).find('div.ryhmHeader').text();
-                const yldaine_c1 = $(this).find('div.yldaine_c1').text();
-                const yldaine_c2 = $(this).find('div.yldaine_c2').text();
-
-                if (ryhmHeader && ryhmHeader !== '') oisContent.oisName = ryhmHeader;
-                if (yldaine_c1 && yldaine_c1 === 'Õppeaine kood') oisContent.code = yldaine_c2;
-                if (yldaine_c1 && yldaine_c1 === 'Õppeaine nimetus eesti k') oisContent.name = yldaine_c2;
-                if (yldaine_c1 && yldaine_c1 === 'Õppeaine maht EAP') oisContent.EAP = yldaine_c2;
-                if (yldaine_c1 && yldaine_c1 === 'Kontrollivorm') oisContent.grading = yldaine_c2;
-                // if (yldaine_c1 && yldaine_c1 === 'Õppeaine eesmärgid') oisContent.eesmargid = yldaine_c2;
-                // if (yldaine_c1 && yldaine_c1 === 'Õppeaine sisu lühikirjeldus') oisContent.summary = yldaine_c2;
-                // if (yldaine_c1 && yldaine_c1 === 'Õppeaine õpiväljundid') oisContent.opivaljundid = yldaine_c2;
-              });
-            });
-          } catch (error) {
-            console.error(error);
-          }
-
-          cache.set(routePathOisContent, oisContent);
-        } else {
-          console.log(`✅✅ oisContent FROM CACHE: ${routePathOisContent}`);
-          oisContent = cache.get(routePathOisContent);
-        }
-        // const end6 = performance.now();
-        // console.log(`Execution time oisContent: ${end6 - start6} ms`);
-
-        console.log('oisContent.name5:', oisContent.name);
-
-        const allComponentSlugs = [];
-        config.lessons.forEach((lesson) => {
-          allComponentSlugs.push(lesson.components);
-        });
-
-        const allComponentSlugsFlat = [].concat(...allComponentSlugs);
-        console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
-
-        const allComponentsUUIDs = [
-          ...config.concepts.filter((concept) => allComponentSlugsFlat.includes(concept.slug)).map((concept) => concept.uuid),
-          ...config.practices.filter((practice) => allComponentSlugsFlat.includes(practice.slug)).map((practice) => practice.uuid),
-        ];
-
-        console.log('allComponentsUUIDs5:', allComponentsUUIDs);
-
-        return {
-          courseUrl: config.courseUrl,
-          teacherUsername: config.teacherUsername,
-          courseIsActive: config.active,
-          courseName: config.courseName || oisContent.name,
-          courseSlug: oisContent.code, // || result.slug,
-          courseCode: oisContent.code, // || result.courseCode,
-          courseSemester: config.semester,
-          courseSlugInGithub: y.name,
-          coursePathInGithub: y.full_name,
-          refBranch,
-          courseEAP: Math.round(oisContent.EAP),
-          courseGrading: oisContent.grading,
-          // courseEesmargid: oisContent.eesmargid,
-          // courseSummary: oisContent.summary,
-          // courseOpivaljundid: oisContent.opivaljundid,
-          courseAllComponentsUUIDs: allComponentsUUIDs,
-        };
-      });
-
     // console.log('coursePromise1:', coursePromise);
 
-    return coursePromise(y);
+    const coursePromiseResponse = await coursePromise(y, refBranch, activeBranches);
+
+    return coursePromiseResponse;
   });
   // console.log('map1:', map1);
 

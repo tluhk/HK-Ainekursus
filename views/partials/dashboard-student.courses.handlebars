@@ -13,11 +13,11 @@
                 href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
               ><div class='text-md font-bold mb-2'>{{this.courseName}}</div> <br>
 
-tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseAllComponentsUUIDs}} / kõik teemad: {{this.courseAllComponentsUUIDs.length }} <br>
+tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / kõik teemad: {{this.courseBranchComponentsUUIDs.length }} <br>
 
                 <div>
-                  <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseAllComponentsUUIDs}}' max='{{this.courseAllComponentsUUIDs.length}}'>
-                    {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseAllComponentsUUIDs}} / {{this.courseAllComponentsUUIDs.length}} teemasid
+                  <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
+                    {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length}} teemasid
                   </progress>
                 </div>
                 <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">

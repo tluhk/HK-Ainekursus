@@ -53,7 +53,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-const liveReloadServer = createServer();
+/* const liveReloadServer = createServer();
 liveReloadServer.watch(join(__dirname, '/views'));
 liveReloadServer.watch(join(__dirname, 'public'));
 liveReloadServer.server.once('connection', () => {
@@ -61,7 +61,7 @@ liveReloadServer.server.once('connection', () => {
     liveReloadServer.refresh('/');
   }, 100);
 });
-app.use(connectLivereload());
+app.use(connectLivereload()); */
 
 const handlebars = handlebarsFactory(exphbs);
 
@@ -403,12 +403,12 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      team: {
+      /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
+      }, */
     };
 
     if (req.user && !req.user.team) {
@@ -675,7 +675,8 @@ app.post('/save-email', async (req, res) => {
 //   request.  The first step in GitHub authentication will involve redirecting
 //   the user to github.com.  After authorization, GitHub will redirect the user
 //   back to this application at /github-callback
-app.get('/login',
+app.get(
+  '/login',
   (req, res) => {
     let message = '';
     if (req.query.email) message = 'Emaili sisestamine pole lubatud';
@@ -795,7 +796,16 @@ app.get('/notifications', resetSelectedVersion, allNotificationsController.rende
 /**
  * Progress overview page
  */
-/* app.get('/progress-overview', resetSelectedVersion, allOverviewController.allOverviewController); */
+app.get('/progress-overview', resetSelectedVersion, allOverviewController.getOverview);
+
+app.post('/progress-overview', (req, res) => {
+  // console.log('req.body1:', req.body);
+
+  // Store the displayBy in the session
+  req.session.displayBy = req.body.displayBy;
+
+  res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
+});
 
 /**
  * Courses page
