@@ -59,7 +59,7 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
     // const end6 = performance.now();
     // console.log(`Execution time oisContent: ${end6 - start6} ms`);
 
-    console.log('oisContent.name5:', oisContent.name);
+    // console.log('oisContent.name5:', oisContent.name);
 
     const allComponentSlugs = [];
     config.lessons.forEach((lesson) => {
@@ -67,14 +67,14 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
     });
 
     const allComponentSlugsFlat = [].concat(...allComponentSlugs);
-    console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
+    // console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
 
     const allComponentsUUIDs = [
       ...config.concepts.filter((concept) => allComponentSlugsFlat.includes(concept.slug)).map((concept) => concept.uuid),
       ...config.practices.filter((practice) => allComponentSlugsFlat.includes(practice.slug)).map((practice) => practice.uuid),
     ];
 
-    console.log('allComponentsUUIDs5:', allComponentsUUIDs);
+    // console.log('allComponentsUUIDs5:', allComponentsUUIDs);
 
     return {
       courseUrl: config.courseUrl,
@@ -94,6 +94,7 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
       refBranch,
       courseBranchComponentsUUIDs: allComponentsUUIDs,
       courseAllActiveBranches: activeBranches,
+      config,
     };
   });
 
@@ -131,7 +132,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
 
   if (!courses) return [];
 
-  console.log('courses1:', courses);
+  // console.log('courses1:', courses);
 
   /*
   * Set conditions, which Repositories (Courses) are read from tluhk org github account

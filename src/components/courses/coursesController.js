@@ -249,7 +249,7 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
     // console.log('Object.keys(obj)', Object.keys(obj));
     // Finally, save keys from object to array and return the array of keys.
     keysArray = Object.keys(obj);
-    // console.log('keysArray:', keysArray);
+    console.log('keysArray:', keysArray);
   }
   return keysArray;
 };
@@ -799,5 +799,5 @@ const allCoursesController = {
 };
 
 export {
-  allCoursesController, responseAction, renderPage,
+  allCoursesController, responseAction, renderPage, getMarkedAsDoneComponents,
 };

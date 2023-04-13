@@ -35,11 +35,17 @@
             {{/unless }}
             {{#with (findTeamCourses this.slug ../teamsCourses)}}              
               {{#each this}}
-                <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4 ml-4'>
-                  <a
-                    class='!no-underline uppercase w-full'
-                    href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                  ><div><span class='text-md font-bold mb-2'>{{this.courseName}}</span>
+               <!-- Hidden form to send req.body values -->
+               {{!-- ../../this: {{../../this}}
+               ../../this.slug: {{../../this.slug}}
+               ../this: {{../this}}
+               this: {{this}}
+               this.courseSlug: {{this.courseSlug}}
+               this.slug: {{this.slug}}
+               index: {{@index}}
+               overview-{{../../this.slug}}-{{this.courseSlug}} --}}
+                <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4 ml-4' onclick="handleCourseClick('{{../../this.slug}}', '{{this.courseSlug}}')" >
+                  <div><span class='text-md font-bold mb-2 uppercase'>{{this.courseName}}</span>
                   <span class="bg-blue-100 text-blue-800 text-sm pl-3 font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{this.refBranch}} haru</span></div>
                     <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
                       <p class="m-0 p-0">{{this.courseCode}}</p>
@@ -48,8 +54,12 @@
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../../teachers)}}{{this.displayName}}{{/with }}</p>
                     </div>
-                    </a>
                 </div>
+                <form id="overview-{{../../this.slug}}-{{this.courseSlug}}" name="overview-{{../../this.slug}}-{{this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
+                  <!-- Hidden form inputs to send req.body values -->
+                  <input type="hidden" name="selectedTeam" id="selectedTeam-{{../../this.slug}}" value="{{../../this.slug}}" >
+                  <input type="hidden" name="selectedCourse" id="selectedCourse-{{this.courseSlug}}" value="{{jsonStringify this}}" >
+                </form>
               {{/each}}
 
             {{/with }}
