@@ -49,8 +49,8 @@ export default function hbsHelpers(hbs) {
         return options.inverse(this);
       },
       ifInMarkedComponents: (elem, list, options) => {
-        // console.log('elem:', elem);
-        // console.log('list:', list);
+        console.log('elem:', elem);
+        console.log('list:', list);
         if (list === undefined) {
           // console.log('list is undefined');
           return options.inverse(this);
@@ -100,9 +100,13 @@ export default function hbsHelpers(hbs) {
         return comp.name;
       },
       showComponentUUID: (componentUppercase, concepts, practices) => {
+        console.log('componentUppercase5:', componentUppercase);
+        console.log('concepts5:', concepts);
+        console.log('practices5:', practices);
         const component = componentUppercase;
         const components = concepts.concat(practices);
         const comp = components.find((x) => (x.slug) === component);
+        console.log('comp.uuid5:', comp.uuid);
         return comp.uuid;
       },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),

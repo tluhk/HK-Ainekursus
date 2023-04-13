@@ -391,7 +391,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  else {
+  /* else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -408,7 +408,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      }, */
+      },
     };
 
     if (req.user && !req.user.team) {
@@ -418,7 +418,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }
+  } */
 
   next();
 });
@@ -798,17 +798,18 @@ app.get('/notifications', resetSelectedVersion, allNotificationsController.rende
  */
 app.get('/progress-overview', resetSelectedVersion, allOverviewController.getOverview);
 
-app.get('/progress-overview/:team/:courseSlug', resetSelectedVersion, allOverviewController.getOverview);
+app.get('/progress-overview/:team?/:courseSlug?', resetSelectedVersion, allOverviewController.getOverview);
 
 app.post('/progress-overview', (req, res) => {
-  /* console.log('req.body3:', req.body);
+  console.log('value0:');
+  console.log('req.body3:', req.body);
   console.log('req.body.selectedTeam3:', req.body.selectedTeam);
   console.log('req.body.selectedCourse3:', req.body.selectedCourse);
-  console.log('JSON.parse(req.body.selectedCourse3):', JSON.parse(req.body.selectedCourse)); */
+  let selectedCourseParsed;
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse) selectedCourseParsed = JSON.parse(req.body.selectedCourse);
+  req.session.courseSlugData = selectedCourseParsed;
 
-  req.session.selectedCourse = JSON.parse(req.body.selectedCourse);
-
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse.courseSlug}`);
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse && selectedCourseParsed) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${selectedCourseParsed.courseSlug}`);
 
   // Store the displayBy in the session
   req.session.displayBy = req.body.displayBy;

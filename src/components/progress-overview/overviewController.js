@@ -1,6 +1,8 @@
 import { performance } from 'perf_hooks';
+import pool from '../../../db';
 
 import getAllCoursesData from '../../functions/getAllCoursesData';
+import { getMarkedAsDoneComponents } from '../courses/coursesController';
 import allNotificationsController from '../notifications/notificationsController';
 import teamsController from '../teams/teamsController';
 
@@ -16,26 +18,52 @@ const allOverviewController = {
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     if (teamSlug !== 'teachers') return res.redirect('/notfound');
 
-    const { selectedTeam, courseSlug } = req.params;
-    const { selectedCourse } = req.session;
-    req.session.selectedCourse = null;
+    const { team, courseSlug } = req.params;
+    let { courseSlugData } = req.session;
 
-    /* console.log('selectedTeam4:', selectedTeam);
-    console.log('courseSlug4:', courseSlug);
-    console.log('selectedCourse4:', selectedCourse);
+    /**
+    * Check if team, courseSlug params and courseSlugData from req.session are provided
+    * If team, courseSlug params and courseSlugData from req.session ARE NOT provided, then user is requesting to load /progress-overview page to see all team/course options. Then you will check if displayBy is provided with req.session. And then render /progress-overview.
+    */
 
-    console.log('req.user44:', req.user); */
     // By default set displayBy to 'teams'
     const displayBy = req.session.displayBy || 'teams';
     res.locals.displayBy = displayBy;
-    // console.log('displayBy44:', displayBy);
 
-    if (!displayBy) return res.redirect('/notfound');
-    if (displayBy === 'teams') return allOverviewController.getOverviewByTeams(req, res);
-    if (displayBy === 'courses') return allOverviewController.getOverviewByCourses(req, res);
+    console.log('displayBy4:', displayBy);
+    console.log('team4:', team);
+    console.log('courseSlug4:', courseSlug);
+    console.log('courseSlugData4:', courseSlugData);
+    console.log('req.user44:', req.user);
 
-    // By default return Teams overview
-    return allOverviewController.getOverviewByTeams(req, res);
+    if (displayBy && team && !courseSlug) {
+      return res.redirect('/progress-overview');
+    }
+    if (displayBy === 'teams' && !team && !courseSlug) return allOverviewController.getOverviewByTeams(req, res);
+    if (displayBy === 'courses' && !team && !courseSlug) return allOverviewController.getOverviewByCourses(req, res);
+
+    /*
+    * If team, courseSlug ARE provided, but courseSlugData from req.session IS NOT, then user approached directly from URL, without sending req.session data. Then get courseSlugData separately.
+    * Once courseSlugData is provided, then continue to render team-course overview page /progress-overview/:team/:courseSlug.
+    */
+    if (team && courseSlug) {
+      if (!courseSlugData) {
+        const teamCoursesPromises = await getAllCoursesData(team, req);
+        await Promise.all(teamCoursesPromises);
+        // console.log('teamCoursesPromises4:', teamCoursesPromises);
+        const courseSlugDataRequested = teamCoursesPromises.find((course) => course.courseSlug === courseSlug);
+        /* If courseSlugDataRequested is not found, then user accessed /('/progress-overview/:team/:courseSlug with invalid team or courseSlug params. Route back to 7progress-overview page.
+        * Else save courseSlugDataRequested to courseSlugData and load /progress-overview/:team/:courseSlug page.
+        */
+        console.log('courseSlugDataRequested4:', courseSlugDataRequested);
+        if (!courseSlugDataRequested) return res.redirect('/progress-overview');
+        courseSlugData = courseSlugDataRequested;
+      }
+    }
+    res.locals = { team, courseSlug, courseSlugData };
+    console.log('courseSlugData4:', courseSlugData);
+
+    return allOverviewController.showProgress(req, res);
   },
   getOverviewByTeams: async (req, res) => {
     const { displayBy } = res.locals;
@@ -91,6 +119,48 @@ const allOverviewController = {
 
     return res.render('overview-courses', {
       user: req.user,
+    });
+  },
+  showProgress: async (req, res) => {
+    const { team, courseSlug, courseSlugData } = res.locals;
+    console.log('team5:', team);
+    console.log('courseSlug5:', courseSlug);
+    console.log('courseSlugData5:', courseSlugData);
+
+    const usersInTeam = await teamsController.getUsersInTeam(team);
+    const usersInTeachersTeam = await teamsController.getUsersInTeam('teachers');
+
+    const usersInTeamAndNotInTeachers = usersInTeam.filter((user) => !usersInTeachersTeam.some((user2) => user.login === user2.login));
+    const usersGithubIDsArray = usersInTeamAndNotInTeachers.map((user) => `${user.id}`);
+
+    // console.log('usersInTeam5:', usersInTeam);
+    // console.log('usersInTeachersTeam5:', usersInTeachersTeam);
+    console.log('usersInTeamAndNotTeachers5:', usersInTeamAndNotInTeachers);
+    console.log('usersGithubIDsArray5:', usersGithubIDsArray);
+
+    let usersDataPromises;
+    if (courseSlug && usersGithubIDsArray.length > 0) {
+      usersDataPromises = usersInTeamAndNotInTeachers.map(async (user, index) => {
+        // Connects to DB again for each user
+        const markedAsDoneComponents = await getMarkedAsDoneComponents(user.id, courseSlug);
+        console.log('markedAsDoneComponents5:', markedAsDoneComponents);
+        console.log('usersInTeamAndNotInTeachers[index]5:', usersInTeamAndNotInTeachers[index]);
+        usersInTeamAndNotInTeachers[index].markedAsDoneComponents = markedAsDoneComponents;
+        console.log('usersInTeamAndNotInTeachers[index]55:', usersInTeamAndNotInTeachers[index]);
+        // usersData.push(usersInTeamAndNotInTeachers[index]);
+        return usersInTeamAndNotInTeachers[index];
+      });
+    }
+
+    let usersData;
+    if (usersDataPromises && usersDataPromises[0]) usersData = await Promise.all(usersDataPromises);
+    console.log('usersData2:', usersData);
+
+    return res.render('overview-stats', {
+      user: req.user,
+      courseData: courseSlugData,
+      team,
+      usersData,
     });
   },
 };

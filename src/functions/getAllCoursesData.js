@@ -94,6 +94,7 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
       refBranch,
       courseBranchComponentsUUIDs: allComponentsUUIDs,
       courseAllActiveBranches: activeBranches,
+      config,
     };
   });
 
@@ -131,7 +132,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
 
   if (!courses) return [];
 
-  console.log('courses1:', courses);
+  // console.log('courses1:', courses);
 
   /*
   * Set conditions, which Repositories (Courses) are read from tluhk org github account

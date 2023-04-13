@@ -59,9 +59,13 @@
       document.getElementById("selectedVersion").value = value;
       document.getElementById("my-form").submit();
     }
-    function handleCourseClick() {
-     //  console.log('value1:', value);
-      document.getElementById("displayCourseProgressByTeam").submit();
+    function handleCourseClick(team, courseSlug) {
+      const formId = `overview-${team}-${courseSlug}`;
+      console.log('formId:', formId);
+      document.getElementById(formId).submit();
+      /* console.log('team:', team);
+      console.log('courseSlug:', courseSlug);
+      document.getElementById(`overview-${team}-${courseSlug}`).submit(); */
     }
     </script>
 
