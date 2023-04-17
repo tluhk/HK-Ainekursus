@@ -47,7 +47,7 @@
           <ul>
             <li>GitHubi ID: {{ user.id }}</li>
             <li>GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
-            <li>Grupp: {{ user.team.name }}</li>
+            <li>Tiim: {{ user.team.name }}</li>
             {{#if user.displayName}}
               <li>Profiilinimi: {{ user.displayName }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">edit</span></a></li>
             {{else }}

@@ -280,7 +280,7 @@ const allCoursesController = {
     res.locals.teamSlug = teamSlug;
 
     // console.log('teamSlug2:', teamSlug);
-    // console.log('isTeacher2:', isTeacher);
+    console.log('isTeacher2:', isTeacher);
 
     const start3 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug, req);
@@ -306,10 +306,21 @@ const allCoursesController = {
     console.log('req.session.coursesDisplayBy1:', req.session.coursesDisplayBy);
     console.log('req.query.coursesDisplayBy1:', req.query.coursesDisplayBy);
     let coursesDisplayBy = req.session.coursesDisplayBy || 'name';
+    if ((req.query.coursesDisplayBy
+      && req.query.coursesDisplayBy !== 'name'
+      && req.query.coursesDisplayBy !== 'progress'
+      && req.query.coursesDisplayBy !== 'semester')
+      || (
+        // 'teachers' team doesn't have progress bars on courses, so disable this display option for them:
+        req.user.team.slug === 'teachers'
+        && req.query.coursesDisplayBy
+        && req.query.coursesDisplayBy === 'progress')) return res.redirect('/dashboard');
+
     if (req.query.coursesDisplayBy && (
       req.query.coursesDisplayBy === 'name'
-      || req.query.coursesDisplayBy === 'progress'
-      || req.query.coursesDisplayBy === 'semester')) {
+      || req.query.coursesDisplayBy === 'semester'
+      // 'teachers' team doesn't have progress bars on courses, so disable this display option for them:
+      || (req.query.coursesDisplayBy === 'progress' && req.user.team.slug !== 'teachers'))) {
       coursesDisplayBy = req.query.coursesDisplayBy;
       req.session.coursesDisplayBy = req.query.coursesDisplayBy;
     }
@@ -357,13 +368,64 @@ const allCoursesController = {
        */
       const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
-      return res.render('dashboard-teacher', {
-        courses: allTeacherCourses,
-        user: req.user,
-        teacherCourses: sortedCoursesGroupedByTeacher,
-        teachers: allTeachers,
-        courseUpdates7Days,
-      });
+      if (coursesDisplayBy === 'name') {
+        return res.render('dashboard-teacher', {
+          coursesDisplayBy,
+          courses: allTeacherCourses,
+          user: req.user,
+          teacherCourses: sortedCoursesGroupedByTeacher,
+          teachers: allTeachers,
+          courseUpdates7Days,
+        });
+      }
+      if (coursesDisplayBy === 'semester') {
+        const allCoursesGroupedBySemester = allTeacherCourses
+          .groupBy(({ courseSemester }) => courseSemester);
+        // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+        const sortedCoursesGroupedBySemester = Object.keys(allCoursesGroupedBySemester)
+          .sort((a, b) => {
+            // Extract the year and first letter of each element
+            const yearA = a.slice(1);
+            const yearB = b.slice(1);
+            const letterA = a[0];
+            const letterB = b[0];
+            // Compare the years first
+            if (yearA !== yearB) {
+              return yearB - yearA;
+            }
+            // If the years are the same, compare the first letter
+            return letterB.localeCompare(letterA);
+          })
+          .reduce((acc, semester) => {
+            acc[semester] = allCoursesGroupedBySemester[semester].sort((a, b) => a.courseName.localeCompare(b.courseName));
+            return acc;
+          }, {});
+
+        const seasons = {
+          K: 'Kevad',
+          S: 'Sügis',
+        };
+        const sortedCoursesGroupedBySemesterWithFullNames = {};
+
+        Object.keys(sortedCoursesGroupedBySemester).forEach((semester) => {
+          if (Object.prototype.hasOwnProperty.call(sortedCoursesGroupedBySemester, semester)) {
+            const season = semester.substring(0, 1);
+            const year = semester.substring(1);
+            sortedCoursesGroupedBySemesterWithFullNames[`${seasons[season]} ${year}`] = sortedCoursesGroupedBySemester[semester];
+          }
+        });
+
+        console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
+
+        return res.render('dashboard-teacher', {
+          coursesDisplayBy,
+          courses: sortedCoursesGroupedBySemesterWithFullNames,
+          user: req.user,
+          teacherCourses: sortedCoursesGroupedByTeacher,
+          teachers: allTeachers,
+          courseUpdates7Days,
+        });
+      }
     }
 
     if (!isTeacher) {
@@ -513,7 +575,7 @@ const allCoursesController = {
       }
     }
     console.log('isTeacher is neither true/false');
-    return false;
+    return res.redirect('/dashboard');
   },
   /**
    * for '/course/:courseSlug/:contentSlug?/:componentSlug?' route

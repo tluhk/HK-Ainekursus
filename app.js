@@ -391,7 +391,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  else {
+  /* else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -403,7 +403,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      team: {
+      /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
@@ -418,7 +418,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }
+  } */
 
   next();
 });
@@ -558,7 +558,7 @@ app.get(
             <form action="/save-displayName" method="post">
                 <span>Sisesta enda profiilinimi:</span>
                 <input name="displayName" type="text" placeholder="${displayName}"/><br>
-                <input type="submit" value="Save displayName"/>
+                <input type="submit" value="Salvesta"/>
             </form>
             <p style="color:red;">${message}</p>
         </body>
@@ -616,7 +616,7 @@ app.get(
             <form action="/save-email" method="post">
                 <span>Sisesta enda email:</span>
                 <input name="email" type="email" placeholder="${email}"/><br>
-                <input type="submit" value="Save"/>
+                <input type="submit" value="Salvesta"/>
             </form>
             <p style="color:red;">${message}</p>
         </body>
