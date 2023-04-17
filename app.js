@@ -391,7 +391,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  /* else {
+  else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -403,7 +403,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      /* team: {
+      team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
@@ -418,7 +418,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
   next();
 });
@@ -805,11 +805,13 @@ app.post('/progress-overview', (req, res) => {
   console.log('req.body3:', req.body);
   console.log('req.body.selectedTeam3:', req.body.selectedTeam);
   console.log('req.body.selectedCourse3:', req.body.selectedCourse);
-  let selectedCourseParsed;
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse) selectedCourseParsed = JSON.parse(req.body.selectedCourse);
-  req.session.courseSlugData = selectedCourseParsed;
+  console.log('req.body.selectedCourseData3:', req.body.selectedCourseData);
 
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse && selectedCourseParsed) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${selectedCourseParsed.courseSlug}`);
+  let selectedCourseDataParsed;
+  if (req.body && req.body.selectedCourseData) selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
+  req.session.courseSlugData = selectedCourseDataParsed;
+
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse}`);
 
   // Store the displayBy in the session
   req.session.displayBy = req.body.displayBy;

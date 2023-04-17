@@ -21,9 +21,29 @@
         </div>
 
         <div class="">
-          <h2>Kursused:</h2>
 
-          Kursuste järgi
+          <h1>Kursused:</h1>
+          {{#each coursesWithTeams}}
+            <div class="flex flex-nowrap content-center gap-x-4 mt-4 ">
+              <h3>{{this.courseName}}</h3> <p class="pl-3">{{this.courseCode}}</p>
+            </div>
+            <div>
+              <ul>
+                {{#each this.teams}}
+                  <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4 ml-4' onclick="handleCourseClick('{{this}}', '{{../this.courseSlug}}')">
+                    <li>{{this}}</li>
+                    <form id="overview-{{this}}-{{../this.courseSlug}}" name="overview-{{this}}-{{../this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
+                      <!-- Hidden form inputs to send req.body values -->
+                      <input type="hidden" name="selectedTeam" id="selectedTeam-{{this}}" value="{{this}}" >
+                      <input type="hidden" name="selectedCourse" id="selectedCourse-{{../this.courseSlug}}" value="{{../this.courseSlug}}" >
+                      <input type="hidden" name="selectedCourseData" id="selectedCourseData-{{../this.courseSlug}}" >
+                    </form>
+                  </div>
+                {{/each }}
+              </ul>
+            </div>
+
+          {{/each}}
 
         </div>
 

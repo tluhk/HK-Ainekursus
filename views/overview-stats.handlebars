@@ -25,49 +25,53 @@
 
           <h1>Detailvaade:</h1>
           <h3>Tiim: <span class="uppercase">{{team}}</span></h3>
-          <h3>Ainekursus: <span class="uppercase">{{courseData.courseName}}</span></h3>
+          <div class="flex flex-nowrap content-center">
+            <h3>Ainekursus: <span class="uppercase">{{courseData.courseName}}</span></h3> <p class="pl-3">{{courseData.refBranch}} haru</p>
+          </div>
 
-          <table class="table-fixed border-separate border border-slate-400 pt-4">
-            <col>
-              {{#each courseData.config.lessons }}
-                <colgroup span="{{this.components.length}}"></colgroup>
-              {{/each }}
-            <tr>
-              <td rowspan="2"></td>
-              {{#each courseData.config.lessons }}
-                <th class="border border-slate-300" colspan="{{this.components.length}}" scope="colgroup">{{this.name}}</th>
-              {{/each }}
-            </tr>
-            <tr>
-              {{#each courseData.config.lessons }}
-                {{#each this.components}}
-                  <th class="border border-slate-300" scope="col">
-                   {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}  
-                    {{this}}
-                  {{/with}} {{!--  –
-                  {{#with (showComponentUUID this ../../courseData.config.concepts ../../courseData.config.practices)}} 
-                    {{this}}
-                  {{/with}}--}}
-                  </th>
+          <div class="overflow-x-auto">
+            <table class="w-full table-fixed border-separate border border-slate-400 pt-4">
+              <col>
+                {{#each courseData.config.lessons }}
+                  <colgroup span="{{this.components.length}}"></colgroup>
                 {{/each }}
-              {{/each }}
-            </tr>
-            {{#each usersData}}
               <tr>
-                <th class="border border-slate-300" scope="row">{{this.login}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</th>
-                {{#each ../courseData.config.lessons }}
+                <td rowspan="2"></td>
+                {{#each courseData.config.lessons }}
+                  <th class="border border-slate-300" colspan="{{this.components.length}}" scope="colgroup">{{this.name}}</th>
+                {{/each }}
+              </tr>
+              <tr>
+                {{#each courseData.config.lessons }}
                   {{#each this.components}}
-                    {{#ifInMarkedComponents (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices) ../../this.markedAsDoneComponents}}
-                      <td class="border border-slate-300 text-center"><span class="material-symbols-outlined bg-green-100">task_alt</span></td>
-                    {{else}}
-                      <td class="border border-slate-300 text-center">-</td>
-                    {{/ifInMarkedComponents}}
+                    <th class="border border-slate-300" scope="col">
+                    {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}  
+                      {{this}}
+                    {{/with}} {{!--  –
+                    {{#with (showComponentUUID this ../../courseData.config.concepts ../../courseData.config.practices)}} 
+                      {{this}}
+                    {{/with}}--}}
+                    </th>
                   {{/each }}
                 {{/each }}
               </tr>
-            {{/each }}
-          
-          </table>
+              {{#each usersData}}
+                <tr>
+                  <th class="border border-slate-300" scope="row">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</th>
+                  {{#each ../courseData.config.lessons }}
+                    {{#each this.components}}
+                      {{#ifInMarkedComponents (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices) ../../this.markedAsDoneComponents}}
+                        <td class="border border-slate-300 text-center"><span class="material-symbols-outlined bg-green-100">task_alt</span></td>
+                      {{else}}
+                        <td class="border border-slate-300 text-center">-</td>
+                      {{/ifInMarkedComponents}}
+                    {{/each }}
+                  {{/each }}
+                </tr>
+              {{/each }}
+            
+            </table>
+          </div>
 
         </div>
 

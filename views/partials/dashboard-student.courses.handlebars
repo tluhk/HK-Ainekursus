@@ -13,7 +13,7 @@
                 href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
               ><div class='text-md font-bold mb-2'>{{this.courseName}}</div> <br>
 
-tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / kõik teemad: {{this.courseBranchComponentsUUIDs.length }} <br>
+                tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / kõik teemad: {{this.courseBranchComponentsUUIDs.length }} <br>
 
                 <div>
                   <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>

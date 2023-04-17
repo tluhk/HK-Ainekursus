@@ -354,14 +354,17 @@ const allCoursesController = {
       // console.log('allTeachers1:', allTeachers);
       // console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
 
-      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
+      /**
+      * Get last 7 day notifications for active courses
+       */
+      const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
       return res.render('dashboard-teacher', {
         courses: allTeacherCourses,
         user: req.user,
         teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
-        courseUpdates,
+        courseUpdates7Days,
       });
     }
 
@@ -388,27 +391,9 @@ const allCoursesController = {
       // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
 
       /**
-      * NOTIFICATIONS
-      /**
-       * Get commits per branch
-       * -- and per path? (only main folders and config file):
-       * https://api.github.com/repos/tluhk/HK_Riistvara-alused/commits?per_page=10&sha=rif20&path=docs
-       * 
-       * Get commit SHAs where comment_count > 0
-       * Get all comments and user.login for each commit SHA:
-       * https://api.github.com/repos/tluhk/HK_Riistvara-alused/commits/70b72e7f38430ba8c3f883510990e10fb11cefd3/comments
-       * 
-       * Save all comments, sort by created_at / updated_at
-       * 
-       * "Mrtrvl uuendas ainet ..." 
-       * "Kommentaar"
-       * //aeg väikselt
-       * 
-       * 
-       * END OF NOTIFICATIONS
+      * Get last 7 day notifications for active courses
        */
-
-      const courseUpdates = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
+      const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
       let courses;
       if (req.user && req.user.id) {
@@ -423,7 +408,7 @@ const allCoursesController = {
         user: req.user,
         teacherCourses: sortedCoursesGroupedByTeacher,
         teachers: allTeachers,
-        courseUpdates,
+        courseUpdates7Days,
       });
     }
     console.log('isTeacher is neither true/false');
