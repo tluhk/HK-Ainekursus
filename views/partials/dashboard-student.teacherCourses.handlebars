@@ -11,7 +11,11 @@
             </div>
             <div class="inline-block">
               <h4 class="mt-0 mb-1">{{this.displayName}}</h4>
-              <p class="m-0 mb-1">{{#if this.email}}{{this.email}}{{else}}email@tlu.ee{{/if}}</p>
+              {{#if this.email}}
+                <a class="m-0 mb-1" href="mailto:{{this.email}}">{{this.email}}<a>
+              {{else}}
+                <p class="m-0 mb-1">Email puudub</p>
+              {{/if}}
             </div>
           </div>
         {{/with }}

@@ -58,7 +58,8 @@
                 <form id="overview-{{../../this.slug}}-{{this.courseSlug}}" name="overview-{{../../this.slug}}-{{this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
                   <!-- Hidden form inputs to send req.body values -->
                   <input type="hidden" name="selectedTeam" id="selectedTeam-{{../../this.slug}}" value="{{../../this.slug}}" >
-                  <input type="hidden" name="selectedCourse" id="selectedCourse-{{this.courseSlug}}" value="{{jsonStringify this}}" >
+                  <input type="hidden" name="selectedCourse" id="selectedCourse-{{this.courseSlug}}" value="{{this.courseSlug}}" >
+                  <input type="hidden" name="selectedCourseData" id="selectedCourseData-{{this.courseSlug}}" value="{{jsonStringify this}}" >
                 </form>
               {{/each}}
 

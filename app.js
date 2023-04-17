@@ -558,7 +558,7 @@ app.get(
             <form action="/save-displayName" method="post">
                 <span>Sisesta enda profiilinimi:</span>
                 <input name="displayName" type="text" placeholder="${displayName}"/><br>
-                <input type="submit" value="Save displayName"/>
+                <input type="submit" value="Salvesta"/>
             </form>
             <p style="color:red;">${message}</p>
         </body>
@@ -616,7 +616,7 @@ app.get(
             <form action="/save-email" method="post">
                 <span>Sisesta enda email:</span>
                 <input name="email" type="email" placeholder="${email}"/><br>
-                <input type="submit" value="Save"/>
+                <input type="submit" value="Salvesta"/>
             </form>
             <p style="color:red;">${message}</p>
         </body>
@@ -805,16 +805,25 @@ app.post('/progress-overview', (req, res) => {
   console.log('req.body3:', req.body);
   console.log('req.body.selectedTeam3:', req.body.selectedTeam);
   console.log('req.body.selectedCourse3:', req.body.selectedCourse);
-  let selectedCourseParsed;
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse) selectedCourseParsed = JSON.parse(req.body.selectedCourse);
-  req.session.courseSlugData = selectedCourseParsed;
+  console.log('req.body.selectedCourseData3:', req.body.selectedCourseData);
 
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse && selectedCourseParsed) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${selectedCourseParsed.courseSlug}`);
+  let selectedCourseDataParsed;
+  if (req.body && req.body.selectedCourseData) selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
+  req.session.courseSlugData = selectedCourseDataParsed;
+
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse}`);
 
   // Store the displayBy in the session
   req.session.displayBy = req.body.displayBy;
 
   return res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
+});
+
+app.post('/courses-display-by', (req, res) => {
+  // Store the displayBy in the session
+  req.session.coursesDisplayBy = req.body.coursesDisplayBy;
+
+  return res.redirect(`/dashboard?coursesDisplayBy=${req.session.coursesDisplayBy}`);
 });
 
 /**

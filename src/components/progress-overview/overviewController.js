@@ -3,7 +3,6 @@ import pool from '../../../db';
 
 import getAllCoursesData from '../../functions/getAllCoursesData';
 import { getMarkedAsDoneComponents } from '../courses/coursesController';
-import allNotificationsController from '../notifications/notificationsController';
 import teamsController from '../teams/teamsController';
 
 /* eslint-disable max-len */
@@ -47,7 +46,7 @@ const allOverviewController = {
     * Once courseSlugData is provided, then continue to render team-course overview page /progress-overview/:team/:courseSlug.
     */
     if (team && courseSlug) {
-      if (!courseSlugData) {
+      if (!courseSlugData || courseSlugData === '') {
         const teamCoursesPromises = await getAllCoursesData(team, req);
         await Promise.all(teamCoursesPromises);
         // console.log('teamCoursesPromises4:', teamCoursesPromises);
@@ -85,7 +84,14 @@ const allOverviewController = {
 
     await Promise.all(teamsCoursesPromises);
 
-    // console.log('teamsCourses3:', teamsCourses);
+    console.log('teamsCourses3:', teamsCourses);
+
+    const teamsCoursesSorted = Object.keys(teamsCourses)
+      .sort()
+      .reduce((acc, team) => {
+        acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
+        return acc;
+      }, {});
 
     /*
     * Get all users in each team
@@ -102,23 +108,104 @@ const allOverviewController = {
     const end4 = performance.now();
     console.log(`Execution time teamsUsers: ${end4 - start4} ms`);
 
-    // console.log('teamsUsers3:', teamsUsers);
+    console.log('teamsUsers3:', teamsUsers);
+
+    const teamsUsersSorted = Object.keys(teamsUsers)
+      .sort()
+      .reduce((acc, team) => {
+        acc[team] = teamsUsers[team].sort((a, b) => a.displayName.localeCompare(b.displayName));
+        return acc;
+      }, {});
 
     return res.render('overview-teams', {
       user: req.user,
       displayBy,
       teams,
-      teamsCourses,
-      teamsUsers,
-      teachers: teamsUsers.teachers,
+      teamsCourses: teamsCoursesSorted,
+      teamsUsers: teamsUsersSorted,
+      teachers: teamsUsersSorted.teachers,
     });
   },
 
   getOverviewByCourses: async (req, res) => {
-    console.log();
+    const { displayBy } = res.locals;
+    const { teams } = await teamsController.getAllValidTeams().catch((error) => {
+      console.error(error);
+      return res.redirect('/notfound');
+    });
+
+    if (!teams) return res.redirect('/notfound');
+    teams.sort((a, b) => a.slug.localeCompare(b.slug));
+    // console.log('teams3:', teams);
+
+    const teamsCourses = {};
+
+    const teamsCoursesPromises = teams.map(async (team) => {
+      const coursesData = await getAllCoursesData(team.slug, req);
+      teamsCourses[team.slug] = coursesData;
+    });
+
+    await Promise.all(teamsCoursesPromises);
+    const teamsCoursesSorted = Object.keys(teamsCourses)
+      .sort()
+      .reduce((acc, team) => {
+        acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
+        return acc;
+      }, {});
+
+    console.log('teamsCoursesSorted3:', teamsCoursesSorted);
+
+    const coursesWithTeams = [];
+
+    Object.keys(teamsCoursesSorted).forEach((key) => {
+      teamsCoursesSorted[key].forEach((course) => {
+        const existingCourse = coursesWithTeams.find((c) => c.courseUrl === course.courseUrl && c.teacherUsername === course.teacherUsername);
+        if (existingCourse) {
+          existingCourse.teams.push(key);
+        } else {
+          coursesWithTeams.push({
+            ...course,
+            teams: [key],
+          });
+        }
+      });
+    });
+
+    coursesWithTeams.sort((a, b) => a.courseName.localeCompare(b.courseName));
+
+    console.log(coursesWithTeams);
+    console.log('coursesWithTeams3:', coursesWithTeams);
+
+    /*
+    * Get all users in each team
+    * Save all teachers in a variable, needed for rendering 
+    */
+    const teamsUsers = {};
+    const start4 = performance.now();
+    const teamsUsersPromises = teams.map(async (team) => {
+      const usersData = await teamsController.getUsersInTeam(team.slug);
+      teamsUsers[team.slug] = usersData;
+    });
+
+    await Promise.all(teamsUsersPromises);
+    const end4 = performance.now();
+    console.log(`Execution time teamsUsers: ${end4 - start4} ms`);
+
+    const teamsUsersSorted = Object.keys(teamsUsers)
+      .sort()
+      .reduce((acc, team) => {
+        acc[team] = teamsUsers[team].sort((a, b) => a.displayName.localeCompare(b.displayName));
+        return acc;
+      }, {});
+    console.log('teamsUsersSorted3:', teamsUsersSorted);
 
     return res.render('overview-courses', {
       user: req.user,
+      displayBy,
+      teams,
+      coursesWithTeams,
+      teamsUsers: teamsUsersSorted,
+      teachers: teamsUsersSorted.teachers,
     });
   },
   showProgress: async (req, res) => {

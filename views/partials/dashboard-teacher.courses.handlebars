@@ -6,25 +6,67 @@
           <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
         {{/unless }}
         {{#if courses }}
-          {{#each courses}}
-            <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
-              <a
-                class='!no-underline uppercase w-full'
-                href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-              ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
-                <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
-                  <p class="m-0 p-0">{{this.courseCode}}</p>
-                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
-                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
-                </div>
-                <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
-                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
-                  <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../teachers)}}{{this.displayName}}{{/with }}</p>
-                </div>
-                </a>
+          <div class="flex flex-row justify-start gap-x-4">
+            <form method="POST" action="/courses-display-by" name="displayByName" id="displayByName">
+              <!-- Hidden form inputs to send req.body values -->
+              <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="name" >
+              <button name="displayByNameButton" class="btn {{#if_equal coursesDisplayBy 'name'}} btn-primary{{else}}btn-secondary{{/if_equal}}">Nime järgi</button>
+            </form>
+            <form method="POST" action="/courses-display-by" name="displayBySemester" id="displayBySemester">
+              <!-- Hidden form inputs to send req.body values -->
+              <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="semester" >
+              <button name="displayBySemesterButton" class="btn {{#if_equal coursesDisplayBy 'semester'}}btn-primary{{else}}btn-secondary{{/if_equal}}">Semestri järgi</button>
+            </form>
+          </div>
+          
+          {{#if_equal coursesDisplayBy 'name' }}
+            {{#each ../courses}}
+              <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
+                <a
+                  class='!no-underline uppercase w-full'
+                  href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
+                ><div class='text-md font-bold mb-2'>{{this.courseName}}</div>
+                  <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                    <p class="m-0 p-0">{{this.courseCode}}</p>
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
+                  </div>
+                  <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
+                  </div>
+                  </a>
+              </div>
+            {{/each}}
+          {{/if_equal}}
 
-            </div>
-          {{/each}}
+          {{#if_equal coursesDisplayBy 'semester' }}
+            {{#each ../courses }}
+              <h3 class="mt-1 mb-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100">{{@key}}</h3>
+
+              <ul class="list-none mt-2">
+              {{#each this }}
+                <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
+                  <a
+                    class='!no-underline uppercase w-full'
+                    href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
+                  ><div class='text-md font-bold mb-2'>{{this.courseName}}</div> <br>
+
+                  <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                    <p class="m-0 p-0">{{this.courseCode}}</p>
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
+                  </div>
+                  <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
+                    <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../../teachers)}}{{this.displayName}}{{/with }}</p>
+                  </div>
+                  </a>
+                </div>
+              {{/each }}
+              </ul>
+            {{/each }}
+          {{/if_equal }}
 
         {{/if }}
     </div>
