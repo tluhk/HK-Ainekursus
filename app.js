@@ -424,7 +424,9 @@ app.use(getTeamAssignments, async (req, res, next) => {
 });
 
 app.post('/mark-component-as-done', async (req, res) => {
-  const { courseSlug, componentSlug, componentUUID } = req.body;
+  const {
+    courseSlug, componentSlug, componentUUID, nextPagePath,
+  } = req.body;
 
   const githubID = req.user.id;
   console.log('req.body6:', req.body);
@@ -433,6 +435,7 @@ app.post('/mark-component-as-done', async (req, res) => {
   console.log('courseSlug6:', courseSlug);
   console.log('componentSlug6:', componentSlug);
   console.log('componentUUID6:', componentUUID);
+  console.log('nextPagePath6', nextPagePath);
   if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
     return res.redirect('/notfound');
   }
@@ -484,7 +487,7 @@ app.post('/mark-component-as-done', async (req, res) => {
     if (conn) conn.release(); // release to pool
   }
 
-  return res.redirect('back');
+  return res.redirect(nextPagePath);
 });
 
 app.post('/remove-component-as-done', async (req, res) => {

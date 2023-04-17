@@ -115,6 +115,7 @@
         <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
         <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}" >
         <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}" >
+        <input type="hidden" name="nextPagePath" id="nextPagePath" value="/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}" >
         <button name="markAsDone" class="btn btn-primary">Märgi loetuks</button>
       </form>
       {{/ifInMarkedComponents }}
