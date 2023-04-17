@@ -819,6 +819,13 @@ app.post('/progress-overview', (req, res) => {
   return res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
 });
 
+app.post('/courses-display-by', (req, res) => {
+  // Store the displayBy in the session
+  req.session.coursesDisplayBy = req.body.coursesDisplayBy;
+
+  return res.redirect(`/dashboard?coursesDisplayBy=${req.session.coursesDisplayBy}`);
+});
+
 /**
  * Courses page
  */

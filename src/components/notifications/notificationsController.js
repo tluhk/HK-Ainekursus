@@ -55,7 +55,7 @@ const allNotificationsController = {
         body: comment.body,
         reactions: comment.reactions,
       })));
-      console.log('commentsArray2:', commentsArray);
+      // console.log('commentsArray2:', commentsArray);
 
       /**
        * Finally, for each comment, add course information.
@@ -68,7 +68,7 @@ const allNotificationsController = {
       return commentsArray;
     }));
 
-    console.log('commentsWithCourses1:', commentsWithCourses);
+    // console.log('commentsWithCourses1:', commentsWithCourses);
 
     /**
      * Here you have and array of comments with course info (commentsWithCourses const).
@@ -78,7 +78,7 @@ const allNotificationsController = {
     // eslint-disable-next-line no-nested-ternary
     commentsWithCoursesFlattened.sort((b, a) => ((a.created_at > b.created_at) ? 1 : ((b.created_at > a.created_at) ? -1 : 0)));
 
-    console.log('commentsWithCoursesFlattened1:', commentsWithCoursesFlattened);
+    // console.log('commentsWithCoursesFlattened1:', commentsWithCoursesFlattened);
 
     /**
      * Limit notifications to max 30 days ago

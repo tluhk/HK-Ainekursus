@@ -45,26 +45,8 @@ const responseAction = async (req, res, next) => {
       apiResponse = response;
     });
   }
-
   // console.log('githubRequest1:', githubRequest);
   // console.log('githubRequest1type:', typeof githubRequest);
-
-  /**
-   * name: 'about.md',
-    path: 'concepts/emaplaadid/about.md',
-    sha: 'a1c74cf1ea13c19cc9c08bcec5bb6f6f693c4450',
-
-    name: 'about.md',
-    path: 'docs/about.md',
-    sha: '08343c30068205a54d6736b25199c7791f2ca655',
-
-    name: 'about.md',
-    path: 'concepts/emaplaadid/about.md',
-    sha: 'a1c74cf1ea13c19cc9c08bcec5bb6f6f693c4450',
-
-    28aee17fe750820f1d0dd1012380f5befab998bc
-    07d766e4ada35aa6f3794a213fd6d5cf70519b9f
-   */
 
   const { components, files, sources } = apiResponse;
   res.locals.resComponents = components;
@@ -226,12 +208,12 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
     // if sth had been saved to DB before, but then removed and DB now returns empty object, return empty array
     if (res10[0].markedAsDoneComponents === '{}') {
       return keysArray;
-    } 
+    }
 
     // console.log('res10[0].markedAsDoneComponents:', res10[0].markedAsDoneComponents);
 
     // remove the curly braces around DB entry (that's string type)
-    const string = res10[0].markedAsDoneComponents.slice(1, -1); 
+    const string = res10[0].markedAsDoneComponents.slice(1, -1);
 
     // convert DB string entry to object
     const obj = {};
@@ -306,7 +288,7 @@ const allCoursesController = {
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     // console.log('allCourses1:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    console.log('allCoursesActive5:', allCoursesActive);
+    // console.log('allCoursesActive5:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
@@ -316,6 +298,22 @@ const allCoursesController = {
 
     res.locals.allCoursesActive = allCoursesActive;
     res.locals.allTeacher = allTeachers;
+
+    /* By default set coursesDisplayBy to 'name'
+    * If coursesDisplayBy is provided with URL, use this instead.
+    * Save coursesDisplayBy to req.session, so dashboard would be loaded with last visited coursesDisplayBy.
+    */
+    console.log('req.session.coursesDisplayBy1:', req.session.coursesDisplayBy);
+    console.log('req.query.coursesDisplayBy1:', req.query.coursesDisplayBy);
+    let coursesDisplayBy = req.session.coursesDisplayBy || 'name';
+    if (req.query.coursesDisplayBy && (
+      req.query.coursesDisplayBy === 'name'
+      || req.query.coursesDisplayBy === 'progress'
+      || req.query.coursesDisplayBy === 'semester')) {
+      coursesDisplayBy = req.query.coursesDisplayBy;
+      req.session.coursesDisplayBy = req.query.coursesDisplayBy;
+    }
+    res.locals.coursesDisplayBy = coursesDisplayBy;
 
     if (isTeacher) {
       /*
@@ -400,16 +398,119 @@ const allCoursesController = {
         courses = await allCoursesActiveWithComponentsData(allCoursesActive, req.user.id);
       } else courses = allCoursesActive;
 
-      console.log('allCoursesActiveWithComponentsData1:', allCoursesActiveWithComponentsData);
+      // console.log('allCoursesActiveWithComponentsData1:', allCoursesActiveWithComponentsData);
       res.locals.allCoursesActive = allCoursesActiveWithComponentsData;
 
-      return res.render('dashboard-student', {
-        courses,
-        user: req.user,
-        teacherCourses: sortedCoursesGroupedByTeacher,
-        teachers: allTeachers,
-        courseUpdates7Days,
-      });
+      console.log('courses1:', courses);
+      console.log('coursesDisplayBy1:', coursesDisplayBy);
+
+      // courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
+      courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
+      courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
+      courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
+      // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
+      // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
+      // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
+      courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
+      courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
+      courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
+      courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
+      courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c');
+
+      if (coursesDisplayBy === 'name') {
+        return res.render('dashboard-student', {
+          coursesDisplayBy,
+          courses,
+          user: req.user,
+          teacherCourses: sortedCoursesGroupedByTeacher,
+          teachers: allTeachers,
+          courseUpdates7Days,
+        });
+      }
+      if (coursesDisplayBy === 'progress') {
+        /**
+         * Sort courses by the % of elements in markedAsDoneComponentsUUIDs that are included in the courseBranchComponentsUUIDs array. A'ka the precentage of markedAsDone components.
+         * If two elements have the same %, these elements are sorted by courseName
+         */
+        courses.sort((a, b) => {
+          const aLength = a.courseBranchComponentsUUIDs.length;
+          const bLength = b.courseBranchComponentsUUIDs.length;
+          const aDoneLength = a.markedAsDoneComponentsUUIDs.filter((uuid) => a.courseBranchComponentsUUIDs.includes(uuid)).length;
+          const bDoneLength = b.markedAsDoneComponentsUUIDs.filter((uuid) => b.courseBranchComponentsUUIDs.includes(uuid)).length;
+          const aPercentage = aLength > 0 ? aDoneLength / aLength : 0;
+          const bPercentage = bLength > 0 ? bDoneLength / bLength : 0;
+
+          if (aPercentage === bPercentage) {
+            return a.courseName.localeCompare(b.courseName);
+          }
+          if (aPercentage === 0) {
+            return -1;
+          }
+          if (bPercentage === 0) {
+            return 1;
+          }
+          return aPercentage - bPercentage;
+        });
+
+        console.log('courses2:', courses);
+
+        return res.render('dashboard-student', {
+          coursesDisplayBy,
+          courses,
+          user: req.user,
+          teacherCourses: sortedCoursesGroupedByTeacher,
+          teachers: allTeachers,
+          courseUpdates7Days,
+        });
+      }
+      if (coursesDisplayBy === 'semester') {
+        const allCoursesGroupedBySemester = courses
+          .groupBy(({ courseSemester }) => courseSemester);
+        // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
+        const sortedCoursesGroupedBySemester = Object.keys(allCoursesGroupedBySemester)
+          .sort((a, b) => {
+            // Extract the year and first letter of each element
+            const yearA = a.slice(1);
+            const yearB = b.slice(1);
+            const letterA = a[0];
+            const letterB = b[0];
+            // Compare the years first
+            if (yearA !== yearB) {
+              return yearB - yearA;
+            }
+            // If the years are the same, compare the first letter
+            return letterB.localeCompare(letterA);
+          })
+          .reduce((acc, semester) => {
+            acc[semester] = allCoursesGroupedBySemester[semester].sort((a, b) => a.courseName.localeCompare(b.courseName));
+            return acc;
+          }, {});
+
+        const seasons = {
+          K: 'Kevad',
+          S: 'Sügis',
+        };
+        const sortedCoursesGroupedBySemesterWithFullNames = {};
+
+        Object.keys(sortedCoursesGroupedBySemester).forEach((semester) => {
+          if (Object.prototype.hasOwnProperty.call(sortedCoursesGroupedBySemester, semester)) {
+            const season = semester.substring(0, 1);
+            const year = semester.substring(1);
+            sortedCoursesGroupedBySemesterWithFullNames[`${seasons[season]} ${year}`] = sortedCoursesGroupedBySemester[semester];
+          }
+        });
+
+        console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
+
+        return res.render('dashboard-student', {
+          coursesDisplayBy,
+          courses: sortedCoursesGroupedBySemesterWithFullNames,
+          user: req.user,
+          teacherCourses: sortedCoursesGroupedByTeacher,
+          teachers: allTeachers,
+          courseUpdates7Days,
+        });
+      }
     }
     console.log('isTeacher is neither true/false');
     return false;
@@ -444,7 +545,7 @@ const allCoursesController = {
      * Get getMarkedAsDoneComponents data – this is array of UUID-s of components  that have been marked as done by the user
      */
     const markedAsDoneComponentsArr = await getMarkedAsDoneComponents(req.user.id, courseSlug);
-    console.log ('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
+    console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
     res.locals.markedAsDoneComponentsArr = markedAsDoneComponentsArr;
 
     /**
