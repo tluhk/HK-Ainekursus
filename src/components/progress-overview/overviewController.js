@@ -1,8 +1,7 @@
 import { performance } from 'perf_hooks';
-import pool from '../../../db';
 
 import getAllCoursesData from '../../functions/getAllCoursesData';
-import { getMarkedAsDoneComponents } from '../courses/coursesController';
+import getMarkedAsDoneComponents from '../../functions/getListOfDoneComponentUUIDs';
 import teamsController from '../teams/teamsController';
 
 /* eslint-disable max-len */

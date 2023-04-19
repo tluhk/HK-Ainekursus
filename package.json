@@ -47,6 +47,7 @@
     "express-passport-logout": "^0.1.0",
     "express-session": "^1.17.3",
     "flowbite": "^1.6.3",
+    "github-username-regex": "^1.0.0",
     "handlebars-utils": "^1.0.6",
     "helmet": "^6.0.1",
     "highlight.js": "^11.7.0",

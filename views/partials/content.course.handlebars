@@ -26,12 +26,9 @@
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   <div id="markdown-content">
-    <br>
-    {{path.courseSlug}} <br>
-    {{path.componentSlug}} <br>
-    {{path.componentUUID}} <br>
-    
+
     {{{component}}}
+    
   </div>
 
   <!-- NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad"" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed. -->
@@ -115,6 +112,7 @@
         <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
         <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}" >
         <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}" >
+        <input type="hidden" name="nextPagePath" id="nextPagePath" value="/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}" >
         <button name="markAsDone" class="btn btn-primary">Märgi loetuks</button>
       </form>
       {{/ifInMarkedComponents }}

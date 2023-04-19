@@ -17,7 +17,6 @@ const apiRequests = {
     const teamsRaw = await axios.get(requestTeams, authToken).catch((error) => {
       console.error(error);
     });
-    // console.log('authToken0:', authToken);
     // console.log('teamsRaw0:', teamsRaw);
     if (!teamsRaw) return [];
     const teams = teamsRaw.data;

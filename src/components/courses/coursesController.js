@@ -14,13 +14,12 @@ import { returnPreviousPage, returnNextPage, setCourseButtonPaths } from '../../
 import apiRequests from './coursesService';
 import teamsController from '../teams/teamsController';
 import allNotificationsController from '../notifications/notificationsController';
-import pool from '../../../db';
+import getMarkedAsDoneComponents from '../../functions/getListOfDoneComponentUUIDs';
 
-/**
- * Define what to do after info about couse and course page is received.
- * This step does the Axios requests via apiRequests[githubRequest] statement.
- * List of possible apiRequests is defined above.
+/** responseAction function defines what to do after info about courses and current course page is received.
+ * This step gets the data from Github, by doing Axios requests via apiRequests[githubRequest] statement.
  * Responses are saved into components, files, sources parts in res.locals, respectively.
+ * After the responseAction() function, the renderPage() function is run which renders the page on frontend.
  */
 const responseAction = async (req, res, next) => {
   const {
@@ -57,8 +56,9 @@ const responseAction = async (req, res, next) => {
 };
 
 /**
- * Last step to render page now that we have resComponents, resFiles and resSources values from Axios.
+ * Last step to render page now that we have resComponents, resFiles and resSources values from Github via Axios.
  * We have everything needed to render the page.
+ * This function also makes sure everything out the markdown content is correctly parsed and passed to FE.
  */
 const renderPage = async (req, res) => {
   const {
@@ -87,16 +87,12 @@ const renderPage = async (req, res) => {
   // console.log('resComponents in responseAction:', resComponents);
   // console.log('resFiles in responseAction:', resComponents);
 
-  // console.log('resComponents1:', resComponents);
-  /**
-   * Sisulehe sisu lugemine
-   */
+  /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
   const componentDecoded = base64.decode(resComponentsContent);
   const componentDecodedUtf8 = utf8.decode(componentDecoded);
 
-  /**
-   * Sisulehe piltide kuvamine
+  /**  Sisulehe piltide kuvamine
    * - functions: https://stackoverflow.com/a/58542933
    * - changing img src: https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
@@ -105,29 +101,21 @@ const renderPage = async (req, res) => {
   const end1 = performance.now();
   console.log(`Execution time markdownWithModifiedImgSources: ${end1 - start1} ms`);
 
-  /**
-   * Add Table of Contents markdown element to Markdown before rendering
-   */
+  /** Add Table of Contents markdown element to Markdown before rendering Markdown */
   const markdownWithModifiedImgSourcesToc = markdownWithModifiedImgSources.concat('\n\n ${toc} \n');
   // console.log('markdownWithModifiedImgSourcesToc:', markdownWithModifiedImgSourcesToc);
 
-  /**
-   * Render Markdown
-   */
+  /** Render Markdown */
   const start2 = performance.now();
   const componentMarkdown = await markdown.render(markdownWithModifiedImgSourcesToc);
   const end2 = performance.now();
   console.log(`Execution time componentMarkdown: ${end2 - start2} ms`);
   // console.log('componentMarkdown:', componentMarkdown);
 
-  /**
-   * Select rendered Markdown html, excluding table of contents
-   */
+  /** Select html from rendered Markdown, but exclude Table of Contents */
   const componentMarkdownWithoutTOC = componentMarkdown.substring(0, componentMarkdown.indexOf('<nav class="table-of-contents-from-markdown-123">'));
 
-  /**
-   * Select rendered Markdown table of contents, excluding preceding contents.
-   */
+  /** Select Table of Contents from rendered Markdown, but exclude preceding html. */
   function getStringBetween(str, start, end) {
     const result = str.match(new RegExp(`${start}(.*)${end}`));
     return result[1];
@@ -135,11 +123,17 @@ const renderPage = async (req, res) => {
   const componentMarkdownOnlyTOCWithoutNav = getStringBetween(componentMarkdown, '<nav class="table-of-contents-from-markdown-123">', '</nav>');
   const componentMarkdownOnlyTOC = `<nav class="table-of-contents">${componentMarkdownOnlyTOCWithoutNav}</nav>`;
 
+  /** You now have stored the markdown content in two variables:
+   * componentMarkdownWithoutTOC
+   * componentMarkdownOnlyTOC
+   */
   // console.log('componentMarkdownWithoutTOC:', componentMarkdownWithoutTOC);
   // console.log('componentMarkdownOnlyTOC:', componentMarkdownOnlyTOC);
 
+  /** Each sisuleht (concepts, practices) has a sources reference which is stored in sources.json file in Github. */
   // define sources as NULL by default.
   let sourcesJSON = null;
+
   // NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed.
   if (resSources) {
     const sources = resSources.data;
@@ -148,8 +142,8 @@ const renderPage = async (req, res) => {
     sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
-  console.log('markedAsDoneComponentsArr9:', markedAsDoneComponentsArr);
-  // console.log('teachers3:', teachers);
+  /** Finally you can render the course view with all correct information you've collected from Github, and with all correctly rendered Markdown content! */
+
   res.render('course', {
     component: componentMarkdownWithoutTOC,
     docs: config.docs,
@@ -178,115 +172,25 @@ const renderPage = async (req, res) => {
   });
 };
 
-const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
-  // console.log('githubID10:', githubID);
-  // console.log('courseSlug10:', courseSlug);
-  let res10;
-  let keysArray = [];
-
-  // read markedAsDoneComponents value from database
-  if (githubID && courseSlug) {
-    let conn;
-    try {
-      conn = await pool.getConnection();
-      console.log('Connected to MariaDB 5!');
-
-      res10 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-    } catch (err) {
-      console.log('Unable to connect to MariaDB 5');
-      console.error(err);
-    } finally {
-      if (conn) conn.release(); // release to pool
-    }
-    // console.log('res10:', res10);
-    // console.log('typeof res10:', typeof res10);
-
-    // if nothing has been saved to databse yet, return empty array
-    if (!res10 || !res10[0]) return keysArray;
-    // console.log('typeof res10[0].markedAsDoneComponents:', typeof res10[0].markedAsDoneComponents);
-
-    // if sth had been saved to DB before, but then removed and DB now returns empty object, return empty array
-    if (res10[0].markedAsDoneComponents === '{}') {
-      return keysArray;
-    }
-
-    // console.log('res10[0].markedAsDoneComponents:', res10[0].markedAsDoneComponents);
-
-    // remove the curly braces around DB entry (that's string type)
-    const string = res10[0].markedAsDoneComponents.slice(1, -1);
-
-    // convert DB string entry to object
-    const obj = {};
-
-    string.split(',').forEach((pair) => {
-      const [key, value] = pair.trim().split(':');
-      // console.log('key:', key);
-      // console.log('value:', value);
-      const keyUnqouted = key.slice(1, -1);
-      const valueUnquoted = value.slice(1, -1);
-      obj[keyUnqouted] = valueUnquoted;
-    });
-    // console.log('obj:', obj);
-
-    // console.log('Object.keys(obj)', Object.keys(obj));
-    // Finally, save keys from object to array and return the array of keys.
-    keysArray = Object.keys(obj);
-    console.log('keysArray:', keysArray);
-  }
-  return keysArray;
-};
-
-/**
- * allCoursesActiveWithComponentsData
- * For each course, get arr of markedAsDoneComponents
- * For each course, get arr of component UUIDs that match with the user's ref version
- * Check how many markedAsDoneComponents match with allComponents
- */
-
-const allCoursesActiveWithComponentsData = async (allCoursesActive, githubID) => {
-  /**
-     * Get getMarkedAsDoneComponents data – this is array of UUID-s of components  that have been marked as done by the user
-     */
-
-  const allCoursesActiveDoneComponentsPromises = allCoursesActive.map((course) => getMarkedAsDoneComponents(githubID, course.courseSlug));
-
-  const allCoursesActiveDoneComponentsArr = await Promise.all(allCoursesActiveDoneComponentsPromises);
-  console.log('allCoursesActiveDoneComponentsArr1:', allCoursesActiveDoneComponentsArr);
-
-  allCoursesActive.forEach((course, index) => {
-    allCoursesActive[index].markedAsDoneComponentsUUIDs = allCoursesActiveDoneComponentsArr[index];
-  });
-
-  console.log('allCoursesActive1:', allCoursesActive);
-  return allCoursesActive;
-};
-
 const allCoursesController = {
 
-  /**
-   * for '/' and '/dashboard' routes
-   */
+  /** For '/dashboard' route: */
   getAllCourses: async (req, res) => {
-    // console.log('req3:', req);
     let teamSlug;
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     /**
      * Check if teamSlug is 'teachers'
-     * If yes, then get teacher courses info
-     * If not, then get user courses info
+     * If yes, then get all courses for teacher
+     * If not, then get all courses for student
      */
     let isTeacher = false;
     if (teamSlug === 'teachers') isTeacher = true;
     res.locals.teamSlug = teamSlug;
 
-    // console.log('teamSlug2:', teamSlug);
-    console.log('isTeacher2:', isTeacher);
-
     const start3 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug, req);
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
-    // console.log('allCourses1:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     // console.log('allCoursesActive5:', allCoursesActive);
 
@@ -299,33 +203,38 @@ const allCoursesController = {
     res.locals.allCoursesActive = allCoursesActive;
     res.locals.allTeacher = allTeachers;
 
-    /* By default set coursesDisplayBy to 'name'
-    * If coursesDisplayBy is provided with URL, use this instead.
+    /* By default, courses are displayed on dashboard by their name. Set coursesDisplayBy to 'name'
+    * If coursesDisplayBy is provided, use this instead - courses are then displayed on dashboard by Name, Progress or Semester.
     * Save coursesDisplayBy to req.session, so dashboard would be loaded with last visited coursesDisplayBy.
     */
-    console.log('req.session.coursesDisplayBy1:', req.session.coursesDisplayBy);
-    console.log('req.query.coursesDisplayBy1:', req.query.coursesDisplayBy);
+    // console.log('req.session.coursesDisplayBy1:', req.session.coursesDisplayBy);
+    // console.log('req.query.coursesDisplayBy1:', req.query.coursesDisplayBy);
     let coursesDisplayBy = req.session.coursesDisplayBy || 'name';
+
+    /** For INVALID coursesDisplayBy parameters, OR if teacher tries to load courses by Progress, redirect back to /dashboard page.
+     * coursesDisplayBy is defaulted to 'name'  */
     if ((req.query.coursesDisplayBy
       && req.query.coursesDisplayBy !== 'name'
       && req.query.coursesDisplayBy !== 'progress'
       && req.query.coursesDisplayBy !== 'semester')
-      || (
-        // 'teachers' team doesn't have progress bars on courses, so disable this display option for them:
-        req.user.team.slug === 'teachers'
+      || (req.user && req.user.team
+        // NB! 'teachers' team doesn't have progress bars on courses, so they can't load courses by Progress:
+        && req.user.team.slug === 'teachers'
         && req.query.coursesDisplayBy
         && req.query.coursesDisplayBy === 'progress')) return res.redirect('/dashboard');
 
+    /** For VALID coursesDisplayBy parameters, save req.session.coursesDisplayBy to the given coursesDisplayBy. On Dashboard, courses will be successfully displayed by either Name, Progress or Semester. */
     if (req.query.coursesDisplayBy && (
       req.query.coursesDisplayBy === 'name'
       || req.query.coursesDisplayBy === 'semester'
-      // 'teachers' team doesn't have progress bars on courses, so disable this display option for them:
+      // 'teachers' team doesn't have Progress bars on courses, so check that user's team is NOT 'teachers:
       || (req.query.coursesDisplayBy === 'progress' && req.user.team.slug !== 'teachers'))) {
       coursesDisplayBy = req.query.coursesDisplayBy;
       req.session.coursesDisplayBy = req.query.coursesDisplayBy;
     }
     res.locals.coursesDisplayBy = coursesDisplayBy;
 
+    /** Following describes different DASHBOARD logics for TEACHER, based on given coursesDisplayBy */
     if (isTeacher) {
       /*
       * Filter allCoursesActive where the teacher is logged in user
@@ -364,10 +273,11 @@ const allCoursesController = {
       // console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
 
       /**
-      * Get last 7 day notifications for active courses
+      * Get last 7 day notifications for active courses, needed for dashboard
        */
       const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
+      /** Rendering teacher's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === 'name') {
         return res.render('dashboard-teacher', {
           coursesDisplayBy,
@@ -378,6 +288,7 @@ const allCoursesController = {
           courseUpdates7Days,
         });
       }
+      /** Rendering teacher's dashboard if courses are displayed by Semester */
       if (coursesDisplayBy === 'semester') {
         const allCoursesGroupedBySemester = allTeacherCourses
           .groupBy(({ courseSemester }) => courseSemester);
@@ -414,8 +325,7 @@ const allCoursesController = {
             sortedCoursesGroupedBySemesterWithFullNames[`${seasons[season]} ${year}`] = sortedCoursesGroupedBySemester[semester];
           }
         });
-
-        console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
+        // console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
 
         return res.render('dashboard-teacher', {
           coursesDisplayBy,
@@ -428,6 +338,7 @@ const allCoursesController = {
       }
     }
 
+    /** Following describes different DASHBOARD logics for STUDENT, based on given coursesDisplayBy */
     if (!isTeacher) {
       /*
       * Sort allCoursesActive, these are student's courses
@@ -451,22 +362,23 @@ const allCoursesController = {
       // console.log('allCoursesGroupedByTeacher5:', allCoursesGroupedByTeacher);
 
       /**
-      * Get last 7 day notifications for active courses
+      * Get last 7 day notifications for active courses, needed for dashboard
        */
       const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
 
+      /** Next, you must get all active courses WITH the list of components that have been markedAsDone. Use the allCoursesController.allCoursesActiveWithComponentsData() function that store those courses. */
       let courses;
       if (req.user && req.user.id) {
-        courses = await allCoursesActiveWithComponentsData(allCoursesActive, req.user.id);
+        courses = await allCoursesController.allCoursesActiveWithComponentsData(allCoursesActive, req.user.id);
       } else courses = allCoursesActive;
 
-      // console.log('allCoursesActiveWithComponentsData1:', allCoursesActiveWithComponentsData);
-      res.locals.allCoursesActive = allCoursesActiveWithComponentsData;
+      console.log('courses55:', courses);
+      res.locals.allCoursesActive = courses;
 
-      console.log('courses1:', courses);
-      console.log('coursesDisplayBy1:', coursesDisplayBy);
+      // console.log('coursesDisplayBy1:', coursesDisplayBy);
 
-      // courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
+      /** Test entries for student: */
+      /* courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
       courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
       courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
       courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
@@ -477,8 +389,9 @@ const allCoursesController = {
       courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
       courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
       courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
-      courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c');
+      courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
 
+      /** Rendering student's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === 'name') {
         return res.render('dashboard-student', {
           coursesDisplayBy,
@@ -489,6 +402,7 @@ const allCoursesController = {
           courseUpdates7Days,
         });
       }
+      /** Rendering student's dashboard if courses are displayed by Progress */
       if (coursesDisplayBy === 'progress') {
         /**
          * Sort courses by the % of elements in markedAsDoneComponentsUUIDs that are included in the courseBranchComponentsUUIDs array. A'ka the precentage of markedAsDone components.
@@ -513,8 +427,7 @@ const allCoursesController = {
           }
           return aPercentage - bPercentage;
         });
-
-        console.log('courses2:', courses);
+        // console.log('courses2:', courses);
 
         return res.render('dashboard-student', {
           coursesDisplayBy,
@@ -525,6 +438,7 @@ const allCoursesController = {
           courseUpdates7Days,
         });
       }
+      /** Rendering student's dashboard if courses are displayed by Semester */
       if (coursesDisplayBy === 'semester') {
         const allCoursesGroupedBySemester = courses
           .groupBy(({ courseSemester }) => courseSemester);
@@ -561,8 +475,7 @@ const allCoursesController = {
             sortedCoursesGroupedBySemesterWithFullNames[`${seasons[season]} ${year}`] = sortedCoursesGroupedBySemester[semester];
           }
         });
-
-        console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
+        // console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
 
         return res.render('dashboard-student', {
           coursesDisplayBy,
@@ -574,16 +487,14 @@ const allCoursesController = {
         });
       }
     }
+
+    /** If isTeacher is somehow neither true/false, redirect back to /dashboard. */
     console.log('isTeacher is neither true/false');
     return res.redirect('/dashboard');
   },
-  /**
-   * for '/course/:courseSlug/:contentSlug?/:componentSlug?' route
-   */
+  /** For '/course/:courseSlug/:contentSlug?/:componentSlug?' route */
   getSpecificCourse: async (req, res, next) => {
-    /**
-     * Read parameters sent with endpoint
-     */
+    /** Read parameters sent with endpoint */
     const {
       courseSlug, contentSlug, componentSlug,
     } = req.params;
@@ -592,82 +503,81 @@ const allCoursesController = {
       ref,
     } = req.query;
 
+    /** If user's team is not found, route to /notfound. Only users with valid team are allowed to see course content. This is checked with app.js. */
     if (!req.user.team.slug) return res.redirect('/notfound');
 
     const teamSlug = req.user.team.slug;
-
-    const selectedVersion = req.session.selectedVersion || ref || null;
-    res.locals.selectedVersion = selectedVersion;
-    // const selectedVersion = req.session.selectedVersion || null;
-    console.log('selectedVersion1:', selectedVersion);
-    // res.locals.selectedVersion = selectedVersion;
     res.locals.teamSlug = teamSlug;
 
-    /**
-     * Get getMarkedAsDoneComponents data – this is array of UUID-s of components  that have been marked as done by the user
+    /** selectedVersion variable refers to either:
+     * - teacher's selected version on a course page
+     * - manually entered ref= value in URL.
+     * selectedVersion variable is used down below to get correct course version from Github.
      */
-    const markedAsDoneComponentsArr = await getMarkedAsDoneComponents(req.user.id, courseSlug);
-    console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
-    res.locals.markedAsDoneComponentsArr = markedAsDoneComponentsArr;
+    const selectedVersion = req.session.selectedVersion || ref || null;
+    res.locals.selectedVersion = selectedVersion;
+    // console.log('selectedVersion1:', selectedVersion);
 
     /**
-     * Get all available courses
+     * Get array of component UUID-s that have been marked as done by the user. This array is stored in MariaDB.
      */
+    const markedAsDoneComponentsArr = await getMarkedAsDoneComponents(req.user.id, courseSlug);
+    // console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
+    res.locals.markedAsDoneComponentsArr = markedAsDoneComponentsArr;
+
+    /** Get all available courses for the user. */
     const start7 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug, req);
     const end7 = performance.now();
     console.log(`Execution time allCourses: ${end7 - start7} ms`);
 
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-
-    console.log('allCoursesActive2:', allCoursesActive);
     await allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+    // console.log('allCoursesActive2:', allCoursesActive);
 
-    /**
-     * Get active course
-     */
+    /** Get the selected course that was accessed with current endpoint  */
     const course = allCoursesActive.filter((x) => x.courseIsActive && x.courseSlug === courseSlug)[0];
 
-    /**
-     * If no course is found (none of the branches is active), but the course URL is still visited by the user, then redirect to /notfound page.
+    /** If no course is found (meaning that the courseSlug doesn't match any courses in Github OR none of the course branches in Github are active), then user tried to manually access an invalid course page. Redirect to /notfound page.
      */
     // console.log('course1:', course);
     if (!course) return res.redirect('/notfound');
 
-    // console.log('course1:', course);
     res.locals.course = course;
-    // console.log('course.courseSlugInGithub1:', course.courseSlugInGithub);
 
+    /** Get all teachers */
     const allTeachers = await teamsController.getUsersInTeam('teachers');
-    console.log('allTeachers0:', allTeachers);
-
+    // console.log('allTeachers0:', allTeachers);
     res.locals.teachers = allTeachers;
 
-    /**
-     * Check if course Repo has a branch that matches user team's slug.
-     * -- If yes, then all Github requests must refer to this branch. The App user must see data only from the branch that has a matching Team name. E.g. user in team "rif20" should only see course information from branch "rif20" for any course, if such branch exists.
-     * -- If such branch doesn't exist, then read data from the master/main branch.
+    /** Check if course Repo has a branch that matches user team's slug.
+     * -- If yes, then all Github requests must refer to this branch. In the app, STUDENT must see data only from the branch that has a matching Team name. E.g. student in team "rif20" should only see course information from branch "rif20" for any course, if such branch exists.
+     * -- If such branch doesn't exist, then STUDENT should see data from master/main branch.
+     * For TEACHERS, the logic is explained on following rows.
      */
+
+    /** refBranch variable refers to the repo branch where course data must be read. refBranch is defined on following rows. */
     let refBranch;
     let activeBranches;
 
+    /** Get all course branches that have config as active:true */
     try {
       activeBranches = await apiRequests.activeBranchesService(course.coursePathInGithub);
     } catch (error) {
       console.error(error);
     }
 
-    console.log('courseSlug1:', courseSlug);
+    /* console.log('courseSlug1:', courseSlug);
     console.log('contentSlug1:', contentSlug);
     console.log('componentSlug1:', componentSlug);
     console.log('ref1:', ref);
     console.log('req.user.team.slug1:', req.user.team.slug);
     console.log('selectedVersion4:', selectedVersion);
     console.log('activeBranches4:', activeBranches);
-    console.log('teamSlug:4', teamSlug);
+    console.log('teamSlug:4', teamSlug); */
 
     /**
-     * ÕIGETE KURSUSE VERSIOONIDE NÄITAMISE LOOGIKA:
+     * KURSUSE ÕIGE VERSIOONI NÄITAMISE LOOGIKA:
      * 1. Kui on antud selectedVersion ja kursuse aktiivsete branchide all on sama nimega branch, siis loe infot sellest branchist
      * 2. Kui on antud selectedVersion, ja kursuse aktiivsete branchide all EI OLE sama nimega branchi, siis suuna /notfound lehele. St, et kasutaja püüdis URLi ligi pääseda kursusele versioonile, mis ei ole aktiivne.
      * 3. Kui pole antud selectedVersion, siis vaata, kas kursuse aktiivsete branchide all on kasutaja tiiminimega sama branch. Kui jah, siis loe infot sellest branchist
@@ -730,15 +640,14 @@ const allCoursesController = {
     // console.log('cache.has(routePath)1:', cache.has(routePath));
     // console.log('cache.get(routePath)1:', cache.get(routePath));
 
+    /** Get config file for given course and its correct refBranch */
     let config;
 
-    // console.log('course.coursePathInGithub3:', course.coursePathInGithub);
-    // console.log('refBranch3:', refBranch);
     try {
       config = await getConfig(course.coursePathInGithub, refBranch);
     } catch (error) {
       /**
-       * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid.
+       * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid. User tried to access an invalid URL.
        * Redirect to /notfound page
        */
       console.log('no config found');
@@ -754,13 +663,18 @@ const allCoursesController = {
     res.locals.config = config;
     res.locals.allCourses = allCoursesActive;
 
+    /** Get arrays of components where Back and Forward buttons must be displayed.
+     * Get arrays of components where "Märgi loetuks" options must be displayed. */
     const { backAndForwardPaths, markAsDonePaths } = setCourseButtonPaths(config);
     // console.log('backAndForwardPaths4:', backAndForwardPaths);
     // console.log('markAsDonePaths4:', markAsDonePaths);
     res.locals.backAndForwardPaths = backAndForwardPaths;
     res.locals.markAsDonePaths = markAsDonePaths;
 
-    // console.log('res.locals.allCourses1:', res.locals.allCourses);
+    /** Following code works directly on the config file that was received.
+     * It uses parameters given with current endpoint (courseSlug, contentSlug, componentSlug) and finds matching elements from the config file.
+     * Once matching element is found from the config file, it makes a request to Github to pull this information with Github API.
+     */
 
     /**
      * Find from multiple object arrays
@@ -793,7 +707,6 @@ const allCoursesController = {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'docsService';
-        // console.log('githubRequest3:', githubRequest);
         // console.log('Slug found in config.docs');
       }
     });
@@ -815,7 +728,7 @@ const allCoursesController = {
 
     /**
      * Check for matching slug from concepts, practices and lessons additionaMaterials arrays.
-     * If a match, get the componentName and set componentType.
+     * If a match, get the componentName, componentUUID and set componentType.
      */
     let componentName;
     let componentType;
@@ -857,9 +770,7 @@ const allCoursesController = {
       }
     });
 
-    /**
-     * You can check values:
-     *
+    /** You can check all relevant values about current endpoint:
     */
     console.log('courseSlug1:', courseSlug);
     console.log('course.courseName1:', course.courseName);
@@ -872,10 +783,13 @@ const allCoursesController = {
     console.log('githubRequest1:', githubRequest);
 
     /**
-     * IF contentSlug exists, but contentName is not returned
-     * OR if contentSlug, contentName and componentSlug exist, but componentName is not returned
-     * THEN either of the slug is invalid and does not exist in config file!
-     * AND Redirect back to homepage.
+     * IF contentSlug exists, but contentName is NOT returned from config file.
+     * OR if contentSlug, contentName and componentSlug exist, but componentName is NOT returned from config file.
+     * THEN
+     * - a) user accessed an URL that does not match with the config file.
+     * - b) config file has inconsistencies (lesson components do not match with concepts or practices arrays).
+     * Config file MUST BE checked for any inconsistencies.
+     * Redirect back to homepage!
      */
     if ((contentSlug && !contentName)
     || (contentSlug && contentName && componentSlug && !componentName)) {
@@ -883,9 +797,9 @@ const allCoursesController = {
       return res.redirect('/notfound');
     }
 
-    /**
-     * Function to set correct fullPath, depending on if componentSlug and/or contentSlug exist.
-     * This defines correct fullPath, depeonding how deep into subpages you are.
+    /** Function to set correct fullPath, depending on if componentSlug and/or contentSlug exist.
+     * This defines correct fullPath, depending how deep into subpages you are.
+     * This is used to assign correct a href-s for sidebar elements and for Back/Forward buttons.
      */
     function getFullPath() {
       if (componentSlug) {
@@ -897,9 +811,9 @@ const allCoursesController = {
       return undefined;
     }
 
-    /**
-     * Function to set correct componentType, depending on if componentSlug and/or contentSlug exist.
+    /** Function to set correct componentType, depending on if componentSlug and/or contentSlug exist.
      * This defines correct componentType, depeonding how deep into subpages you are.
+     * This is used to assign correct sidebar icons.
      */
     function getType() {
       if (componentSlug) {
@@ -911,17 +825,13 @@ const allCoursesController = {
       return undefined;
     }
 
-    /**
-     * Save page names for breadcrumb
-     */
+    /**  Save page names for breadcrumbs. */
     const breadcrumbNames = {
       courseName: course.courseName,
       contentName,
       componentName,
     };
-    /**
-     * Save page slugs, fullPath and page type for address, menu icons, for most following BE logic tbh
-     */
+    /** Save all relevant info about current page: slugs, fullPath, menu icons. These are used to render correct info on given page with responseAction() and renderPage() functions. */
     const path = {
       courseSlug,
       contentSlug,
@@ -941,9 +851,25 @@ const allCoursesController = {
     // console.log('res.locals1:', res.locals);
     return next();
   },
-  // renderAllCoursesPage: async(req, res) => {
-  // }
+  /** The function allCoursesActiveWithComponentsData() is used to get info about markedAsDone components for each active course for the given user (githubID).
+  * Parameters are list of all active courses + user's githubID whose markedAsDone info is requested.
+  */
+  allCoursesActiveWithComponentsData: async (allCoursesActive, githubID) => {
+    /** First, for each course, get a list of component UUIDs that has been marked as done. Save this to allCoursesActiveDoneComponentsArr array. */
+    const allCoursesActiveDoneComponentsPromises = allCoursesActive.map((course) => getMarkedAsDoneComponents(githubID, course.courseSlug));
 
+    const allCoursesActiveDoneComponentsArr = await Promise.all(allCoursesActiveDoneComponentsPromises);
+    // console.log('allCoursesActiveDoneComponentsArr1:', allCoursesActiveDoneComponentsArr);
+
+    /** Then, again for each course, add the respective array of done components as a key-value pair: */
+    allCoursesActive.forEach((course, index) => {
+      allCoursesActive[index].markedAsDoneComponentsUUIDs = allCoursesActiveDoneComponentsArr[index];
+    });
+
+    /** You now have a list of active courses where each course has a list of markedAsDone components' UUIDs by the given user. */
+    // console.log('allCoursesActive1:', allCoursesActive);
+    return allCoursesActive;
+  },
 };
 
 export {

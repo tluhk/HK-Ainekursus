@@ -35,8 +35,6 @@ export default function hbsHelpers(hbs) {
           return opts.fn(this);
         } return opts.inverse(this);
       },
-      SafeStringFiles: (param) => (`javascript:fileFunc(${param});`),
-
       last: (array) => array[array.length - 1].path,
 
       concatActivePath: (arg1, arg2) => `${arg1}/${arg2}`,

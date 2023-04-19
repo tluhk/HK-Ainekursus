@@ -1,9 +1,11 @@
 <nav class="sidebar-course-right h-fit relative lg:sticky top-0" id="sidebar-course-anchor">
 
+<!-- Branch (version) selection menu. Only visible to 'teachers' team -->
+
+{{#if_equal user.team.slug 'teachers'}}
   <button id="dropdownRadioBgHoverButton"
   data-dropdown-toggle="dropdownRadioBgHover" class=" font-medium text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">Vali versioon <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
 
-  <!-- Dropdown menu -->
   <div id="dropdownRadioBgHover" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">    
     <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
     <!-- Radio buttons -->
@@ -24,13 +26,17 @@
   <input type="hidden" name="currentPath" id="currentPath" value="/course/{{path.courseSlug}}/about/" >
   <input type="hidden" name="courseSlug" id="courseSlug" value="{{path.courseSlug}}" >
   </form>
-    
-    <!-- sidebar sticky behavior beginning from lg size -->
-    <div class="p-2 lg:max-h-screen drop-shadow-2xl w-full text-sm">
 
-      {{{ ToC }}}
- 
-    </div>
+{{/if_equal}}
+
+<!-- Table of contents -->
+
+  <!-- sidebar sticky behavior beginning from lg size -->
+  <div class="p-2 lg:max-h-screen drop-shadow-2xl w-full text-sm">
+    <h5>Lehekülje teemad:</h5>
+    {{{ ToC }}}
+
+  </div>
   
 </nav>
 

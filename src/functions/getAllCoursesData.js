@@ -14,15 +14,21 @@ const { requestTeamCourses, requestRepos } = githubReposRequests;
 
 const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full_name, refBranch)
   .then(async (config) => {
-    /**
-     * Read course information from ÕIS Ainekaart
-     * https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
+    if (!config) {
+      console.log(`No config found for ${param.full_name}, ${refBranch}`);
+      return {};
+    }
+
+    /** Read course information from ÕIS Ainekaart using the courseUrl value from config file.
+     * Guide: https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
+     * Then store info from ÕIS Ainekaart under a course's object.
+     * Finally return the object.
      */
     let oisContent = {};
 
     const routePathOisContent = `oisContent+${param.full_name}+${refBranch}`;
 
-    // const start6 = performance.now();
+    const start6 = performance.now();
 
     if (!cache.has(routePathOisContent)) {
       console.log(`❌❌ oisContent IS NOT from cache: ${routePathOisContent}`);
@@ -56,12 +62,14 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
       console.log(`✅✅ oisContent FROM CACHE: ${routePathOisContent}`);
       oisContent = cache.get(routePathOisContent);
     }
-    // const end6 = performance.now();
-    // console.log(`Execution time oisContent: ${end6 - start6} ms`);
+    const end6 = performance.now();
+    console.log(`Execution time oisContent: ${end6 - start6} ms`);
 
     // console.log('oisContent.name5:', oisContent.name);
 
+    console.log('config5:', config);
     const allComponentSlugs = [];
+
     config.lessons.forEach((lesson) => {
       allComponentSlugs.push(lesson.components);
     });
@@ -101,7 +109,7 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
 const getAllCoursesData = (async (teamSlug, req) => {
   // console.log('teamSlug4:', teamSlug);
   /**
-   * If user exists, they're in a team and team.slug exists, only then read Course repos.
+   * Read Course repos only if the user exists, they are in a team and team.slug exists!
    * Otherwise load courses array as empty (no courses to show).
    */
   const { user } = req;
@@ -114,10 +122,12 @@ const getAllCoursesData = (async (teamSlug, req) => {
   if (!cache.has(routePath)) {
     console.log(`❌❌ team courses IS NOT from cache: ${routePath}`);
 
+    /** For TEACHERS get all possible HK_ repos  */
     if (teamSlug && (teamSlug === 'master' || teamSlug === 'teachers')) {
       courses = await axios.get(requestRepos, authToken).catch((error) => {
         console.error(error);
       });
+    /** For STUDENTS get only HK_ repos where they have access to */
     } if (teamSlug && teamSlug !== 'master' && teamSlug !== 'teachers') {
       courses = await axios.get(requestTeamCourses(teamSlug), authToken).catch((error) => {
         console.error(error);
@@ -131,27 +141,25 @@ const getAllCoursesData = (async (teamSlug, req) => {
   }
 
   if (!courses) return [];
-
   // console.log('courses1:', courses);
 
   /*
-  * Set conditions, which Repositories (Courses) are read from tluhk org github account
+  * Filter only repos that start with "HK_" prefix.
    */
   const coursesStartingWithHK = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
-  // console.log('filter1', filter1);
 
   /**
    * Return empty array if tluhk org doesn't have any repos starting with "HK_"
    */
   if (!coursesStartingWithHK) return [];
 
-  const map1 = coursesStartingWithHK.map(async (y) => {
+  const allCourses = coursesStartingWithHK.map(async (course) => {
     // const start5 = performance.now();
-    const activeBranches = await apiRequests.activeBranchesService(y.full_name);
+    const activeBranches = await apiRequests.activeBranchesService(course.full_name);
     // const end5 = performance.now();
     // console.log(`Execution time activeBranches: ${end5 - start5} ms`);
 
-    console.log('y.full_name4:', y.full_name);
+    console.log('course.full_name4:', course.full_name);
     console.log('activeBranches4:', activeBranches);
     let refBranch;
     if (activeBranches && activeBranches.includes(teamSlug)) {
@@ -159,7 +167,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
     } else if (activeBranches.length && teamSlug === 'teachers') {
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
       const branchConfigPromises = activeBranches.map(async (branch) => {
-        const config = await getConfig(y.full_name, branch);
+        const config = await getConfig(course.full_name, branch);
         return config;
       });
       // console.log('branchConfigPromises1:', branchConfigPromises);
@@ -180,15 +188,14 @@ const getAllCoursesData = (async (teamSlug, req) => {
     }
     // console.log('refBranch4:', refBranch);
 
-    // console.log('coursePromise1:', coursePromise);
+    /** Get selected course info from ÕIS Ainekaart with coursePromise() func. */
+    const courseDataWithOIS = await coursePromise(course, refBranch, activeBranches);
 
-    const coursePromiseResponse = await coursePromise(y, refBranch, activeBranches);
-
-    return coursePromiseResponse;
+    return courseDataWithOIS;
   });
   // console.log('map1:', map1);
 
-  return Promise.all(map1).then((results) => results);
+  return Promise.all(allCourses).then((results) => results);
 });
 
 export default getAllCoursesData;
