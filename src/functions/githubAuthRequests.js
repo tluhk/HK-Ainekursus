@@ -6,6 +6,9 @@ const githubAuthRequests = {
   searchUsers: (
     (email) => `${baseUrl}/search/users?q=${email}`
   ),
+  getUser: (
+    (username) => `${baseUrl}/users/${username}`
+  ),
 };
 
 // Github API request endpoints

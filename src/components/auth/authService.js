@@ -5,7 +5,7 @@ import axios from 'axios';
 import githubAuthRequests from '../../functions/githubAuthRequests';
 import { authToken } from '../../setup/setupGithub';
 
-const { searchUsers } = githubAuthRequests;
+const { searchUsers, getUser } = githubAuthRequests;
 
 /**
  * Define all API requests that are done to GitHub API
@@ -20,6 +20,13 @@ const apiRequests = {
     // console.log('user1:', user);
 
     return user;
+  },
+  getUserFromGithub: async (username) => {
+    const userFromGithub = await axios.get(getUser(username), authToken).catch((error) => {
+      console.error(error);
+    });
+    // console.log('userFromGithub1.5:', userFromGithub);
+    return userFromGithub;
   },
 };
 

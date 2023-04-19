@@ -14,6 +14,11 @@ const { requestTeamCourses, requestRepos } = githubReposRequests;
 
 const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full_name, refBranch)
   .then(async (config) => {
+    if (!config) {
+      console.log(`No config found for ${param.full_name}, ${refBranch}`);
+      return {};
+    }
+
     /**
      * Read course information from ÕIS Ainekaart
      * https://hackernoon.com/how-to-build-a-web-scraper-with-nodejs
@@ -61,7 +66,9 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
 
     // console.log('oisContent.name5:', oisContent.name);
 
+    console.log('config5:', config);
     const allComponentSlugs = [];
+
     config.lessons.forEach((lesson) => {
       allComponentSlugs.push(lesson.components);
     });

@@ -49,18 +49,21 @@
             <li>GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
             <li>Tiim: {{ user.team.name }}</li>
             {{#if user.displayName}}
-              <li>Profiilinimi: {{ user.displayName }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">edit</span></a></li>
+              <li>Profiilinimi: {{ user.displayName }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
             {{else }}
-              <li><a href="/save-displayName" class="!text-white">Lisa profiilinimi</a></li>
+              <li>Profiilinimi: {{ user.username }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
             {{/if }}
-            {{#if user.email}}
-              <li>Email: {{ user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">edit</span></a></li>
-            {{else }}
-              <li><a href="/save-email" class="!text-white">Lisa email</a></li>
-            {{/if }}
+            {{#if_equal user.team.slug 'teachers'}}
+              {{#if user.email}}
+                <li>Email: {{ user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
+              {{else }}
+                <li><a href="/save-email" class="!text-white">Lisa email</a></li>
+              {{/if }}
+            {{/if_equal}}
           </ul>
         {{/if}}
 
+        {{!-- 
         {{#unless user}}
           <a href="/login" class="!text-white">Logi sisse</a>
           
@@ -139,6 +142,8 @@
           </ul>
         </div>
         {{/unless}}
+        --}}
+        
         {{#if user}}
           <a href="/logout" class="!text-white">Logi välja</a>
         {{/if}}

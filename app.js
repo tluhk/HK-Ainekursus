@@ -1,16 +1,15 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable import/newline-after-import */
-/**
- * Import express framework
- */
+
+/** Import express framework */
 import express from 'express';
 import path, { join } from 'path';
 import exphbs from 'express-handlebars';
 import favicon from 'serve-favicon';
 
-/**
- * Create a session middleware with the given options using passport
+/** Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
  */
@@ -18,10 +17,6 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import pkg from 'body-parser';
-
-/* kui tahad livesse lasta, siis chekout production ja seal kustuta kogu livereload plokk ära – see blokeerib lehte */
-import { createServer } from 'livereload';
-import connectLivereload from 'connect-livereload';
 
 import dotenv from 'dotenv';
 
@@ -35,25 +30,25 @@ import membersController from './src/components/members/membersController';
 import teamsController from './src/components/teams/teamsController';
 import allNotificationsController from './src/components/notifications/notificationsController';
 
-/**
- *  Import handlebars helpers: https://stackoverflow.com/a/32707476
- */
+/** Import handlebars helpers: https://stackoverflow.com/a/32707476 */
 import handlebarsFactory from './src/helpers/handlebars';
 import allOverviewController from './src/components/progress-overview/overviewController';
+import apiRequests from './src/components/auth/authService';
 
 dotenv.config();
 
-const { urlencoded } = pkg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
-  * Create express app
-  */
+/** Create express app */
 const app = express();
 const port = process.env.PORT || 3000;
 
-/* const liveReloadServer = createServer();
+/** To run app live in Railway, then chekout production branch and delete the following block refering Livereload – this blocks Railway page */
+/* import { createServer } from 'livereload';
+import connectLivereload from 'connect-livereload';
+
+const liveReloadServer = createServer();
 liveReloadServer.watch(join(__dirname, '/views'));
 liveReloadServer.watch(join(__dirname, 'public'));
 liveReloadServer.server.once('connection', () => {
@@ -63,46 +58,43 @@ liveReloadServer.server.once('connection', () => {
 });
 app.use(connectLivereload()); */
 
+/** Set up Handlebars views */
 const handlebars = handlebarsFactory(exphbs);
-
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', join(__dirname, '/views'));
 
-/**
- *  Define application static folder
- */
+/** Define application static folder */
 app.use(express.static(join(__dirname, '/public')));
 
-/**
- *  Define favicon file
- */
+/** Define favicon file */
 app.use(favicon(join(__dirname, '/public/images', 'favicon.ico')));
 
-/**
-  * Testing API endpoints
-  */
+/** Testing API endpoints */
 app.get('/ping', (req, res) => {
   res.status(200).json({
     message: 'API is working',
   });
 });
 
+/** Set up Github credentials */
 const loginConfig = {
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: process.env.GITHUB_CALLBACK_URL,
 };
 
-/**
- * Authentication
+/** Function to validate that logged in user is authenticated.
+ * If not, then route back to /login page.
+ *
  * https://github.com/cfsghost/passport-github/blob/master/examples/login/app.js
  *
-  // Simple route middleware to ensure user is authenticated.
-  //   Use this route middleware on any resource that needs to be protected.  If
-  //   the request is authenticated (typically via a persistent login session),
-  //   the request will proceed.  Otherwise, the user will be redirected to the
-  //   login page.
+  // Simple route middleware to ensure user is authenticated for any action.
+  //
+  // Use this route middleware on any resource that needs to be protected. If
+  // the request is authenticated (typically via a persistent login session),
+  // the request will proceed. Otherwise, the user will be redirected to the
+  // main page.
  */
 const ensureAuthenticated = ((req, res, next) => {
   if (req.isAuthenticated()) {
@@ -112,10 +104,26 @@ const ensureAuthenticated = ((req, res, next) => {
     return next();
   }
   // console.log('req.session2:', req.session);
-  console.log('NOT Authenticated');
-  return res.redirect('/');
+  console.log('User is NOT Authenticated');
+  return res.redirect('/login');
 });
 
+/** Function to validate if logged in user is a teacher or not.
+ */
+const validateTeacher = ((req, res, next) => {
+  if (req.user.team.slug === 'teachers') {
+    // console.log('req.session1:', req.session);
+    // console.log('req.session.passport.user.id1:', req.session.passport.user.id);
+    // console.log('Authenticated');
+    return next();
+  }
+  // console.log('req.session2:', req.session);
+  console.log("User is NOT in 'teachers' team");
+  return res.redirect('/notfound');
+});
+
+/** Set up cache with app.js routes. This is used here for teamAssignments function, possibly for more functions.
+ */
 const cacheService = (async (req, res) => {
   const { cacheName } = res.locals;
   // console.log('cacheName1:', cacheName);
@@ -134,8 +142,7 @@ const cacheService = (async (req, res) => {
   }
 });
 
-/**
- * Request tluhk org teams and teamMembers once during app starting.
+/** Function to request tluhk org teams and teamMembers from tluhk Github organisation.
  * Save teamAssignments into res.locals
  */
 const getTeamAssignments = (async (req, res, next) => {
@@ -165,8 +172,8 @@ const getTeamAssignments = (async (req, res, next) => {
   return next();
 });
 
-/**
- * Clear selectedVersion value when leaving any course page.
+/** Function to clear selectedVersion value when leaving any specific course: when going to another course, going to dashboard, going to notifications page or else.
+ * Do NOT clear selectedVersion when just going to another page under the same specific course, e.g. from Loeng1 to Loeng2.
  */
 const resetSelectedVersion = ((req, res, next) => {
   // console.log('req.params.courseSlug1:', req.params.courseSlug);
@@ -174,7 +181,7 @@ const resetSelectedVersion = ((req, res, next) => {
 
   /**
    * If visited page is from the same course, keep the courseSlug and selectedVersion info in req.session.
-   * Otherwise, if another course or any other page is visited , clear courseSlug and selectedVersion info from req.session
+   * Otherwise, if another course or any other page is visited, clear courseSlug and selectedVersion info from req.session.
    */
   if (req.params.courseSlug === req.session.courseSlug) {
     return next();
@@ -184,14 +191,16 @@ const resetSelectedVersion = ((req, res, next) => {
   return next();
 });
 
-/**
- * Initialize Passport!
+/** Initialize Passport.
+ * Used for user login and session.
  * Also use passport.session() middleware, to support persistent login sessions (recommended).
+ * https://github.com/jaredhanson/passport 
+ * https://www.npmjs.com/package/passport-github2
  */
 app.use(
   session({
     name: 'HK_e-kursused',
-    secret: 'keyboard cat',
+    secret: process.env.PASSPORT_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     // prompt: 'login',
@@ -204,19 +213,28 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+/** Middleware for parsing bodies from URL. Options can be found here. Source code can be found here.
+ * https://github.com/expressjs/body-parser#bodyparserurlencodedoptions
+ * // { extended: true } precises that the req.body object will contain values of any type instead of just strings. https://stackoverflow.com/a/55558485
+ */
+const { urlencoded } = pkg;
 app.use(urlencoded({ extended: true }));
 
+/** Github Oauth2 authentication in nodeJS with a page inviting user to choose the preferred login account.
+ * https://gist.github.com/bertrandmartel/13caa379cfc6c59743937e5eab88cb51
+ */
 GitHubStrategy.prototype.authorizationParams = function (options) {
   return options || {};
 };
 
-// Passport session setup.
+/** Setup passport session.
 //   To support persistent login sessions, Passport needs to be able to
 //   serialize users into and deserialize users out of the session.  Typically,
 //   this will be as simple as storing the user ID when serializing, and finding
-//   the user by ID when deserializing.  However, since this example does not
+//   the user by ID when deserializing. However, since this example does not
 //   have a database of user records, the complete GitHub profile is serialized
-//   and deserialized.
+//   and deserialized. */
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -225,23 +243,25 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-/** LOGIN LOGIC
+/** LOGIN LOGIC FULL DESCRIPTION:
    * check if githubUserID exists in tluhk Github organisation members
-   * if not, redirect to /noauth page, showing you must ask access from tluhk
+   * if not, redirect to /noauth page, showing they must ask access from tluhk personnel
    * -- if yes:
    * get all tluhk teams
    * get all githubUserID teams
-   * get all tluhk HK_ team assignments
-   * check if githubUserID exists in tluhk Github organisation teams
-   * -- if not, redirect to /noauth page, showing you must ask access from tluhk
+   * get all tluhk HK_ teams' assignments
+   * check if githubUserID exists in tluhk Github organisation's teams
+   * -- if not, redirect to /noauth page, showing they must ask access from tluhk personnel
    * -- if yes:
-   * check which teams it exists in
+   * check which teams the user exists in
    * check if githubID exists in users
-   * -- if yes, check that user is up-to-date with github user?? + update??
-   * -- if yes, read user info from database? github?
-   * -- if not, add githubUser to users
+   * -- if yes, check that DB user data is up-to-date with github user data
+   * -- if no, add githubUser to DB users
+   * -- if yes, read user's displayName and/or email info from Database. Everything else about the user is read from Github.
    */
 
+/** Function to check if user exists in DB and insert/update/read user's displayName and email from DB.
+ */
 async function userDBFunction(userData) {
   const {
     githubID, username, displayName, email,
@@ -252,9 +272,6 @@ async function userDBFunction(userData) {
     conn = await pool.getConnection();
     console.log('Connected to MariaDB1');
     console.log(`connected ! connection id is ${conn.threadId}`);
-
-    // const users1 = await conn.query('SELECT * FROM users;');
-    // console.log('users1:', users1);
 
     /**
      * If user exists in DB, don't insert new user. Check if DB data matches with BE data. If not, get users' displayName and email data from DB.
@@ -289,6 +306,7 @@ async function userDBFunction(userData) {
   } finally {
     if (conn) conn.release(); // release to pool
   }
+  return true;
 }
 
 // Use the GitHubStrategy within Passport.
@@ -305,17 +323,15 @@ passport.use(
     },
     (async (accessToken, refreshToken, profile, done) => {
       process.nextTick(async () => {
-        // asynchronous verification, for effect...
         // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
         // console.log('accessToken1:', accessToken);
 
         // eslint-disable-next-line no-param-reassign
-        // profile.token = accessToken;
 
         /**
          * Check if Github user is part of tluhk Github org members.
-         * If not, forbid access by not saving passport profile.
-         * If yes, save github user profile in the passport.
+         * If not, forbid access by not returning passport profile.
+         * If yes, return github user profile with the passport.
          */
         const userInOrgMembers = membersController.isUserInOrgMembers(profile.id);
 
@@ -325,7 +341,7 @@ passport.use(
         }
         console.log('user exists in tluhk org');
 
-        console.log('profile1:', profile);
+        // console.log('profile1:', profile);
         const {
           id, username, displayName, _json,
         } = profile;
@@ -340,6 +356,11 @@ passport.use(
         console.log('displayName1:', displayName);
         console.log('_json.email1:', _json.email); */
 
+        /**
+         * Read user data from DB.
+         * If user NOT in DB, insert user data.
+         * If user is in DB, read its data. Get displayName and email info from DB. Then store it to user profile.
+         */
         const userDataAfterDB = await userDBFunction(userData);
 
         if (userDataAfterDB) {
@@ -350,26 +371,19 @@ passport.use(
         // console.log('userInOrgMembers1:', userInOrgMembers);
         // console.log('profile1:', profile);
         // console.log('Logged in');
+
+        /**
+         * Return user profile with a successful login,
+         */
         return done(null, profile);
       });
-
-      // an example of how you might save a user
-      // new User({ username: profile.username }).fetch().then(user => {
-      //   if (!user) {
-      //     user = User.forge({ username: profile.username })
-      //   }
-      //   user.save({ profile: profile, access_token: accessToken }).then(() => {
-      //     return done(null, user)
-      //   })
-      // })
     }),
   ),
 );
 
-/**
+/** Endpoint to get team assignments from tluhk Github account when app is running.
+ * Used as middleware to add user's team info to session's profile.
  * https://stackoverflow.com/a/25687358
- * in an express middleware (before the router).
- * I recommend the middleware route, I use such a function to add last visit date-time to the req.session, and am also developing middleware in using app.all('*') to do IP request tracking
  */
 app.use(getTeamAssignments, async (req, res, next) => {
   // console.log('req.user5:', req.user);
@@ -403,7 +417,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      /* team: {
+      team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
@@ -423,19 +437,143 @@ app.use(getTeamAssignments, async (req, res, next) => {
   next();
 });
 
-app.post('/mark-component-as-done', async (req, res) => {
+/** Endpoints for logging in
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request. The first step in GitHub authentication will involve redirecting
+//   the user to github.com.  After authorization, GitHub will redirect the user
+//   back to this application at /github-callback
+*/
+app.get('/login', (req, res) => {
+  let message = '';
+  /**
+   * Validate that text input is not empty or is not an email
+   */
+  if (req.query.invalid) message = 'Sisestatud Githubi kasutajanimi pole korrektne';
+  if (req.query.email) message = 'Emaili sisestamine pole lubatud';
+
+  return res.render('login', {
+    message,
+  });
+});
+
+app.post('/login', async (req, res, next) => {
+  /**
+   * If entered value is empty, redirect back to login and show "invalid username" message
+   */
+  if (!req.body.login || !req.body.login.trim()) return res.redirect('/login?invalid=true');
+
+  /**
+   * If entered value is email, redirect back to login and show "entering email is not allowed" message
+   */
+  // eslint-disable-next-line no-useless-escape
+  if (req.body.login.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) return res.redirect('/login?email=true');
+
+  /**
+   * If entered username doesn't exist in Github, redirect back to login and show "invalid username" message
+   */
+  const userFromGithub = await apiRequests.getUserFromGithub(req.body.login);
+  // console.log('userFromGithub2:', userFromGithub);
+  if (!userFromGithub) return res.redirect('/login?invalid=true');
+
+  return passport.authenticate('github', {
+    login: req.body.login,
+  })(req, res, next);
+});
+
+/** Github callback to confirm/reject login
+ * Use passport.authenticate() as route middleware to authenticate the callback request.
+ * If authentication fails, the user will be redirected back to the "/noauth" page.
+ * Otherwise, the primary route function will be called, which will redirect the user to the "/" homepage.
+ */
+app.get(
+  '/github-callback',
+  passport.authenticate('github', {
+    // prompt: 'login',
+    successRedirect: '/dashboard',
+    failureRedirect: '/noauth',
+    scope: ['user'],
+  }),
+);
+
+/** From here on, following endpoints are available only with succesful login and authentication */
+app.use(ensureAuthenticated);
+
+/** General endpoint, duplicates /dashboard for now */
+app.get('/', resetSelectedVersion, ensureAuthenticated, allCoursesController.getAllCourses);
+
+/** Endpoint for dashboard */
+app.get('/dashboard', resetSelectedVersion, ensureAuthenticated, allCoursesController.getAllCourses);
+
+/** Endpoint to load course pages */
+app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', resetSelectedVersion, allCoursesController.getSpecificCourse, responseAction, renderPage);
+
+/** Endpoints to change course version.
+ * Only available for teachers.
+ */
+app.post('/save-selected-version', validateTeacher, (req, res) => {
+  // Store the selectedValue in the session
+  req.session.selectedVersion = req.body.selectedVersion;
+  req.session.courseSlug = req.body.courseSlug;
+  // console.log('req.session.selectedVersion1:', req.session.selectedVersion);
+  // console.log('req.session.currentPath1:', req.body.currentPath);
+
+  /**
+   * Stores selectedVersion correctly,
+   * and then makes the original GET request again to reload same page with selectedVersion value.
+   */
+  res.redirect(`${req.body.currentPath}?ref=${req.session.selectedVersion}`);
+});
+
+/** Endpoint for notifications page */
+app.get('/notifications', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
+
+/** Endpoints for progress overview pages.
+ * Only available for teachers.
+ */
+app.get('/progress-overview', resetSelectedVersion, validateTeacher, allOverviewController.getOverview);
+
+app.get('/progress-overview/:team?/:courseSlug?', resetSelectedVersion, validateTeacher, allOverviewController.getOverview);
+
+app.post('/progress-overview', validateTeacher, (req, res) => {
+  /* console.log('value0:');
+  console.log('req.body3:', req.body);
+  console.log('req.body.selectedTeam3:', req.body.selectedTeam);
+  console.log('req.body.selectedCourse3:', req.body.selectedCourse);
+  console.log('req.body.selectedCourseData3:', req.body.selectedCourseData); */
+
+  let selectedCourseDataParsed;
+  if (req.body && req.body.selectedCourseData) selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
+  req.session.courseSlugData = selectedCourseDataParsed;
+
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse}`);
+
+  // Store the displayBy in the session
+  req.session.displayBy = req.body.displayBy;
+
+  return res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
+});
+
+/** Endpoint to change how courses are displayed on dashboard */
+app.post('/courses-display-by', (req, res) => {
+  // Store the displayBy in the session
+  req.session.coursesDisplayBy = req.body.coursesDisplayBy;
+
+  return res.redirect(`/dashboard?coursesDisplayBy=${req.session.coursesDisplayBy}`);
+});
+
+/** Endpoint to mark a course component as Done */
+app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
   const {
     courseSlug, componentSlug, componentUUID, nextPagePath,
   } = req.body;
 
   const githubID = req.user.id;
-  console.log('req.body6:', req.body);
-
+  /* console.log('req.body6:', req.body);
   console.log('githubID6:', githubID);
   console.log('courseSlug6:', courseSlug);
   console.log('componentSlug6:', componentSlug);
   console.log('componentUUID6:', componentUUID);
-  console.log('nextPagePath6', nextPagePath);
+  console.log('nextPagePath6', nextPagePath); */
   if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
     return res.redirect('/notfound');
   }
@@ -446,7 +584,7 @@ app.post('/mark-component-as-done', async (req, res) => {
       conn = await pool.getConnection();
       // console.log('Connected to MariaDB 1!');
 
-      const res0 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      // const res0 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
       // console.log('res0:', res0);
       const res1 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
       // console.log('res1:', res1);
@@ -459,7 +597,7 @@ app.post('/mark-component-as-done', async (req, res) => {
         // console.log('res2:', res2);
       } else {
         const res3 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT('$.', ?), ?) WHERE githubID = ? AND courseCode = ?;", [componentUUID, componentSlug, githubID, courseSlug]);
-        console.log('res3:', res3);
+        // console.log('res3:', res3);
       }
 
       // cache.flushAll();
@@ -490,16 +628,16 @@ app.post('/mark-component-as-done', async (req, res) => {
   return res.redirect(nextPagePath);
 });
 
-app.post('/remove-component-as-done', async (req, res) => {
+/** Endpoint to unmark/remove course component as Done */
+app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
   const { courseSlug, componentSlug, componentUUID } = req.body;
 
   const githubID = req.user.id;
-  console.log('req.body7:', req.body);
-
+  /* console.log('req.body7:', req.body);
   console.log('githubID7:', githubID);
   console.log('courseSlug7:', courseSlug);
   console.log('componentSlug7:', componentSlug);
-  console.log('componentUUID7:', componentUUID);
+  console.log('componentUUID7:', componentUUID); */
   if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
     return res.redirect('/notfound');
   }
@@ -546,13 +684,20 @@ app.post('/remove-component-as-done', async (req, res) => {
   return res.redirect('back');
 });
 
+/** Endpoints to update user's profile name on FE app.
+ * GET method displays the html page with input.
+ * POST method saves the profile name to DB.
+ */
 app.get(
   '/save-displayName',
+  ensureAuthenticated,
   (req, res) => {
     let { displayName } = req.user;
-    if (!displayName) displayName = 'Ees- ja perekonnanimi';
+    if (!displayName) displayName = req.user.username;
     let message = '';
-    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik';
+    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik. Lubatud on vaid tähed ja tühikud.';
+
+    console.log('req.body.displayName1:', req.user);
 
     res.send(`
         <html>
@@ -570,10 +715,12 @@ app.get(
   },
 );
 
-app.post('/save-displayName', async (req, res) => {
+app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
   const { user } = req;
-  // console.log('req.body.login1:', req.body.login);
-  if (!req.body.displayName) {
+  /**
+   * Validate that input was entered and that it's a valid string containing only letters and spaces. Entering only spaces is not allowed either.
+   */
+  if (!req.body.displayName || !req.body.displayName.trim().match(/^[a-zA-Z\s]+$/)) {
     return res.redirect('/save-displayName?displayName=true');
   }
 
@@ -584,10 +731,10 @@ app.post('/save-displayName', async (req, res) => {
       console.log('Connected to MariaDB!');
 
       const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
-      console.log('res1:', res1);
+      // console.log('res1:', res1);
       req.user.displayName = req.body.displayName;
-      console.log('cache.keys1:', cache.keys());
 
+      // Flush all cache so that user's name would be shown correctly across app.
       cache.flushAll();
     } catch (err) {
       console.log('Unable to connect to MariaDB');
@@ -596,16 +743,20 @@ app.post('/save-displayName', async (req, res) => {
       if (conn) conn.release(); // release to pool
     }
   }
-
-  console.log('req.user1:', req.user);
-  console.log('user.id1:', user.id);
-  console.log('req.body.displayName1:', req.body.displayName);
+  // console.log('req.user1:', req.user);
+  // console.log('user.id1:', user.id);
+  // console.log('req.body.displayName1:', req.body.displayName);
 
   return res.redirect('/dashboard');
 });
 
+/** Endpoints to update user's email on FE app.
+ * GET method displays the html page with input.
+ * POST method saves the email to DB.
+ */
 app.get(
   '/save-email',
+  ensureAuthenticated,
   (req, res) => {
     let { email } = req.user;
     if (!email) email = 'email@gmail.com';
@@ -628,227 +779,51 @@ app.get(
   },
 );
 
-app.post('/save-email', async (req, res) => {
+app.post('/save-email', ensureAuthenticated, async (req, res) => {
   const { user } = req;
   // console.log('req.body.login1:', req.body.login);
-  if (!req.body.email) {
+  // eslint-disable-next-line no-useless-escape
+  /**
+   * Validate that input was entered and that it's a valid email.
+   * If not, redirect back to /save-email page.
+   */
+  // eslint-disable-next-line no-useless-escape
+  if (!req.body.email || !req.body.email.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) {
     return res.redirect('/save-email?email=true');
   }
 
-  if (req.body.email) {
-    /**
-     * Check if entered value is email
-     */
-    // Regular expression to check if string is email
-    const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
-    const isEmail = regexExp.test(req.body.email);
-
-    console.log('isEmail:', isEmail);
-
-    /**
-     * If entered value is email, redirect back to login and show "email is not allowed" message
-     */
-    if (!isEmail) return res.redirect('/dashboard?email=false');
-
-    let conn;
-    try {
-      conn = await pool.getConnection();
-
-      const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
-      console.log('res2:', res2);
-      req.user.email = req.body.email;
-
-      cache.flushAll();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      if (conn) conn.release(); // release to pool
-    }
-  }
-
-  console.log('req.user1:', req.user);
-  console.log('user.id1:', user.id);
-  console.log('req.body.email1:', req.body.email);
-
-  return res.redirect('/dashboard');
-});
-
-// GET /login
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in GitHub authentication will involve redirecting
-//   the user to github.com.  After authorization, GitHub will redirect the user
-//   back to this application at /github-callback
-app.get(
-  '/login',
-  (req, res) => {
-    let message = '';
-    if (req.query.email) message = 'Emaili sisestamine pole lubatud';
-    res.send(`
-        <html>
-        <body>
-            <form action="/login" method="post">
-                <span>Sisesta enda Githubi kasutajanimi (mitte email):</span>
-                <input name="login" type="text"/>
-                <input type="submit" value="Connect"/>
-            </form>
-            <p style="color:red;">${message}</p>
-        </body>
-        </html>
-    `);
-  },
-);
-
-app.post('/login', (req, res, next) => {
-  // console.log('req.body.login1:', req.body.login);
-  if (!req.body.login) {
-    return res.sendStatus(400);
-  }
-
-  /**
-   * Check if entered value is email
-   */
-  // Regular expression to check if string is email
-  const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
-  const isEmail = regexExp.test(req.body.login);
-  /**
-   * If entered value is email, redirect back to login and show "email is not allowed" message
-   */
-  if (isEmail) return res.redirect('/login?email=true');
-
-  return passport.authenticate('github', {
-    login: req.body.login,
-  })(req, res, next);
-});
-
-/*
-  passport.authenticate('github', {
-    // prompt: 'login',
-    // scope: ['user:email'],
-  }),
-); */
-
-/**
- * // Github callback
- * Use passport.authenticate() as route middleware to authenticate the callback request.
- * If authentication fails, the user will be redirected back to the "/noauth" page.
- * Otherwise, the primary route function will be called, which will redirect the user to the "/" homepage.
- */
-app.get(
-  '/github-callback',
-  passport.authenticate('github', {
-    // prompt: 'login',
-    successRedirect: '/dashboard',
-    failureRedirect: '/noauth',
-    scope: ['user'],
-  }),
-);
-
-/**
-  * Available endpoints without login
-  */
-app.get('/', resetSelectedVersion, allCoursesController.getAllCourses);
-app.get('/dashboard', resetSelectedVersion, allCoursesController.getAllCourses);
-
-app.get('/desserts', async (req, res) => {
   let conn;
   try {
     conn = await pool.getConnection();
 
-    const sql = 'SELECT * FROM desserts';
-    const result = await conn.query(sql);
+    const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+    console.log('res2:', res2);
+    req.user.email = req.body.email;
 
-    res.send(result);
-  } catch (error) {
-    console.log('error.code:', error.code);
-    throw error;
+    // Flush all cache so that user's email would be shown correctly across app.
+    cache.flushAll();
+  } catch (err) {
+    console.error(err);
   } finally {
-    if (conn) {
-      conn.release();
-    }
+    if (conn) conn.release(); // release to pool
   }
+  // console.log('req.user1:', req.user);
+  // console.log('user.id1:', user.id);
+  // console.log('req.body.email1:', req.body.email);
+
+  return res.redirect('/dashboard');
 });
 
-/**
- * Available endpoints with login
- */
-app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', resetSelectedVersion, ensureAuthenticated, allCoursesController.getSpecificCourse, responseAction, renderPage);
-
-app.post('/save-selected-version', (req, res) => {
-  // console.log('req.body1:', req.body);
-
-  // Store the selectedValue in the session
-  req.session.selectedVersion = req.body.selectedVersion;
-  req.session.courseSlug = req.body.courseSlug;
-
-  // console.log('req.session.selectedVersion1:', req.session.selectedVersion);
-
-  console.log('req.session.currentPath1:', req.body.currentPath);
-
-  /**
-   * Stores selectedVersion correctly,
-   * but I need to make the original GET request again to reload same page with selectedVersion value.
-   */
-  res.redirect(`${req.body.currentPath}?ref=${req.session.selectedVersion}`);
-});
-
-/**
- * Notifications page
- */
-app.get('/notifications', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
-
-/**
- * Progress overview page
- */
-app.get('/progress-overview', resetSelectedVersion, allOverviewController.getOverview);
-
-app.get('/progress-overview/:team?/:courseSlug?', resetSelectedVersion, allOverviewController.getOverview);
-
-app.post('/progress-overview', (req, res) => {
-  console.log('value0:');
-  console.log('req.body3:', req.body);
-  console.log('req.body.selectedTeam3:', req.body.selectedTeam);
-  console.log('req.body.selectedCourse3:', req.body.selectedCourse);
-  console.log('req.body.selectedCourseData3:', req.body.selectedCourseData);
-
-  let selectedCourseDataParsed;
-  if (req.body && req.body.selectedCourseData) selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
-  req.session.courseSlugData = selectedCourseDataParsed;
-
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse}`);
-
-  // Store the displayBy in the session
-  req.session.displayBy = req.body.displayBy;
-
-  return res.redirect(`/progress-overview?displayBy=${req.session.displayBy}`);
-});
-
-app.post('/courses-display-by', (req, res) => {
-  // Store the displayBy in the session
-  req.session.coursesDisplayBy = req.body.coursesDisplayBy;
-
-  return res.redirect(`/dashboard?coursesDisplayBy=${req.session.coursesDisplayBy}`);
-});
-
-/**
- * Courses page
- */
-app.get('/courses', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
-
-/**
- * 404 page for wrong links
- */
+/** Endpoint for 404 page for invalid or inaccesible links */
 app.get('/notfound', resetSelectedVersion, otherController.notFound);
 
-/**
- * Page for not authorized login attempt (github user not part of tluhk organisation)
- */
+/** Page for not authorized login attempt (github user not part of tluhk organisation) */
 app.get('/noauth', otherController.noAuth);
 
-/**
- * Logout
- * https://www.tabnine.com/code/javascript/functions/express/Request/logout
+/** Endpoint for Logout.
+https://www.tabnine.com/code/javascript/functions/express/Request/logout
  */
-app.get('/logout', resetSelectedVersion, (req, res, next) => {
+app.get('/logout', resetSelectedVersion, ensureAuthenticated, (req, res, next) => {
   // console.log('req.user3:', req.user);
   console.log('Logging out process');
   req.logout((err) => {
@@ -865,14 +840,10 @@ app.get('/logout', resetSelectedVersion, (req, res, next) => {
   });
 });
 
-/**
- * Redirect all unknown paths to 404 page
- */
+/** Redirect all unknown paths to 404 page */
 app.all('*', resetSelectedVersion, otherController.notFound);
 
-/**
- * Start a server and listen on port 3000
- */
+/** Start a server and listen on port 3000 */
 app.listen(port, () => {
   console.log('Hei');
   console.log(`Listening on port ${port}`);
