@@ -30,6 +30,8 @@ npm install
 ```
 AUTH=''
 
+PASSPORT_SESSION_SECRET=''
+
 GITHUB_CLIENT_ID=''
 GITHUB_CLIENT_SECRET=''
 GITHUB_CALLBACK_URL=''
@@ -46,6 +48,11 @@ DB_PASSWORD=''
 Esimene muutuja on sinu Githubi token, [juhend](https://github.com/tluhk/rif20-valikpraktika-1/#github-tokeni-lisamine-rakendusse).
 ```
 AUTH=''
+```
+
+Järgmine muutuja on Passporti sessiooni parool. Võid selle ise määrata, peaasi, et see on keeruline.
+```
+PASSPORT_SESSION_SECRET=''
 ```
 
 Järgnevad 3 muutujat leiad tluhk organisatsiooni Githubi kontolt: Settings -> Developer settings -> OAuth Apps -> Haapsalu kolledži e-õppe keskkond. [Otselink](https://github.com/organizations/tluhk/settings/applications/2100214).
