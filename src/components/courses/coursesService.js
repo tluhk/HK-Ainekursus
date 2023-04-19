@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 
 import axios from 'axios';
@@ -23,7 +24,7 @@ const {
 } = githubReposRequests;
 
 /**
- * Define files to ignore from /files folders
+ * Define files to ignore from Github /files folders
  */
 const ignoreFiles = ['.DS_Store', '.gitkeep'];
 
@@ -62,7 +63,9 @@ const apiRequests = {
         .then((resolvedArr) => {
           const resolvedObj = Object.fromEntries(resolvedArr);
           // console.log('resolvedObj5:', resolvedObj);
+          // eslint-disable-next-line no-unused-vars
           const response = Object.entries(resolvedObj).filter(([key, value]) => value.active);
+
           return response;
         })
         .catch((error) => {
@@ -70,7 +73,6 @@ const apiRequests = {
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
-
       // const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
 
       if (!activeBranchesRaw) return [];

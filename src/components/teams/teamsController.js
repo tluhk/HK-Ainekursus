@@ -7,19 +7,7 @@ import apiRequests from './teamsService';
 
 import cache from '../../setup/setupCache';
 
-const getOneTeamMembers = async (team) => {
-  let members;
-  if (typeof team === 'string') {
-    members = await apiRequests.getTeamMembersService(team);
-  }
-  if (typeof team === 'object') {
-    members = await apiRequests.getTeamMembersService(team.slug);
-  }
-  return members;
-};
-
 const teamsController = {
-
   getAllValidTeams: async () => {
     /**
      * Request all teams of tluhk organisation
@@ -49,7 +37,7 @@ const teamsController = {
 
     // Map each team.slug to a promise that eventually fulfills with each teams members
     const promises = teams.map(async (team) => {
-      const members = await getOneTeamMembers(team.slug);
+      const members = await teamsController.getOneTeamMembers(team.slug);
       return members;
     });
 
@@ -130,7 +118,7 @@ const teamsController = {
 
     if (!cache.has(routePath)) {
       console.log(`❌❌ users in team IS NOT from cache: ${routePath}`);
-      const usersPromise = await getOneTeamMembers(team);
+      const usersPromise = await teamsController.getOneTeamMembers(team);
       users = await Promise.all(usersPromise);
 
       // console.log('users2:', users);
@@ -181,6 +169,16 @@ const teamsController = {
 
     // console.log('users3:', users);
     return users;
+  },
+  getOneTeamMembers: async (team) => {
+    let members;
+    if (typeof team === 'string') {
+      members = await apiRequests.getTeamMembersService(team);
+    }
+    if (typeof team === 'object') {
+      members = await apiRequests.getTeamMembersService(team.slug);
+    }
+    return members;
   },
 };
 
