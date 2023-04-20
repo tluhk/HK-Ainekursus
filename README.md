@@ -159,7 +159,7 @@ Rakendus hakkab tööle lokaalses serveris: [localhost:3000](http://localhost:30
 
 Uute ainekursuste lisamiseks järgi juhendeid sellest repositooriumist: https://github.com/tluhk/HK_Ainekursuse_mall
 
-Ainekursuste materjalid asuvad Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumide nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
+Ainekursuste materjalid asuvad Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumide nimed algavad eesliidesega `HK_` ja mille `config.js` failis on `active: true` .
 
 ## Valikpraktika I grupp
 
@@ -181,7 +181,7 @@ Olemasolevate e-kursuste (nt Moodle) probleem on jäikus ja keerulisus (kõigile
 
 Rakendus on täielikult haldajate kontrolli all, selle sisu on võimalik ristkasutada ning kasutajasõbralikul moel kätte saada, kuvada ja töödelda. Need on olnud seniste lahenduste nõrkused.
 
-Õppematerjalide baasmaterjal asub Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumite nimed algavad eesliidesega `HK_` ja mille `config.json` failis on `active: true` .
+Õppematerjalide baasmaterjal asub Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumite nimed algavad eesliidesega `HK_` ja mille `config.js` failis on `active: true` .
 
 Õppematerjali erinevate kursuste sisu on kättesaadav kolmel viisil: 1) jagades Githubis baasmaterjali veebiaadressi, 2) pärides baasmaterjali infot Github API kaudu, 3) eesrakenduses on igal leheküljel unikaalne aadress ja igal pealkirjal unikaalne ankur-aadress, mida saab kopeerida ning jagada lõppkasutajatele.
 
