@@ -164,6 +164,7 @@ const getConfig = async (selectedCourse, refBranch) => {
   console.log('configObj8:', configObj);
   console.log('configObj.lessons[0].additionalMaterials8:', configObj.lessons[0].additionalMaterials);
 
+  /** Validate that config file has correct structure */
   if (!validateConfig(configObj, selectedCourse, refBranch)) return {};
 
   return configObj;
