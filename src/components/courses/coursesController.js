@@ -144,6 +144,7 @@ const renderPage = async (req, res) => {
 
   /** Finally you can render the course view with all correct information you've collected from Github, and with all correctly rendered Markdown content! */
 
+  console.log('branches1:', branches);
   res.render('course', {
     component: componentMarkdownWithoutTOC,
     docs: config.docs,
@@ -192,7 +193,7 @@ const allCoursesController = {
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    // console.log('allCoursesActive5:', allCoursesActive);
+    console.log('allCoursesActive5:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
@@ -558,11 +559,11 @@ const allCoursesController = {
 
     /** refBranch variable refers to the repo branch where course data must be read. refBranch is defined on following rows. */
     let refBranch;
-    let activeBranches;
+    let validBranches;
 
     /** Get all course branches that have config as active:true */
     try {
-      activeBranches = await apiRequests.activeBranchesService(course.coursePathInGithub);
+      validBranches = await apiRequests.validBranchesService(course.coursePathInGithub);
     } catch (error) {
       console.error(error);
     }
@@ -573,7 +574,7 @@ const allCoursesController = {
     console.log('ref1:', ref);
     console.log('req.user.team.slug1:', req.user.team.slug);
     console.log('selectedVersion4:', selectedVersion);
-    console.log('activeBranches4:', activeBranches);
+    console.log('validBranches4:', validBranches);
     console.log('teamSlug:4', teamSlug); */
 
     /**
@@ -586,45 +587,45 @@ const allCoursesController = {
      * -- 4b. Kui kasutaja ON 'teachers' tiimis, ja kui aktiivsete branchide all pole ühtegi versioon, mille teacherUsername on sisseloginud kasutaja, siis tagasta kursuse esimene aktiivne branch.
      * -- 4c. Kui kursuse all pole ühtegi aktiivset branchi, suuna "/notfound" lehele.
      * 5. Kui kasutaja EI OLE 'teachers' tiimis, aga kui aktiivsete branchide all on mõni versioon, siis tagasta esimene aktiivne versioon.
-     * 6. Kui kasutaja EI OLE 'teachers' tiimis, pole antud selectedVersion ja kasutaja tiim pole activeBranches hulgas, siis suuna "/notfound" lehele.
+     * 6. Kui kasutaja EI OLE 'teachers' tiimis, pole antud selectedVersion ja kasutaja tiim pole validBranches hulgas, siis suuna "/notfound" lehele.
      */
 
     // 1.
-    if (selectedVersion && activeBranches.includes(selectedVersion)) {
+    if (selectedVersion && validBranches.includes(selectedVersion)) {
       refBranch = selectedVersion;
     // 2.
-    } else if (selectedVersion && !activeBranches.includes(selectedVersion)) {
+    } else if (selectedVersion && !validBranches.includes(selectedVersion)) {
       return res.redirect('/notfound');
     // 3.
-    } else if (!selectedVersion && activeBranches.includes(teamSlug)) {
+    } else if (!selectedVersion && validBranches.includes(teamSlug)) {
       refBranch = teamSlug;
     // 4.
-    } else if (!selectedVersion && !activeBranches.includes(teamSlug)) {
-      const activeBranchConfigPromises = activeBranches.map(async (branch) => {
+    } else if (!selectedVersion && !validBranches.includes(teamSlug)) {
+      const validBranchConfigPromises = validBranches.map(async (branch) => {
         const config = await getConfig(course.coursePathInGithub, branch);
         return config;
       });
-      const activeBranchConfigs = await Promise.all(activeBranchConfigPromises);
-      // console.log('activeBranchConfigs1:', activeBranchConfigs);
+      const validBranchConfigs = await Promise.all(validBranchConfigPromises);
+      console.log('validBranchConfigs1:', validBranchConfigs);
 
       if (allTeachers.find((teacher) => teacher.login === req.user.username)) {
-        const correctBranchIndex = activeBranchConfigs.findIndex((config) => config.teacherUsername === req.user.username);
-        // console.log('activeBranchConfigs1:', activeBranchConfigs1);
+        const correctBranchIndex = validBranchConfigs.findIndex((config) => config.teacherUsername === req.user.username);
+        // console.log('validBranchConfigs1:', validBranchConfigs1);
         // console.log('correctBranchIndex1:', correctBranchIndex);
 
         // 4a.
         if (correctBranchIndex > -1) {
-          refBranch = activeBranches[correctBranchIndex];
+          refBranch = validBranches[correctBranchIndex];
         // 4b.
-        } else if (correctBranchIndex <= -1 && activeBranches.length >= 0) {
-          refBranch = activeBranches[0];
+        } else if (correctBranchIndex <= -1 && validBranches.length >= 0) {
+          refBranch = validBranches[0];
         // 4c.
         } return res.redirect('/notfound');
       }
       // 5.
-      if (activeBranches.length >= 0) {
-        const firstActiveBranchIndex = activeBranchConfigs.findIndex((config) => config.active === true);
-        refBranch = activeBranches[firstActiveBranchIndex];
+      if (validBranches.length >= 0) {
+        const firstActiveBranchIndex = validBranchConfigs.findIndex((config) => config.active === true);
+        refBranch = validBranches[firstActiveBranchIndex];
       }
     // 6.
     } else return res.redirect('/notfound');
@@ -635,7 +636,7 @@ const allCoursesController = {
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
     res.locals.refBranch = refBranch;
-    res.locals.branches = activeBranches;
+    res.locals.branches = validBranches;
 
     // console.log('cache.has(routePath)1:', cache.has(routePath));
     // console.log('cache.get(routePath)1:', cache.get(routePath));

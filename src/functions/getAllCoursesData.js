@@ -12,7 +12,7 @@ import apiRequests from '../components/courses/coursesService';
 
 const { requestTeamCourses, requestRepos } = githubReposRequests;
 
-const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full_name, refBranch)
+const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_name, refBranch)
   .then(async (config) => {
     if (!config) {
       console.log(`No config found for ${param.full_name}, ${refBranch}`);
@@ -101,7 +101,7 @@ const coursePromise = (param, refBranch, activeBranches) => getConfig(param.full
       // courseOpivaljundid: oisContent.opivaljundid,
       refBranch,
       courseBranchComponentsUUIDs: allComponentsUUIDs,
-      courseAllActiveBranches: activeBranches,
+      courseAllActiveBranches: validBranches,
       config,
     };
   });
@@ -141,7 +141,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
   }
 
   if (!courses) return [];
-  // console.log('courses1:', courses);
+  console.log('courses1:', courses);
 
   /*
   * Filter only repos that start with "HK_" prefix.
@@ -155,42 +155,44 @@ const getAllCoursesData = (async (teamSlug, req) => {
 
   const allCourses = coursesStartingWithHK.map(async (course) => {
     // const start5 = performance.now();
-    const activeBranches = await apiRequests.activeBranchesService(course.full_name);
+    const validBranches = await apiRequests.validBranchesService(course.full_name);
     // const end5 = performance.now();
-    // console.log(`Execution time activeBranches: ${end5 - start5} ms`);
+    // console.log(`Execution time validBranches: ${end5 - start5} ms`);
 
     console.log('course.full_name4:', course.full_name);
-    console.log('activeBranches4:', activeBranches);
+    console.log('validBranches4:', validBranches);
     let refBranch;
-    if (activeBranches && activeBranches.includes(teamSlug)) {
+    if (validBranches && validBranches.includes(teamSlug)) {
       refBranch = teamSlug;
-    } else if (activeBranches.length && teamSlug === 'teachers') {
+    } else if (validBranches.length && teamSlug === 'teachers') {
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
-      const branchConfigPromises = activeBranches.map(async (branch) => {
+      const branchConfigPromises = validBranches.map(async (branch) => {
         const config = await getConfig(course.full_name, branch);
         return config;
       });
-      // console.log('branchConfigPromises1:', branchConfigPromises);
       const branchConfigs = await Promise.all(branchConfigPromises);
+      console.log('branchConfigs1:', branchConfigs);
+
       const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === user.username);
 
       // console.log('branchConfigs1:', branchConfigs);
       // console.log('correctBranchIndex1:', correctBranchIndex);
 
       if (correctBranchIndex > -1) {
-        refBranch = activeBranches[correctBranchIndex];
+        refBranch = validBranches[correctBranchIndex];
       } else if (correctBranchIndex <= -1) {
         const firstActiveBranchIndex = branchConfigs.findIndex((config) => config.active === true);
-        refBranch = activeBranches[firstActiveBranchIndex];
+        refBranch = validBranches[firstActiveBranchIndex];
       } else refBranch = 'master';
     } else {
       refBranch = 'master';
     }
-    // console.log('refBranch4:', refBranch);
+    console.log('refBranch4:', refBranch);
 
     /** Get selected course info from ÕIS Ainekaart with coursePromise() func. */
-    const courseDataWithOIS = await coursePromise(course, refBranch, activeBranches);
+    const courseDataWithOIS = await coursePromise(course, refBranch, validBranches);
 
+    console.log('courseDataWithOIS1:', courseDataWithOIS);
     return courseDataWithOIS;
   });
   // console.log('map1:', map1);

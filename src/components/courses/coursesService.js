@@ -32,7 +32,7 @@ const ignoreFiles = ['.DS_Store', '.gitkeep'];
  * Define all API requests that are done to GitHub API
  */
 const apiRequests = {
-  activeBranchesService: async (coursePathInGithub) => {
+  validBranchesService: async (coursePathInGithub) => {
     const routePath = `${coursePathInGithub}+branches`;
     /**
      * Get list of repo branches
@@ -41,7 +41,7 @@ const apiRequests = {
      */
 
     let branches;
-    let activeBranches;
+    let validBranches;
 
     if (!cache.has(routePath)) {
       console.log(`❌❌ branches IS NOT from cache: ${routePath}`);
@@ -49,17 +49,20 @@ const apiRequests = {
       const branchesRaw = await axios.get(requestRepoBranches(coursePathInGithub), authToken);
 
       branches = branchesRaw.data.map((branch) => branch.name);
-      // console.log('coursePathInGithub5:', coursePathInGithub);
-      // console.log('truebranches5:', branches);
+      console.log('coursePathInGithub5:', coursePathInGithub);
+      console.log('truebranches5:', branches);
 
       const branchPromises = await branches.reduce((acc, branch) => {
+        // console.log('getConfig(coursePathInGithub, branch):', await getConfig(coursePathInGithub, branch));
+
+        /** IF CONFIG IS BROKEN (doesn't pass validation), the branch is not considered either! */
         acc[branch] = getConfig(coursePathInGithub, branch);
         return acc;
       }, {});
 
-      // console.log('branchPromises5:', branchPromises);
+      console.log('branchPromises5:', branchPromises);
 
-      const activeBranchesRaw = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
+      const validBranchesRaw = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
         .then((resolvedArr) => {
           const resolvedObj = Object.fromEntries(resolvedArr);
           // console.log('resolvedObj5:', resolvedObj);
@@ -73,24 +76,24 @@ const apiRequests = {
         });
 
       // console.log('branchesWithConfig5:', branchesWithConfig);
-      // const activeBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
+      // const validBranchesRaw = Object.entries(branchesWithConfig).filter(([key, value]) => value.active);
 
-      if (!activeBranchesRaw) return [];
+      if (!validBranchesRaw) return [];
 
-      activeBranches = activeBranchesRaw.map((x) => x[0]);
+      validBranches = validBranchesRaw.map((x) => x[0]);
 
       // console.log('coursePathInGithub1:', coursePathInGithub);
-      // console.log('activeBranchesRaw0:', activeBranchesRaw);
-      // console.log('activeBranches0:', activeBranches);
+      console.log('validBranchesRaw0:', validBranchesRaw);
+      console.log('validBranches0:', validBranches);
 
-      cache.set(routePath, activeBranches);
+      cache.set(routePath, validBranches);
     } else {
       console.log(`✅✅ branches FROM CACHE: ${routePath}`);
-      activeBranches = cache.get(routePath);
+      validBranches = cache.get(routePath);
       // console.log('Cachecomponents2:', components);
     }
 
-    return activeBranches;
+    return validBranches;
   },
   docsService: async (req, res) => {
     const {

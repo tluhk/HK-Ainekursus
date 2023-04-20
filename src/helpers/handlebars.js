@@ -148,10 +148,10 @@ export default function hbsHelpers(hbs) {
        * Set behaviours on which cases the Version dropdown option should get a checked mark.
        */
       setDefaultChecked: (branchSlug, refBranch, selectedVersion, branches) => {
-        // console.log('branchSlug5:', branchSlug);
-        // console.log('refBranch5:', refBranch);
-        // console.log('selectedVersion5:', selectedVersion);
-        // console.log('branches5:', branches);
+        console.log('branchSlug5:', branchSlug);
+        console.log('refBranch5:', refBranch);
+        console.log('selectedVersion5:', selectedVersion);
+        console.log('branches5:', branches);
 
         /**
          * For students

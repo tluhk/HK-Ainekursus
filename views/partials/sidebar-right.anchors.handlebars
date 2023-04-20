@@ -9,10 +9,10 @@
   <div id="dropdownRadioBgHover" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">    
     <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
     <!-- Radio buttons -->
-      {{#each branches }}
+      {{#each ../branches }}
        <li>
           <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-            <input {{setDefaultChecked this ../refBranch ../selectedVersion ../branches }} id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio" class="form-radio"  onclick="handleRadioClick('{{this}}')" >
+            <input {{setDefaultChecked this ../../refBranch ../../selectedVersion ../../branches }} id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio" class="form-radio"  onclick="handleRadioClick('{{this}}')" >
             <label for="default-radio-{{@index}}" class="w-full ml-2 text-sm font-medium" onclick="handleRadioClick('{{this}}')" >{{this }} </label>
           </div>
         </li>
@@ -23,8 +23,8 @@
   <!-- Hidden forms to send req.body values -->
   <form id="my-form" style="display:none;" method="POST" action="/save-selected-version">
   <input type="hidden" name="selectedVersion" id="selectedVersion" >
-  <input type="hidden" name="currentPath" id="currentPath" value="/course/{{path.courseSlug}}/about/" >
-  <input type="hidden" name="courseSlug" id="courseSlug" value="{{path.courseSlug}}" >
+  <input type="hidden" name="currentPath" id="currentPath" value="/course/{{../path.courseSlug}}/about/" >
+  <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
   </form>
 
 {{/if_equal}}
