@@ -40,5 +40,6 @@
 ## Edasiarendus
 
 - Read data from Ois Ainekaardid: https://www.npmjs.com/package/cheerio . The cheerio package will enable us to manipulate the DOM by reading the elements on the provided URL page.
+- Repair broken config files if it has some formatting issues (e.g. missing comma, missing quotes, remove comments) https://www.npmjs.com/package/jsonrepair
 
 [<Tagasi](../../README.md)
