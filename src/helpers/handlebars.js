@@ -92,25 +92,29 @@ export default function hbsHelpers(hbs) {
         return 'attach_file';
       },
       showComponentName: (componentUppercase, concepts, practices) => {
-        const component = componentUppercase;
+        const component = componentUppercase.toLowerCase();
         const components = concepts.concat(practices);
-        const comp = components.find((x) => (x.slug) === component);
+        // console.log('component5:', component);
+        // console.log('components5:', components);
+
+        const comp = components.find((x) => (x.slug.toLowerCase()) === component);
+        // console.log('comp.name5:', comp.name);
         return comp.name;
       },
       showComponentUUID: (componentUppercase, concepts, practices) => {
-        console.log('componentUppercase5:', componentUppercase);
-        console.log('concepts5:', concepts);
-        console.log('practices5:', practices);
-        const component = componentUppercase;
+        const component = componentUppercase.toLowerCase();
         const components = concepts.concat(practices);
-        const comp = components.find((x) => (x.slug) === component);
-        console.log('comp.uuid5:', comp.uuid);
+        // console.log('component6:', component);
+        // console.log('components6:', components);
+
+        const comp = components.find((x) => (x.slug.toLowerCase()) === component);
+        // console.log('comp.uuid6:', comp.uuid);
         return comp.uuid;
       },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
-        // console.log('teacherName2:', teacherName);
-        // console.log('teachers2:', teachers);
+        console.log('teacherName2:', teacherName);
+        console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
         // console.log('teacherData2:', teacherData);
 
@@ -141,7 +145,7 @@ export default function hbsHelpers(hbs) {
         const coursesData = teamCourses[teamSlug];
         // console.log('coursesData2:', coursesData);
 
-        if (coursesData.length === 0) return false;
+        if (!coursesData || coursesData.length === 0) return false;
         return coursesData;
       },
       /**

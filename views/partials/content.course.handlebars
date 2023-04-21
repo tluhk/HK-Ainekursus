@@ -26,7 +26,10 @@
   <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
   "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
   <div id="markdown-content">
-
+    {{#unless component}}
+      <h3>Midagi läks valesti. Lehekülje sisu ei ole võimalik laadida.</h3>
+      <p>Õppejõud peab üle vaatama kursuse seadistused (config fail, kaustade nimetused, failide nimetused).</p>
+    {{/unless }}
     {{{component}}}
     
   </div>

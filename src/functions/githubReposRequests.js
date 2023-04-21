@@ -21,7 +21,7 @@ const githubReposRequests = {
      */
     // console.log('team2:', team);
     // console.log('refBranch2:', refBranch);
-    (coursePathInGithub, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?ref=${refBranch}`
+    (coursePathInGithub, refBranch) => `${baseUrl}/repos/${coursePathInGithub}/contents/config.js?ref=${refBranch}`
   ),
   // docs related
   requestDocs: (
