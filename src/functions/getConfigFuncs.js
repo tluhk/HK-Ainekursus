@@ -35,7 +35,7 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
   if (!hasAllKeys) {
     console.error(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected keys missing.`);
-    return {};
+    return false;
   }
 
   /** Validate that docs, additionalMaterials, lessons, concepts and practices keys have Arrays as values and that each array consists of at least on elem (Arrays are not empty).  */
@@ -48,7 +48,7 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
     || !Array.isArray(configObj.practices) || !configObj.practices.length > 0
   ) {
     console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected keys with incorrect type or empty array.`);
-    return {};
+    return false;
   }
 
   const expectedKeys2 = ['slug', 'name'];
@@ -112,19 +112,18 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 const getConfig = async (selectedCourse, refBranch) => {
   let config;
 
-  /**
- * Check if cache already has course branch config.
- * If yes, read config from cache.
- * If not, make new github request for config and cache it.
- */
-  console.log('selectedCourse1:', selectedCourse);
-  console.log('refBranch1:', refBranch);
+  /** Check if cache already has course branch config.
+   * If yes, read config from cache.
+   * If not, make new github request for config and cache it.
+   */
+  // console.log('selectedCourse1:', selectedCourse);
+  // console.log('refBranch1:', refBranch);
 
   const routePath = `getConfig:${selectedCourse}+${refBranch}`;
   // console.log('routePath1:', routePath);
   // console.log('cache.get(routePath)1:', cache.get(routePath));
-  console.log('cache.has(routePath)1:', cache.has(routePath));
-  console.log('cache.get(routePath)1:', cache.get(routePath));
+  // console.log('cache.has(routePath)1:', cache.has(routePath));
+  // console.log('cache.get(routePath)1:', cache.get(routePath));
 
   if (cache.has(routePath) || cache.get(routePath) !== undefined) {
     config = cache.get(routePath);
@@ -140,32 +139,66 @@ const getConfig = async (selectedCourse, refBranch) => {
     // console.log('config from api');
   }
 
-  console.log('config2:', config);
-  console.log('config.data2:', config.data);
+  // console.log('config2:', config);
+  // console.log('config.data2:', config.data);
 
   if (!config.data) return null;
   // console.log('config2:', config);
   /** Decode Github response with base64 and utf8. Result is a string configDecodedUtf8 that contains the config file content. */
   const configDecoded = base64.decode(config.data.content);
   const configDecodedUtf8 = utf8.decode(configDecoded);
-  console.log('configDecodedUtf8:', configDecodedUtf8);
+  // console.log('configDecodedUtf8:', configDecodedUtf8);
   // console.log('typeof configDecodedUtf8:', typeof configDecodedUtf8);
 
   /** Fix broken JSON before parsing it: https://www.npmjs.com/package/jsonrepair .
    * E.g. the config file might be missing a comma, or double quotes here or there.
    * This must be fixed before JSON.parse() command.
   */
-  const repairedConfigJSON = jsonrepair(configDecodedUtf8);
-  console.log('repairedConfigJSON8:', repairedConfigJSON);
-  console.log('typeof repairedConfigJSON8:', typeof repairedConfigJSON);
+  let repairedConfigJSON;
+  /* Validate that config is object type and in JSON format */
+  try {
+    repairedConfigJSON = jsonrepair(configDecodedUtf8);
+  } catch (error) {
+    console.error(`Config file of ${selectedCourse}, branch ${refBranch} is not object type or does not match JSON format.`);
+    return null;
+  }
+  // console.log('repairedConfigJSON8:', repairedConfigJSON);
+  // console.log('typeof repairedConfigJSON8:', typeof repairedConfigJSON);
 
   /** Parse string into object */
   const configObj = JSON.parse(repairedConfigJSON);
-  console.log('configObj8:', configObj);
-  console.log('configObj.lessons[0].additionalMaterials8:', configObj.lessons[0].additionalMaterials);
+  // console.log('configObj8:', configObj);
 
   /** Validate that config file has correct structure */
-  if (!validateConfig(configObj, selectedCourse, refBranch)) return {};
+  if (!validateConfig(configObj, selectedCourse, refBranch)) return null;
+
+  /** Convert all lessons component array elements to lowercase */
+  configObj.lessons.forEach((lesson, indexLesson) => {
+    if (Array.isArray(lesson.components)) {
+      const arr = lesson.components;
+      const componentsLowercase = arr.map((item) => item.toLowerCase());
+      configObj.lessons[indexLesson].components = componentsLowercase;
+    }
+  });
+  // console.log('configObj.lessons[0].components10:', configObj.lessons[0].components);
+
+  /** Convert all "slug" key values to lowercase */
+  Object.keys(configObj).forEach((key) => {
+    // console.log('key9:', key);
+    if (Array.isArray(configObj[key])) {
+      const arr = configObj[key];
+      // console.log('arr9:', arr);
+      arr.forEach((item) => {
+        // console.log('item9:', item);
+        if (item.hasOwnProperty('slug')) {
+          item.slug = item.slug.toLowerCase();
+          // console.log('item10:', item);
+        }
+      });
+    }
+  });
+
+  // console.log('configObj9:', configObj);
 
   return configObj;
 };

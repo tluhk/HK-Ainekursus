@@ -72,7 +72,7 @@ const allOverviewController = {
 
     if (!teams) return res.redirect('/notfound');
     teams.sort((a, b) => a.slug.localeCompare(b.slug));
-    // console.log('teams3:', teams);
+    console.log('teams3:', teams);
 
     const teamsCourses = {};
 
@@ -85,10 +85,13 @@ const allOverviewController = {
 
     console.log('teamsCourses3:', teamsCourses);
 
+
     const teamsCoursesSorted = Object.keys(teamsCourses)
       .sort()
       .reduce((acc, team) => {
-        acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
+        console.log('team3:', team);
+        console.log('teamsCourses[team]3:', teamsCourses[team]);
+        if (teamsCourses[team].length > 0) acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
         return acc;
       }, {});
 

@@ -49,8 +49,8 @@ const apiRequests = {
       const branchesRaw = await axios.get(requestRepoBranches(coursePathInGithub), authToken);
 
       branches = branchesRaw.data.map((branch) => branch.name);
-      console.log('coursePathInGithub5:', coursePathInGithub);
-      console.log('truebranches5:', branches);
+      // console.log('coursePathInGithub5:', coursePathInGithub);
+      // console.log('truebranches5:', branches);
 
       const branchPromises = await branches.reduce((acc, branch) => {
         // console.log('getConfig(coursePathInGithub, branch):', await getConfig(coursePathInGithub, branch));
@@ -60,7 +60,7 @@ const apiRequests = {
         return acc;
       }, {});
 
-      console.log('branchPromises5:', branchPromises);
+      // console.log('branchPromises5:', branchPromises);
 
       const validBranchesRaw = await Promise.all(Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value])))
         .then((resolvedArr) => {
@@ -82,8 +82,8 @@ const apiRequests = {
 
       validBranches = validBranchesRaw.map((x) => x[0]);
 
-      // console.log('coursePathInGithub1:', coursePathInGithub);
-      console.log('validBranchesRaw0:', validBranchesRaw);
+      console.log('coursePathInGithub1:', coursePathInGithub);
+      // console.log('validBranchesRaw0:', validBranchesRaw);
       console.log('validBranches0:', validBranches);
 
       cache.set(routePath, validBranches);
@@ -263,7 +263,7 @@ const apiRequests = {
       refBranch,
     } = res.locals;
 
-    console.log('refBranch8:', refBranch);
+    console.log('refBranch9:', refBranch);
 
     const routePath = `${req.url}+${refBranch}+components`;
     const routePathSources = `${req.url}+${refBranch}+sources`;

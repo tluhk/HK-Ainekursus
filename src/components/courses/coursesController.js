@@ -48,9 +48,22 @@ const responseAction = async (req, res, next) => {
   // console.log('githubRequest1type:', typeof githubRequest);
 
   const { components, files, sources } = apiResponse;
+  // console.log('components1:', components);
+  // console.log('files1:', files);
+  // console.log('sources1:', sources);
+
   res.locals.resComponents = components;
   res.locals.resFiles = files;
   res.locals.resSources = sources;
+
+  /** If Github API responds with no data for components, sources or files, then save those as empty to res.locals + render an empty page.
+   * Github API responds with no data if there's inconsistency in the course repo files or folder. E.g. if the config file refers to a folder with lowercase ("arvuti"), but the folder name in Github is actually camelcase ("Arvuti"). This is inconsistent and Github API does not respond with data if the folder name is sent incorrectly with the API request.
+   * We require the teacher to write all folder names lowercase.
+   * There's no good way to validate that folder names are all in lowercase, and if not, then change to lowercase from Github's side.
+   */
+  if (!components) res.locals.resComponents = { data: { content: '' } };
+  if (!sources) res.locals.resSources = { data: { content: '' } };
+  if (!files) res.locals.resFiles = [];
 
   return next();
 };
@@ -84,8 +97,8 @@ const renderPage = async (req, res) => {
 
   console.log('req.user55:', req.user);
 
-  // console.log('resComponents in responseAction:', resComponents);
-  // console.log('resFiles in responseAction:', resComponents);
+  console.log('resComponents in responseAction:', resComponents);
+  console.log('resFiles in responseAction:', resComponents);
 
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
@@ -135,11 +148,15 @@ const renderPage = async (req, res) => {
   let sourcesJSON = null;
 
   // NB! Sources are sent only with "Teemade endpointid" axios call. If sourcesJSON stays NULL (is false), then content.handlebars does not display "Allikad" div. If sourcesJSON gets filled (is true), then "Allikad" div is displayed.
-  if (resSources) {
+  if (resSources
+    && resSources.data
+    && resSources.data.content
+    && resSources.data.content !== '') {
     const sources = resSources.data;
     const sourcesDecoded = base64.decode(sources.content);
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
-    sourcesJSON = JSON.parse(sourcesDecodedUtf8);
+    console.log('sourcesDecodedUtf8:', sourcesDecodedUtf8);
+    if (sourcesDecodedUtf8) sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
   /** Finally you can render the course view with all correct information you've collected from Github, and with all correctly rendered Markdown content! */
@@ -192,6 +209,7 @@ const allCoursesController = {
     const allCourses = await getAllCoursesData(teamSlug, req);
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
+    console.log('allCourses5:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
     console.log('allCoursesActive5:', allCoursesActive);
 
@@ -773,7 +791,7 @@ const allCoursesController = {
 
     /** You can check all relevant values about current endpoint:
     */
-    console.log('courseSlug1:', courseSlug);
+    /* console.log('courseSlug1:', courseSlug);
     console.log('course.courseName1:', course.courseName);
     console.log('contentSlug1:', contentSlug);
     console.log('contentName1:', contentName);
@@ -781,7 +799,7 @@ const allCoursesController = {
     console.log('componentSlug1:', componentSlug);
     console.log('componentName1:', componentName);
     console.log('componentUUID1:', componentUUID);
-    console.log('githubRequest1:', githubRequest);
+    console.log('githubRequest1:', githubRequest); */
 
     /**
      * IF contentSlug exists, but contentName is NOT returned from config file.

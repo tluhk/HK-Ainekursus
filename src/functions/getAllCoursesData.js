@@ -107,7 +107,7 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
   });
 
 const getAllCoursesData = (async (teamSlug, req) => {
-  // console.log('teamSlug4:', teamSlug);
+  console.log('teamSlug4:', teamSlug);
   /**
    * Read Course repos only if the user exists, they are in a team and team.slug exists!
    * Otherwise load courses array as empty (no courses to show).
@@ -146,12 +146,14 @@ const getAllCoursesData = (async (teamSlug, req) => {
   /*
   * Filter only repos that start with "HK_" prefix.
    */
-  const coursesStartingWithHK = courses.data.filter((x) => x.name.startsWith('HK_') && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
+  const coursesStartingWithHK = courses.data.filter((x) => x.name.startsWith('HK_')); // && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
 
   /**
    * Return empty array if tluhk org doesn't have any repos starting with "HK_"
    */
   if (!coursesStartingWithHK) return [];
+
+  console.log('coursesStartingWithHK:', coursesStartingWithHK);
 
   const allCourses = coursesStartingWithHK.map(async (course) => {
     // const start5 = performance.now();
@@ -168,7 +170,8 @@ const getAllCoursesData = (async (teamSlug, req) => {
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
       const branchConfigPromises = validBranches.map(async (branch) => {
         const config = await getConfig(course.full_name, branch);
-        return config;
+        console.log('config4:', config);
+        if (config) return config;
       });
       const branchConfigs = await Promise.all(branchConfigPromises);
       console.log('branchConfigs1:', branchConfigs);
@@ -192,12 +195,15 @@ const getAllCoursesData = (async (teamSlug, req) => {
     /** Get selected course info from ÕIS Ainekaart with coursePromise() func. */
     const courseDataWithOIS = await coursePromise(course, refBranch, validBranches);
 
-    console.log('courseDataWithOIS1:', courseDataWithOIS);
     return courseDataWithOIS;
   });
   // console.log('map1:', map1);
 
-  return Promise.all(allCourses).then((results) => results);
+  /** Filter out and return only course object where the object is not empty.
+   * It's possible that getConfig()
+   */
+  return Promise.all(allCourses)
+    .then((results) => results.filter((item) => Object.keys(item).length > 0));
 });
 
 export default getAllCoursesData;
