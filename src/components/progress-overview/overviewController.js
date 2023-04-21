@@ -71,12 +71,17 @@ const allOverviewController = {
     });
 
     if (!teams) return res.redirect('/notfound');
-    teams.sort((a, b) => a.slug.localeCompare(b.slug));
-    console.log('teams3:', teams);
+
+    /** Remove teachers team from teams array. Teachers team's courses shouldn't be displayed on app.
+     * However you still need to keep teams array with teachers to get teachers names for rendering.
+    */
+
+    const teamsExclTeachers = teams.filter((team) => team.slug !== 'teachers');
+    teamsExclTeachers.sort((a, b) => a.slug.localeCompare(b.slug));
 
     const teamsCourses = {};
 
-    const teamsCoursesPromises = teams.map(async (team) => {
+    const teamsCoursesPromises = teamsExclTeachers.map(async (team) => {
       const coursesData = await getAllCoursesData(team.slug, req);
       teamsCourses[team.slug] = coursesData;
     });
@@ -97,7 +102,8 @@ const allOverviewController = {
 
     /*
     * Get all users in each team
-    * Save all teachers in a variable, needed for rendering 
+    * Use teams array where teachers team is included.
+    * Save all teachers in a variable, needed for rendering
     */
     const teamsUsers = {};
     const start4 = performance.now();
@@ -122,7 +128,7 @@ const allOverviewController = {
     return res.render('overview-teams', {
       user: req.user,
       displayBy,
-      teams,
+      teams: teamsExclTeachers,
       teamsCourses: teamsCoursesSorted,
       teamsUsers: teamsUsersSorted,
       teachers: teamsUsersSorted.teachers,
@@ -137,12 +143,17 @@ const allOverviewController = {
     });
 
     if (!teams) return res.redirect('/notfound');
-    teams.sort((a, b) => a.slug.localeCompare(b.slug));
+
+    /** Remove teachers team from teams array. Teachers team's courses shouldn't be displayed on app.
+     * However you still need to keep teams array with teachers to get teachers names for rendering.
+     */
+    const teamsExclTeachers = teams.filter((team) => team.slug !== 'teachers');
+    teamsExclTeachers.sort((a, b) => a.slug.localeCompare(b.slug));
     // console.log('teams3:', teams);
 
     const teamsCourses = {};
 
-    const teamsCoursesPromises = teams.map(async (team) => {
+    const teamsCoursesPromises = teamsExclTeachers.map(async (team) => {
       const coursesData = await getAllCoursesData(team.slug, req);
       teamsCourses[team.slug] = coursesData;
     });
@@ -178,9 +189,9 @@ const allOverviewController = {
     console.log(coursesWithTeams);
     console.log('coursesWithTeams3:', coursesWithTeams);
 
-    /*
-    * Get all users in each team
-    * Save all teachers in a variable, needed for rendering 
+    /* Get all users in each team.
+    * Use teams array where teachers team is included.
+    * Save all teachers in a variable, needed for rendering
     */
     const teamsUsers = {};
     const start4 = performance.now();
@@ -204,7 +215,7 @@ const allOverviewController = {
     return res.render('overview-courses', {
       user: req.user,
       displayBy,
-      teams,
+      teams: teamsExclTeachers,
       coursesWithTeams,
       teamsUsers: teamsUsersSorted,
       teachers: teamsUsersSorted.teachers,
@@ -243,6 +254,10 @@ const allOverviewController = {
 
     let usersData;
     if (usersDataPromises && usersDataPromises[0]) usersData = await Promise.all(usersDataPromises);
+
+    /* Sort users by displayName */
+    usersData.sort((a, b) => a.displayName.localeCompare(b.displayName));
+
     console.log('usersData2:', usersData);
 
     return res.render('overview-stats', {

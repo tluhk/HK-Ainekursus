@@ -29,8 +29,8 @@
             <h3>Ainekursus: <span class="uppercase">{{courseData.courseName}}</span></h3> <p class="pl-3">{{courseData.refBranch}} haru</p>
           </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full table-fixed border-separate border border-slate-400 pt-4">
+          <div class="overflow-x-auto w-full ">
+            <table class="table-fixed border-separate border border-slate-400 pt-4">
               <col>
                 {{#each courseData.config.lessons }}
                   <colgroup span="{{this.components.length}}"></colgroup>
@@ -38,13 +38,13 @@
               <tr>
                 <td rowspan="2"></td>
                 {{#each courseData.config.lessons }}
-                  <th class="border border-slate-300" colspan="{{this.components.length}}" scope="colgroup">{{this.name}}</th>
+                  <th class="border border-slate-300 p-4" colspan="{{this.components.length}}" scope="colgroup">{{this.name}}</th>
                 {{/each }}
               </tr>
               <tr>
                 {{#each courseData.config.lessons }}
                   {{#each this.components}}
-                    <th class="border border-slate-300" scope="col">
+                    <th class="border border-slate-300 p-4" scope="col">
                     {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}  
                       {{this}}
                     {{/with}} {{!--  –
@@ -57,13 +57,13 @@
               </tr>
               {{#each usersData}}
                 <tr>
-                  <th class="border border-slate-300" scope="row">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</th>
+                  <th class="border border-slate-300 px-4 py-3" scope="row">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</th>
                   {{#each ../courseData.config.lessons }}
                     {{#each this.components}}
                       {{#ifInMarkedComponents (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices) ../../this.markedAsDoneComponents}}
-                        <td class="border border-slate-300 text-center"><span class="material-symbols-outlined bg-green-100">task_alt</span></td>
+                        <td class="border border-slate-300 text-center px-4 py-3"><span class="material-symbols-outlined bg-green-100">task_alt</span></td>
                       {{else}}
-                        <td class="border border-slate-300 text-center">-</td>
+                        <td class="border border-slate-300 text-center px-4 py-3"><span class="material-symbols-outlined text-green-600">task_alt</span></td>
                       {{/ifInMarkedComponents}}
                     {{/each }}
                   {{/each }}
