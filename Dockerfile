@@ -10,6 +10,9 @@ COPY package.json /app
 # This will install those dependencies
 RUN npm install
 
+# Install nodemon dependencies
+RUN npm install -g nodemon
+
 # Copy the rest of the app to the working directory
 COPY . /app
 
