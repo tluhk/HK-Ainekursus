@@ -1,4 +1,7 @@
 /* eslint-disable max-len */
+
+import pool from '../../db';
+
 /** Function to get a list of UUIDs of components that have been markedAsDone by a selected user in a selected course. This data is stored in MariaDB.
  * Parameters are user's githubID and course's slug. E.g. '24424256' and 'HKI6001.HK'.
  */
