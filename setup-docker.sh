@@ -38,7 +38,7 @@ echo "Containers have started!" 2>&1
 echo "Waiting for containers to initialize..."
 echo "Logging haapsalu-mariadb..."
 docker logs haapsalu-mariadb
-sleep 20
+sleep 60
 
 # Execute the commands inside the mariadb container
 echo "Mariadb containers..." 2>&1
