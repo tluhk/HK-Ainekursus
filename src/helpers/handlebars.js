@@ -7,10 +7,10 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import moment from 'moment';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-import moment from 'moment';
 // import { checkServerIdentity } from 'tls';
 
 moment.locale('et');
@@ -47,8 +47,8 @@ export default function hbsHelpers(hbs) {
         return options.inverse(this);
       },
       ifInMarkedComponents: (elem, list, options) => {
-        console.log('elem:', elem);
-        console.log('list:', list);
+        // console.log('elem:', elem);
+        // console.log('list:', list);
         if (list === undefined) {
           // console.log('list is undefined');
           return options.inverse(this);
@@ -113,8 +113,8 @@ export default function hbsHelpers(hbs) {
       },
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       findTeacher: (teacherName, teachers) => {
-        console.log('teacherName2:', teacherName);
-        console.log('teachers2:', teachers);
+        // console.log('teacherName2:', teacherName);
+        // console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
         // console.log('teacherData2:', teacherData);
 
@@ -184,8 +184,8 @@ export default function hbsHelpers(hbs) {
       },
       timeSince: (date) => moment(date).fromNow(),
       matchingDoneComponentsCount: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
-        console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
-        console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
+        // console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
+        // console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
         const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
 
         return commonElementsCount;
