@@ -391,7 +391,7 @@ const allCoursesController = {
         courses = await allCoursesController.allCoursesActiveWithComponentsData(allCoursesActive, req.user.id);
       } else courses = allCoursesActive;
 
-      console.log('courses55:', courses);
+      // console.log('courses55:', courses);
       res.locals.allCoursesActive = courses;
 
       // console.log('coursesDisplayBy1:', coursesDisplayBy);
