@@ -67,7 +67,7 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
 
     // console.log('oisContent.name5:', oisContent.name);
 
-    console.log('config5:', config);
+    // console.log('config5:', config);
     const allComponentSlugs = [];
 
     config.lessons.forEach((lesson) => {
