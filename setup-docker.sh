@@ -9,7 +9,6 @@ export $(grep -v '^#' .env | grep -E 'MYSQL_ROOT_PASSWORD' | xargs)
 # Remove containers
 echo "Stop and remove containers..." 2>&1
 docker rm -f haapsalu-mariadb haapsalu-app
-
 # Delete Docker image
 echo "Deleting Docker image..." 2>&1
 docker image rm -f haapsalu || (echo "Image haapsalu didn't exist so not removed."; exit 0)
@@ -27,7 +26,7 @@ done
 
 # Build and start the Docker containers in detached mode
 echo "Starting Docker containers..." 2>&1
-docker-compose up -d
+docker compose up -d
 
 # Wait for containers to start
 while ! docker ps | grep -qE 'haapsalu-app|haapsalu-mariadb'; do
@@ -59,7 +58,7 @@ sleep 40
 
 # Start the Docker containers again
 echo "Starting Docker containers again..." 2>&1
-docker-compose up
+docker compose up
 
 sleep 20
 
