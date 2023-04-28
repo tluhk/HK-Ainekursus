@@ -22,7 +22,7 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
     // Handle Error Here
     console.error(err);
   }
-  console.log('response2:', response);
+  // console.log('response2:', response);
   return response;
 };
 
@@ -76,7 +76,7 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
     }
     const lessonKeysAdditionalMaterials = Object.keys(lesson.additionalMaterials[0]);
 
-    console.log('lessonKeysAdditionalMaterials1:', lessonKeysAdditionalMaterials);
+    // console.log('lessonKeysAdditionalMaterials1:', lessonKeysAdditionalMaterials);
     const lessonAddMaterialsHaveKeys = expectedKeys2.every((key) => lessonKeysAdditionalMaterials.includes(key));
     if (!lessonAddMaterialsHaveKeys) {
       console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson additionalMaterials array with missing keys.`);
