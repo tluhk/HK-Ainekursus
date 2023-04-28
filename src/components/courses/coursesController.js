@@ -209,9 +209,9 @@ const allCoursesController = {
     const allCourses = await getAllCoursesData(teamSlug, req);
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
-    console.log('allCourses5:', allCourses);
+    // console.log('allCourses5:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    console.log('allCoursesActive5:', allCoursesActive);
+    // console.log('allCoursesActive5:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
