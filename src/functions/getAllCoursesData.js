@@ -107,14 +107,14 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
   });
 
 const getAllCoursesData = (async (teamSlug, req) => {
-  console.log('teamSlug4:', teamSlug);
+  // console.log('teamSlug4:', teamSlug);
   /**
    * Read Course repos only if the user exists, they are in a team and team.slug exists!
    * Otherwise load courses array as empty (no courses to show).
    */
   const { user } = req;
 
-  console.log('user55:', user);
+  // console.log('user55:', user);
 
   let courses = { data: [] };
   const routePath = `allCoursesData+${teamSlug}`;
@@ -153,7 +153,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
    */
   if (!coursesStartingWithHK) return [];
 
-  console.log('coursesStartingWithHK:', coursesStartingWithHK);
+  // console.log('coursesStartingWithHK:', coursesStartingWithHK);
 
   const allCourses = coursesStartingWithHK.map(async (course) => {
     // const start5 = performance.now();
