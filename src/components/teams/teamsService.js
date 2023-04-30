@@ -3,8 +3,8 @@
 
 import axios from 'axios';
 
-import githubTeamsRequests from '../../functions/githubTeamsRequests';
-import { authToken } from '../../setup/setupGithub';
+import githubTeamsRequests from '../../functions/githubTeamsRequests.js';
+import { authToken } from '../../setup/setupGithub.js';
 
 const { requestTeams, requestTeamMembers } = githubTeamsRequests;
 

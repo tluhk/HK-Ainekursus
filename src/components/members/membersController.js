@@ -1,4 +1,4 @@
-import apiRequests from './membersService';
+import apiRequests from './membersService.js';
 
 const membersController = {
 

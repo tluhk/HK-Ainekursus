@@ -3,12 +3,12 @@ import { jsonrepair } from 'jsonrepair';
 import base64 from 'base-64';
 
 import utf8 from 'utf8';
-import { axios, authToken } from '../setup/setupGithub';
+import { axios, authToken } from '../setup/setupGithub.js';
 
-import cache from '../setup/setupCache';
+import cache from '../setup/setupCache.js';
 
 // Import request functions for Axios
-import githubReposRequests from './githubReposRequests';
+import githubReposRequests from './githubReposRequests.js';
 
 const { requestConfig } = githubReposRequests;
 

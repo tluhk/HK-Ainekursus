@@ -1,20 +1,20 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
-import 'core-js/actual/array/group-by';
+import 'core-js/actual/array/group-by.js';
 
 import { performance } from 'perf_hooks';
-import { base64, utf8, markdown } from '../../setup/setupMarkdown';
+import { base64, utf8, markdown } from '../../setup/setupMarkdown.js';
 
 // Enable in-memory cache
-import getAllCoursesData from '../../functions/getAllCoursesData';
+import getAllCoursesData from '../../functions/getAllCoursesData.js';
 
-import getConfig from '../../functions/getConfigFuncs';
-import { function1 } from '../../functions/imgFunctions';
-import { returnPreviousPage, returnNextPage, setCourseButtonPaths } from '../../functions/navButtonFunctions';
-import apiRequests from './coursesService';
-import teamsController from '../teams/teamsController';
-import allNotificationsController from '../notifications/notificationsController';
-import getMarkedAsDoneComponents from '../../functions/getListOfDoneComponentUUIDs';
+import getConfig from '../../functions/getConfigFuncs.js';
+import { function1 } from '../../functions/imgFunctions.js';
+import { returnPreviousPage, returnNextPage, setCourseButtonPaths } from '../../functions/navButtonFunctions.js';
+import apiRequests from './coursesService.js';
+import teamsController from '../teams/teamsController.js';
+import allNotificationsController from '../notifications/notificationsController.js';
+import getMarkedAsDoneComponents from '../../functions/getListOfDoneComponentUUIDs.js';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from Github, by doing Axios requests via apiRequests[githubRequest] statement.

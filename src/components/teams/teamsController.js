@@ -1,11 +1,11 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable max-len */
-import pool from '../../../db';
+import pool from '../../../db.js';
 
-import apiRequests from './teamsService';
+import apiRequests from './teamsService.js';
 
-import cache from '../../setup/setupCache';
+import cache from '../../setup/setupCache.js';
 
 const teamsController = {
   getAllValidTeams: async () => {

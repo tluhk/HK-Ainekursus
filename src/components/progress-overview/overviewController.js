@@ -1,8 +1,8 @@
 import { performance } from 'perf_hooks';
 
-import getAllCoursesData from '../../functions/getAllCoursesData';
-import getMarkedAsDoneComponents from '../../functions/getListOfDoneComponentUUIDs';
-import teamsController from '../teams/teamsController';
+import getAllCoursesData from '../../functions/getAllCoursesData.js';
+import getMarkedAsDoneComponents from '../../functions/getListOfDoneComponentUUIDs.js';
+import teamsController from '../teams/teamsController.js';
 
 /* eslint-disable max-len */
 const allOverviewController = {

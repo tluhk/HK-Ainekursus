@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import axios from 'axios';
 
-import cache from '../setup/setupCache';
-import githubReposRequests from './githubReposRequests';
-import { authToken } from '../setup/setupGithub';
+import cache from '../setup/setupCache.js';
+import githubReposRequests from './githubReposRequests.js';
+import { authToken } from '../setup/setupGithub.js';
 
 const { requestImgURL } = githubReposRequests;
 

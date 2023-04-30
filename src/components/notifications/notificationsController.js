@@ -1,8 +1,8 @@
 import { performance } from 'perf_hooks';
 
-import getAllCoursesData from '../../functions/getAllCoursesData';
-import apiRequestsCommits from '../commits/commitsService';
-import teamsController from '../teams/teamsController';
+import getAllCoursesData from '../../functions/getAllCoursesData.js';
+import apiRequestsCommits from '../commits/commitsService.js';
+import teamsController from '../teams/teamsController.js';
 
 /* eslint-disable max-len */
 const allNotificationsController = {

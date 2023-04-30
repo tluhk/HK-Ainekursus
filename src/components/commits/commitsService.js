@@ -2,9 +2,9 @@
 
 import axios from 'axios';
 
-import cache from '../../setup/setupCache';
-import { authToken } from '../../setup/setupGithub';
-import githubCommitsRequests from '../../functions/githubCommitsRequests';
+import cache from '../../setup/setupCache.js';
+import { authToken } from '../../setup/setupGithub.js';
+import githubCommitsRequests from '../../functions/githubCommitsRequests.js';
 
 const { requestCommits, requestCommitComments } = githubCommitsRequests;
 

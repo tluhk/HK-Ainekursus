@@ -4,11 +4,11 @@ import { performance } from 'perf_hooks';
 
 import cheerio from 'cheerio';
 
-import { axios, authToken } from '../setup/setupGithub';
-import cache from '../setup/setupCache';
-import githubReposRequests from './githubReposRequests';
-import getConfig from './getConfigFuncs';
-import apiRequests from '../components/courses/coursesService';
+import { axios, authToken } from '../setup/setupGithub.js';
+import cache from '../setup/setupCache.js';
+import githubReposRequests from './githubReposRequests.js';
+import getConfig from './getConfigFuncs.js';
+import apiRequests from '../components/courses/coursesService.js';
 
 const { requestTeamCourses, requestRepos } = githubReposRequests;
 

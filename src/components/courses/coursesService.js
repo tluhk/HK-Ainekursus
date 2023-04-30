@@ -3,12 +3,12 @@
 
 import axios from 'axios';
 
-import cache from '../../setup/setupCache';
+import cache from '../../setup/setupCache.js';
 
-import githubReposRequests from '../../functions/githubReposRequests';
+import githubReposRequests from '../../functions/githubReposRequests.js';
 
-import { authToken } from '../../setup/setupGithub';
-import getConfig from '../../functions/getConfigFuncs';
+import { authToken } from '../../setup/setupGithub.js';
+import getConfig from '../../functions/getConfigFuncs.js';
 
 const {
   requestDocs,

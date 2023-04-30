@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 
-import githubAuthRequests from '../../functions/githubAuthRequests';
-import { authToken } from '../../setup/setupGithub';
+import githubAuthRequests from '../../functions/githubAuthRequests.js';
+import { authToken } from '../../setup/setupGithub.js';
 
 const { searchUsers, getUser } = githubAuthRequests;
 
