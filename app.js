@@ -21,8 +21,8 @@ import pkg from 'body-parser';
 import dotenv from 'dotenv';
 
 import { fileURLToPath } from 'url';
-import pool from './db';
-import cache from './src/setup/setupCache';
+import pool from './db.js';
+import cache from './src/setup/setupCache.js';
 
 import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController';
 import otherController from './src/components/other/otherController';
