@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "bash setup-docker.sh && npm run start-app",
-    "start-app": "nodemon --ext js,mjs,json,css,handlebars --experimental-loader ./loader.js app.js",
+    "start-app": "nodemon --ext js,mjs,json,css,handlebars --es-module-specifier-resolution=node app.js",
     "build-css": "tailwindcss -i ./src/main.css -o ./public/css/main.css",
     "lint": "eslint"
   },
