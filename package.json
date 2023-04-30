@@ -11,8 +11,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "bash setup-docker.sh && npm run start-app",
     "start-app": "nodemon --ext js,mjs,json,css,handlebars --es-module-specifier-resolution=node app.js",
-    "build-css": "tailwindcss -i ./src/main.css -o ./public/css/main.css",
-    "lint": "eslint"
+    "lint": "eslint",
+    "pull-tokens": "node src/tokens/pulltokens.cjs",
+    "build-transform-global": "npx token-transformer src/tokens/figma-tokens.json src/tokens/converted-tokens/global.json global",
+    "build-transform-light": "npx token-transformer src/tokens/figma-tokens.json src/tokens/converted-tokens/light.json global,light,theme global",
+    "build-transform-dark": "npx token-transformer src/tokens/figma-tokens.json src/tokens/converted-tokens/dark.json global,dark,theme global",
+    "build-transform": "npm run pull-tokens && npm run build-transform-global && npm run build-transform-light && npm run build-transform-dark",
+    "build-sd": "node src/tokens/build.cjs && node src/tokens/updateclean.cjs"
   },
   "repository": {
     "type": "git",
@@ -95,12 +100,16 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
+    "child_process": "^1.0.2",
     "eslint": "^8.23.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
+    "fs": "^0.0.1-security",
     "jquery-iframe-auto-height": "^2.0.0",
     "nodemon": "^2.0.20",
+    "path": "^0.12.7",
     "postcss": "^8.4.18",
-    "postcss-import": "^15.0.0"
+    "postcss-import": "^15.0.0",
+    "style-dictionary": "^3.8.0"
   }
 }
