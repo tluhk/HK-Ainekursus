@@ -55,7 +55,10 @@ Järgmine muutuja on Passporti sessiooni parool. Võid selle ise määrata, peaa
 PASSPORT_SESSION_SECRET=''
 ```
 
-Järgnevad 3 muutujat leiad tluhk organisatsiooni Githubi kontolt: Settings -> Developer settings -> OAuth Apps -> Haapsalu kolledži e-õppe keskkond. [Otselink](https://github.com/organizations/tluhk/settings/applications/2100214).
+Järgnevad 3 muutujat leiad tluhk organisatsiooni Githubi kontoga seotud OAuth Apps-ide alt: Settings -> Developer settings -> OAuth Apps. [Otselink](https://github.com/organizations/tluhk/settings/applications).
+Kui sa jooksutad rakendust localhostis (test-keskkonnas), siis kasuta andmeid "Development" app'ist ([link](https://github.com/organizations/tluhk/settings/applications/2100214)).
+Kui sa jooksutad rakendust serveris (live-keskkonnas), siis kasuta andmeid mitte-developmenti app'ist ([link](https://github.com/organizations/tluhk/settings/applications/2184113)).
+
 ```
 GITHUB_CLIENT_ID=''
 GITHUB_CLIENT_SECRET=''
@@ -138,7 +141,7 @@ Githubiga ühenduse loomiseks on vajalik Githubi tokeni loomine ja selle lisamin
    AUTH = 'Bearer ghp_SINUGITHUBITOKEN'
    ```
 
-### Rakenduse käivitamine
+### Rakenduse käivitamine lokaalselt (test-keskkonnas)
 
 Rakenduse käivitamiseks läbi Dockeri (koos andmebaasiga) kasuta käsku:
 
@@ -153,6 +156,33 @@ npm run start-app
 ```
 
 Rakendus hakkab tööle lokaalses serveris: [localhost:3000](http://localhost:3000).
+
+### Rakenduse käivitamine serveris (live-keskkonnas)
+
+Sisene Tigu serverisse läbi ssh. Sealt edasi sisene ainekursus.kolledz serverisse läbi ssh.
+
+```
+ssh kasutajanimi@tigu.hk.tlu.ee
+ssh ainekursus.kolledz
+```
+
+ainekursus.kolledz serveris mine rakenduse kausta
+```
+cd rif20-valikpraktika-1
+```
+
+Tõmba rakenduse viimane versioon main branchist
+```
+git checkout main
+git pull
+```
+
+Käivita rakendus (sisaldab Dockerit koos andmebaasiga)
+```
+npm start
+```
+
+Rakendus hakkab tööle avalikus serveris: [213.180.26.248](http://213.180.26.248). Ligi pääseb ka aadressiga [http://ainekursus.hk.tlu.ee](http://ainekursus.hk.tlu.ee).
 
 
 ## Ainekursuste lisamine rakendusse
