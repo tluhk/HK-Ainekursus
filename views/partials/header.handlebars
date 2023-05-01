@@ -27,7 +27,7 @@
     </div>
   {{/if}}
   <div
-    class='closing-menu flex flex-col lg:flex-row items-end absolute lg:relative w-full lg:w-auto left-0 pr-8 lg:pr-0 pb-8 lg:pb-0 bg-neutral top-[-350px] lg:!top-0 transition-all'
+    class='closing-menu flex flex-col lg:flex-row items-center absolute lg:relative w-full lg:w-auto left-0 pr-8 lg:pr-0 pb-8 lg:pb-0 bg-neutral top-[-350px] lg:!top-0 transition-all'
   >
     <span
       onclick='closeMenu()'
@@ -35,24 +35,29 @@
     >
       close
     </span>
-    <div class="flex flex-row gap-4 items-start">
+    <div class="flex flex-row gap-4 items-center">
       {{#if user}}
         <div>
-          <img src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
+          <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
         </div>
       {{/if}}
 
-      <div class="flex flex-col justify-items-start">
+      <div class="flex flex-col group relative">
         {{#if user}}
-          <ul>
+          <div class="z-[51]">
+            {{#if user.displayName}}
+              {{ user.displayName }}
+            {{else }}
+              {{ user.username }}
+            {{/if }}
+          </div>
+          <ul class="hidden absolute group-hover:block z-50 list-none bg-neutral p-4 pt-12 right-[-1rem] text-end w-max">
+            
+            <li><a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda nime</span></a></li>
             <li>GitHubi ID: {{ user.id }}</li>
             <li>GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
             <li>Tiim: {{ user.team.name }}</li>
-            {{#if user.displayName}}
-              <li>Profiilinimi: {{ user.displayName }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
-            {{else }}
-              <li>Profiilinimi: {{ user.username }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
-            {{/if }}
+
             {{#if_equal user.team.slug 'teachers'}}
               {{#if ../user.email}}
                 <li>Email: {{ ../../user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
@@ -60,8 +65,13 @@
                 <li><a href="/save-email" class="!text-white">Lisa email</a></li>
               {{/if }}
             {{/if_equal}}
-          </ul>
+          
         {{/if}}
+
+              {{#if user}}
+                <li><a href="/logout" class="!text-white">Logi välja</a></li>
+              {{/if}}
+        </ul>
 
         {{!-- 
         {{#unless user}}
@@ -144,9 +154,7 @@
         {{/unless}}
         --}}
         
-        {{#if user}}
-          <a href="/logout" class="!text-white">Logi välja</a>
-        {{/if}}
+        
       </div>
     </div>
       <!-- google otsing -->
