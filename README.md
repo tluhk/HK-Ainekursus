@@ -159,25 +159,25 @@ Rakendus hakkab tööle lokaalses serveris: [localhost:3000](http://localhost:30
 
 ### Rakenduse käivitamine serveris (live-keskkonnas)
 
-Sisene Tigu serverisse läbi ssh. Sealt edasi sisene ainekursus.kolledz serverisse läbi ssh.
+Sisene Tigu serverisse läbi ssh. Sealt edasi sisene ainekursus.kolledz serverisse läbi ssh:
 
 ```
 ssh kasutajanimi@tigu.hk.tlu.ee
 ssh ainekursus.kolledz
 ```
 
-ainekursus.kolledz serveris mine rakenduse kausta
+ainekursus.kolledz serveris mine rakenduse kausta:
 ```
 cd rif20-valikpraktika-1
 ```
 
-Tõmba rakenduse viimane versioon main branchist
+Tõmba rakenduse viimane versioon main branchist:
 ```
 git checkout main
 git pull
 ```
 
-Käivita rakendus (sisaldab Dockerit koos andmebaasiga)
+Käivita rakendus (sisaldab Dockerit koos andmebaasiga):
 ```
 npm start
 ```
