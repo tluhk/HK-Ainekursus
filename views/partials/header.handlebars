@@ -54,8 +54,8 @@
               <li>Profiilinimi: {{ user.username }} <a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
             {{/if }}
             {{#if_equal user.team.slug 'teachers'}}
-              {{#if user.email}}
-                <li>Email: {{ user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
+              {{#if ../user.email}}
+                <li>Email: {{ ../../user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
               {{else }}
                 <li><a href="/save-email" class="!text-white">Lisa email</a></li>
               {{/if }}

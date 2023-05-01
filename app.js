@@ -728,7 +728,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      console.log('Connected to MariaDB!');
+      console.log('Connected to MariaDB 8!');
 
       const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
       // console.log('res1:', res1);
@@ -737,7 +737,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       // Flush all cache so that user's name would be shown correctly across app.
       cache.flushAll();
     } catch (err) {
-      console.log('Unable to connect to MariaDB');
+      console.log('Unable to update user displayName');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
@@ -792,22 +792,30 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
     return res.redirect('/save-email?email=true');
   }
 
-  let conn;
-  try {
-    conn = await pool.getConnection();
+  console.log('req.body.email1:', req.body.email);
+  console.log('user.id1:', user.id);
+  console.log('user:', user);
 
-    const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
-    console.log('res2:', res2);
-    req.user.email = req.body.email;
+  if (req.body.email) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      console.log('Connected to MariaDB 9!');
 
-    // Flush all cache so that user's email would be shown correctly across app.
-    cache.flushAll();
-  } catch (err) {
-    console.error(err);
-  } finally {
-    if (conn) conn.release(); // release to pool
+      const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+      console.log('res2:', res2);
+      req.user.email = req.body.email;
+
+      // Flush all cache so that user's email would be shown correctly across app.
+      cache.flushAll();
+    } catch (err) {
+      console.log('Unable to update user email');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
   }
-  // console.log('req.user1:', req.user);
+  console.log('req.user1:', req.user);
   // console.log('user.id1:', user.id);
   // console.log('req.body.email1:', req.body.email);
 
