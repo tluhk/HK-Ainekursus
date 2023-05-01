@@ -2,8 +2,7 @@
 
 TLU HK RIF20 Valikpraktika raames loodud rakendus ainekursuste haldamiseks läbi giti ja kuvamiseks eesrakenduses.
 
-## <a href="https://rif.up.railway.app" target="_blank">Rakenduse demoversioon "lives"</a>
-
+## Rakenduse liveversioon: [http://ainekursus.hk.tlu.ee](http://ainekursus.hk.tlu.ee)
 
 ## Rakenduse käivitamine
 
