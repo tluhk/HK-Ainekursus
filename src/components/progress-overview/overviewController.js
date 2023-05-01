@@ -258,13 +258,16 @@ const allOverviewController = {
     /* Sort users by displayName */
     usersData.sort((a, b) => a.displayName.localeCompare(b.displayName));
 
-    console.log('usersData2:', usersData);
+    // console.log('usersData2:', usersData);
+    // console.log('courseSlugData2:', courseSlugData);
+    // console.log('usersInTeachersTeam2:', usersInTeachersTeam);
 
     return res.render('overview-stats', {
       user: req.user,
       courseData: courseSlugData,
       team,
       usersData,
+      teachers: usersInTeachersTeam
     });
   },
 };

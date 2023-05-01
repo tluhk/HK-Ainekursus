@@ -46,11 +46,12 @@
                overview-{{../../this.slug}}-{{this.courseSlug}} --}}
                 <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4 ml-4' onclick="handleCourseClick('{{../../this.slug}}', '{{this.courseSlug}}')" >
                   <div><span class='text-md font-bold mb-2 uppercase'>{{this.courseName}}</span>
-                  <span class="bg-blue-100 text-blue-800 text-sm pl-3 font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{this.refBranch}} haru</span></div>
+                  </div>
                     <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
                       <p class="m-0 p-0">{{this.courseCode}}</p>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{this.refBranch}} haru</p>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
-                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize this.courseGrading}}</p>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../../teachers)}}{{this.displayName}}{{/with }}</p>
                     </div>

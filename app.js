@@ -728,7 +728,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      console.log('Connected to MariaDB 8!');
+      // console.log('Connected to MariaDB 8!');
 
       const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
       // console.log('res1:', res1);
@@ -792,18 +792,18 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
     return res.redirect('/save-email?email=true');
   }
 
-  console.log('req.body.email1:', req.body.email);
-  console.log('user.id1:', user.id);
-  console.log('user:', user);
+  // console.log('req.body.email1:', req.body.email);
+  // console.log('user.id1:', user.id);
+  // console.log('user:', user);
 
   if (req.body.email) {
     let conn;
     try {
       conn = await pool.getConnection();
-      console.log('Connected to MariaDB 9!');
+      // console.log('Connected to MariaDB 9!');
 
       const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
-      console.log('res2:', res2);
+      // console.log('res2:', res2);
       req.user.email = req.body.email;
 
       // Flush all cache so that user's email would be shown correctly across app.
@@ -815,7 +815,7 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
       if (conn) conn.release(); // release to pool
     }
   }
-  console.log('req.user1:', req.user);
+  // console.log('req.user1:', req.user);
   // console.log('user.id1:', user.id);
   // console.log('req.body.email1:', req.body.email);
 
