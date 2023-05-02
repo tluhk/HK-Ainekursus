@@ -25,7 +25,6 @@ const responseAction = async (req, res, next) => {
   const {
     githubRequest,
   } = res.locals;
-  console.log();
 
   let apiResponse;
   // eslint-disable-next-line no-prototype-builtins
@@ -586,14 +585,14 @@ const allCoursesController = {
       console.error(error);
     }
 
-    /* console.log('courseSlug1:', courseSlug);
-    console.log('contentSlug1:', contentSlug);
-    console.log('componentSlug1:', componentSlug);
-    console.log('ref1:', ref);
-    console.log('req.user.team.slug1:', req.user.team.slug);
-    console.log('selectedVersion4:', selectedVersion);
-    console.log('validBranches4:', validBranches);
-    console.log('teamSlug:4', teamSlug); */
+    // console.log('courseSlug1:', courseSlug);
+    // console.log('contentSlug1:', contentSlug);
+    // console.log('componentSlug1:', componentSlug);
+    // console.log('ref1:', ref);
+    // console.log('req.user.team.slug1:', req.user.team.slug);
+    // console.log('selectedVersion4:', selectedVersion);
+    // console.log('validBranches4:', validBranches);
+    // console.log('teamSlug:4', teamSlug);
 
     /**
      * KURSUSE ÕIGE VERSIOONI NÄITAMISE LOOGIKA:
@@ -624,7 +623,7 @@ const allCoursesController = {
         return config;
       });
       const validBranchConfigs = await Promise.all(validBranchConfigPromises);
-      console.log('validBranchConfigs1:', validBranchConfigs);
+      // console.log('validBranchConfigs1:', validBranchConfigs);
 
       if (allTeachers.find((teacher) => teacher.login === req.user.username)) {
         const correctBranchIndex = validBranchConfigs.findIndex((config) => config.teacherUsername === req.user.username);
@@ -669,7 +668,7 @@ const allCoursesController = {
        * If config file is not returned with course.coursePathInGithub, the coursePathInGithub is invalid. User tried to access an invalid URL.
        * Redirect to /notfound page
        */
-      console.log('no config found');
+      console.log('No config found with getConfig function when loading course page. Rerouting to /notfound.');
       return res.redirect('/notfound');
     }
 
@@ -791,15 +790,15 @@ const allCoursesController = {
 
     /** You can check all relevant values about current endpoint:
     */
-    /* console.log('courseSlug1:', courseSlug);
-    console.log('course.courseName1:', course.courseName);
-    console.log('contentSlug1:', contentSlug);
-    console.log('contentName1:', contentName);
-    console.log('contentUUID1:', contentUUID);
-    console.log('componentSlug1:', componentSlug);
-    console.log('componentName1:', componentName);
-    console.log('componentUUID1:', componentUUID);
-    console.log('githubRequest1:', githubRequest); */
+    // console.log('courseSlug1:', courseSlug);
+    // console.log('course.courseName1:', course.courseName);
+    // console.log('contentSlug1:', contentSlug);
+    // console.log('contentName1:', contentName);
+    // console.log('contentUUID1:', contentUUID);
+    // console.log('componentSlug1:', componentSlug);
+    // console.log('componentName1:', componentName);
+    // console.log('componentUUID1:', componentUUID);
+    // console.log('githubRequest1:', githubRequest);
 
     /**
      * IF contentSlug exists, but contentName is NOT returned from config file.

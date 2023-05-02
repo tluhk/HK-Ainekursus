@@ -133,7 +133,7 @@ const teamsController = {
           // console.log('response3:', response);
           // console.log('users[index]3:', users[index]);
         } catch (err) {
-          console.log('getUsersInTeam error:');
+          console.log('Unable to get user info from database');
           console.error(err);
         } finally {
           if (conn) conn.release(); // release to pool

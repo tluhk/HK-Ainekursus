@@ -93,8 +93,8 @@ const allOverviewController = {
     const teamsCoursesSorted = Object.keys(teamsCourses)
       .sort()
       .reduce((acc, team) => {
-        console.log('team3:', team);
-        console.log('teamsCourses[team]3:', teamsCourses[team]);
+        // console.log('team3:', team);
+        // console.log('teamsCourses[team]3:', teamsCourses[team]);
         if (teamsCourses[team].length > 0) acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
         return acc;
       }, {});

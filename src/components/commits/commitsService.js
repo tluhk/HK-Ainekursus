@@ -14,7 +14,7 @@ const { requestCommits, requestCommitComments } = githubCommitsRequests;
 const apiRequestsCommits = {
   /** Get commits from selected course and selected branch */
   commitsService: async (coursePathInGithub, refBranch) => {
-    console.log('refBranch8:', refBranch);
+    // console.log('refBranch8:', refBranch);
 
     const routePath = `${coursePathInGithub}+${refBranch}+commits`;
 

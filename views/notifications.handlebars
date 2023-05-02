@@ -19,7 +19,7 @@
                 {{#each courseUpdates30Days }} 
                   <div>
                     <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
-                    {{#if_equal this.user.team.slug 'teachers' }}
+                    {{#if_equal ../this.user.team.slug 'teachers' }}
                       <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0"><b>{{#with (findTeacher ../this.user.displayName ../../teachers)}}{{this.displayName}}{{/with }}</b> uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{../this.course.courseName}}</b></a> {{../this.course.refBranch}} haru: <br></p></div>
                     {{else }}
                       <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0"><b>{{#with (findTeacher ../this.user.displayName ../../teachers)}}{{this.displayName}}{{/with }}</b> uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{../this.course.courseName}}</b></a> {{!-- {{this.course.refBranch}} haru --}}:<br></p></div>

@@ -82,9 +82,9 @@ const apiRequests = {
 
       validBranches = validBranchesRaw.map((x) => x[0]);
 
-      console.log('coursePathInGithub1:', coursePathInGithub);
+      // console.log('coursePathInGithub1:', coursePathInGithub);
       // console.log('validBranchesRaw0:', validBranchesRaw);
-      console.log('validBranches0:', validBranches);
+      // console.log('validBranches0:', validBranches);
 
       cache.set(routePath, validBranches);
     } else {
@@ -263,7 +263,7 @@ const apiRequests = {
       refBranch,
     } = res.locals;
 
-    console.log('refBranch9:', refBranch);
+    // console.log('refBranch9:', refBranch);
 
     const routePath = `${req.url}+${refBranch}+components`;
     const routePathSources = `${req.url}+${refBranch}+sources`;
@@ -281,7 +281,7 @@ const apiRequests = {
         try {
           componentsRaw = await axios.get(requestConcepts(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
         } catch (error) {
-          console.log('Unable to get componentsRar');
+          console.log('Unable to get componentsRaw');
           console.error(error);
         }
         try {
@@ -291,8 +291,8 @@ const apiRequests = {
           console.error(error);
         }
 
-        console.log('componentsRaw4:', componentsRaw);
-        console.log('sourcesRaw4:', sourcesRaw);
+        // console.log('componentsRaw4:', componentsRaw);
+        // console.log('sourcesRaw4:', sourcesRaw);
 
         await axios
           .all([componentsRaw, sourcesRaw])

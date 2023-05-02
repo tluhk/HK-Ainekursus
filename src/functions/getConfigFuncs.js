@@ -13,8 +13,8 @@ import githubReposRequests from './githubReposRequests.js';
 const { requestConfig } = githubReposRequests;
 
 const getRepoResponse = async (selectedCourse, refBranch) => {
-  console.log('selectedCourse2:', selectedCourse);
-  console.log('refBranch2:', refBranch);
+  // console.log('selectedCourse2:', selectedCourse);
+  // console.log('refBranch2:', refBranch);
   let response = '';
   try {
     response = await axios.get(requestConfig(selectedCourse, refBranch), authToken);

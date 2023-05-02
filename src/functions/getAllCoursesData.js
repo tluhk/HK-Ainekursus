@@ -161,8 +161,8 @@ const getAllCoursesData = (async (teamSlug, req) => {
     // const end5 = performance.now();
     // console.log(`Execution time validBranches: ${end5 - start5} ms`);
 
-    console.log('course.full_name4:', course.full_name);
-    console.log('validBranches4:', validBranches);
+    // console.log('course.full_name4:', course.full_name);
+    // console.log('validBranches4:', validBranches);
     let refBranch;
     if (validBranches && validBranches.includes(teamSlug)) {
       refBranch = teamSlug;
@@ -170,11 +170,11 @@ const getAllCoursesData = (async (teamSlug, req) => {
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
       const branchConfigPromises = validBranches.map(async (branch) => {
         const config = await getConfig(course.full_name, branch);
-        console.log('config4:', config);
+        // console.log('config4:', config);
         if (config) return config;
       });
       const branchConfigs = await Promise.all(branchConfigPromises);
-      console.log('branchConfigs1:', branchConfigs);
+      // console.log('branchConfigs1:', branchConfigs);
 
       const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === user.username);
 
@@ -190,7 +190,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
     } else {
       refBranch = 'master';
     }
-    console.log('refBranch4:', refBranch);
+    // console.log('refBranch4:', refBranch);
 
     /** Get selected course info from ÕIS Ainekaart with coursePromise() func. */
     const courseDataWithOIS = await coursePromise(course, refBranch, validBranches);
