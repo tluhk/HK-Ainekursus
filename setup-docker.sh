@@ -7,8 +7,8 @@ set -e
 export $(grep -v '^#' .env | grep -E 'MYSQL_ROOT_PASSWORD' | xargs)
 
 # Remove containers
-echo "Stop and remove haapsalu-app container. Keep haapsalu-mariadb container if it already exists..." 2>&1
-docker rm -f haapsalu-app
+echo "Stop and remove containers..." 2>&1
+docker rm -f haapsalu-app haapsalu-mariadb
 
 # Delete Docker image
 echo "Deleting Docker image..." 2>&1
