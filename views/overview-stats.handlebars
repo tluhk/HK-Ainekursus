@@ -1,5 +1,5 @@
-<div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
-  <main id="main-content" class="w-full px-4 py-16 dashboard_content">
+<div class="flex flex-row grow 2xl:justify-between ">
+  <main id="main-content" class="w-full px-4 py-16">
     
     <div class="flex flex-col flex-nowrap grow justify-between">
       {{#unless user }}  
@@ -7,6 +7,7 @@
       {{/unless }}
 
       {{#if user }}
+      <div class=" dashboard_content">
         <div class="flex flex-row justify-start gap-x-4">
           <form method="POST" action="/progress-overview" name="displayByTeams" id="displayByTeams">
             <!-- Hidden form inputs to send req.body values -->
@@ -33,23 +34,26 @@
           <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{courseData.courseSemester}}</p>
           <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher courseData.teacherUsername teachers)}}{{this.displayName}}{{/with }}</p>
         </div>
-
-        <div class="overflow-x-auto w-full ">
-          <table class="table-fixed border-separate border border-slate-400 pt-4">
-            <col>
+        </div>
+        <div>
+        <div>
+          <table class="">
+            
+            
               {{#each courseData.config.lessons }}
                 <colgroup span="{{this.components.length}}"></colgroup>
               {{/each }}
-            <tr>
-              <td rowspan="2"></td>
-              {{#each courseData.config.lessons }}
-                <th class="border border-slate-300 p-4" colspan="{{this.components.length}}" scope="colgroup"><a href="/course/{{../courseData.courseSlug}}/{{this.slug}}?ref={{../courseData.refBranch}}">{{this.name}}</a></th>
-              {{/each }}
-            </tr>
-            <tr>
+            <thead class=" sticky top-0 bg-white z-10">
+              <tr>
+                <td class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px] sticky left-0 bg-white" rowspan="2"></td>
+                {{#each courseData.config.lessons }}
+                  <th class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px] p-4" colspan="{{this.components.length}}" scope="colgroup"><a href="/course/{{../courseData.courseSlug}}/{{this.slug}}?ref={{../courseData.refBranch}}">{{this.name}}</a></th>
+                {{/each }}
+              </tr> 
+            <tr class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px] ">
               {{#each courseData.config.lessons }}
                 {{#each this.components}}
-                  <th class="border border-slate-300 p-4" scope="col">
+                  <th class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px] p-4" scope="col">
                   {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}
                     <a href="/course/{{../../../courseData.courseSlug}}/{{../../this.slug}}/{{../this}}?ref={{../../../courseData.refBranch}}">{{this}}</a>
                   {{/with}} {{!--  –
@@ -60,27 +64,32 @@
                 {{/each }}
               {{/each }}
             </tr>
+
+            </thead> 
+            <tbody>
             {{#each usersData}}
               <tr>
-                <th class="border border-slate-300 px-4 py-3" scope="row">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</th>
+                <th class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px]  px-4 py-3 sticky left-0 bg-secondary-200" scope="row">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</th>
                 {{#each ../courseData.config.lessons }}
                   {{#each this.components}}
                     {{#ifInMarkedComponents (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices) ../../this.markedAsDoneComponents}}
-                      <td class="border border-slate-300 text-center px-4 py-3"><span class="material-symbols-outlined bg-green-100">task_alt</span></td>
+                      <td class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px]  text-center px-4 py-3"><span class="material-symbols-outlined bg-green-100">task_alt</span></td>
                     {{else}}
-                      <td class="border border-slate-300 text-center px-4 py-3">-</td>
+                      <td class="outline outline-1 outline-neutral-500 outline-offset-[-0.5px]  text-center px-4 py-3">-</td>
                     {{/ifInMarkedComponents}}
                   {{/each }}
                 {{/each }}
               </tr>
             {{/each }}
-          
+            </tbody>
           </table>
-        </div>
+        </div> 
+        </div> 
+        
 
       {{/if }}
     </div>
-
+    
   </main>
 
 </div>

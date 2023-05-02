@@ -1228,14 +1228,6 @@ input:checked ~ .tab-label {
   flex-grow: 1;
 }
 
-.table-fixed {
-  table-layout: fixed;
-}
-
-.border-separate {
-  border-collapse: separate;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -1325,10 +1317,6 @@ input:checked ~ .tab-label {
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
 
-.overflow-x-auto {
-  overflow-x: auto;
-}
-
 .overflow-x-hidden {
   overflow-x: hidden;
 }
@@ -1397,6 +1385,11 @@ input:checked ~ .tab-label {
 .bg-neutral-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(212 214 216 / var(--tw-bg-opacity));
+}
+
+.bg-secondary-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(231 229 228 / var(--tw-bg-opacity));
 }
 
 .bg-white {
@@ -1648,6 +1641,22 @@ input:checked ~ .tab-label {
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.outline {
+  outline-style: solid;
+}
+
+.outline-1 {
+  outline-width: 1px;
+}
+
+.outline-offset-\[-0\.5px\] {
+  outline-offset: -0.5px;
+}
+
+.outline-neutral-500 {
+  outline-color: #595F65;
 }
 
 .drop-shadow-2xl {
