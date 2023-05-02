@@ -9,7 +9,7 @@
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
         <div>
           <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
-          <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0"><b>{{this.user.displayName}}</b> uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{this.course.courseName}}</b></a> {{this.course.refBranch}} haru: <br></p></div>
+          <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0"><b>{{#with (findTeacher this.user.displayName ../teachers)}}{{this.displayName}}{{/with }}</b> uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{this.course.courseName}}</b></a> {{this.course.refBranch}} haru: <br></p></div>
           <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
         </div>
         {{#unless @last}}
