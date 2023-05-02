@@ -300,8 +300,8 @@ const apiRequests = {
             axios.spread((...responses) => {
               [components, sources] = responses;
 
-              console.log('components4:', components);
-              console.log('sources4:', sources);
+              // console.log('components4:', components);
+              // console.log('sources4:', sources);
               cache.set(routePath, components);
               cache.set(routePathSources, sources);
             }),

@@ -7,8 +7,9 @@ set -e
 export $(grep -v '^#' .env | grep -E 'MYSQL_ROOT_PASSWORD' | xargs)
 
 # Remove containers
-echo "Stop and remove containers..." 2>&1
-docker rm -f haapsalu-mariadb haapsalu-app
+echo "Stop and remove haapsalu-app container. Keep haapsalu-mariadb container if it already exists..." 2>&1
+docker rm -f haapsalu-app
+
 # Delete Docker image
 echo "Deleting Docker image..." 2>&1
 docker image rm -f haapsalu || (echo "Image haapsalu didn't exist so not removed."; exit 0)
@@ -40,17 +41,10 @@ echo "Logging haapsalu-mariadb..."
 docker logs haapsalu-mariadb
 sleep 60
 
-# Execute the commands inside the mariadb container
-echo "Mariadb containers..." 2>&1
-echo "$MYSQL_ROOT_PASSWORD" 2>&1
+# Create database inside the haapsalu mariadb- container's mysql server
+echo "Create database in haapsalu-mariadb container..."
 
-# Store haapsalu-mariadb container's IP address in a variable
-ip_address=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' haapsalu-mariadb)
-
-# Create database inside the container's mysql server
-echo "Create database..."
-
-docker exec haapsalu-mariadb mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -h haapsalu-mariadb -P 3306 -e "CREATE DATABASE \`course_management\`; USE \`course_management\`; CREATE TABLE \`users\` ( \`id\` INT NOT NULL AUTO_INCREMENT, \`githubID\` CHAR(12) NOT NULL DEFAULT '' UNIQUE, \`username\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', \`displayName\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, \`email\` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci, PRIMARY KEY (\`id\`) ); INSERT INTO \`users\` (\`githubID\`, \`username\`, \`displayName\`, \`email\`) VALUES ('1234', 'seppkh', NULL, NULL), ('62253084', 'seppkh', 'Krister Sepp', 'email@gmail.com'); CREATE TABLE \`users_progress\` (\`githubID\` CHAR(12) NOT NULL DEFAULT '',\`courseCode\` CHAR(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',\`markedAsDoneComponents\` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '{}');"
+docker exec haapsalu-mariadb mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -h haapsalu-mariadb -P 3306 -e "CREATE DATABASE IF NOT EXISTS \`course_management\`; USE \`course_management\`; CREATE TABLE IF NOT EXISTS \`users\` ( \`id\` INT NOT NULL AUTO_INCREMENT, \`githubID\` CHAR(12) NOT NULL DEFAULT '' UNIQUE, \`username\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', \`displayName\` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, \`email\` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci, PRIMARY KEY (\`id\`) ); CREATE TABLE IF NOT EXISTS \`users_progress\` (\`githubID\` CHAR(12) NOT NULL DEFAULT '',\`courseCode\` CHAR(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',\`markedAsDoneComponents\` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '{}');"
 
 # Wait for 30 seconds before starting containers again
 echo "Waiting for database to initialize..."

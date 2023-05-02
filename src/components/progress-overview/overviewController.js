@@ -28,11 +28,11 @@ const allOverviewController = {
     const displayBy = req.session.displayBy || 'teams';
     res.locals.displayBy = displayBy;
 
-    console.log('displayBy4:', displayBy);
-    console.log('team4:', team);
-    console.log('courseSlug4:', courseSlug);
-    console.log('courseSlugData4:', courseSlugData);
-    console.log('req.user44:', req.user);
+    // console.log('displayBy4:', displayBy);
+    // console.log('team4:', team);
+    // console.log('courseSlug4:', courseSlug);
+    // console.log('courseSlugData4:', courseSlugData);
+    // console.log('req.user44:', req.user);
 
     if (displayBy && team && !courseSlug) {
       return res.redirect('/progress-overview');
@@ -53,13 +53,13 @@ const allOverviewController = {
         /* If courseSlugDataRequested is not found, then user accessed /('/progress-overview/:team/:courseSlug with invalid team or courseSlug params. Route back to 7progress-overview page.
         * Else save courseSlugDataRequested to courseSlugData and load /progress-overview/:team/:courseSlug page.
         */
-        console.log('courseSlugDataRequested4:', courseSlugDataRequested);
+        // console.log('courseSlugDataRequested4:', courseSlugDataRequested);
         if (!courseSlugDataRequested) return res.redirect('/progress-overview');
         courseSlugData = courseSlugDataRequested;
       }
     }
     res.locals = { team, courseSlug, courseSlugData };
-    console.log('courseSlugData4:', courseSlugData);
+    // console.log('courseSlugData4:', courseSlugData);
 
     return allOverviewController.showProgress(req, res);
   },
@@ -88,8 +88,7 @@ const allOverviewController = {
 
     await Promise.all(teamsCoursesPromises);
 
-    console.log('teamsCourses3:', teamsCourses);
-
+    // console.log('teamsCourses3:', teamsCourses);
 
     const teamsCoursesSorted = Object.keys(teamsCourses)
       .sort()
@@ -116,7 +115,7 @@ const allOverviewController = {
     const end4 = performance.now();
     console.log(`Execution time teamsUsers: ${end4 - start4} ms`);
 
-    console.log('teamsUsers3:', teamsUsers);
+    // console.log('teamsUsers3:', teamsUsers);
 
     const teamsUsersSorted = Object.keys(teamsUsers)
       .sort()
@@ -166,7 +165,7 @@ const allOverviewController = {
         return acc;
       }, {});
 
-    console.log('teamsCoursesSorted3:', teamsCoursesSorted);
+    // console.log('teamsCoursesSorted3:', teamsCoursesSorted);
 
     const coursesWithTeams = [];
 
@@ -187,7 +186,7 @@ const allOverviewController = {
     coursesWithTeams.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
     console.log(coursesWithTeams);
-    console.log('coursesWithTeams3:', coursesWithTeams);
+    // console.log('coursesWithTeams3:', coursesWithTeams);
 
     /* Get all users in each team.
     * Use teams array where teachers team is included.
@@ -210,7 +209,7 @@ const allOverviewController = {
         acc[team] = teamsUsers[team].sort((a, b) => a.displayName.localeCompare(b.displayName));
         return acc;
       }, {});
-    console.log('teamsUsersSorted3:', teamsUsersSorted);
+    // console.log('teamsUsersSorted3:', teamsUsersSorted);
 
     return res.render('overview-courses', {
       user: req.user,
@@ -223,9 +222,9 @@ const allOverviewController = {
   },
   showProgress: async (req, res) => {
     const { team, courseSlug, courseSlugData } = res.locals;
-    console.log('team5:', team);
-    console.log('courseSlug5:', courseSlug);
-    console.log('courseSlugData5:', courseSlugData);
+    // console.log('team5:', team);
+    // console.log('courseSlug5:', courseSlug);
+    // console.log('courseSlugData5:', courseSlugData);
 
     const usersInTeam = await teamsController.getUsersInTeam(team);
     const usersInTeachersTeam = await teamsController.getUsersInTeam('teachers');
@@ -235,18 +234,19 @@ const allOverviewController = {
 
     // console.log('usersInTeam5:', usersInTeam);
     // console.log('usersInTeachersTeam5:', usersInTeachersTeam);
-    console.log('usersInTeamAndNotTeachers5:', usersInTeamAndNotInTeachers);
-    console.log('usersGithubIDsArray5:', usersGithubIDsArray);
+    // console.log('usersInTeamAndNotTeachers5:', usersInTeamAndNotInTeachers);
+    // console.log('usersGithubIDsArray5:', usersGithubIDsArray);
 
     let usersDataPromises;
     if (courseSlug && usersGithubIDsArray.length > 0) {
       usersDataPromises = usersInTeamAndNotInTeachers.map(async (user, index) => {
         // Connects to DB again for each user
         const markedAsDoneComponents = await getMarkedAsDoneComponents(user.id, courseSlug);
-        console.log('markedAsDoneComponents5:', markedAsDoneComponents);
-        console.log('usersInTeamAndNotInTeachers[index]5:', usersInTeamAndNotInTeachers[index]);
+        // console.log('user.login5:', user.login);
+        // console.log('markedAsDoneComponents5:', markedAsDoneComponents);
+        // console.log('usersInTeamAndNotInTeachers[index]5:', usersInTeamAndNotInTeachers[index]);
         usersInTeamAndNotInTeachers[index].markedAsDoneComponents = markedAsDoneComponents;
-        console.log('usersInTeamAndNotInTeachers[index]55:', usersInTeamAndNotInTeachers[index]);
+        // console.log('usersInTeamAndNotInTeachers[index]55:', usersInTeamAndNotInTeachers[index]);
         // usersData.push(usersInTeamAndNotInTeachers[index]);
         return usersInTeamAndNotInTeachers[index];
       });

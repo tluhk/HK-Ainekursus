@@ -137,6 +137,7 @@ const teamsController = {
           console.error(err);
         } finally {
           if (conn) conn.release(); // release to pool
+      
         }
 
         // console.log('response4:', response);

@@ -141,7 +141,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
   }
 
   if (!courses) return [];
-  console.log('courses1:', courses);
+  // console.log('courses1:', courses);
 
   /*
   * Filter only repos that start with "HK_" prefix.
