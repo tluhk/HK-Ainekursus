@@ -142,8 +142,8 @@ const allNotificationsController = {
      * Get notifications for all active courses
      */
     const { courseUpdates30Days, courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(allCoursesActive, allTeachers);
-    console.log('courseUpdates30Days4:', courseUpdates30Days);
-    console.log('courseUpdates7Days4:', courseUpdates7Days);
+    // console.log('courseUpdates30Days4:', courseUpdates30Days);
+    // console.log('courseUpdates7Days4:', courseUpdates7Days);
 
     return res.render('notifications', {
       courses: allCoursesActive,

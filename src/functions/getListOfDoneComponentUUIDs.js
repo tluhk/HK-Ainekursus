@@ -6,8 +6,8 @@ import pool from '../../db.js';
  * Parameters are user's githubID and course's slug. E.g. '24424256' and 'HKI6001.HK'.
  */
 const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
-  // console.log('githubID10:', githubID);
-  // console.log('courseSlug10:', courseSlug);
+  console.log('githubID10:', githubID);
+  console.log('courseSlug10:', courseSlug);
   let res10;
   let keysArray = [];
 
@@ -19,11 +19,14 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
       console.log('Connected to MariaDB 5!');
 
       res10 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      console.log('res10:', res10);
     } catch (err) {
       console.log('Unable to connect to MariaDB 5');
+      console.log('Unable to get marked as done components');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
+  
     }
     // console.log('res10:', res10);
     // console.log('typeof res10:', typeof res10);

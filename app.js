@@ -305,6 +305,7 @@ async function userDBFunction(userData) {
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
+
   }
   return true;
 }
@@ -606,6 +607,7 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
+  
     }
   }
 
@@ -623,6 +625,7 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
+
   }
 
   return res.redirect(nextPagePath);
@@ -662,6 +665,7 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
+  
     }
   }
 
@@ -679,6 +683,8 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
+
+
   }
 
   return res.redirect('back');
@@ -728,7 +734,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      // console.log('Connected to MariaDB 8!');
+      console.log('Connected to MariaDB!');
 
       const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
       // console.log('res1:', res1);
@@ -737,10 +743,12 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       // Flush all cache so that user's name would be shown correctly across app.
       cache.flushAll();
     } catch (err) {
-      console.log('Unable to update user displayName');
+      console.log('Unable to connect to MariaDB');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
+  
+
     }
   }
   // console.log('req.user1:', req.user);
@@ -792,28 +800,22 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
     return res.redirect('/save-email?email=true');
   }
 
-  // console.log('req.body.email1:', req.body.email);
-  // console.log('user.id1:', user.id);
-  // console.log('user:', user);
+  let conn;
+  try {
+    conn = await pool.getConnection();
 
-  if (req.body.email) {
-    let conn;
-    try {
-      conn = await pool.getConnection();
-      // console.log('Connected to MariaDB 9!');
+    const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+    console.log('res2:', res2);
+    req.user.email = req.body.email;
 
-      const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
-      // console.log('res2:', res2);
-      req.user.email = req.body.email;
+    // Flush all cache so that user's email would be shown correctly across app.
+    cache.flushAll();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    if (conn) conn.release(); // release to pool
 
-      // Flush all cache so that user's email would be shown correctly across app.
-      cache.flushAll();
-    } catch (err) {
-      console.log('Unable to update user email');
-      console.error(err);
-    } finally {
-      if (conn) conn.release(); // release to pool
-    }
+
   }
   // console.log('req.user1:', req.user);
   // console.log('user.id1:', user.id);

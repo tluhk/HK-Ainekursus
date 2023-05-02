@@ -95,10 +95,10 @@ const renderPage = async (req, res) => {
     refBranch,
   } = res.locals;
 
-  console.log('req.user55:', req.user);
+  // console.log('req.user55:', req.user);
 
-  console.log('resComponents in responseAction:', resComponents);
-  console.log('resFiles in responseAction:', resComponents);
+  // console.log('resComponents in responseAction:', resComponents);
+  // console.log('resFiles in responseAction:', resComponents);
 
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
@@ -155,13 +155,13 @@ const renderPage = async (req, res) => {
     const sources = resSources.data;
     const sourcesDecoded = base64.decode(sources.content);
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
-    console.log('sourcesDecodedUtf8:', sourcesDecodedUtf8);
+    // console.log('sourcesDecodedUtf8:', sourcesDecodedUtf8);
     if (sourcesDecodedUtf8) sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
   /** Finally you can render the course view with all correct information you've collected from Github, and with all correctly rendered Markdown content! */
 
-  console.log('branches1:', branches);
+  // console.log('branches1:', branches);
   res.render('course', {
     component: componentMarkdownWithoutTOC,
     docs: config.docs,
@@ -260,7 +260,7 @@ const allCoursesController = {
       */
       const allTeacherCourses = allCoursesActive
         .filter((course) => course.teacherUsername === req.user.username);
-      console.log('allTeacherCourses1:', allTeacherCourses);
+      // console.log('allTeacherCourses1:', allTeacherCourses);
 
       /*
       * Sort allTeacherCourses, these are teacher's own courses
@@ -278,7 +278,7 @@ const allCoursesController = {
       // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
 
       delete allCoursesGroupedByTeacher[req.user.username];
-      console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
+      // console.log('allCoursesGroupedByTeacher2:', allCoursesGroupedByTeacher);
 
       const sortedCoursesGroupedByTeacher = Object.keys(allCoursesGroupedByTeacher)
         .sort()
