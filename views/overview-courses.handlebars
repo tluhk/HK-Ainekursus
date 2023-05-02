@@ -16,34 +16,45 @@
           <form method="POST" action="/progress-overview" name="displayByCourses" id="displayByCourses">
             <!-- Hidden form inputs to send req.body values -->
             <input type="hidden" name="displayBy" id="displayBy" value="courses" >
-            <button name="displayByCoursesButton" class="btn btn-primary">Kursuste järgi</button>
+            <button name="displayByCoursesButton" class="btn btn-primary">Ainekursuste järgi</button>
           </form>
         </div>
 
         <div class="">
 
-          <h1>Kursused:</h1>
+          <h1>Ainekursuste ülevaade</h1>
+          <p>Siin lehel näed kõiki aktiivseid ainekursuseid, nendega seotud tiime ja millist ainekursuse haru näeb iga tiim vaikimisi.</p>
+
+          <p>Kui sa vajutad mõne ainekursuse all tiimi nimele, siis avaneb ülevaade selle tiimi kasutajate progressist antud ainekursusel.</p>
           {{#each coursesWithTeams}}
-            <div class="p-2 pl-4 ml-4">
-              <div class="flex flex-nowrap content-center gap-x-4">
-                <h3 class="text-md font-bold mb-2 uppercase">{{this.courseName}}</h3>
+            <div class="p-4 ml-4">
+              <div class="flex content-end gap-x-4 items-end pt-4 pb-4">
+                <h3 class="text-md font-bold uppercase items-start m-0">{{this.courseName}}</h3>
+                <p class="m-0">{{this.courseCode}}</p>
               </div>
-              <div class="flex flex-nowrap justify-start gap-x-4 items-center">
-                <p class="m-0 p-0">{{this.courseCode}}</p>
-                <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>Vali tiim:</p>
-                <div class="flex flex-nowrap justify-start gap-x-4 items-center">
-                  {{#each this.teams}}
-                    <p class='bg-neutral-50 hover:bg-neutral-100 font-bold m-0 p-2' onclick="handleCourseClick('{{this}}', '{{../this.courseSlug}}')">
-                      {{this}}
-                      <form id="overview-{{this}}-{{../this.courseSlug}}" name="overview-{{this}}-{{../this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
+              <div class="flex items-start gap-2 m-0 pb-2">Tiimid ja nende vaikimisi harud:</div>
+               <div class="flex flex-nowrap justify-start gap-x-4 items-center pl-4">
+                  <ul class="pt-2 pl-4">
+                  {{#each this.courseConfigByTeam}}
+                    <li class='bg-neutral-50 hover:bg-neutral-100 p-2' onclick="handleCourseClick('{{@key}}', '{{../this.courseSlug}}')">
+                    <div class="flex flex-nowrap justify-start gap-x-4 items-center">
+                      <h5 class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">groups</span>
+                      {{uppercase @key}} tiim</h5>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{this.refBranch}} haru</p>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize this.courseGrading}}</p>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
+                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
+                    </div>
+                      <form id="overview-{{@key}}-{{../this.courseSlug}}" name="overview-{{@key}}-{{../this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
                         <!-- Hidden form inputs to send req.body values -->
-                        <input type="hidden" name="selectedTeam" id="selectedTeam-{{this}}" value="{{this}}" >
+                        <input type="hidden" name="selectedTeam" id="selectedTeam-{{@key}}" value="{{@key}}" >
                         <input type="hidden" name="selectedCourse" id="selectedCourse-{{../this.courseSlug}}" value="{{../this.courseSlug}}" >
                         <input type="hidden" name="selectedCourseData" id="selectedCourseData-{{../this.courseSlug}}" >
                       </form>
-                    </p>
+                    </li>
                   {{/each }}
-                </div>
+                  </ul>
               </div>
             </div>
           {{/each}}

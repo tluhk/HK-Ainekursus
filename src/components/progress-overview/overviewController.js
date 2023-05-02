@@ -165,19 +165,22 @@ const allOverviewController = {
         return acc;
       }, {});
 
-    // console.log('teamsCoursesSorted3:', teamsCoursesSorted);
+    console.log('teamsCoursesSorted3:', teamsCoursesSorted);
 
     const coursesWithTeams = [];
 
-    Object.keys(teamsCoursesSorted).forEach((key) => {
-      teamsCoursesSorted[key].forEach((course) => {
-        const existingCourse = coursesWithTeams.find((c) => c.courseUrl === course.courseUrl && c.teacherUsername === course.teacherUsername);
+    Object.keys(teamsCoursesSorted).forEach((team) => {
+      teamsCoursesSorted[team].forEach((course) => {
+        const existingCourse = coursesWithTeams.find((c) => c.courseUrl === course.courseUrl);
         if (existingCourse) {
-          existingCourse.teams.push(key);
+          existingCourse.courseConfigByTeam[team] = course;
         } else {
           coursesWithTeams.push({
-            ...course,
-            teams: [key],
+            courseUrl: course.courseUrl,
+            courseName: course.courseName,
+            courseCode: course.courseCode,
+            courseSlug: course.courseSlug,
+            courseConfigByTeam: {[team]: course},
           });
         }
       });
@@ -186,7 +189,7 @@ const allOverviewController = {
     coursesWithTeams.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
     console.log(coursesWithTeams);
-    // console.log('coursesWithTeams3:', coursesWithTeams);
+    console.log('coursesWithTeams3:', coursesWithTeams);
 
     /* Get all users in each team.
     * Use teams array where teachers team is included.

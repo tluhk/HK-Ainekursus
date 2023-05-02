@@ -16,24 +16,29 @@
           <form method="POST" action="/progress-overview" name="displayByCourses" id="displayByCourses">
             <!-- Hidden form inputs to send req.body values -->
             <input type="hidden" name="displayBy" id="displayBy" value="courses" >
-            <button name="displayByCoursesButton" class="btn btn-secondary">Kursuste järgi</button>
+            <button name="displayByCoursesButton" class="btn btn-secondary">Ainekursuste järgi</button>
           </form>
         </div>
 
         <div class="">
 
-          <h1>Tiimid:</h1>
+          <h1>Tiimide ülevaade</h1>
+          <p>Siin lehel näed sa kõiki tiime, igale tiimile nähtavaid ainekursuseid ja vaikimisi haru, mida tiim näeb.</p>
+
+          <p>Kui sa vajutad mõne tiimi all ainekursuse nimele, siis avaneb ülevaade selle tiimi kasutajate progressist antud ainekursusel.</p>
+
+          <div class="pt-1">
           {{#each teams}}
-            <ul>
-              <li><h3>{{capitalize this.slug}}</h3></li>
-            </ul>
+            <h4 class="p-4 bg-neutral-100 font-bold ">{{uppercase this.slug}} tiim</h3>
     
             {{#unless (findTeamCourses this.slug ../teamsCourses) }}
-              <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4 ml-4'>
-                <div class='text-md font-bold mb-2'>Aktiivsed kursused puuduvad</div>
+              <div class='mb-4 bg-neutral-50 p-4 ml-4'>
+                <p class="m-0">Aktiivsed ainekursused puuduvad</p>
               </div>
             {{/unless }}
-            {{#with (findTeamCourses this.slug ../teamsCourses)}}              
+            {{#with (findTeamCourses this.slug ../teamsCourses)}}
+            <div class="flex items-start gap-2 m-0 pb-2">Tiimile nähtavad ainekursused ja nende vaikimisi harud:</div>
+              
               {{#each this}}
                <!-- Hidden form to send req.body values -->
                {{!-- ../../this: {{../../this}}
@@ -44,10 +49,10 @@
                this.slug: {{this.slug}}
                index: {{@index}}
                overview-{{../../this.slug}}-{{this.courseSlug}} --}}
-                <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4 ml-4' onclick="handleCourseClick('{{../../this.slug}}', '{{this.courseSlug}}')" >
+                <div class='bg-neutral-50 hover:bg-neutral-100 p-4 ml-4' onclick="handleCourseClick('{{../../this.slug}}', '{{this.courseSlug}}')" >
                   <div><span class='text-md font-bold mb-2 uppercase'>{{this.courseName}}</span>
                   </div>
-                    <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+                    <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4 pl-4 ml-4">
                       <p class="m-0 p-0">{{this.courseCode}}</p>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{this.refBranch}} haru</p>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
@@ -67,6 +72,7 @@
             {{/with }}
 
           {{/each }}
+          </div>
 
         </div>
 
