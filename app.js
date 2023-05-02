@@ -730,7 +730,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
   /**
    * Validate that input was entered and that it's a valid string containing only letters and spaces. Entering only spaces is not allowed either.
    */
-  if (!req.body.displayName || !req.body.displayName.trim().match(/^[a-zA-Z\s]+$/)) {
+  if (!req.body.displayName || !req.body.displayName.trim().match(/^[A-zÀ-ú\s]+$/)) {
     return res.redirect('/save-displayName?displayName=true');
   }
 
