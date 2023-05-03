@@ -1375,11 +1375,6 @@ input:checked ~ .tab-label {
   border-color: rgb(212 214 216 / var(--tw-border-opacity));
 }
 
-.bg-brand_red {
-  --tw-bg-opacity: 1;
-  background-color: rgb(183 18 52 / var(--tw-bg-opacity));
-}
-
 .bg-neutral {
   --tw-bg-opacity: 1;
   background-color: rgb(64 70 77 / var(--tw-bg-opacity));

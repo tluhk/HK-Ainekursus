@@ -30,9 +30,9 @@
                 <a
                   class='!no-underline uppercase w-full'
                   href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                ><div class='text-md font-bold mb-2'>{{this.courseName}}</div> <br>
+                ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
-                tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / kõik teemad: {{this.courseBranchComponentsUUIDs.length }} <br>
+                läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br>
 
                 <div>
                   <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
@@ -59,9 +59,9 @@
                 <a
                   class='!no-underline uppercase w-full'
                   href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                ><div class='text-md font-bold mb-2'>{{this.courseName}}</div> <br>
+                ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
-                tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / kõik teemad: {{this.courseBranchComponentsUUIDs.length }} <br>
+                läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br>
                 <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
                   {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length}} teemasid
                 </progress>
@@ -89,9 +89,9 @@
                   <a
                     class='!no-underline uppercase w-full'
                     href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                  ><div class='text-md font-bold mb-2'>{{this.courseName}}</div> <br>
+                  ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
-                  tehtud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / kõik teemad: {{this.courseBranchComponentsUUIDs.length }} <br>
+                  läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br>
                   <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
                     {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length}} teemasid
                   </progress>

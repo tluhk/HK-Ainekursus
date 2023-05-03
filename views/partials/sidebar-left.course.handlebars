@@ -54,25 +54,25 @@
             
             <!-- Themes links -->
             {{#each this.components}}
-              <div class="tab-content flex gap-2 
+              <div class="tab-content flex gap-2
                 {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
                   active-tab-content
                 {{/if_equal }}
               " >
-                <a class="grow py-3 !no-underline" 
+                <a class="flex flex-row justify-between grow py-3 !no-underline" 
                   href="/course/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}?ref={{../../path.refBranch}}">
-                  <div class="flex gap-2 w-full" >
+                  <div class="flex gap-2" >
                       <span class="material-symbols-outlined">
                         {{{showComponentType this ../../concepts ../../practices}}}
                       </span>
                       {{{showComponentName this ../../concepts ../../practices}}}
                     </div>
-                  </a>
                   {{#ifInMarkedComponents (showComponentUUID this ../../concepts ../../practices) ../../markedAsDoneComponentsArr }}
-                  <span class="!pt-3 material-symbols-outlined">task_alt</span>
+                  <span class="material-symbols-outlined">task_alt</span>
                   {{else }}
-                  <span class="!pt-3 material-symbols-outlined">radio_button_unchecked</span>
+                  <span class="material-symbols-outlined">radio_button_unchecked</span>
                   {{/ifInMarkedComponents }}
+                  </a>
               </div>
             {{/each}}
 
