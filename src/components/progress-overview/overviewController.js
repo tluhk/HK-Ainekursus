@@ -227,7 +227,7 @@ const allOverviewController = {
     const { team, courseSlug, courseSlugData } = res.locals;
     // console.log('team5:', team);
     // console.log('courseSlug5:', courseSlug);
-    // console.log('courseSlugData5:', courseSlugData);
+    console.log('courseSlugData5:', courseSlugData);
 
     const usersInTeam = await teamsController.getUsersInTeam(team);
     const usersInTeachersTeam = await teamsController.getUsersInTeam('teachers');

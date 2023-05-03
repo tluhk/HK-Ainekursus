@@ -1,7 +1,7 @@
 <div>
   <h2>Teised õppejõud</h2>
   <p>Siin näed infot teiste õppejõudude ja nende kursuste kohta.</p>
-  <div class="grid gap-2 pt-4 pl-4 pb-4">
+  <div class="grid gap-2 pt-4 pb-4">
     {{#each teacherCourses }}
       <div class="py-2">
         {{#with (findTeacher @key ../teachers)}}
@@ -11,7 +11,11 @@
             </div>
             <div class="inline-block">
               <h4 class="mt-0 mb-1">{{this.displayName}}</h4>
-              <p class="m-0 mb-1">{{#if this.email}}{{this.email}}{{else}}Email puudub{{/if}}</p>
+              {{#if this.email}}
+                <a class="m-0 mb-1" href="mailto:{{this.email}}">{{this.email}}<a>
+              {{else}}
+                <p class="m-0 mb-1">Email lisamata</p>
+              {{/if}}
             </div>
           </div>
         {{/with }}

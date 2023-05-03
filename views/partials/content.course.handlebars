@@ -1,19 +1,27 @@
 <div class="reading_content">
 
   <div class='breadcrumb'>
+      <span class="material-symbols-outlined">
+        <a class='hover:underline' href='/'>
+        home
+        </a>
+      </span>
+      >
     {{#if breadcrumb.courseName}}
       <a
         class='hover:underline'
         href='/course/{{path.courseSlug}}/about?ref={{path.refBranch}}'
       >{{breadcrumb.courseName}}</a>
     {{/if}}
-    {{#if breadcrumb.contentName }}
-      >
-      <a
-        class='hover:underline'
-        href='/course/{{path.courseSlug}}/{{path.contentSlug}}?ref={{path.refBranch}}'
-      >{{breadcrumb.contentName}}</a>
-    {{/if}}
+    {{#if_not_equal path.contentSlug 'about'}}
+      {{#if ../breadcrumb.contentName }}
+        >
+        <a
+          class='hover:underline'
+          href='/course/{{../../path.courseSlug}}/{{../../path.contentSlug}}?ref={{../../path.refBranch}}'
+        >{{../../breadcrumb.contentName}}</a>
+      {{/if}}
+    {{/if_not_equal }}
     {{#if breadcrumb.componentName}}
       >
       <a

@@ -21,7 +21,7 @@
           </form>
         </div>
 
-        <h1>Ainekursuse ülevaade:</h1>
+        <h1>Õpilaste progressi ülevaade:</h1>
         <h4 class="m-0 pl-4 pt-4 pb-4">Tiim: <span class="uppercase">{{team}}</span></h4>
         <div class="flex flex-nowrap content-center">
           <h4 class="m-0 pl-4">Ainekursus: <span class="uppercase">{{courseData.courseName}}</span></h4>
@@ -38,8 +38,6 @@
         <div>
         <div>
           <table class="">
-            
-            
               {{#each courseData.config.lessons }}
                 <colgroup span="{{this.components.length}}"></colgroup>
               {{/each }}
