@@ -118,7 +118,7 @@ const validateTeacher = ((req, res, next) => {
     return next();
   }
   // console.log('req.session2:', req.session);
-  console.log("Page is available only for teachers. User is NOT in 'teachers' team. Rerouting to /notfound page.");
+  console.log("User is NOT in 'teachers' team");
   return res.redirect('/notfound');
 });
 
@@ -136,7 +136,7 @@ const cacheService = (async (req, res) => {
     }
     return console.log(`${cacheName} loaded with API`);
   } catch (err) {
-    console.log('Error with cacheService:');
+    console.log('err with cacheService:');
     return console.error(err);
     // throw new Error(err);
   }
@@ -270,8 +270,8 @@ async function userDBFunction(userData) {
   let conn;
   try {
     conn = await pool.getConnection();
-    // console.log('Connected to MariaDB1');
-    // console.log(`connected ! connection id is ${conn.threadId}`);
+    console.log('Connected to MariaDB1');
+    console.log(`connected ! connection id is ${conn.threadId}`);
 
     /**
      * If user exists in DB, don't insert new user. Check if DB data matches with BE data. If not, get users' displayName and email data from DB.
@@ -279,7 +279,7 @@ async function userDBFunction(userData) {
      */
 
     const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [githubID]);
-    // console.log('user1:', user);
+    console.log('user1:', user);
 
     if (user[0]) {
       if (user[0].displayName && displayName !== user[0].displayName) {
@@ -301,11 +301,10 @@ async function userDBFunction(userData) {
       return userData;
     }
   } catch (err) {
-    console.log('Unable read or update user data from database');
+    console.log('Unable to connect to MariaDB1');
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
-
   }
   return true;
 }
@@ -337,10 +336,10 @@ passport.use(
         const userInOrgMembers = membersController.isUserInOrgMembers(profile.id);
 
         if (!userInOrgMembers) {
-          console.log('No user in tluhk org');
+          console.log('no user in tluhk org');
           return done(null, null);
         }
-        console.log('User exists in tluhk org');
+        console.log('user exists in tluhk org');
 
         // console.log('profile1:', profile);
         const {
@@ -352,10 +351,10 @@ passport.use(
           githubID: id, username, displayName, email,
         };
 
-        // console.log('id1:', id);
-        // console.log('username1:', username);
-        // console.log('displayName1:', displayName);
-        // console.log('_json.email1:', _json.email); 
+        /* console.log('id1:', id);
+        console.log('username1:', username);
+        console.log('displayName1:', displayName);
+        console.log('_json.email1:', _json.email); */
 
         /**
          * Read user data from DB.
@@ -382,28 +381,6 @@ passport.use(
   ),
 );
 
-/*
-const resetSideMenuState = (req, res, next) => {
-  console.log('req.session0:', req.session);
-  if (!req.session.hasOwnProperty('sideMenuState')) req.session.sideMenuState = true;
-  console.log('req.session1:', req.session);
-  return next();
-}
-/** At app starting, set SideMenuState to true */
-// app.use(resetSideMenuState);
-
-/** Endpoint to save sideMenuState */
-/* app.post('/toggle-side-menu-state', ensureAuthenticated, async (req, res) => {
-  console.log('req.session0:', req.session);
-  if (!req.session.hasOwnProperty('sideMenuState')) {
-    req.session.sideMenuState = true
-    return;
-  };
-  req.session.sideMenuState = !req.session.sideMenuState;
-  console.log('req.session.sideMenuState1:', req.session.sideMenuState);
-  return;
-}); */
-
 /** Endpoint to get team assignments from tluhk Github account when app is running.
  * Used as middleware to add user's team info to session's profile.
  * https://stackoverflow.com/a/25687358
@@ -428,7 +405,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  else {
+  /* else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -455,37 +432,10 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }
+  } */
 
 
-  else {
-    req.user = {
-      id: '132268493',
-      nodeId: 'U_kgDOB-JBzQ=',
-      displayName: null,
-      username: 'vile-ja-kell',
-      profileUrl: 'https://github.com/vile-ja-kell',
-      provider: 'github',
-      _json: {
-        avatar_url: 'https://avatars.githubusercontent.com/u/132268493?v=4',
-        type: 'User',
-      },
-      /* team: {
-        name: 'rif20',
-        id: 6514564,
-        node_id: 'T_kwDOBqxQ5c4AY2eE',
-        slug: 'rif20',
-      }, */
-    };
-    if (req.user && !req.user.team) {
-      const { user } = req;
-      const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
-      // console.log('user1:', user);
-      // console.log('userTeam1:', userTeam);
-      req.user.team = userTeam;
-    }
-  }
-
+  
 
   next();
 });
@@ -588,11 +538,11 @@ app.get('/progress-overview', resetSelectedVersion, validateTeacher, allOverview
 app.get('/progress-overview/:team?/:courseSlug?', resetSelectedVersion, validateTeacher, allOverviewController.getOverview);
 
 app.post('/progress-overview', validateTeacher, (req, res) => {
-  // console.log('value0:');
-  // console.log('req.body3:', req.body);
-  // console.log('req.body.selectedTeam3:', req.body.selectedTeam);
-  // console.log('req.body.selectedCourse3:', req.body.selectedCourse);
-  // console.log('req.body.selectedCourseData3:', req.body.selectedCourseData);
+  /* console.log('value0:');
+  console.log('req.body3:', req.body);
+  console.log('req.body.selectedTeam3:', req.body.selectedTeam);
+  console.log('req.body.selectedCourse3:', req.body.selectedCourse);
+  console.log('req.body.selectedCourseData3:', req.body.selectedCourseData); */
 
   let selectedCourseDataParsed;
   if (req.body && req.body.selectedCourseData) selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
@@ -621,13 +571,12 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
   } = req.body;
 
   const githubID = req.user.id;
-  // console.log('req.body6:', req.body);
-  // console.log('githubID6:', githubID);
-  // console.log('courseSlug6:', courseSlug);
-  // console.log('componentSlug6:', componentSlug);
-  // console.log('componentUUID6:', componentUUID);
-  // console.log('nextPagePath6', nextPagePath);
-
+  /* console.log('req.body6:', req.body);
+  console.log('githubID6:', githubID);
+  console.log('courseSlug6:', courseSlug);
+  console.log('componentSlug6:', componentSlug);
+  console.log('componentUUID6:', componentUUID);
+  console.log('nextPagePath6', nextPagePath); */
   if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
     return res.redirect('/notfound');
   }
@@ -656,11 +605,10 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
 
       // cache.flushAll();
     } catch (err) {
-      console.log('Unable to mark component as done');
+      console.log('Unable to connect to MariaDB 1');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
-  
     }
   }
 
@@ -678,7 +626,6 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
-
   }
 
   return res.redirect(nextPagePath);
@@ -689,12 +636,11 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
   const { courseSlug, componentSlug, componentUUID } = req.body;
 
   const githubID = req.user.id;
-  // console.log('req.body7:', req.body);
-  // console.log('githubID7:', githubID);
-  // console.log('courseSlug7:', courseSlug);
-  // console.log('componentSlug7:', componentSlug);
-  // console.log('componentUUID7:', componentUUID);
-
+  /* console.log('req.body7:', req.body);
+  console.log('githubID7:', githubID);
+  console.log('courseSlug7:', courseSlug);
+  console.log('componentSlug7:', componentSlug);
+  console.log('componentUUID7:', componentUUID); */
   if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
     return res.redirect('/notfound');
   }
@@ -715,12 +661,10 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
 
       // cache.flushAll();
     } catch (err) {
-      // console.log('Unable to connect to MariaDB 3');
-      console.log('Unable to remove component as done');
+      console.log('Unable to connect to MariaDB 3');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
-  
     }
   }
 
@@ -734,13 +678,10 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
     const res9 = await conn.query('SELECT * FROM users_progress;');
     // console.log('res9:', res9);
   } catch (err) {
-    // console.log('Unable to connect to MariaDB 4');
-    console.log('Unable to get user progress from database');
+    console.log('Unable to connect to MariaDB 4');
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
-
-
   }
 
   return res.redirect('back');
@@ -759,7 +700,7 @@ app.get(
     let message = '';
     if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik. Lubatud on vaid tähed ja tühikud.';
 
-    // console.log('req.body.displayName1:', req.user);
+    console.log('req.body.displayName1:', req.user);
 
     res.send(`
         <html>
@@ -782,7 +723,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
   /**
    * Validate that input was entered and that it's a valid string containing only letters and spaces. Entering only spaces is not allowed either.
    */
-  if (!req.body.displayName || !req.body.displayName.trim().match(/^[A-zÀ-ú\s]+$/)) {
+  if (!req.body.displayName || !req.body.displayName.trim().match(/^[a-zA-Z\s]+$/)) {
     return res.redirect('/save-displayName?displayName=true');
   }
 
@@ -790,7 +731,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      // console.log('Connected to MariaDB!');
+      // console.log('Connected to MariaDB 8!');
 
       const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
       // console.log('res1:', res1);
@@ -799,7 +740,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       // Flush all cache so that user's name would be shown correctly across app.
       cache.flushAll();
     } catch (err) {
-      console.log('Unable to update user displayName in database');
+      console.log('Unable to update user displayName');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
@@ -854,21 +795,28 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
     return res.redirect('/save-email?email=true');
   }
 
-  let conn;
-  try {
-    conn = await pool.getConnection();
+  // console.log('req.body.email1:', req.body.email);
+  // console.log('user.id1:', user.id);
+  // console.log('user:', user);
 
-    const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
-    // console.log('res2:', res2);
-    req.user.email = req.body.email;
+  if (req.body.email) {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      // console.log('Connected to MariaDB 9!');
 
-    // Flush all cache so that user's email would be shown correctly across app.
-    cache.flushAll();
-  } catch (err) {
-    console.error(err);
-    console.log('Unable to update user email in database');
-  } finally {
-    if (conn) conn.release(); // release to pool
+      const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+      // console.log('res2:', res2);
+      req.user.email = req.body.email;
+
+      // Flush all cache so that user's email would be shown correctly across app.
+      cache.flushAll();
+    } catch (err) {
+      console.log('Unable to update user email');
+      console.error(err);
+    } finally {
+      if (conn) conn.release(); // release to pool
+    }
   }
   // console.log('req.user1:', req.user);
   // console.log('user.id1:', user.id);
@@ -888,7 +836,7 @@ https://www.tabnine.com/code/javascript/functions/express/Request/logout
  */
 app.get('/logout', resetSelectedVersion, ensureAuthenticated, (req, res, next) => {
   // console.log('req.user3:', req.user);
-  // console.log('Logging out process');
+  console.log('Logging out process');
   req.logout((err) => {
     if (err) { return next(err); }
     return req.session.destroy((err2) => {
@@ -908,5 +856,6 @@ app.all('*', resetSelectedVersion, otherController.notFound);
 
 /** Start a server and listen on port 3000 */
 app.listen(port, () => {
-  console.log(`App is running`);
+  console.log('Hei');
+  console.log(`Listening on port ${port}`);
 });
