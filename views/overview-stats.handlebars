@@ -72,8 +72,8 @@
             
             <div class="tracks syncscroll" name="myElements"> <!-- body part -->
             {{#each usersData}}
-              <div class="flex hover:bg-neutral-100" style="width:calc(12rem + 12rem * {{../courseData.courseBranchComponentsUUIDs.length }})">
-                <div class="hover:bg-neutral-100 cell p-1 basis-48 sticky left-0 bg-white">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</div>
+              <div class="hoverrow flex hover:bg-neutral-100" style="width:calc(12rem + 12rem * {{../courseData.courseBranchComponentsUUIDs.length }})">
+                <div class="hoverrowchild hover:bg-neutral-100 cell p-1 basis-48 sticky left-0 bg-white">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</div>
 
                 <div class="flex text-center">
                   {{#each ../courseData.config.lessons }}

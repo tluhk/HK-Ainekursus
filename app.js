@@ -457,8 +457,8 @@ app.use(getTeamAssignments, async (req, res, next) => {
     }
   }
 */
-/*
-  else {
+
+/*  else {
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',
@@ -476,7 +476,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
       }, 
-    };/*
+    };
     if (req.user && !req.user.team) {
       const { user } = req;
       const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
