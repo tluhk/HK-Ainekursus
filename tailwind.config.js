@@ -11,6 +11,7 @@ module.exports = {
       brand_red: '#b71234',
       brand_black: '#282627',
       brand_grey: '#545153',
+      pink: '#ffe4e6',
       primary: colors.red,
       secondary: colors.stone,
       white: colors.white,

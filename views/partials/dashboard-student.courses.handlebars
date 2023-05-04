@@ -32,12 +32,18 @@
                   href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
                 ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
-                läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br>
+                {{!-- läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br> --}}
 
                 <div>
-                  <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
-                    {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length}} teemasid
-                  </progress>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-base font-medium ">Läbitud teemad:</span>
+                    <span class="text-base font-medium">
+                      {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }}
+                    </span>
+                  </div>
+                  <div class="w-full bg-pink rounded-full h-3 ">
+                    <div class="bg-brand_red h-3 rounded-full" style="width: {{matchingDoneComponentsPercent this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}%"></div>
+                  </div>
                 </div>
                 <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
                   <p class="m-0 p-0">{{this.courseCode}}</p>
@@ -60,11 +66,18 @@
                   class='!no-underline uppercase w-full'
                   href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
                 ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-base font-medium ">Läbitud teemad:</span>
+                    <span class="text-base font-medium">
+                      {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }}
+                    </span>
+                  </div>
+                  <div class="w-full bg-pink rounded-full h-3 ">
+                    <div class="bg-brand_red h-3 rounded-full" style="width: {{matchingDoneComponentsPercent this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}%"></div>
+                  </div>
+                </div>
 
-                läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br>
-                <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
-                  {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length}} teemasid
-                </progress>
                 <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
                   <p class="m-0 p-0">{{this.courseCode}}</p>
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
@@ -91,10 +104,18 @@
                     href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
                   ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
-                  läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br>
-                  <progress id='{{this.courseCode}}' value='{{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}' max='{{this.courseBranchComponentsUUIDs.length}}'>
-                    {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length}} teemasid
-                  </progress>
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="text-base font-medium ">Läbitud teemad:</span>
+                      <span class="text-base font-medium">
+                        {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }}
+                      </span>
+                    </div>
+                    <div class="w-full bg-pink rounded-full h-3 ">
+                      <div class="bg-brand_red h-3 rounded-full" style="width: {{matchingDoneComponentsPercent this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}}%"></div>
+                    </div>
+                  </div>
+
                   <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
                     <p class="m-0 p-0">{{this.courseCode}}</p>
                     <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>

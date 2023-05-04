@@ -194,6 +194,15 @@ export default function hbsHelpers(hbs) {
 
         return commonElementsCount;
       },
+      matchingDoneComponentsPercent: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
+        // console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
+        // console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
+        const percent = commonElementsCount/courseBranchComponentsUUIDs.length*100;
+
+        // console.log('percent1:', percent);
+        return percent;
+      },
       jsonStringify: (context) => JSON.stringify(context),
     },
   });
