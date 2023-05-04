@@ -26,13 +26,11 @@
 
           {{#if_equal coursesDisplayBy 'name' }}
             {{#each ../courses}}
+            <a class='!no-underline uppercase w-full'
+                href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
+            >
               <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
-                <a
-                  class='!no-underline uppercase w-full'
-                  href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
-
-                {{!-- läbitud teemad: {{matchingDoneComponentsCount this.markedAsDoneComponentsUUIDs this.courseBranchComponentsUUIDs}} / {{this.courseBranchComponentsUUIDs.length }} <br> --}}
+                <div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
                 <div>
                   <div class="flex justify-between mb-1">
@@ -54,18 +52,18 @@
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
                 </div>
-                </a>
               </div>
+            </a>
             {{/each}}
           {{/if_equal }}
 
           {{#if_equal coursesDisplayBy 'progress' }}
             {{#each ../courses}}
+            <a class='!no-underline uppercase w-full'
+              href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
+            >
               <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
-                <a
-                  class='!no-underline uppercase w-full'
-                  href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
+                <div class='text-md font-bold mb-4'>{{this.courseName}}</div>
                 <div>
                   <div class="flex justify-between mb-1">
                     <span class="text-base font-medium ">Läbitud teemad:</span>
@@ -87,8 +85,8 @@
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
                   <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
                 </div>
-                </a>
               </div>
+              </a>
             {{/each}}
           {{/if_equal }}
 
@@ -98,11 +96,11 @@
 
               <ul class="list-none mt-2">
               {{#each this }}
+              <a class='!no-underline uppercase w-full'
+                href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
+              >
                 <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
-                  <a
-                    class='!no-underline uppercase w-full'
-                    href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
-                  ><div class='text-md font-bold mb-4'>{{this.courseName}}</div>
+                  <div class='text-md font-bold mb-4'>{{this.courseName}}</div>
 
                   <div>
                     <div class="flex justify-between mb-1">
@@ -125,8 +123,8 @@
                     <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
                     <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../../teachers)}}{{this.displayName}}{{/with }}</p>
                   </div>
-                  </a>
                 </div>
+              </a>
               {{/each }}
               </ul>
             {{/each }}
