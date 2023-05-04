@@ -202,14 +202,12 @@ html {
 .gsc-control-cse {
   background-color: transparent !important;
   border: 1px solid transparent !important;
-  margin-top: 1rem;
 }
 .gsc-control-cse {
   padding: 0 !important;
 }
 form.gsc-search-box {
   margin-bottom: 6px !important;
-  padding-left: 34px !important;
 }
 table.gsc-search-box td.gsc-input {
   padding-right: 0 !important;

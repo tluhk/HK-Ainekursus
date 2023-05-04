@@ -16,8 +16,18 @@
       menu
     </span>
   </div>
-  {{#if user}}
-    <div class="flex flex-row justify-evenly items-center gap-x-4">
+  
+  <div
+    class=' gap-4 closing-menu flex flex-col lg:flex-row items-center absolute lg:relative w-full lg:w-auto left-0 lg:pr-0 pb-8 lg:pb-0 bg-neutral top-[-425px] lg:!top-0 transition-all'
+  >
+    <span
+      onclick='closeMenu()'
+      class='mt-8 material-symbols-outlined text-4xl cursor-pointer lg:hidden text-xxl'
+    >
+      close
+    </span>
+    {{#if user}}
+    <div class=" z-[52] flex flex-row justify-evenly items-center gap-x-4">
       <a href="/" class="!text-white !no-underline hover:!underline">Avaleht</a>
       {{!-- <a href="/" class="!text-white !no-underline hover:!underline">Kursused</a> --}}
       <a href="/notifications" class="!text-white !no-underline hover:!underline">Teated</a>
@@ -26,16 +36,7 @@
       {{/if_equal }}
     </div>
   {{/if}}
-  <div
-    class='closing-menu flex flex-col lg:flex-row items-center absolute lg:relative w-full lg:w-auto left-0 pr-8 lg:pr-0 pb-8 lg:pb-0 bg-neutral top-[-350px] lg:!top-0 transition-all'
-  >
-    <span
-      onclick='closeMenu()'
-      class='mt-8 material-symbols-outlined text-4xl cursor-pointer lg:hidden text-xxl'
-    >
-      close
-    </span>
-    <div class="flex flex-row gap-4 items-center">
+    <div class="flex flex-row gap-4 items-start lg:items-center">
       {{#if user}}
         <div>
           <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
@@ -51,7 +52,7 @@
               {{ user.username }}
             {{/if }}
           </div>
-          <ul class="hidden absolute group-hover:block z-50 list-none bg-neutral p-4 pt-12 right-[-1rem] text-end w-max">
+          <ul class="lg:hidden lg:absolute lg:group-hover:block z-50 list-none bg-neutral lg:p-4 lg:pt-12 right-[-1rem] lg:text-end w-max">
             
             <li><a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda nime</span></a></li>
             <li>GitHubi ID: {{ user.id }}</li>
