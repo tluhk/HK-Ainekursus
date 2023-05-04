@@ -1922,8 +1922,6 @@ a.table-of-contents:hover {
   scroll-snap-type: x mandatory;
 }
 
-/* temporary */
-
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 250px);
@@ -1942,6 +1940,17 @@ a.table-of-contents:hover {
   position: sticky;
   left: 0;
   z-index: 1;
+}
+
+.tracks::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 7px;
+}
+
+.tracks::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
 .hover\:bg-neutral-100:hover {
