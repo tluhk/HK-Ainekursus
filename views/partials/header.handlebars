@@ -26,8 +26,8 @@
     >
       close
     </span>
-    {{#if user}}
-    <div class=" z-[52] flex flex-row justify-evenly items-center gap-x-4">
+  {{#if user}}
+    <div class=" z-[52] flex flex-row justify-evenly items-center gap-x-8 mr-4">
       <a href="/" class="!text-white !no-underline hover:!underline">Avaleht</a>
       {{!-- <a href="/" class="!text-white !no-underline hover:!underline">Kursused</a> --}}
       <a href="/notifications" class="!text-white !no-underline hover:!underline">Teated</a>
@@ -36,128 +36,48 @@
       {{/if_equal }}
     </div>
   {{/if}}
+  {{#if user}}
     <div class="flex flex-row gap-4 items-start group lg:items-center">
-      {{#if user}}
-        <div>
-          <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
-        </div>
-      {{/if}}
+      <div>
+        <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
+      </div>
 
-      <div class="flex flex-col relative">
-        {{#if user}}
-          <div class="z-[51]">
-            {{#if user.displayName}}
-              {{ user.displayName }}
+      <div class="flex flex-row relative">
+        <div class="z-[51]">
+          {{#if user.displayName}}
+            {{ user.displayName }}
+          {{else }}
+            {{ user.username }}
+          {{/if }}
+        </div>
+
+        <span class="material-symbols-outlined z-50 pl-2">
+          expand_more
+        </span>
+
+        <ul class="lg:hidden lg:absolute lg:group-hover:block z-49 list-none bg-neutral lg:p-4 lg:pt-12 right-[-1rem] lg:text-end w-max">
+          
+          <li><a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda nime</span></a></li>
+
+          {{#if_equal user.team.slug 'teachers'}}
+            {{#if ../user.email}}
+              <li>Email: {{ ../../user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
             {{else }}
-              {{ user.username }}
+              <li><a href="/save-email" class="!text-white">Lisa email</a></li>
             {{/if }}
-          </div>
-          <ul class="lg:hidden lg:absolute lg:group-hover:block z-50 list-none bg-neutral lg:p-4 lg:pt-12 right-[-1rem] lg:text-end w-max">
-            
-            <li><a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda nime</span></a></li>
-            <li>GitHubi ID: {{ user.id }}</li>
-            <li>GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
-            <li>Tiim: {{ user.team.name }}</li>
+          {{/if_equal}}
 
-            {{#if_equal user.team.slug 'teachers'}}
-              {{#if ../user.email}}
-                <li>Email: {{ ../../user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
-              {{else }}
-                <li><a href="/save-email" class="!text-white">Lisa email</a></li>
-              {{/if }}
-            {{/if_equal}}
-          
-        {{/if}}
-
-              {{#if user}}
-                <li><a href="/logout" class="!text-white">Logi välja</a></li>
-              {{/if}}
-        </ul>
-
-        {{!-- 
-        {{#unless user}}
-          <a href="/login" class="!text-white">Logi sisse</a>
-          
-        <div class="dropdown relative">
-          <button
-            class="
-              dropdown-toggle
-              px-6
-              py-2.5
-              bg-blue-600
-              text-white
-              font-medium
-              text-xs
-              leading-tight
-              uppercase
-              rounded
-              shadow-md
-              hover:bg-blue-700 hover:shadow-lg
-              focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
-              active:bg-blue-800 active:shadow-lg active:text-white
-              transition
-              duration-150
-              ease-in-out
-              flex
-              items-center
-              whitespace-nowrap
-            "
-            type="button"
-            id="dropdownMenuButton1"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Dropdown button
-          </button>
-          <ul
-            class="
-              dropdown-menu
-              min-w-max
-              absolute
-              hidden
-              bg-white
-              text-base
-              z-50
-              float-left
-              py-2
-              list-none
-              text-left
-              rounded-lg
-              shadow-lg
-              mt-1
-              hidden
-              m-0
-              bg-clip-padding
-              border-none
-            "
-            aria-labelledby="dropdownMenuButton1"
-          >
-          <li>
-              <a
-                class="
-                  dropdown-item
-                  text-sm
-                  py-2
-                  px-4
-                  font-normal
-                  block
-                  w-full
-                  whitespace-nowrap
-                  bg-transparent
-                  text-gray-700
-                  hover:bg-gray-100
-                "
-                >Dropdown Button tekstile vajutades peaks siin olema sama Form, mida näidatakse peale "Logi sisse" vajutamist
-                </a>
-              </li>
-          </ul>
-        </div>
-        {{/unless}}
-        --}}
+          {{!-- <li class="mt-4">GitHubi ID: {{ user.id }}</li> --}}
+          <li class="mt-4">GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
+          <li>GitHubi tiim: {{ user.team.name }}</li>
         
-        
+          <li class="mt-4"><a href="/logout" class="!text-white">Logi välja</a></li>
+
+        </ul>  
+  
       </div>
     </div>
+  {{/if}}
       <!-- google otsing -->
     <script async src='https://cse.google.com/cse.js?cx=42b628b4183f0478e'></script>
     <div class='gcse-search'></div>

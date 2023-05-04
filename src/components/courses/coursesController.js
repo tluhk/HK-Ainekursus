@@ -438,12 +438,12 @@ const allCoursesController = {
             return a.courseName.localeCompare(b.courseName);
           }
           if (aPercentage === 0) {
-            return -1;
-          }
-          if (bPercentage === 0) {
             return 1;
           }
-          return aPercentage - bPercentage;
+          if (bPercentage === 0) {
+            return -1;
+          }
+          return bPercentage - aPercentage;
         });
         // console.log('courses2:', courses);
 

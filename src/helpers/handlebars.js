@@ -114,8 +114,8 @@ export default function hbsHelpers(hbs) {
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       findTeacher: (teacherName, teachers) => {
-        // console.log('teacherName2:', teacherName);
-        // console.log('teachers2:', teachers);
+        console.log('teacherName2:', teacherName);
+        console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
         // console.log('teacherData2:', teacherData);
 
@@ -193,6 +193,15 @@ export default function hbsHelpers(hbs) {
         const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
 
         return commonElementsCount;
+      },
+      matchingDoneComponentsPercent: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
+        // console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
+        // console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
+        const percent = commonElementsCount/courseBranchComponentsUUIDs.length*100;
+
+        // console.log('percent1:', percent);
+        return percent;
       },
       jsonStringify: (context) => JSON.stringify(context),
     },
