@@ -36,14 +36,14 @@
       {{/if_equal }}
     </div>
   {{/if}}
-    <div class="flex flex-row gap-4 items-start lg:items-center">
+    <div class="flex flex-row gap-4 items-start group lg:items-center">
       {{#if user}}
         <div>
           <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
         </div>
       {{/if}}
 
-      <div class="flex flex-col group relative">
+      <div class="flex flex-col relative">
         {{#if user}}
           <div class="z-[51]">
             {{#if user.displayName}}
