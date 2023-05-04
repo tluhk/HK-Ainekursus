@@ -457,6 +457,36 @@ app.use(getTeamAssignments, async (req, res, next) => {
     }
   }
 
+
+  else {
+    req.user = {
+      id: '132268493',
+      nodeId: 'U_kgDOB-JBzQ=',
+      displayName: null,
+      username: 'vile-ja-kell',
+      profileUrl: 'https://github.com/vile-ja-kell',
+      provider: 'github',
+      _json: {
+        avatar_url: 'https://avatars.githubusercontent.com/u/132268493?v=4',
+        type: 'User',
+      },
+      /* team: {
+        name: 'rif20',
+        id: 6514564,
+        node_id: 'T_kwDOBqxQ5c4AY2eE',
+        slug: 'rif20',
+      }, */
+    };
+    if (req.user && !req.user.team) {
+      const { user } = req;
+      const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
+      // console.log('user1:', user);
+      // console.log('userTeam1:', userTeam);
+      req.user.team = userTeam;
+    }
+  }
+
+
   next();
 });
 

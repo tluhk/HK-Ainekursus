@@ -171,6 +171,9 @@ export default function hbsHelpers(hbs) {
           return 'checked';
         } return '';
       },
+      add: (a, b) => {
+        return a + b;
+      },
       createPath: (currentPath) => {
         const { courseSlug, contentSlug, componentSlug } = currentPath;
 

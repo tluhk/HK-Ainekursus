@@ -17,11 +17,11 @@
           <form method="POST" action="/progress-overview" name="displayByCourses" id="displayByCourses">
             <!-- Hidden form inputs to send req.body values -->
             <input type="hidden" name="displayBy" id="displayBy" value="courses" >
-            <button name="displayByCoursesButton" class="btn btn-secondary">Ainekursuste järgi</button>
+            <button name="displayByCoursesButton" class="btn btn-secondary">Kursuste järgi</button>
           </form>
         </div>
 
-        <h1>Õpilaste progressi ülevaade:</h1>
+        <h1>Ainekursuse ülevaade:</h1>
         <h4 class="m-0 pl-4 pt-4 pb-4">Tiim: <span class="uppercase">{{team}}</span></h4>
         <div class="flex flex-nowrap content-center">
           <h4 class="m-0 pl-4">Ainekursus: <span class="uppercase">{{courseData.courseName}}</span></h4>
@@ -37,57 +37,103 @@
         </div>
         <div>
         <div>
-          <div class="block">
-            
 
-            
-            <div class="headers bg-white">
-              <div class="scroller syncscroll" name="myElements">
-                <div class="flex">
-                    <div class="flex w-full pl-48"> 
-                      {{#each courseData.config.lessons }}
-                      <div class=" text-center flex-shrink-0 flex-grow-0" style="flex-basis:calc(12rem * {{this.components.length}})"><a href="/course/{{../courseData.courseSlug}}/{{this.slug}}?ref={{../courseData.refBranch}}">{{this.name}}</a></div>
-                      {{/each }}
-                    </div>
-                </div> 
-                <div class="flex">
-                  
-                  <div class="flex w-full pl-48"> 
 
-                    {{#each courseData.config.lessons }}
-                      {{#each this.components}}
-                        <div class=" text-center basis-48 flex-shrink-0 flex-grow-0">
-                        {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}
-                          <a href="/course/{{../../../courseData.courseSlug}}/{{../../this.slug}}/{{../this}}?ref={{../../../courseData.refBranch}}">{{this}}</a>
-                        {{/with}}
-                        </div>
-                      {{/each }}
+
+
+          <div class="headers">
+          <div class="scroller syncscroll"
+          style="
+            display: grid;
+            grid-template-columns: repeat(calc(1 + {{courseData.courseBranchComponentsUUIDs.length }}), 250px);
+            grid-template-rows: repeat(2, 50px);
+            {{add 2 3}}
+            overflow-x: auto;
+            width:calc(250px * (1 + {{courseData.courseBranchComponentsUUIDs.length }}))
+          "
+          >
+          
+            <!-- header first row -->
+            <div class="cell fix bg-white"></div>
+              {{#each courseData.config.lessons }}
+            <div class="cell" style="grid-column:span {{this.components.length}}"><a href="/course/{{../courseData.courseSlug}}/{{this.slug}}?ref={{../courseData.refBranch}}">{{this.name}}</a></div>
+              {{/each }}
+            
+            <div class="cell fix bg-white"></div>
+
+            <!-- header second row -->
+            {{#each courseData.config.lessons }}
+                    {{#each this.components}}
+                      <div class="cell">
+                      {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}
+                        <a href="/course/{{../../../courseData.courseSlug}}/{{../../this.slug}}/{{../this}}?ref={{../../../courseData.refBranch}}">{{this}}</a>
+                      {{/with}}
+                      </div>
                     {{/each }}
-                  </div>
-                </div>
-              </div>
-            </div> 
-            
-            <div class="tracks syncscroll" name="myElements"> <!-- body part -->
-            {{#each usersData}}
-              <div class="flex" style="width:calc(12rem + 12rem * {{../courseData.courseBranchComponentsUUIDs.length }})">
-                <div class=" basis-48 sticky left-0 bg-white">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</div>
+            {{/each }}
+          </div>
+          </div>
 
-                <div class="flex text-center">
+
+
+          <div class="tracks syncscroll"
+          style="
+            display: grid;
+            grid-template-columns: repeat(calc(1 + {{courseData.courseBranchComponentsUUIDs.length }}), 250px);
+            grid-template-rows: repeat(3, 50px);
+            {{add 2 3}}
+            overflow-x: auto;
+            width:calc(250px * (1 + {{courseData.courseBranchComponentsUUIDs.length }}))
+          "
+          >
+
+
+          <!-- body -->
+          {{#each usersData}}
+                <div class="cell student-name fix bg-white">{{this.displayName}}</div>
                   {{#each ../courseData.config.lessons }}
                     {{#each this.components}}
                       {{#ifInMarkedComponents (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices) ../../this.markedAsDoneComponents}}
-                        <div class="basis-48 flex-shrink-0 flex-grow-0"><span class="material-symbols-outlined bg-green-100">task_alt</span></div>
+                        <div class="result-done cell"><span class="material-symbols-outlined bg-green-100">task_alt</span></div>
                       {{else}}
-                        <div class="basis-48 flex-shrink-0 flex-grow-0">-</div>
+                        <div class="result-undone cell">-</div>
                       {{/ifInMarkedComponents}}
                     {{/each }}
                   {{/each }}
-                </div>
-              </div>
             {{/each }}
-            </div>
-          </div>
+
+
+          
+          
+<!-- 
+            
+              {{#each usersData}}
+                
+                  <div class="cell fix">{{this.displayName}}</div>
+                  {{#each ../courseData.config.lessons }}
+                    <div class="cell flex" style="grid-column:2 / {{this.components.length}}">
+                   
+                      {{#each this.components}}
+                        {{#ifInMarkedComponents (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices) ../../this.markedAsDoneComponents}}
+                          <div class=""><span class="material-symbols-outlined bg-green-100">task_alt</span></div>
+                        {{else}}
+                          <div class="">-</div>
+                        {{/ifInMarkedComponents}}
+                      {{/each }}
+                    
+                     </div>
+                  {{/each }}
+              {{/each }}
+           
+-->
+
+
+
+
+          
+
+        </div>
+
         </div> 
         </div> 
         

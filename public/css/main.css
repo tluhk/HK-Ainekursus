@@ -1224,8 +1224,20 @@ input:checked ~ .tab-label {
   flex: 1 1 0%;
 }
 
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
 .grow {
   flex-grow: 1;
+}
+
+.basis-48 {
+  flex-basis: 12rem;
 }
 
 .cursor-pointer {
@@ -1494,6 +1506,10 @@ input:checked ~ .tab-label {
 
 .pl-4 {
   padding-left: 1rem;
+}
+
+.pl-48 {
+  padding-left: 12rem;
 }
 
 .pl-8 {
@@ -1879,6 +1895,48 @@ a.table-of-contents {
 
 a.table-of-contents:hover {
   color: rgb(55 65 81);
+}
+
+/* sticky table */
+
+.headers {
+  top: 0;
+  position: sticky;
+  z-index: 1;
+}
+
+.scroller {
+  overflow-x: hidden;
+}
+
+.tracks, .scroller {
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tracks {
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+}
+
+/* temporary */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 250px);
+  grid-template-rows: repeat(3, 50px);
+  overflow-x: auto;
+}
+
+.cell {
+  border: 1px solid black;
+  box-sizing: border-box;
+}
+
+.cell.fix {
+  position: sticky;
+  left: 0;
+  z-index: 1;
 }
 
 .hover\:bg-neutral-100:hover {
