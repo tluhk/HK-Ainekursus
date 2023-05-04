@@ -434,7 +434,6 @@ app.use(getTeamAssignments, async (req, res, next) => {
     }
   } */
 
-
   
 
   next();
