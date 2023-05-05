@@ -67,8 +67,8 @@
                       </span>
                       {{{showComponentName this ../../concepts ../../practices}}}
                     </div>
-                  {{#if_not_equal user.team.slug 'teachers' }}
-                    {{#ifInMarkedComponents (showComponentUUID this ../../concepts ../../practices) ../../markedAsDoneComponentsArr }}
+                  {{#if_not_equal ../../../user.team.slug 'teachers' }}
+                    {{#ifInMarkedComponents (showComponentUUID ../this ../../../concepts ../../../practices) ../../../markedAsDoneComponentsArr }}
                     <span class="material-symbols-outlined">task_alt</span>
                     {{else }}
                     <span class="material-symbols-outlined">radio_button_unchecked</span>

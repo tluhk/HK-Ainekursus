@@ -183,7 +183,7 @@ const resetSelectedVersion = ((req, res, next) => {
  */
 app.use(
   session({
-    name: 'HK_e-kursused',
+    name: 'HK_ainekursused',
     secret: process.env.PASSPORT_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -191,7 +191,7 @@ app.use(
     cookie: {
       secure: false, // change this to true if you're using HTTPS
       maxAge: 60 * 60 * 1000, // 1 hour
-      // name: 'HK_e-kursused', // specify your cookie name here
+      // name: 'HK_ainekursused', // specify your cookie name here
     },
   }),
 );
@@ -854,7 +854,7 @@ app.get('/logout', resetSelectedVersion, ensureAuthenticated, (req, res, next) =
       if (err2) { return next(err2); }
       console.log('Logged out');
       // localStorage.removeItem('accessToken');
-      res.clearCookie('HK_e-kursused');
+      res.clearCookie('HK_ainekursused');
       // console.log('req.session2:', req.session);
       // console.log('req2:', req);
       return res.redirect('/');
