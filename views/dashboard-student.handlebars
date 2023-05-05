@@ -1,20 +1,20 @@
 <div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
 
-  <main id="main-content" class="w-full px-4 py-16 dashboard_content">
+  <main id="main-content" class="w-full px-4 py-8 dashboard_content">
     {{#unless user }}  
       <h3 class='mt-4 ml-4'>Logi sisse, et näha töölauda</h3>
     {{/unless }}
 
     {{#if user }} 
-      <div>
+      <div class="flex flex-row mt-4 gap-x-4 items-end">
         {{#if user.displayName }} 
           <h1>Tere, {{user.displayName}}!</h1>
         {{else}}
           <h1>Tere, {{user.username}}!</h2>
         {{/if }}
-        {{#if_not_equal user.team.slug 'teachers' }} 
+        {{!-- {{#if_not_equal user.team.slug 'teachers' }} 
           <h4>Mida täna õpime?</h4>
-        {{/if_not_equal }} 
+        {{/if_not_equal }} --}}
       </div>
       
       <div class="flex flex-row flex-wrap grow justify-between">
