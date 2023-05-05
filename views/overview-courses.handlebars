@@ -7,7 +7,7 @@
       {{/unless }}
 
       {{#if user }}
-        <div class="flex flex-row justify-start gap-x-4">
+        <div class="flex flex-row justify-start gap-x-4 py-4">
           <form method="POST" action="/progress-overview" name="displayByTeams" id="displayByTeams">
             <!-- Hidden form inputs to send req.body values -->
             <input type="hidden" name="displayBy" id="displayBy" value="teams" >
