@@ -428,7 +428,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  /* else {
+  else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -440,12 +440,12 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-      team: {
+    /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
+      }, */
     };
 
     if (req.user && !req.user.team) {
@@ -456,7 +456,6 @@ app.use(getTeamAssignments, async (req, res, next) => {
       req.user.team = userTeam;
     }
   }
-*/
 
 /*  else {
     req.user = {
