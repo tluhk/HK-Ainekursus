@@ -102,12 +102,9 @@ export default function hbsHelpers(hbs) {
         return comp.name;
       },
       showComponentUUID: (componentUppercase, concepts, practices) => {
-        console.log('componentUppercase6:', componentUppercase);
-        console.log('concepts6:', concepts);
-        console.log('practices6:', practices);
         const component = componentUppercase.toLowerCase();
         const components = concepts.concat(practices);
-        console.log('components6:', components);
+        // console.log('components6:', components);
 
         const comp = components.find((x) => (x.slug.toLowerCase()) === component);
         // console.log('comp.uuid6:', comp.uuid);
