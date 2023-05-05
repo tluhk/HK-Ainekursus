@@ -22,7 +22,7 @@ import dotenv from 'dotenv';
 
 import { fileURLToPath } from 'url';
 import pool from './db.js';
-import cache from './src/setup/setupCache.js';
+import { cacheTeamAssignments, cacheMarkedAsDoneComponents } from './src/setup/setupCache.js';
 
 import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController.js';
 import otherController from './src/components/other/otherController.js';
@@ -122,50 +122,34 @@ const validateTeacher = ((req, res, next) => {
   return res.redirect('/notfound');
 });
 
-/** Set up cache with app.js routes. This is used here for teamAssignments function, possibly for more functions.
- */
-const cacheService = (async (req, res) => {
-  const { cacheName } = res.locals;
-  // console.log('cacheName1:', cacheName);
-  try {
-    if (cache.has(cacheName) && cache.get(cacheName) !== undefined) {
-      console.log(`${cacheName} loaded with CACHE`);
-      res.locals[cacheName] = await cache.get(cacheName);
-      delete res.locals.cacheName;
-      // console.log('res.locals2:', res.locals);
-    }
-    return console.log(`${cacheName} loaded with API`);
-  } catch (err) {
-    console.log('Error with cacheService:');
-    return console.error(err);
-    // throw new Error(err);
-  }
-});
-
 /** Function to request tluhk org teams and teamMembers from tluhk Github organisation.
  * Save teamAssignments into res.locals
  */
 const getTeamAssignments = (async (req, res, next) => {
+
+    /** If teamAssignments is already stored in res.local, then continue with next() */
   if (res.locals.teamAssignments) return next();
+  const cacheName = 'teamAssignments'
 
-  const cacheName = 'teamAssignments';
-  res.locals.cacheName = cacheName;
+  /** If teamAssignments is NOT yet stored in res.local, then check if it's stored in Cache.
+   * Save teamAssignments to res.locals.
+   */
 
-  await cacheService(req, res);
-  if (res.locals[cacheName]) return next();
-
-  // console.log('res.locals3:', res.locals);
-  const { teams } = await teamsController.getAllValidTeams().catch((error) => {
-    console.error(error);
-    return res.redirect('/notfound');
-  });
-  const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
-  // console.log('getAllTeamAssignments1:', getAllTeamAssignments);
-
-  cache.set(cacheName, getAllTeamAssignments);
-  res.locals[cacheName] = getAllTeamAssignments;
-  delete res.locals.cacheName;
-  // console.log('res.locals4:', res.locals);
+  if (!cacheTeamAssignments.has(cacheName)) {
+    console.log(`❌ ${cacheName} IS NOT from cache`);
+    const { teams } = await teamsController.getAllValidTeams().catch((error) => {
+      console.error(error);
+      return res.redirect('/notfound');
+    });
+    const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
+    // console.log('getAllTeamAssignments1:', getAllTeamAssignments);
+  
+    cacheTeamAssignments.set(cacheName, getAllTeamAssignments);
+    res.locals[cacheName] = getAllTeamAssignments;
+  } else {
+    console.log(`✅ ${cacheName} FROM CACHE`);
+    res.locals[cacheName] = cacheTeamAssignments.get(cacheName);    
+  }
 
   // console.log('res.locals.teamAssignments1:', res.locals.teamAssignments);
 
@@ -428,7 +412,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
    */
-  /* else {
+  else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -440,12 +424,12 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-    team: {
+    /* team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
+      }, */
     };
 
     if (req.user && !req.user.team) {
@@ -455,7 +439,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
 /*  else {
     req.user = {
@@ -652,7 +636,12 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
         // console.log('res3:', res3);
       }
 
-      // cache.flushAll();
+      /** Check if cache for markedAsDoneComponents for given user and given course exists.
+       * If yes, delete cache for markedAsDoneComponents when user adds a component from given course */
+      if (
+        cacheMarkedAsDoneComponents.has(`markedAsDoneComponents+${githubID}+${courseSlug}`)
+      ) cacheMarkedAsDoneComponents.del(`markedAsDoneComponents+${githubID}+${courseSlug}`);
+
     } catch (err) {
       console.log('Unable to mark component as done');
       console.error(err);
@@ -660,23 +649,6 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
       if (conn) conn.release(); // release to pool
   
     }
-  }
-
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    // console.log('Connected to MariaDB 2!');
-
-    const res4 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-    // console.log('res4:', res4);
-    const res5 = await conn.query('SELECT * FROM users_progress;');
-    // console.log('res5:', res5);
-  } catch (err) {
-    console.log('Unable to connect to MariaDB 2');
-    console.error(err);
-  } finally {
-    if (conn) conn.release(); // release to pool
-
   }
 
   return res.redirect(nextPagePath);
@@ -711,7 +683,12 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
         // console.log('res7:', res7);
       }
 
-      // cache.flushAll();
+      /** Check if cache for markedAsDoneComponents for given user and given course exists.
+      * If yes, delete cache for markedAsDoneComponents when user removes a done component from given course */
+      if (
+        cacheMarkedAsDoneComponents.has(`markedAsDoneComponents+${githubID}+${courseSlug}`)
+      ) cacheMarkedAsDoneComponents.del(`markedAsDoneComponents+${githubID}+${courseSlug}`);
+
     } catch (err) {
       // console.log('Unable to connect to MariaDB 3');
       console.log('Unable to remove component as done');
@@ -720,25 +697,6 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
       if (conn) conn.release(); // release to pool
   
     }
-  }
-
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    // console.log('Connected to MariaDB 4!');
-
-    const res8 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
-    // console.log('res8:', res8);
-    const res9 = await conn.query('SELECT * FROM users_progress;');
-    // console.log('res9:', res9);
-  } catch (err) {
-    // console.log('Unable to connect to MariaDB 4');
-    console.log('Unable to get user progress from database');
-    console.error(err);
-  } finally {
-    if (conn) conn.release(); // release to pool
-
-
   }
 
   return res.redirect('back');
@@ -794,9 +752,11 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       // console.log('res1:', res1);
       req.user.displayName = req.body.displayName;
 
-      // Flush all cache so that user's name would be shown correctly across app.
-      cache.flushAll();
-    } catch (err) {
+      // Flush caches that store users names so that users names would be shown correctly across app.
+      cacheTeamUsers.flushAll();
+      cacheCommitComments.flushAll();
+
+      } catch (err) {
       console.log('Unable to update user displayName in database');
       console.error(err);
     } finally {
@@ -860,8 +820,9 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
     // console.log('res2:', res2);
     req.user.email = req.body.email;
 
-    // Flush all cache so that user's email would be shown correctly across app.
-    cache.flushAll();
+    // Flush caches that stores users emails so that users emails would be shown correctly across app.
+    cacheTeamUsers.flushAll();
+
   } catch (err) {
     console.error(err);
     console.log('Unable to update user email in database');

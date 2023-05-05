@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import axios from 'axios';
 
-import cache from '../setup/setupCache.js';
+import { cacheImages } from '../setup/setupCache.js';
 import githubReposRequests from './githubReposRequests.js';
 import { authToken } from '../setup/setupGithub.js';
 
@@ -21,14 +21,14 @@ const getImgResponse = async (coursePathInGithub, path, url, refBranch) => {
   // console.log('url1:', url);
   const routePath = `${coursePathInGithub}+${path.componentSlug}+${url}`;
 
-  if (!cache.has(routePath)) {
+  if (!cacheImages.has(routePath)) {
     console.log(`❌❌ image IS NOT from cache: ${routePath}`);
     image = await axios.get(requestImgURL(coursePathInGithub, path, url, refBranch), authToken);
 
-    cache.set(routePath, image);
+    cacheImages.set(routePath, image);
   } else {
     console.log(`✅✅ image FROM CACHE: ${routePath}`);
-    image = cache.get(routePath);
+    image = cacheImages.get(routePath);
   }
   return image;
 };

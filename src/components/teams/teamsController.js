@@ -5,7 +5,7 @@ import pool from '../../../db.js';
 
 import apiRequests from './teamsService.js';
 
-import cache from '../../setup/setupCache.js';
+import { cacheTeamUsers } from '../../setup/setupCache.js';
 
 const teamsController = {
   getAllValidTeams: async () => {
@@ -72,7 +72,7 @@ const teamsController = {
         // console.log('user found');
         // console.log('team2:', team);
         foundTeam = teachers;
-        console.log(`userId found from team: ${teachers.slug}`);
+        // console.log(`userId found from team: ${teachers.slug}`);
         return true;
       }
       return false;
@@ -95,7 +95,7 @@ const teamsController = {
           // console.log('user found');
           // console.log('team2:', team);
             foundTeam = team;
-            console.log(`userId found from team: ${team.slug}`);
+            // console.log(`userId found from team: ${team.slug}`);
             return true;
           }
           return false;
@@ -116,7 +116,7 @@ const teamsController = {
     let users;
     const routePath = `usersInTeam+${team}`;
 
-    if (!cache.has(routePath)) {
+    if (!cacheTeamUsers.has(routePath)) {
       console.log(`❌❌ users in team IS NOT from cache: ${routePath}`);
       const usersPromise = await teamsController.getOneTeamMembers(team);
       users = await Promise.all(usersPromise);
@@ -162,10 +162,10 @@ const teamsController = {
       await Promise.all(promises);
       // console.log('users4:', users);
 
-      cache.set(routePath, users);
+      cacheTeamUsers.set(routePath, users);
     } else {
       console.log(`✅✅ users in team FROM CACHE: ${routePath}`);
-      users = cache.get(routePath);
+      users = cacheTeamUsers.get(routePath);
     }
 
     // console.log('users3:', users);
