@@ -2,22 +2,21 @@
 
 [<Tagasi](../../README.md)
 
-## Used tools for app setup:
+## Esimeses versioonis kasutatud (uued) töövahendid
+
+### Used tools for app setup:
 
 - Node.js: https://nodejs.org/en/ – runtime environment that runs on a JavaScript Engine and executes JavaScript code outside a web browser, widely used to build scalable network applications
 - nodemon: https://www.npmjs.com/package/nodemon – helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
 - eslint: https://www.npmjs.com/package/eslint – for identifying and reporting on patterns found in ECMAScript/JavaScript code
 - live reload: https://bytearcher.com/articles/refresh-changes-browser-express-livereload-nodemon/
 
-## Used tools for rendering:
+### Used tools for rendering:
 
 - express JS: https://expressjs.com/ – web application framework used to build a single page, multipage, and hybrid web application
 - express-handlebars: https://www.npmjs.com/package/express-handlebars – pure rendering engine. Allows writing semantic templates for rendering HTML-pages, e-mails or markdown files
 
-## Used tools for cache:
-- Add in-memory cache: https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4
-
-## Used tools for reading and displaying content from GitHub:
+### Used tools for reading and displaying content from GitHub:
 
 - GitHub API: https://docs.github.com/en/rest – to read data from GitHub repositories
 - axios: https://axios-http.com/ – Promise based HTTP client for the browser and node.js. For making requests to GitHub API.
@@ -37,9 +36,14 @@
 - Enable embedded iframes: https://github.com/rjriel/markdown-it-iframe
 - Specify image rendering: https://www.npmjs.com/package/markdown-it-imagination
 
-## Edasiarendus
+## Teise versiooni edasiarenduse (uued) tööriistad
 
-- Read data from Ois Ainekaardid: https://www.npmjs.com/package/cheerio . The cheerio package will enable us to manipulate the DOM by reading the elements on the provided URL page.
-- Repair broken config files if it has some formatting issues (e.g. missing comma, missing quotes, remove comments) https://www.npmjs.com/package/jsonrepair
+- Enable authentication and authorization using GitHub accounts: https://www.npmjs.com/package/passport-github2
+- Read course data from ÕIS Ainekaardid: https://www.npmjs.com/package/cheerio . The cheerio package will enable us to manipulate the DOM by reading the elements on the provided URL page.
+- For validating config-files: repair broken config files if it has some formatting issues (e.g. missing comma, missing quotes, remove comments) https://www.npmjs.com/package/jsonrepair
+- Checking app performance: https://www.npmjs.com/package/perf_hooks
+- Formatting and displaying date and time values: https://www.npmjs.com/package/moment
+- Cache service: https://www.npmjs.com/package/node-cache, [guide](https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4)
+- MariaDB for database – allows relational data management: https://www.npmjs.com/package/mariadb 
 
 [<Tagasi](../../README.md)
