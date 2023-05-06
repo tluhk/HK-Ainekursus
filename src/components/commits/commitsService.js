@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-import cache from '../../setup/setupCache.js';
+import { cacheCommits, cacheCommitComments } from '../../setup/setupCache.js';
 import { authToken } from '../../setup/setupGithub.js';
 import githubCommitsRequests from '../../functions/githubCommitsRequests.js';
 
@@ -20,14 +20,14 @@ const apiRequestsCommits = {
 
     let commits;
 
-    if (!cache.has(routePath)) {
+    if (!cacheCommits.has(routePath)) {
       console.log(`❌❌ commits IS NOT from cache: ${routePath}`);
       commits = await axios.get(requestCommits(coursePathInGithub, refBranch), authToken);
 
-      cache.set(routePath, commits);
+      cacheCommits.set(routePath, commits);
     } else {
       console.log(`✅✅ commits FROM CACHE: ${routePath}`);
-      commits = cache.get(routePath);
+      commits = cacheCommits.get(routePath);
     }
 
     return commits;
@@ -38,14 +38,14 @@ const apiRequestsCommits = {
 
     let comments;
 
-    if (!cache.has(routePath)) {
+    if (!cacheCommitComments.has(routePath)) {
       console.log(`❌❌ commit comments IS NOT from cache: ${routePath}`);
       comments = await axios.get(requestCommitComments(coursePathInGithub, commitSHA), authToken);
 
-      cache.set(routePath, comments);
+      cacheCommitComments.set(routePath, comments);
     } else {
       console.log(`✅✅ commit comments FROM CACHE: ${routePath}`);
-      comments = cache.get(routePath);
+      comments = cacheCommitComments.get(routePath);
     }
 
     return comments;

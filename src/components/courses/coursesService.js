@@ -3,7 +3,7 @@
 
 import axios from 'axios';
 
-import cache from '../../setup/setupCache.js';
+import { cachePageContent, cacheBranches, cacheFiles } from '../../setup/setupCache.js';
 
 import githubReposRequests from '../../functions/githubReposRequests.js';
 
@@ -43,7 +43,7 @@ const apiRequests = {
     let branches;
     let validBranches;
 
-    if (!cache.has(routePath)) {
+    if (!cacheBranches.has(routePath)) {
       console.log(`❌❌ branches IS NOT from cache: ${routePath}`);
 
       const branchesRaw = await axios.get(requestRepoBranches(coursePathInGithub), authToken);
@@ -86,10 +86,10 @@ const apiRequests = {
       // console.log('validBranchesRaw0:', validBranchesRaw);
       // console.log('validBranches0:', validBranches);
 
-      cache.set(routePath, validBranches);
+      cacheBranches.set(routePath, validBranches);
     } else {
       console.log(`✅✅ branches FROM CACHE: ${routePath}`);
-      validBranches = cache.get(routePath);
+      validBranches = cacheBranches.get(routePath);
       // console.log('Cachecomponents2:', components);
     }
 
@@ -109,14 +109,14 @@ const apiRequests = {
 
     let components;
 
-    if (!cache.has(routePath)) {
+    if (!cachePageContent.has(routePath)) {
       console.log(`❌❌ docs components IS NOT from cache: ${routePath}`);
       components = await axios.get(requestDocs(coursePathInGithub, refBranch), authToken);
 
-      cache.set(routePath, components);
+      cachePageContent.set(routePath, components);
     } else {
       console.log(`✅✅ docs components FROM CACHE: ${routePath}`);
-      components = cache.get(routePath);
+      components = cachePageContent.get(routePath);
     }
 
     return { components };
@@ -137,7 +137,7 @@ const apiRequests = {
     let components;
     let files;
 
-    if (!cache.get(routePath) || !cache.get(routePathFiles)) {
+    if (!cachePageContent.get(routePath) || !cacheFiles.get(routePathFiles)) {
       console.log(`❌❌ courseAdditionalMaterials components IS NOT from cache: ${routePath}`);
       console.log(`❌❌ courseAdditionalMaterials files IS NOT from cache: ${routePathFiles}`);
 
@@ -156,8 +156,8 @@ const apiRequests = {
 
             // console.log('files1:', files);
 
-            cache.set(routePath, components);
-            cache.set(routePathFiles, files);
+            cachePageContent.set(routePath, components);
+            cacheFiles.set(routePathFiles, files);
           }),
         )
         .catch((error) => {
@@ -166,8 +166,8 @@ const apiRequests = {
     } else {
       console.log(`✅✅ courseAdditionalMaterials components FROM CACHE: ${routePath}`);
       console.log(`✅✅ courseAdditionalMaterials files FROM CACHE: ${routePathFiles}`);
-      components = cache.get(routePath);
-      files = cache.get(routePathFiles);
+      components = cachePageContent.get(routePath);
+      files = cacheFiles.get(routePathFiles);
       // console.log('Cachecomponents2:', components);
       // console.log('CacheFiles2:', files);
     }
@@ -192,16 +192,16 @@ const apiRequests = {
 
     let components;
 
-    if (!cache.get(routePath)) {
+    if (!cachePageContent.get(routePath)) {
       console.log(`❌❌ lessons components IS NOT from cache: ${routePath}`);
 
       components = await axios.get(requestLessons(coursePathInGithub, `${path.contentSlug}`, refBranch), authToken);
 
-      cache.set(routePath, components);
+      cachePageContent.set(routePath, components);
     } else {
       console.log(`✅✅ lessons components FROM CACHE: ${routePath}`);
 
-      components = cache.get(routePath);
+      components = cachePageContent.get(routePath);
     }
 
     return { components };
@@ -221,7 +221,7 @@ const apiRequests = {
     let components;
     let files;
 
-    if (!cache.get(routePath) || !cache.get(routePathFiles)) {
+    if (!cachePageContent.get(routePath) || !cacheFiles.get(routePathFiles)) {
       console.log(`❌❌ lessonAdditionalMaterials components IS NOT from cache: ${routePath}`);
       console.log(`❌❌ lessonAdditionalMaterials files IS NOT from cache: ${routePathFiles}`);
 
@@ -238,8 +238,8 @@ const apiRequests = {
             [components, files] = responses;
             files = responses[1].data.filter((x) => !ignoreFiles.includes(x.name));
 
-            cache.set(routePath, components);
-            cache.set(routePathFiles, files);
+            cachePageContent.set(routePath, components);
+            cacheFiles.set(routePathFiles, files);
           }),
         )
         .catch((error) => {
@@ -248,8 +248,8 @@ const apiRequests = {
     } else {
       console.log(`✅✅ lessonAdditionalMaterials components FROM CACHE: ${routePath}`);
       console.log(`✅✅ lessonAdditionalMaterials files FROM CACHE: ${routePathFiles}`);
-      components = cache.get(routePath);
-      files = cache.get(routePathFiles);
+      components = cachePageContent.get(routePath);
+      files = cacheFiles.get(routePathFiles);
     }
 
     return { components, files };
@@ -274,7 +274,7 @@ const apiRequests = {
     let sourcesRaw;
 
     if (path.type === 'concept') {
-      if (!cache.get(routePath)) {
+      if (!cachePageContent.get(routePath)) {
         console.log(`❌❌ concept components IS NOT from cache: ${routePath}`);
         console.log(`❌❌ concept sources IS NOT from cache: ${routePathSources}`);
 
@@ -302,27 +302,27 @@ const apiRequests = {
 
               // console.log('components4:', components);
               // console.log('sources4:', sources);
-              cache.set(routePath, components);
-              cache.set(routePathSources, sources);
+              cachePageContent.set(routePath, components);
+              cachePageContent.set(routePathSources, sources);
             }),
           )
           .catch((error) => error);
       } else {
         console.log(`✅✅ concept components FROM CACHE: ${routePath}`);
         console.log(`✅✅ concept sources FROM CACHE: ${routePathSources}`);
-        components = cache.get(routePath);
-        sources = cache.get(routePathSources);
+        components = cachePageContent.get(routePath);
+        sources = cachePageContent.get(routePathSources);
       }
     }
 
     if (path.type === 'practice') {
-      if (!cache.get(routePath)) {
+      if (!cachePageContent.get(routePath)) {
         console.log(`❌❌ practice components IS NOT from cache: ${routePath}`);
         components = await axios.get(requestPractices(coursePathInGithub, `${path.componentSlug}`, refBranch), authToken);
-        cache.set(routePath, components);
+        cachePageContent.set(routePath, components);
       } else {
         console.log(`✅✅ practice components FROM CACHE: ${routePath}`);
-        components = cache.get(routePath);
+        components = cachePageContent.get(routePath);
       }
     }
 

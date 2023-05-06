@@ -5,7 +5,7 @@ import pool from '../../../db.js';
 
 import apiRequests from './teamsService.js';
 
-import cache from '../../setup/setupCache.js';
+import { cacheTeamUsers } from '../../setup/setupCache.js';
 
 const teamsController = {
   getAllValidTeams: async () => {
@@ -15,16 +15,14 @@ const teamsController = {
     const allTeams = await apiRequests.getTeamsService();
     // console.log('allTeams1:', allTeams);
 
-    /**
-     * Set conditions, which Teams are read from tluhk org github account
+    /** Set conditions, which Teams are read from tluhk org github account
      * Filter out only main teams:
-     * -- those that start with "rif" or "HK_" and do NOT contain a hyphen.
+     * -- those that consist of 3 alphabetical symbols and 2 letters, e.g. rif20, rif21
+     * -- and 'teachers' team
      */
-
-    const teams = allTeams.filter((x) => // x.name === 'rif20-valikpraktika-1' ||
-      (x.slug.startsWith('rif') && !x.slug.includes('-'))
-      || (x.slug.startsWith('teachers') && !x.slug.includes('-')),
-      /* || (x.name.startsWith('HK_') && !x.name.includes('-'))) */
+    const teams = allTeams.filter((x) =>
+      x.slug.match(/^[a-zA-Z]{3}\d{2}$/) // match team names that consist of 3 alphabetical symbols and 2 letters, e.g. rif20, rif21
+      || x.slug === 'teachers' // or match 'teachers' team
     );
 
     // console.log('teams1:', teams);
@@ -72,7 +70,7 @@ const teamsController = {
         // console.log('user found');
         // console.log('team2:', team);
         foundTeam = teachers;
-        console.log(`userId found from team: ${teachers.slug}`);
+        // console.log(`userId found from team: ${teachers.slug}`);
         return true;
       }
       return false;
@@ -95,7 +93,7 @@ const teamsController = {
           // console.log('user found');
           // console.log('team2:', team);
             foundTeam = team;
-            console.log(`userId found from team: ${team.slug}`);
+            // console.log(`userId found from team: ${team.slug}`);
             return true;
           }
           return false;
@@ -116,7 +114,7 @@ const teamsController = {
     let users;
     const routePath = `usersInTeam+${team}`;
 
-    if (!cache.has(routePath)) {
+    if (!cacheTeamUsers.has(routePath)) {
       console.log(`❌❌ users in team IS NOT from cache: ${routePath}`);
       const usersPromise = await teamsController.getOneTeamMembers(team);
       users = await Promise.all(usersPromise);
@@ -162,10 +160,10 @@ const teamsController = {
       await Promise.all(promises);
       // console.log('users4:', users);
 
-      cache.set(routePath, users);
+      cacheTeamUsers.set(routePath, users);
     } else {
       console.log(`✅✅ users in team FROM CACHE: ${routePath}`);
-      users = cache.get(routePath);
+      users = cacheTeamUsers.get(routePath);
     }
 
     // console.log('users3:', users);

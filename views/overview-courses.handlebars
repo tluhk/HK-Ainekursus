@@ -1,5 +1,5 @@
 <div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
-  <main id="main-content" class="w-full px-4 py-16 dashboard_content">
+  <main id="main-content" class="w-full px-4 py-8 dashboard_content">
     
       <div class="flex flex-col flex-nowrap grow justify-between">
       {{#unless user }}  
@@ -7,7 +7,7 @@
       {{/unless }}
 
       {{#if user }}
-        <div class="flex flex-row justify-start gap-x-4">
+        <div class="flex flex-row justify-start gap-x-4 py-4">
           <form method="POST" action="/progress-overview" name="displayByTeams" id="displayByTeams">
             <!-- Hidden form inputs to send req.body values -->
             <input type="hidden" name="displayBy" id="displayBy" value="teams" >
@@ -33,10 +33,10 @@
                 <p class="m-0">{{this.courseCode}}</p>
               </div>
               <div class="flex items-start gap-2 m-0 pb-2">Tiimid ja nende vaikimisi harud:</div>
-               <div class="flex flex-nowrap justify-start gap-x-4 items-center pl-4">
-                  <ul class="pt-2 pl-4">
+               <div class="flex flex-nowrap justify-start gap-x-4 items-center">
+                  <ul class="pt-2 w-full">
                   {{#each this.courseConfigByTeam}}
-                    <li class='bg-neutral-50 hover:bg-neutral-100 p-2' onclick="handleCourseClick('{{@key}}', '{{../this.courseSlug}}')">
+                    <li class="bg-neutral-50 hover:bg-neutral-100 pl-8 pt-4 pb-4" onclick="handleCourseClick('{{@key}}', '{{../this.courseSlug}}')">
                     <div class="flex flex-nowrap justify-start gap-x-4 items-center">
                       <h5 class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">groups</span>
                       {{uppercase @key}} tiim</h5>

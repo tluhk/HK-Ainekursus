@@ -5,7 +5,7 @@ import base64 from 'base-64';
 import utf8 from 'utf8';
 import { axios, authToken } from '../setup/setupGithub.js';
 
-import cache from '../setup/setupCache.js';
+import { cacheConfig } from '../setup/setupCache.js';
 
 // Import request functions for Axios
 import githubReposRequests from './githubReposRequests.js';
@@ -121,12 +121,12 @@ const getConfig = async (selectedCourse, refBranch) => {
 
   const routePath = `getConfig:${selectedCourse}+${refBranch}`;
   // console.log('routePath1:', routePath);
-  // console.log('cache.get(routePath)1:', cache.get(routePath));
-  // console.log('cache.has(routePath)1:', cache.has(routePath));
-  // console.log('cache.get(routePath)1:', cache.get(routePath));
+  // console.log('cacheConfig.get(routePath)1:', cacheConfig.get(routePath));
+  // console.log('cacheConfig.has(routePath)1:', cacheConfig.has(routePath));
+  // console.log('cacheConfig.get(routePath)1:', cacheConfig.get(routePath));
 
-  if (cache.has(routePath) || cache.get(routePath) !== undefined) {
-    config = cache.get(routePath);
+  if (cacheConfig.has(routePath) || cacheConfig.get(routePath) !== undefined) {
+    config = cacheConfig.get(routePath);
     console.log(`✅ getConfig FROM CACHE: ${selectedCourse}+${refBranch}`);
   } else {
     console.log(`❌ getConfig IS NOT from cache: ${selectedCourse}+${refBranch}`);
@@ -135,7 +135,7 @@ const getConfig = async (selectedCourse, refBranch) => {
     } catch (error) {
       console.error(error);
     }
-    cache.set(routePath, config);
+    cacheConfig.set(routePath, config);
     // console.log('config from api');
   }
 

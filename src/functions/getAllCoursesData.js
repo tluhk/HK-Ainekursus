@@ -5,7 +5,7 @@ import { performance } from 'perf_hooks';
 import cheerio from 'cheerio';
 
 import { axios, authToken } from '../setup/setupGithub.js';
-import cache from '../setup/setupCache.js';
+import { cacheTeamCourses, cacheOisContent } from '../setup/setupCache.js';
 import githubReposRequests from './githubReposRequests.js';
 import getConfig from './getConfigFuncs.js';
 import apiRequests from '../components/courses/coursesService.js';
@@ -30,7 +30,7 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
 
     const start6 = performance.now();
 
-    if (!cache.has(routePathOisContent)) {
+    if (!cacheOisContent.has(routePathOisContent)) {
       console.log(`❌❌ oisContent IS NOT from cache: ${routePathOisContent}`);
 
       try {
@@ -57,10 +57,10 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
         console.error(error);
       }
 
-      cache.set(routePathOisContent, oisContent);
+      cacheOisContent.set(routePathOisContent, oisContent);
     } else {
       console.log(`✅✅ oisContent FROM CACHE: ${routePathOisContent}`);
-      oisContent = cache.get(routePathOisContent);
+      oisContent = cacheOisContent.get(routePathOisContent);
     }
     const end6 = performance.now();
     console.log(`Execution time oisContent: ${end6 - start6} ms`);
@@ -119,7 +119,7 @@ const getAllCoursesData = (async (teamSlug, req) => {
   let courses = { data: [] };
   const routePath = `allCoursesData+${teamSlug}`;
 
-  if (!cache.has(routePath)) {
+  if (!cacheTeamCourses.has(routePath)) {
     console.log(`❌❌ team courses IS NOT from cache: ${routePath}`);
 
     /** For TEACHERS get all possible HK_ repos  */
@@ -133,10 +133,10 @@ const getAllCoursesData = (async (teamSlug, req) => {
         console.error(error);
       });
     }
-    cache.set(routePath, courses);
+    cacheTeamCourses.set(routePath, courses);
   } else {
     console.log(`✅✅ team courses FROM CACHE: ${routePath}`);
-    courses = cache.get(routePath);
+    courses = cacheTeamCourses.get(routePath);
     // console.log('Cachecomponents2:', components);
   }
 

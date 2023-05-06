@@ -1,3 +1,5 @@
+
+<!DOCTYPE html>
 <html lang='et'>
 
   <head>
@@ -29,7 +31,7 @@
     <script src="https://sisuloome.e-koolikott.ee/modules/contrib/h5p/vendor/h5p/h5p-core/js/h5p-resizer.js" charset="UTF-8"></script>
     <script src="https://oppevara.tlu.ee/modules/contrib/h5p/vendor/h5p/h5p-core/js/h5p-resizer.js" charset="UTF-8"></script>
 
-    <title>Haapsalu kolledži e-kursused | {{#if config.courseName}}
+    <title>Haapsalu kolledži ainekursused | {{#if config.courseName}}
       {{config.courseName}}
     {{/if}}</title>
   </head>
@@ -57,15 +59,16 @@
     function handleRadioClick(value) {
      //  console.log('value1:', value);
       document.getElementById("selectedVersion").value = value;
-      document.getElementById("toggle-side-menu-state").submit();
+      document.getElementById("my-form").submit();
     }
+    
     function handleCourseClick(team, courseSlug) {
       const formId = `overview-${team}-${courseSlug}`;
       // console.log('formId:', formId);
       document.getElementById(formId).submit();
       // console.log('team:', team);
       // console.log('courseSlug:', courseSlug);
-      document.getElementById(`overview-${team}-${courseSlug}`).submit(); */
+      document.getElementById(`overview-${team}-${courseSlug}`).submit(); 
     }
     </script>
 

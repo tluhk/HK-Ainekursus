@@ -104,7 +104,6 @@ export default function hbsHelpers(hbs) {
       showComponentUUID: (componentUppercase, concepts, practices) => {
         const component = componentUppercase.toLowerCase();
         const components = concepts.concat(practices);
-        // console.log('component6:', component);
         // console.log('components6:', components);
 
         const comp = components.find((x) => (x.slug.toLowerCase()) === component);
@@ -114,8 +113,8 @@ export default function hbsHelpers(hbs) {
       capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       findTeacher: (teacherName, teachers) => {
-        console.log('teacherName2:', teacherName);
-        console.log('teachers2:', teachers);
+        // console.log('teacherName2:', teacherName);
+        // console.log('teachers2:', teachers);
         const teacherData = teachers.find((x) => x.login === teacherName);
         // console.log('teacherData2:', teacherData);
 

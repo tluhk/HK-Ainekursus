@@ -1055,6 +1055,10 @@ input:checked ~ .tab-label {
   margin: 0px;
 }
 
+.m-2 {
+  margin: 0.5rem;
+}
+
 .my-1 {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
@@ -1496,6 +1500,16 @@ input:checked ~ .tab-label {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .pb-2 {
