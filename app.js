@@ -97,6 +97,8 @@ const loginConfig = {
   // main page.
  */
 const ensureAuthenticated = ((req, res, next) => {
+  // console.log('req.isAuthenticated1:', req.isAuthenticated);
+  // console.log('req.user1:', req.user);
   if (req.isAuthenticated()) {
     // console.log('req.session1:', req.session);
     // console.log('req.session.passport.user.id1:', req.session.passport.user.id);
@@ -402,7 +404,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-    /* team: {
+    team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',

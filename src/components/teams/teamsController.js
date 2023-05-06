@@ -15,16 +15,14 @@ const teamsController = {
     const allTeams = await apiRequests.getTeamsService();
     // console.log('allTeams1:', allTeams);
 
-    /**
-     * Set conditions, which Teams are read from tluhk org github account
+    /** Set conditions, which Teams are read from tluhk org github account
      * Filter out only main teams:
-     * -- those that start with "rif" or "HK_" and do NOT contain a hyphen.
+     * -- those that consist of 3 alphabetical symbols and 2 letters, e.g. rif20, rif21
+     * -- and 'teachers' team
      */
-
-    const teams = allTeams.filter((x) => // x.name === 'rif20-valikpraktika-1' ||
-      (x.slug.startsWith('rif') && !x.slug.includes('-'))
-      || (x.slug.startsWith('teachers') && !x.slug.includes('-')),
-      /* || (x.name.startsWith('HK_') && !x.name.includes('-'))) */
+    const teams = allTeams.filter((x) =>
+      x.slug.match(/^[a-zA-Z]{3}\d{2}$/) // match team names that consist of 3 alphabetical symbols and 2 letters, e.g. rif20, rif21
+      || x.slug === 'teachers' // or match 'teachers' team
     );
 
     // console.log('teams1:', teams);

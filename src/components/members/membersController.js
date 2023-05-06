@@ -1,3 +1,4 @@
+import { cacheOrgMembers } from '../../setup/setupCache.js';
 import apiRequests from './membersService.js';
 
 const membersController = {
@@ -6,7 +7,18 @@ const membersController = {
     /**
      * Request all members of tluhk organisation
      */
-    const members = await apiRequests.getMembersService();
+    const cacheName = 'orgMembers';
+    let members;
+
+    if (!cacheOrgMembers.has(cacheName)) {
+      console.log(`❌❌ Org Members IS NOT from cache`);
+      members = await apiRequests.getMembersService();
+  
+      cacheOrgMembers.set(cacheName, members);
+    } else {
+      console.log(`✅✅ Org Members FROM CACHE`);
+      members = cacheOrgMembers.get(cacheName);
+    }
     // console.log('allMembers1:', members);
     return { members };
   },
