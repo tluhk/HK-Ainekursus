@@ -16,7 +16,7 @@ docker image rm -f haapsalu || (echo "Image haapsalu didn't exist so not removed
 
 # Build the Docker image
 echo "Building Docker image..." 2>&1
-docker build -t haapsalu .
+DOCKER_BUILDKIT=1 docker image build -t haapsalu .
 
 # Wait for the image to be built
 echo "Waiting for Docker image to be built..." 2>&1
