@@ -366,28 +366,6 @@ passport.use(
   ),
 );
 
-/*
-const resetSideMenuState = (req, res, next) => {
-  console.log('req.session0:', req.session);
-  if (!req.session.hasOwnProperty('sideMenuState')) req.session.sideMenuState = true;
-  console.log('req.session1:', req.session);
-  return next();
-}
-/** At app starting, set SideMenuState to true */
-// app.use(resetSideMenuState);
-
-/** Endpoint to save sideMenuState */
-/* app.post('/toggle-side-menu-state', ensureAuthenticated, async (req, res) => {
-  console.log('req.session0:', req.session);
-  if (!req.session.hasOwnProperty('sideMenuState')) {
-    req.session.sideMenuState = true
-    return;
-  };
-  req.session.sideMenuState = !req.session.sideMenuState;
-  console.log('req.session.sideMenuState1:', req.session.sideMenuState);
-  return;
-}); */
-
 /** Endpoint to get team assignments from tluhk Github account when app is running.
  * Used as middleware to add user's team info to session's profile.
  * https://stackoverflow.com/a/25687358
@@ -429,7 +407,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      },
+      }, 
     };
 
     if (req.user && !req.user.team) {
