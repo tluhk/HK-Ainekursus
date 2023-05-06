@@ -22,7 +22,7 @@ import dotenv from 'dotenv';
 
 import { fileURLToPath } from 'url';
 import pool from './db.js';
-import { cacheTeamAssignments, cacheMarkedAsDoneComponents } from './src/setup/setupCache.js';
+import { cacheTeamAssignments, cacheMarkedAsDoneComponents, cacheTeamUsers } from './src/setup/setupCache.js';
 
 import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController.js';
 import otherController from './src/components/other/otherController.js';
@@ -741,9 +741,10 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       req.user.displayName = req.body.displayName;
 
       // Flush caches that store users names so that users names would be shown correctly across app.
-      cacheTeamUsers.flushAll();
+      // console.log(`usersInTeam1: usersInTeam+${user.team.slug}`);
+
+      cacheTeamUsers.del(`usersInTeam+${user.team.slug}`)
       cacheCommitComments.flushAll();
-      cacheTeamCourses.flushAll();
 
       } catch (err) {
       console.log('Unable to update user displayName in database');
@@ -810,8 +811,8 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
     req.user.email = req.body.email;
 
     // Flush caches that stores users emails so that users emails would be shown correctly across app.
-    cacheTeamUsers.flushAll();
-    cacheTeamCourses.flushAll();
+    // console.log(`usersInTeam1: usersInTeam+${user.team.slug}`);
+    cacheTeamUsers.del(`usersInTeam+${user.team.slug}`)
 
   } catch (err) {
     console.error(err);

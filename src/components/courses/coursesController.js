@@ -409,6 +409,7 @@ const allCoursesController = {
       courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
       courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
 
+      // console.log('allTeachers1:', allTeachers);
       /** Rendering student's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === 'name') {
         return res.render('dashboard-student', {
