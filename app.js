@@ -743,6 +743,7 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       // Flush caches that store users names so that users names would be shown correctly across app.
       cacheTeamUsers.flushAll();
       cacheCommitComments.flushAll();
+      cacheTeamCourses.flushAll();
 
       } catch (err) {
       console.log('Unable to update user displayName in database');
@@ -810,6 +811,7 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
 
     // Flush caches that stores users emails so that users emails would be shown correctly across app.
     cacheTeamUsers.flushAll();
+    cacheTeamCourses.flushAll();
 
   } catch (err) {
     console.error(err);
