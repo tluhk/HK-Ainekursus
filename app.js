@@ -315,12 +315,12 @@ passport.use(
 
         // eslint-disable-next-line no-param-reassign
 
-        /**
-         * Check if Github user is part of tluhk Github org members.
+        /** Double check that Github user is part of tluhk Github org members.
          * If not, forbid access by not returning passport profile.
          * If yes, return github user profile with the passport.
          */
-        const userInOrgMembers = membersController.isUserInOrgMembers(profile.id);
+        // console.log('profile1:', profile);
+        const userInOrgMembers = await membersController.isUserInOrgMembers(profile.username);
 
         if (!userInOrgMembers) {
           console.log('No user in tluhk org');
@@ -359,6 +359,7 @@ passport.use(
         // console.log('profile1:', profile);
         // console.log('Logged in');
 
+        console.log('Logging in...');
         /**
          * Return user profile with a successful login,
          */
@@ -463,7 +464,7 @@ app.get('/login', (req, res) => {
   /**
    * Validate that text input is not empty or is not an email
    */
-  if (req.query.invalid) message = 'Sisestatud Githubi kasutajanimi pole korrektne';
+  if (req.query.invalid) message = 'Sisestatud Githubi kasutajanimi pole korrektne või ei kuulu kolledži kasutajate hulka';
   if (req.query.email) message = 'Emaili sisestamine pole lubatud';
 
   return res.render('login', {
@@ -481,14 +482,21 @@ app.post('/login', async (req, res, next) => {
    * If entered value is email, redirect back to login and show "entering email is not allowed" message
    */
   // eslint-disable-next-line no-useless-escape
-  if (req.body.login.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) return res.redirect('/login?email=true');
+  if (req.body.login.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) {
+    console.log(`Invalid login – email not allowed`);
+    return res.redirect('/login?email=true');
+  }
 
-  /**
-   * If entered username doesn't exist in Github, redirect back to login and show "invalid username" message
-   */
-  const userFromGithub = await apiRequests.getUserFromGithub(req.body.login);
-  // console.log('userFromGithub2:', userFromGithub);
-  if (!userFromGithub) return res.redirect('/login?invalid=true');
+  /** If entered username doesn't exist in Github, redirect back to login and show "invalid username" message */
+  // const userFromGithub = await apiRequests.getUserFromGithub(req.body.login);
+  // if (!userFromGithub) return res.redirect('/login?invalid=true');
+
+  /**  If entered username doesn't exist in Github tluhk organisation members, redirect back to login and show "invalid username" message */
+  const userInOrgMembers = await membersController.isUserInOrgMembers(req.body.login);
+  if (!userInOrgMembers) { 
+    console.log(`Invalid login – entered username is not in tluhk org members`);
+    return res.redirect('/login?invalid=true');
+  }
 
   return passport.authenticate('github', {
     login: req.body.login,

@@ -22,13 +22,15 @@ const membersController = {
     // console.log('allMembers1:', members);
     return { members };
   },
-  isUserInOrgMembers: async (githubUserIDString) => {
+  isUserInOrgMembers: async (user) => {
     /**
      * check if given githubUserID is part of tluhk organisation members
      */
     const { members } = await membersController.getOrgMembers();
-    const githubUserID = parseInt(githubUserIDString, 10);
-    const userInOrgMembers = members.find((x) => x.id === githubUserID);
+    // console.log('user1:', user);
+    // console.log('members1:', members);
+    // const githubUser = parseInt(githubUserIDString, 10);
+    const userInOrgMembers = members.find((x) => x.login === user);
 
     if (!userInOrgMembers) return false;
     return userInOrgMembers;
