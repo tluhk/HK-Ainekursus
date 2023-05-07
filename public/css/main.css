@@ -603,6 +603,12 @@ h6{
 .z-\[52\]{
   z-index: 52;
 }
+.col-span-2{
+  grid-column: span 2 / span 2;
+}
+.col-span-4{
+  grid-column: span 4 / span 4;
+}
 .m-0{
   margin: 0px;
 }
@@ -756,6 +762,9 @@ h6{
 }
 .list-none{
   list-style-type: none;
+}
+.grid-cols-6{
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 .grid-cols-7{
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -1064,6 +1073,11 @@ h6{
 html {
   scroll-behavior: smooth;
 }
+.dashboard_content {
+  max-width: 100%;
+  width: 65rem;
+  margin: 0 auto;
+}
 /* only for designsystem demo */
 pre[class*='language-'] {
   margin: 0 !important;
@@ -1321,11 +1335,8 @@ body {
   }
 }
 @media (min-width: 768px){
-  .md\:w-2\/5{
-    width: 40%;
-  }
-  .md\:w-3\/5{
-    width: 60%;
+  .md\:grid{
+    display: grid;
   }
   .md\:flex-row{
     flex-direction: row;

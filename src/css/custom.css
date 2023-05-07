@@ -1,11 +1,12 @@
-
 html {
   scroll-behavior: smooth;
 }
 
-
-
-
+.dashboard_content {
+  max-width: 100%;
+  width: 65rem;
+  margin: 0 auto;
+}
 
 /* only for designsystem demo */
 
@@ -20,4 +21,3 @@ code {
   white-space: -o-pre-wrap !important; /* Opera 7 */
   word-wrap: break-word !important;
 }
-

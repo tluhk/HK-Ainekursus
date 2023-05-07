@@ -17,12 +17,12 @@
         {{/if_not_equal }} --}}
       </div>
       
-      <div class="flex flex-row flex-wrap grow justify-between">
+      <div class="md:grid grid-cols-6 gap-4">
         <!-- refers to content.handlebars fail in /partials folder -->
-        <div class="md:w-3/5">
+        <div class="col-span-4">
           {{> dashboard-student.courses }} <br>
         </div>
-        <div class="md:w-2/5">
+        <div class="col-span-2">
           {{> dashboard-student.notifications }} <br>
           {{> dashboard-student.teacherCourses }} <br>
         </div>
