@@ -1,0 +1,16 @@
+body {
+  background-position-x: right;
+  background-repeat: no-repeat;
+}
+.dark-theme body {
+  background-image: url(/images/dark_bg.jpg);
+  background-attachment: fixed;
+}
+.light-theme body {
+  background-image: url(/images/light_bg.jpg);
+  background-attachment: fixed;
+}
+
+body {
+  @apply bg-page-background text-text;
+}

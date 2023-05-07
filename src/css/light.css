@@ -1,0 +1,29 @@
+.light-theme {
+  --active-menu-stroke-on: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --text: #414a58;
+  --link: #2b313b;
+  --link-idle: #5c6470;
+  --link-action: #749f60;
+  --card-background: linear-gradient(194deg, #a57e43 0%, #4f4536 100%);
+  --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
+  --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
+  --menu-background-stroke: #dad7d38c;
+  --menu-item-background-stroke: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --link-active: #416b2e;
+  --link-hover: #749f60;
+  --page-background: #FAFCFF;
+  --button-default: #749f60;
+  --button-hover: #5d804d;
+  --button-active: #416b2e;
+  --button-focus: #749f60;
+  --button-disabled: #abb1ba;
+  --button-secondary-default: #749f60;
+  --button-secondary-label-default: #414a58;
+  --button-secondary-hover: #5d804d;
+  --button-secondary-active: #416b2e;
+  --button-secondary-focus: #749f60;
+  --button-secondary-disabled: #abb1ba;
+  --button-link: #416b2e;
+  --button-link-hover: #5d804d;
+  --button-link-active: #749f60;
+}

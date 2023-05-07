@@ -1,0 +1,24 @@
+.dark-theme {
+  --text: #f1f2f4;
+  --link: #f1f2f4;
+  --link-idle: #7b8593;
+  --link-active: #5d804d;
+  --dark-drop-shadow: [object Object];
+  --dark-drop-shadow-strong: [object Object];
+  --link-hover: #c7cbd1;
+  --page-background: #040802;
+  --button-default: #749f60;
+  --button-hover: #5d804d;
+  --button-active: #416b2e;
+  --button-focus: #749f60;
+  --button-disabled: #abb1ba;
+  --button-secondary-default: #abc69f;
+  --button-secondary-label-default: #f1f2f4;
+  --button-secondary-hover: #90b380;
+  --button-secondary-active: #749f60;
+  --button-secondary-focus: #abc69f;
+  --button-secondary-disabled: #e3e5e8;
+  --button-link: #e3ecdf;
+  --button-link-hover: #c7d9bf;
+  --button-link-active: #abc69f;
+}

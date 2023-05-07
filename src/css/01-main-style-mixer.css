@@ -1,0 +1,11 @@
+@import 'tailwindcss/base';
+
+@import 'tailwindcss/components';
+@import 'light.css';
+@import 'dark.css';
+@import 'buttons.css';
+@import 'custom.css';
+@import 'typography.css';
+@import 'background-gradient.css';
+
+@import 'mode-switch.css';
