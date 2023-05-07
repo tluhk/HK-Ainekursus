@@ -8,6 +8,60 @@ html {
   margin: 0 auto;
 }
 
+/* sticky table */
+.headers {
+  top: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1;
+}
+.scroller {
+  overflow-x: hidden;
+}
+.tracks,
+.scroller {
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.tracks {
+  overflow: auto;
+  -ms-scroll-snap-type: x mandatory;
+  scroll-snap-type: x mandatory;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 250px);
+  grid-template-rows: repeat(3, 50px);
+  overflow-x: auto;
+}
+
+.cell {
+  border: 1px solid;
+  box-sizing: border-box;
+  @apply border-neutral-400;
+}
+
+.cell.fix {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.tracks::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 7px;
+}
+.tracks::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.hoverrow:hover .hoverrowchild {
+  @apply bg-primary-200;
+}
+
 /* only for designsystem demo */
 
 pre[class*='language-'] {

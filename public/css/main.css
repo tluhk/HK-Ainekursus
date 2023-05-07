@@ -615,6 +615,10 @@ h6{
 .m-2{
   margin: 0.5rem;
 }
+.mx-auto{
+  margin-left: auto;
+  margin-right: auto;
+}
 .my-1{
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
@@ -884,6 +888,12 @@ h6{
 .bg-neutral-200{
   background-color: var(--neutral-200, #e3e5e8);
 }
+.bg-primary-100{
+  background-color: var(--primary-100, #f2eff5);
+}
+.bg-primary-200{
+  background-color: var(--primary-200, #e6dfec);
+}
 .p-0{
   padding: 0px;
 }
@@ -1077,6 +1087,52 @@ html {
   max-width: 100%;
   width: 65rem;
   margin: 0 auto;
+}
+/* sticky table */
+.headers {
+  top: 0;
+  position: sticky;
+  z-index: 1;
+}
+.scroller {
+  overflow-x: hidden;
+}
+.tracks,
+.scroller {
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.tracks {
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 250px);
+  grid-template-rows: repeat(3, 50px);
+  overflow-x: auto;
+}
+.cell {
+  border: 1px solid;
+  box-sizing: border-box;
+  border-color: var(--neutral-400, #abb1ba);
+}
+.cell.fix {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+.tracks::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 7px;
+}
+.tracks::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.hoverrow:hover .hoverrowchild{
+  background-color: var(--primary-200, #e6dfec);
 }
 /* only for designsystem demo */
 pre[class*='language-'] {

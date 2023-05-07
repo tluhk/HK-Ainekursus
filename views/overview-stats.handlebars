@@ -41,24 +41,24 @@
             
 
             
-            <div class="headers bg-white">
+            <div class="headers">
               <div class="scroller syncscroll" name="myElements">
-                <div class="flex" style="width:calc(12rem + 12rem * {{courseData.courseBranchComponentsUUIDs.length }})">
-                    <div class="sticky left-0 basis-48 grow-0 shrink-0 border-r bg-neutral-200 border-r-neutral-200"></div>
+                <div class="flex bg-primary-100 mx-auto" style="width:calc(12rem + 12rem * {{courseData.courseBranchComponentsUUIDs.length }})">
+                    <div class="sticky left-0 basis-48 grow-0 shrink-0 border-r  border-r-neutral-200"></div>
                     <div class="flex w-full"> 
                       {{#each courseData.config.lessons }}
-                      <div class="cell p-3 font-bold text-center flex-shrink-0 flex-grow-0" style="flex-basis:calc(12rem * {{this.components.length}})"><a href="/course/{{../courseData.courseSlug}}/{{this.slug}}?ref={{../courseData.refBranch}}">{{this.name}}</a></div>
+                      <div class="cell bg-primary-100 p-3 font-bold text-center flex-shrink-0 flex-grow-0" style="flex-basis:calc(12rem * {{this.components.length}})"><a href="/course/{{../courseData.courseSlug}}/{{this.slug}}?ref={{../courseData.refBranch}}">{{this.name}}</a></div>
                       {{/each }}
                     </div>
                 </div> 
-                <div class="flex" style="width:calc(12rem + 12rem * {{courseData.courseBranchComponentsUUIDs.length }})">
-                  <div class="sticky left-0 basis-48 grow-0 shrink-0 border-r bg-neutral-200 border-r-neutral-200"></div>
+                <div class="flex bg-primary-100 mx-auto" style="width:calc(12rem + 12rem * {{courseData.courseBranchComponentsUUIDs.length }})">
+                  <div class="sticky left-0 basis-48 grow-0 shrink-0 border-r  border-r-neutral-200"></div>
                     
                   <div class="flex w-full"> 
 
                     {{#each courseData.config.lessons }}
                       {{#each this.components}}
-                        <div class="cell text-center basis-48 flex-shrink-0 flex-grow-0">
+                        <div class="cell bg-primary-100 text-center basis-48 flex-shrink-0 flex-grow-0">
                         {{#with (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}
                           <a href="/course/{{../../../courseData.courseSlug}}/{{../../this.slug}}/{{../this}}?ref={{../../../courseData.refBranch}}">{{this}}</a>
                         {{/with}}
@@ -72,8 +72,8 @@
             
             <div class="tracks syncscroll" name="myElements"> <!-- body part -->
             {{#each usersData}}
-              <div class="hoverrow flex hover:bg-neutral-100" style="width:calc(12rem + 12rem * {{../courseData.courseBranchComponentsUUIDs.length }})">
-                <div class="hoverrowchild hover:bg-neutral-100 cell p-1 basis-48 sticky left-0 bg-white">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</div>
+              <div class="hoverrow mx-auto flex hover:bg-neutral-100" style="width:calc(12rem + 12rem * {{../courseData.courseBranchComponentsUUIDs.length }})">
+                <div class="hoverrowchild bg-primary-100 hover:bg-neutral-100 cell p-1 basis-48 sticky left-0 bg-white">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</div>
 
                 <div class="flex text-center">
                   {{#each ../courseData.config.lessons }}
