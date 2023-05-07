@@ -3,9 +3,9 @@
 @import 'tailwindcss/components';
 @import 'light.css';
 @import 'dark.css';
-@import 'buttons.css';
+@import '03-buttons-inputs.css';
 @import 'custom.css';
-@import 'typography.css';
-@import 'background-gradient.css';
+@import '05-typography.css';
+@import '02-background.css';
 
-@import 'mode-switch.css';
+@import '04-mode-switch.css';

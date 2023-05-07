@@ -1,7 +1,3 @@
-// esialgne alakriipsude asendamine tühikuga
-// document
-//  .querySelectorAll('#sidebar a, #sidebar h3')
-//  .forEach((el) => (el.innerText = el.innerText.split('_').join(' ')));
 function closeMenu() {
   let x = document.querySelector('.closing-menu');
   x.classList.toggle('menu-zero');
@@ -26,3 +22,25 @@ mediaQuery.addListener(handleTabletChange);
 
 // Initial check
 handleTabletChange(mediaQuery);
+
+// Theme switcher
+function setTheme(name) {
+  localStorage.setItem('theme', name);
+  document.documentElement.className = name;
+}
+
+function toggleTheme() {
+  if (localStorage.getItem('theme') === 'dark-theme') {
+    setTheme('light-theme');
+  } else {
+    setTheme('dark-theme');
+  }
+}
+
+(function () {
+  if (localStorage.getItem('theme') === 'dark-theme') {
+    setTheme('dark-theme');
+  } else {
+    setTheme('light-theme');
+  }
+})();

@@ -7,53 +7,53 @@
   --text: #414a58;
   --link: #2b313b;
   --link-idle: #5c6470;
-  --link-action: #749f60;
+  --link-action: #80609f;
   --card-background: linear-gradient(194deg, #a57e43 0%, #4f4536 100%);
   --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
   --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
   --menu-background-stroke: #dad7d38c;
   --menu-item-background-stroke: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
-  --link-active: #416b2e;
-  --link-hover: #749f60;
+  --link-active: #4d2e6b;
+  --link-hover: #80609f;
   --page-background: #FAFCFF;
-  --button-default: #749f60;
-  --button-hover: #5d804d;
-  --button-active: #416b2e;
-  --button-focus: #749f60;
+  --button-default: #80609f;
+  --button-hover: #664d80;
+  --button-active: #4d2e6b;
+  --button-focus: #80609f;
   --button-disabled: #abb1ba;
-  --button-secondary-default: #749f60;
+  --button-secondary-default: #80609f;
   --button-secondary-label-default: #414a58;
-  --button-secondary-hover: #5d804d;
-  --button-secondary-active: #416b2e;
-  --button-secondary-focus: #749f60;
+  --button-secondary-hover: #664d80;
+  --button-secondary-active: #4d2e6b;
+  --button-secondary-focus: #80609f;
   --button-secondary-disabled: #abb1ba;
-  --button-link: #416b2e;
-  --button-link-hover: #5d804d;
-  --button-link-active: #749f60;
+  --button-link: #4d2e6b;
+  --button-link-hover: #664d80;
+  --button-link-active: #80609f;
 }
 .dark-theme {
   --text: #f1f2f4;
   --link: #f1f2f4;
   --link-idle: #7b8593;
-  --link-active: #5d804d;
+  --link-active: #664d80;
   --dark-drop-shadow: [object Object];
   --dark-drop-shadow-strong: [object Object];
   --link-hover: #c7cbd1;
-  --page-background: #040802;
-  --button-default: #749f60;
-  --button-hover: #5d804d;
-  --button-active: #416b2e;
-  --button-focus: #749f60;
+  --page-background: #050208;
+  --button-default: #80609f;
+  --button-hover: #664d80;
+  --button-active: #4d2e6b;
+  --button-focus: #80609f;
   --button-disabled: #abb1ba;
-  --button-secondary-default: #abc69f;
+  --button-secondary-default: #b39fc6;
   --button-secondary-label-default: #f1f2f4;
-  --button-secondary-hover: #90b380;
-  --button-secondary-active: #749f60;
-  --button-secondary-focus: #abc69f;
+  --button-secondary-hover: #9980b3;
+  --button-secondary-active: #80609f;
+  --button-secondary-focus: #b39fc6;
   --button-secondary-disabled: #e3e5e8;
-  --button-link: #e3ecdf;
-  --button-link-hover: #c7d9bf;
-  --button-link-active: #abc69f;
+  --button-link: #e6dfec;
+  --button-link-hover: #ccbfd9;
+  --button-link-active: #b39fc6;
 }
 /*
 ! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
@@ -510,11 +510,11 @@ h6{
   padding-bottom: 0.75rem;
 }
 .btn-primary{
-  background-color: var(--button-default, #749f60);
+  background-color: var(--button-default, #80609f);
   color: var(--system-white, #ffffff);
 }
 .btn-primary:hover{
-  background-color: var(--button-hover, #5d804d);
+  background-color: var(--button-hover, #664d80);
 }
 .btn-primary:focus-visible{
   border-style: solid;
@@ -524,16 +524,16 @@ h6{
   outline-color: var(--system-focus, #EB6424);
 }
 .btn-primary:active{
-  background-color: var(--button-active, #416b2e);
+  background-color: var(--button-active, #4d2e6b);
 }
 .btn-secondary{
   border-width: 2px;
-  border-color: var(--button-secondary-default, #749f60);
+  border-color: var(--button-secondary-default, #80609f);
   color: var(--button-secondary-label-default, #414a58);
 }
 .btn-secondary:hover{
-  border-color: var(--button-secondary-hover, #5d804d);
-  color: var(--button-secondary-hover, #5d804d);
+  border-color: var(--button-secondary-hover, #664d80);
+  color: var(--button-secondary-hover, #664d80);
 }
 .btn-secondary:focus-visible{
   border-style: solid;
@@ -543,8 +543,8 @@ h6{
   outline-color: var(--system-focus, #EB6424);
 }
 .btn-secondary:active{
-  border-color: var(--button-secondary-active, #416b2e);
-  color: var(--button-secondary-active, #416b2e);
+  border-color: var(--button-secondary-active, #4d2e6b);
+  color: var(--button-secondary-active, #4d2e6b);
 }
 /* there is inputs with usual inputs and inputs with buttons */
 /* next two are for positioning the button into input */
@@ -1095,17 +1095,17 @@ code {
   --roboto: Roboto;
   --sora: Sora;
   --roboto-serif: Roboto Serif;
-  --primary-100: #f1f5ef;
-  --primary-200: #e3ecdf;
-  --primary-300: #c7d9bf;
-  --primary-400: #abc69f;
-  --primary-500: #90b380;
-  --primary-600: #749f60;
-  --primary-700: #5d804d;
-  --primary-800: #416b2e;
-  --primary-900: #2a4d1a;
-  --primary-1000: #040802;
-  --primary-hue: 101;
+  --primary-100: #f2eff5;
+  --primary-200: #e6dfec;
+  --primary-300: #ccbfd9;
+  --primary-400: #b39fc6;
+  --primary-500: #9980b3;
+  --primary-600: #80609f;
+  --primary-700: #664d80;
+  --primary-800: #4d2e6b;
+  --primary-900: #331a4d;
+  --primary-1000: #050208;
+  --primary-hue: 270;
   --neutral-100: #f1f2f4;
   --neutral-200: #e3e5e8;
   --neutral-300: #c7cbd1;
@@ -1121,7 +1121,7 @@ code {
   --system-black: #000000;
   --system-white: #ffffff;
   --system-focus: #EB6424;
-  --system-primary: #749f60;
+  --system-primary: #80609f;
   --article-bottom: 1rem;
   --article-section-bottom: 1rem;
   --body-line-height: 175%;
