@@ -22,9 +22,17 @@ import dotenv from 'dotenv';
 
 import { fileURLToPath } from 'url';
 import pool from './db.js';
-import { cacheTeamAssignments, cacheMarkedAsDoneComponents, cacheTeamUsers } from './src/setup/setupCache.js';
+import {
+  cacheTeamAssignments,
+  cacheMarkedAsDoneComponents,
+  cacheTeamUsers,
+} from './src/setup/setupCache.js';
 
-import { allCoursesController, responseAction, renderPage } from './src/components/courses/coursesController.js';
+import {
+  allCoursesController,
+  responseAction,
+  renderPage,
+} from './src/components/courses/coursesController.js';
 import otherController from './src/components/other/otherController.js';
 import membersController from './src/components/members/membersController.js';
 import teamsController from './src/components/teams/teamsController.js';
@@ -96,7 +104,7 @@ const loginConfig = {
   // the request will proceed. Otherwise, the user will be redirected to the
   // main page.
  */
-const ensureAuthenticated = ((req, res, next) => {
+const ensureAuthenticated = (req, res, next) => {
   // console.log('req.isAuthenticated1:', req.isAuthenticated);
   // console.log('req.user1:', req.user);
   if (req.isAuthenticated()) {
@@ -108,11 +116,11 @@ const ensureAuthenticated = ((req, res, next) => {
   // console.log('req.session2:', req.session);
   console.log('User is NOT Authenticated');
   return res.redirect('/login');
-});
+};
 
 /** Function to validate if logged in user is a teacher or not.
  */
-const validateTeacher = ((req, res, next) => {
+const validateTeacher = (req, res, next) => {
   if (req.user.team.slug === 'teachers') {
     // console.log('req.session1:', req.session);
     // console.log('req.session.passport.user.id1:', req.session.passport.user.id);
@@ -120,18 +128,19 @@ const validateTeacher = ((req, res, next) => {
     return next();
   }
   // console.log('req.session2:', req.session);
-  console.log("Page is available only for teachers. User is NOT in 'teachers' team. Rerouting to /notfound page.");
+  console.log(
+    "Page is available only for teachers. User is NOT in 'teachers' team. Rerouting to /notfound page."
+  );
   return res.redirect('/notfound');
-});
+};
 
 /** Function to request tluhk org teams and teamMembers from tluhk Github organisation.
  * Save teamAssignments into res.locals
  */
-const getTeamAssignments = (async (req, res, next) => {
-
-    /** If teamAssignments is already stored in res.local, then continue with next() */
+const getTeamAssignments = async (req, res, next) => {
+  /** If teamAssignments is already stored in res.local, then continue with next() */
   if (res.locals.teamAssignments) return next();
-  const cacheName = 'teamAssignments'
+  const cacheName = 'teamAssignments';
 
   /** If teamAssignments is NOT yet stored in res.local, then check if it's stored in Cache.
    * Save teamAssignments to res.locals.
@@ -139,29 +148,33 @@ const getTeamAssignments = (async (req, res, next) => {
 
   if (!cacheTeamAssignments.has(cacheName)) {
     console.log(`❌ ${cacheName} IS NOT from cache`);
-    const { teams } = await teamsController.getAllValidTeams().catch((error) => {
-      console.error(error);
-      return res.redirect('/notfound');
-    });
-    const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
+    const { teams } = await teamsController
+      .getAllValidTeams()
+      .catch((error) => {
+        console.error(error);
+        return res.redirect('/notfound');
+      });
+    const getAllTeamAssignments = await teamsController.getAllTeamAssignments(
+      teams
+    );
     // console.log('getAllTeamAssignments1:', getAllTeamAssignments);
-  
+
     cacheTeamAssignments.set(cacheName, getAllTeamAssignments);
     res.locals[cacheName] = getAllTeamAssignments;
   } else {
     console.log(`✅ ${cacheName} FROM CACHE`);
-    res.locals[cacheName] = cacheTeamAssignments.get(cacheName);    
+    res.locals[cacheName] = cacheTeamAssignments.get(cacheName);
   }
 
   // console.log('res.locals.teamAssignments1:', res.locals.teamAssignments);
 
   return next();
-});
+};
 
 /** Function to clear selectedVersion value when leaving any specific course: when going to another course, going to dashboard, going to notifications page or else.
  * Do NOT clear selectedVersion when just going to another page under the same specific course, e.g. from Loeng1 to Loeng2.
  */
-const resetSelectedVersion = ((req, res, next) => {
+const resetSelectedVersion = (req, res, next) => {
   // console.log('req.params.courseSlug1:', req.params.courseSlug);
   // console.log('req.path.courseSlug1:', req.session.courseSlug);
 
@@ -175,12 +188,12 @@ const resetSelectedVersion = ((req, res, next) => {
   req.session.courseSlug = null;
   req.session.selectedVersion = null;
   return next();
-});
+};
 
 /** Initialize Passport.
  * Used for user login and session.
  * Also use passport.session() middleware, to support persistent login sessions (recommended).
- * https://github.com/jaredhanson/passport 
+ * https://github.com/jaredhanson/passport
  * https://www.npmjs.com/package/passport-github2
  */
 app.use(
@@ -195,7 +208,7 @@ app.use(
       maxAge: 60 * 60 * 1000, // 1 hour
       // name: 'HK_ainekursused', // specify your cookie name here
     },
-  }),
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -230,28 +243,26 @@ passport.deserializeUser((obj, done) => {
 });
 
 /** LOGIN LOGIC FULL DESCRIPTION:
-   * check if githubUserID exists in tluhk Github organisation members
-   * if not, redirect to /noauth page, showing they must ask access from tluhk personnel
-   * -- if yes:
-   * get all tluhk teams
-   * get all githubUserID teams
-   * get all tluhk HK_ teams' assignments
-   * check if githubUserID exists in tluhk Github organisation's teams
-   * -- if not, redirect to /noauth page, showing they must ask access from tluhk personnel
-   * -- if yes:
-   * check which teams the user exists in
-   * check if githubID exists in users
-   * -- if yes, check that DB user data is up-to-date with github user data
-   * -- if no, add githubUser to DB users
-   * -- if yes, read user's displayName and/or email info from Database. Everything else about the user is read from Github.
-   */
+ * check if githubUserID exists in tluhk Github organisation members
+ * if not, redirect to /noauth page, showing they must ask access from tluhk personnel
+ * -- if yes:
+ * get all tluhk teams
+ * get all githubUserID teams
+ * get all tluhk HK_ teams' assignments
+ * check if githubUserID exists in tluhk Github organisation's teams
+ * -- if not, redirect to /noauth page, showing they must ask access from tluhk personnel
+ * -- if yes:
+ * check which teams the user exists in
+ * check if githubID exists in users
+ * -- if yes, check that DB user data is up-to-date with github user data
+ * -- if no, add githubUser to DB users
+ * -- if yes, read user's displayName and/or email info from Database. Everything else about the user is read from Github.
+ */
 
 /** Function to check if user exists in DB and insert/update/read user's displayName and email from DB.
  */
 async function userDBFunction(userData) {
-  const {
-    githubID, username, displayName, email,
-  } = userData;
+  const { githubID, username, displayName, email } = userData;
 
   let conn;
   try {
@@ -264,7 +275,9 @@ async function userDBFunction(userData) {
      * If user doesn't exist in DB, insert it to DB based on values in github. If displayName doesn't exist, use username to save this to DB. Return same github values you insert to DB.
      */
 
-    const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [githubID]);
+    const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [
+      githubID,
+    ]);
     // console.log('user1:', user);
 
     if (user[0]) {
@@ -279,10 +292,16 @@ async function userDBFunction(userData) {
 
     if (!user[0]) {
       if (displayName) {
-        await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, displayName, email]);
+        await conn.query(
+          'INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)',
+          [githubID, username, displayName, email]
+        );
         return userData;
       }
-      await conn.query('INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)', [githubID, username, username, email]);
+      await conn.query(
+        'INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)',
+        [githubID, username, username, email]
+      );
       userData.displayName = username;
       return userData;
     }
@@ -291,7 +310,6 @@ async function userDBFunction(userData) {
     console.error(err);
   } finally {
     if (conn) conn.release(); // release to pool
-
   }
   return true;
 }
@@ -308,7 +326,7 @@ passport.use(
       callbackURL: loginConfig.callbackURL,
       // proxy: true,
     },
-    (async (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       process.nextTick(async () => {
         // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
         // console.log('accessToken1:', accessToken);
@@ -320,7 +338,9 @@ passport.use(
          * If yes, return github user profile with the passport.
          */
         // console.log('profile1:', profile);
-        const userInOrgMembers = await membersController.isUserInOrgMembers(profile.username);
+        const userInOrgMembers = await membersController.isUserInOrgMembers(
+          profile.username
+        );
 
         if (!userInOrgMembers) {
           console.log('No user in tluhk org');
@@ -329,19 +349,20 @@ passport.use(
         console.log('User exists in tluhk org');
 
         // console.log('profile1:', profile);
-        const {
-          id, username, displayName, _json,
-        } = profile;
+        const { id, username, displayName, _json } = profile;
         const { email } = _json;
 
         const userData = {
-          githubID: id, username, displayName, email,
+          githubID: id,
+          username,
+          displayName,
+          email,
         };
 
         // console.log('id1:', id);
         // console.log('username1:', username);
         // console.log('displayName1:', displayName);
-        // console.log('_json.email1:', _json.email); 
+        // console.log('_json.email1:', _json.email);
 
         /**
          * Read user data from DB.
@@ -351,7 +372,11 @@ passport.use(
         const userDataAfterDB = await userDBFunction(userData);
 
         if (userDataAfterDB) {
-          if (userDataAfterDB.displayName && profile.displayName !== userDataAfterDB.displayName) profile.displayName = userDataAfterDB.displayName;
+          if (
+            userDataAfterDB.displayName &&
+            profile.displayName !== userDataAfterDB.displayName
+          )
+            profile.displayName = userDataAfterDB.displayName;
           if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
         }
 
@@ -365,8 +390,8 @@ passport.use(
          */
         return done(null, profile);
       });
-    }),
-  ),
+    }
+  )
 );
 
 /** Endpoint to get team assignments from tluhk Github account when app is running.
@@ -377,12 +402,15 @@ app.use(getTeamAssignments, async (req, res, next) => {
   // console.log('req.user5:', req.user);
   if (req.user && !req.user.team) {
     const { user } = req;
-    const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
+    const userTeam = await teamsController.getUserTeam(
+      user.id,
+      res.locals.teamAssignments
+    );
     // console.log('user1:', user);
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
-  // eslint-disable-next-line brace-style
-  }
+    // eslint-disable-next-line brace-style
+  } else {
 
   /**
    * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
@@ -421,8 +449,6 @@ app.use(getTeamAssignments, async (req, res, next) => {
       req.user.team = userTeam;
     }
   } */
-
-/*  else {
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',
@@ -439,16 +465,19 @@ app.use(getTeamAssignments, async (req, res, next) => {
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      }, 
+      }, */
     };
     if (req.user && !req.user.team) {
       const { user } = req;
-      const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
+      const userTeam = await teamsController.getUserTeam(
+        user.id,
+        res.locals.teamAssignments
+      );
       // console.log('user1:', user);
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }*/
+  }
 
   next();
 });
@@ -464,7 +493,9 @@ app.get('/login', (req, res) => {
   /**
    * Validate that text input is not empty or is not an email
    */
-  if (req.query.invalid) message = 'Sisestatud Githubi kasutajanimi pole korrektne või ei kuulu kolledži kasutajate hulka';
+  if (req.query.invalid)
+    message =
+      'Sisestatud Githubi kasutajanimi pole korrektne või ei kuulu kolledži kasutajate hulka';
   if (req.query.email) message = 'Emaili sisestamine pole lubatud';
 
   return res.render('login', {
@@ -476,7 +507,8 @@ app.post('/login', async (req, res, next) => {
   /**
    * If entered value is empty, redirect back to login and show "invalid username" message
    */
-  if (!req.body.login || !req.body.login.trim()) return res.redirect('/login?invalid=true');
+  if (!req.body.login || !req.body.login.trim())
+    return res.redirect('/login?invalid=true');
 
   /**
    * If entered value is email, redirect back to login and show "entering email is not allowed" message
@@ -492,8 +524,10 @@ app.post('/login', async (req, res, next) => {
   // if (!userFromGithub) return res.redirect('/login?invalid=true');
 
   /**  If entered username doesn't exist in Github tluhk organisation members, redirect back to login and show "invalid username" message */
-  const userInOrgMembers = await membersController.isUserInOrgMembers(req.body.login);
-  if (!userInOrgMembers) { 
+  const userInOrgMembers = await membersController.isUserInOrgMembers(
+    req.body.login
+  );
+  if (!userInOrgMembers) {
     console.log(`Invalid login – entered username is not in tluhk org members`);
     return res.redirect('/login?invalid=true');
   }
@@ -515,20 +549,36 @@ app.get(
     successRedirect: '/dashboard',
     failureRedirect: '/noauth',
     scope: ['user'],
-  }),
+  })
 );
 
 /** From here on, following endpoints are available only with succesful login and authentication */
 app.use(ensureAuthenticated);
 
 /** General endpoint, duplicates /dashboard for now */
-app.get('/', resetSelectedVersion, ensureAuthenticated, allCoursesController.getAllCourses);
+app.get(
+  '/',
+  resetSelectedVersion,
+  ensureAuthenticated,
+  allCoursesController.getAllCourses
+);
 
 /** Endpoint for dashboard */
-app.get('/dashboard', resetSelectedVersion, ensureAuthenticated, allCoursesController.getAllCourses);
+app.get(
+  '/dashboard',
+  resetSelectedVersion,
+  ensureAuthenticated,
+  allCoursesController.getAllCourses
+);
 
 /** Endpoint to load course pages */
-app.get('/course/:courseSlug/:contentSlug?/:componentSlug?', resetSelectedVersion, allCoursesController.getSpecificCourse, responseAction, renderPage);
+app.get(
+  '/course/:courseSlug/:contentSlug?/:componentSlug?',
+  resetSelectedVersion,
+  allCoursesController.getSpecificCourse,
+  responseAction,
+  renderPage
+);
 
 /** Endpoints to change course version.
  * Only available for teachers.
@@ -548,14 +598,28 @@ app.post('/save-selected-version', validateTeacher, (req, res) => {
 });
 
 /** Endpoint for notifications page */
-app.get('/notifications', resetSelectedVersion, allNotificationsController.renderNotificationsPage);
+app.get(
+  '/notifications',
+  resetSelectedVersion,
+  allNotificationsController.renderNotificationsPage
+);
 
 /** Endpoints for progress overview pages.
  * Only available for teachers.
  */
-app.get('/progress-overview', resetSelectedVersion, validateTeacher, allOverviewController.getOverview);
+app.get(
+  '/progress-overview',
+  resetSelectedVersion,
+  validateTeacher,
+  allOverviewController.getOverview
+);
 
-app.get('/progress-overview/:team?/:courseSlug?', resetSelectedVersion, validateTeacher, allOverviewController.getOverview);
+app.get(
+  '/progress-overview/:team?/:courseSlug?',
+  resetSelectedVersion,
+  validateTeacher,
+  allOverviewController.getOverview
+);
 
 app.post('/progress-overview', validateTeacher, (req, res) => {
   // console.log('value0:');
@@ -565,10 +629,14 @@ app.post('/progress-overview', validateTeacher, (req, res) => {
   // console.log('req.body.selectedCourseData3:', req.body.selectedCourseData);
 
   let selectedCourseDataParsed;
-  if (req.body && req.body.selectedCourseData) selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
+  if (req.body && req.body.selectedCourseData)
+    selectedCourseDataParsed = JSON.parse(req.body.selectedCourseData);
   req.session.courseSlugData = selectedCourseDataParsed;
 
-  if (req.body && req.body.selectedTeam && req.body.selectedCourse) return res.redirect(`/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse}`);
+  if (req.body && req.body.selectedTeam && req.body.selectedCourse)
+    return res.redirect(
+      `/progress-overview/${req.body.selectedTeam}/${req.body.selectedCourse}`
+    );
 
   // Store the displayBy in the session
   req.session.displayBy = req.body.displayBy;
@@ -581,14 +649,14 @@ app.post('/courses-display-by', (req, res) => {
   // Store the displayBy in the session
   req.session.coursesDisplayBy = req.body.coursesDisplayBy;
 
-  return res.redirect(`/dashboard?coursesDisplayBy=${req.session.coursesDisplayBy}`);
+  return res.redirect(
+    `/dashboard?coursesDisplayBy=${req.session.coursesDisplayBy}`
+  );
 });
 
 /** Endpoint to mark a course component as Done */
 app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
-  const {
-    courseSlug, componentSlug, componentUUID, nextPagePath,
-  } = req.body;
+  const { courseSlug, componentSlug, componentUUID, nextPagePath } = req.body;
 
   const githubID = req.user.id;
   // console.log('req.body6:', req.body);
@@ -610,32 +678,44 @@ app.post('/mark-component-as-done', ensureAuthenticated, async (req, res) => {
 
       // const res0 = await conn.query('SELECT * FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
       // console.log('res0:', res0);
-      const res1 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      const res1 = await conn.query(
+        'SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;',
+        [githubID, courseSlug]
+      );
       // console.log('res1:', res1);
 
       if (!res1[0]) {
         const keyValue = {};
         keyValue[componentUUID] = componentSlug;
 
-        const res2 = await conn.query('INSERT INTO users_progress (githubID, courseCode, markedAsDoneComponents) VALUES (?, ?, ?);', [githubID, courseSlug, keyValue]);
+        const res2 = await conn.query(
+          'INSERT INTO users_progress (githubID, courseCode, markedAsDoneComponents) VALUES (?, ?, ?);',
+          [githubID, courseSlug, keyValue]
+        );
         // console.log('res2:', res2);
       } else {
-        const res3 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT('$.', ?), ?) WHERE githubID = ? AND courseCode = ?;", [componentUUID, componentSlug, githubID, courseSlug]);
+        const res3 = await conn.query(
+          "UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT('$.', ?), ?) WHERE githubID = ? AND courseCode = ?;",
+          [componentUUID, componentSlug, githubID, courseSlug]
+        );
         // console.log('res3:', res3);
       }
 
       /** Check if cache for markedAsDoneComponents for given user and given course exists.
        * If yes, delete cache for markedAsDoneComponents when user adds a component from given course */
       if (
-        cacheMarkedAsDoneComponents.has(`markedAsDoneComponents+${githubID}+${courseSlug}`)
-      ) cacheMarkedAsDoneComponents.del(`markedAsDoneComponents+${githubID}+${courseSlug}`);
-
+        cacheMarkedAsDoneComponents.has(
+          `markedAsDoneComponents+${githubID}+${courseSlug}`
+        )
+      )
+        cacheMarkedAsDoneComponents.del(
+          `markedAsDoneComponents+${githubID}+${courseSlug}`
+        );
     } catch (err) {
       console.log('Unable to mark component as done');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
-  
     }
   }
 
@@ -663,27 +743,36 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
       conn = await pool.getConnection();
       // console.log('Connected to MariaDB 3!');
 
-      const res6 = await conn.query('SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;', [githubID, courseSlug]);
+      const res6 = await conn.query(
+        'SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;',
+        [githubID, courseSlug]
+      );
       // console.log('res6:', res6);
 
       if (res6[0]) {
-        const res7 = await conn.query("UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', ?)) WHERE githubID = ? AND courseCode = ?;", [componentUUID, githubID, courseSlug]);
+        const res7 = await conn.query(
+          "UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', ?)) WHERE githubID = ? AND courseCode = ?;",
+          [componentUUID, githubID, courseSlug]
+        );
         // console.log('res7:', res7);
       }
 
       /** Check if cache for markedAsDoneComponents for given user and given course exists.
-      * If yes, delete cache for markedAsDoneComponents when user removes a done component from given course */
+       * If yes, delete cache for markedAsDoneComponents when user removes a done component from given course */
       if (
-        cacheMarkedAsDoneComponents.has(`markedAsDoneComponents+${githubID}+${courseSlug}`)
-      ) cacheMarkedAsDoneComponents.del(`markedAsDoneComponents+${githubID}+${courseSlug}`);
-
+        cacheMarkedAsDoneComponents.has(
+          `markedAsDoneComponents+${githubID}+${courseSlug}`
+        )
+      )
+        cacheMarkedAsDoneComponents.del(
+          `markedAsDoneComponents+${githubID}+${courseSlug}`
+        );
     } catch (err) {
       // console.log('Unable to connect to MariaDB 3');
       console.log('Unable to remove component as done');
       console.error(err);
     } finally {
       if (conn) conn.release(); // release to pool
-  
     }
   }
 
@@ -694,18 +783,17 @@ app.post('/remove-component-as-done', ensureAuthenticated, async (req, res) => {
  * GET method displays the html page with input.
  * POST method saves the profile name to DB.
  */
-app.get(
-  '/save-displayName',
-  ensureAuthenticated,
-  (req, res) => {
-    let { displayName } = req.user;
-    if (!displayName) displayName = req.user.username;
-    let message = '';
-    if (req.query && req.query.displayName) message = 'Profiilinime sisestamine on kohustuslik. Lubatud on vaid tähed ja tühikud.';
+app.get('/save-displayName', ensureAuthenticated, (req, res) => {
+  let { displayName } = req.user;
+  if (!displayName) displayName = req.user.username;
+  let message = '';
+  if (req.query && req.query.displayName)
+    message =
+      'Profiilinime sisestamine on kohustuslik. Lubatud on vaid tähed ja tühikud.';
 
-    // console.log('req.body.displayName1:', req.user);
+  // console.log('req.body.displayName1:', req.user);
 
-    res.send(`
+  res.send(`
         <html>
         <body>
             <a href="/dashboard"">Tagasi avalehele</a><br>
@@ -718,15 +806,17 @@ app.get(
         </body>
         </html>
     `);
-  },
-);
+});
 
 app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
   const { user } = req;
   /**
    * Validate that input was entered and that it's a valid string containing only letters and spaces. Entering only spaces is not allowed either.
    */
-  if (!req.body.displayName || !req.body.displayName.trim().match(/^[A-zÀ-ú\s]+$/)) {
+  if (
+    !req.body.displayName ||
+    !req.body.displayName.trim().match(/^[A-zÀ-ú\s]+$/)
+  ) {
     return res.redirect('/save-displayName?displayName=true');
   }
 
@@ -736,17 +826,19 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
       conn = await pool.getConnection();
       // console.log('Connected to MariaDB!');
 
-      const res1 = await conn.query('UPDATE users SET displayName = ? WHERE githubID = ?;', [req.body.displayName, user.id]);
+      const res1 = await conn.query(
+        'UPDATE users SET displayName = ? WHERE githubID = ?;',
+        [req.body.displayName, user.id]
+      );
       // console.log('res1:', res1);
       req.user.displayName = req.body.displayName;
 
       // Flush caches that store users names so that users names would be shown correctly across app.
       // console.log(`usersInTeam1: usersInTeam+${user.team.slug}`);
 
-      cacheTeamUsers.del(`usersInTeam+${user.team.slug}`)
+      cacheTeamUsers.del(`usersInTeam+${user.team.slug}`);
       cacheCommitComments.flushAll();
-
-      } catch (err) {
+    } catch (err) {
       console.log('Unable to update user displayName in database');
       console.error(err);
     } finally {
@@ -764,16 +856,13 @@ app.post('/save-displayName', ensureAuthenticated, async (req, res) => {
  * GET method displays the html page with input.
  * POST method saves the email to DB.
  */
-app.get(
-  '/save-email',
-  ensureAuthenticated,
-  (req, res) => {
-    let { email } = req.user;
-    if (!email) email = 'email@gmail.com';
-    let message = '';
-    if (req.query && req.query.email) message = 'Sisestatud email pole korrektne';
+app.get('/save-email', ensureAuthenticated, (req, res) => {
+  let { email } = req.user;
+  if (!email) email = 'email@gmail.com';
+  let message = '';
+  if (req.query && req.query.email) message = 'Sisestatud email pole korrektne';
 
-    res.send(`
+  res.send(`
         <html>
         <body>
             <a href="/dashboard"">Tagasi avalehele</a><br>
@@ -786,8 +875,7 @@ app.get(
         </body>
         </html>
     `);
-  },
-);
+});
 
 app.post('/save-email', ensureAuthenticated, async (req, res) => {
   const { user } = req;
@@ -798,7 +886,10 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
    * If not, redirect back to /save-email page.
    */
   // eslint-disable-next-line no-useless-escape
-  if (!req.body.email || !req.body.email.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) {
+  if (
+    !req.body.email ||
+    !req.body.email.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)
+  ) {
     return res.redirect('/save-email?email=true');
   }
 
@@ -806,14 +897,16 @@ app.post('/save-email', ensureAuthenticated, async (req, res) => {
   try {
     conn = await pool.getConnection();
 
-    const res2 = await conn.query('UPDATE users SET email = ? WHERE githubID = ?;', [req.body.email, user.id]);
+    const res2 = await conn.query(
+      'UPDATE users SET email = ? WHERE githubID = ?;',
+      [req.body.email, user.id]
+    );
     // console.log('res2:', res2);
     req.user.email = req.body.email;
 
     // Flush caches that stores users emails so that users emails would be shown correctly across app.
     // console.log(`usersInTeam1: usersInTeam+${user.team.slug}`);
-    cacheTeamUsers.del(`usersInTeam+${user.team.slug}`)
-
+    cacheTeamUsers.del(`usersInTeam+${user.team.slug}`);
   } catch (err) {
     console.error(err);
     console.log('Unable to update user email in database');
@@ -836,22 +929,31 @@ app.get('/noauth', otherController.noAuth);
 /** Endpoint for Logout.
 https://www.tabnine.com/code/javascript/functions/express/Request/logout
  */
-app.get('/logout', resetSelectedVersion, ensureAuthenticated, (req, res, next) => {
-  // console.log('req.user3:', req.user);
-  // console.log('Logging out process');
-  req.logout((err) => {
-    if (err) { return next(err); }
-    return req.session.destroy((err2) => {
-      if (err2) { return next(err2); }
-      console.log('Logged out');
-      // localStorage.removeItem('accessToken');
-      res.clearCookie('HK_ainekursused');
-      // console.log('req.session2:', req.session);
-      // console.log('req2:', req);
-      return res.redirect('/');
+app.get(
+  '/logout',
+  resetSelectedVersion,
+  ensureAuthenticated,
+  (req, res, next) => {
+    // console.log('req.user3:', req.user);
+    // console.log('Logging out process');
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      return req.session.destroy((err2) => {
+        if (err2) {
+          return next(err2);
+        }
+        console.log('Logged out');
+        // localStorage.removeItem('accessToken');
+        res.clearCookie('HK_ainekursused');
+        // console.log('req.session2:', req.session);
+        // console.log('req2:', req);
+        return res.redirect('/');
+      });
     });
-  });
-});
+  }
+);
 
 /** Redirect all unknown paths to 404 page */
 app.all('*', resetSelectedVersion, otherController.notFound);
