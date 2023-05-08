@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dark-theme .logo-on-light {
+  display: none;
+}
+.light-theme .logo-on-dark {
+  display: none;
+}
+
+/* menu */
+.menu-zero {
+  top: 0;
+  height: 100vh;
+  @apply bg-page-background;
+}

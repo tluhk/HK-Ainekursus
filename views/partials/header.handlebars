@@ -4,30 +4,38 @@
   <div class='flex justify-between items-center'>
     <a href='/' class='w-40 sm:w-64 h-auto'>
       <img
-        src='/images/haapsalu-kolledzi-logo-mustal.svg'
+        class="logo-on-light"
+        src='/images/logo-on-light.svg'
+        alt='Tallinna Ülikooli logo'
+        style='max-height: 100px;'
+      />
+      <img
+        class="logo-on-dark"
+        src='/images/logo-on-dark.svg'
         alt='Tallinna Ülikooli logo'
         style='max-height: 100px;'
       />
     </a>
     <span
       onclick='closeMenu()'
-      class='material-symbols-outlined text-4xl cursor-pointer absolute right-8 lg:hidden text-xxl'
+      class='material-symbols-outlined text-4xl cursor-pointer absolute right-8 lg:hidden'
     >
       menu
     </span>
   </div>
   
   <div
-    class=' gap-4 closing-menu flex flex-col lg:flex-row items-center absolute lg:relative w-full lg:w-auto left-0 lg:pr-0 pb-8 lg:pb-0 bg-neutral top-[-425px] lg:!top-0 transition-all'
+    class=' gap-4 closing-menu flex flex-col lg:flex-row items-end lg:items-center fixed lg:relative w-full lg:w-auto left-0 lg:pr-0 pb-8 lg:pb-0 top-[-700px] lg:!top-0'
   >
     <span
       onclick='closeMenu()'
-      class='mt-8 material-symbols-outlined text-4xl cursor-pointer lg:hidden text-xxl'
+      class='mt-8 material-symbols-outlined text-4xl cursor-pointer right-8 relative lg:hidden'
     >
       close
     </span>
   {{#if user}}
-    <div class=" z-[52] flex flex-row justify-evenly items-center gap-x-8 mr-4">
+    <!-- menu -->
+    <div class="mr-8 z-[52] flex flex-col lg:flex-row lg:justify-evenly items-end lg:items-center gap-4 lg:mr-4 mb-4 lg:mb-0">
       <a href="/" class="!text-white !no-underline hover:!underline">Avaleht</a>
       {{!-- <a href="/" class="!text-white !no-underline hover:!underline">Kursused</a> --}}
       <a href="/notifications" class="!text-white !no-underline hover:!underline">Teated</a>
@@ -37,12 +45,10 @@
     </div>
   {{/if}}
   {{#if user}}
-    <div class="flex flex-row gap-4 items-start group lg:items-center">
-      <div>
+    <!-- user preferences -->
+    <div class="mr-8 lg:mr-0 flex flex-col lg:flex-row items-end group lg:items-center">
+      <div class="flex items-center gap-2">
         <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
-      </div>
-
-      <div class="flex flex-row relative">
         <div class="z-[51]">
           {{#if user.displayName}}
             {{ user.displayName }}
@@ -50,28 +56,30 @@
             {{ user.username }}
           {{/if }}
         </div>
-
-        <span class="material-symbols-outlined z-50 pl-2">
+        <div class="hidden lg:block material-symbols-outlined z-50">
           expand_more
-        </span>
+        </div>
+      </div>
 
-        <ul class="lg:hidden lg:absolute lg:group-hover:block z-49 list-none bg-neutral lg:p-4 lg:pt-12 right-[-1rem] lg:text-end w-max">
+      <div class="flex flex-row relative text-right">
+
+        <ul class="lg:hidden lg:absolute lg:group-hover:block z-49 list-none bg-neutral lg:p-4 lg:pt-12 lg:right-4 lg:text-end w-max">
           
-          <li><a href="/save-displayName" class="!text-white"><span class="material-symbols-rounded">Muuda nime</span></a></li>
+          <li class="py-2"><a href="/save-displayName" class=" text-text"><span class="material-symbols-rounded">Muuda nime</span></a></li>
 
           {{#if_equal user.team.slug 'teachers'}}
             {{#if ../user.email}}
-              <li>Email: {{ ../../user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
+              <li class="py-2">Email: {{ ../../user.email }} <a href="/save-email" class="!text-white"><span class="material-symbols-rounded">Muuda</span></a></li>
             {{else }}
-              <li><a href="/save-email" class="!text-white">Lisa email</a></li>
+              <li class="py-2"><a href="/save-email" class="text-text">Lisa email</a></li>
             {{/if }}
           {{/if_equal}}
 
-          {{!-- <li class="mt-4">GitHubi ID: {{ user.id }}</li> --}}
-          <li class="mt-4">GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
+          {{!-- <li  class="py-2">GitHubi ID: {{ user.id }}</li> --}}
+          <li  class="py-2">GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
           <li>GitHubi tiim: {{ user.team.name }}</li>
         
-          <li class="mt-4"><a href="/logout" class="!text-white">Logi välja</a></li>
+          <li  class="py-2"><a href="/logout" class="text-text">Logi välja</a></li>
 
         </ul>  
   
@@ -79,7 +87,7 @@
     </div>
   {{/if}}
 
-  <div class="mode">
+  <div class="mr-8 lg:mr-0 mode">
     <input onclick="toggleTheme()" type="checkbox" id="switch" checked="checked">
     <label for="switch">
       <!-- <img src="../images/moon.svg" alt=""> -->
