@@ -1301,7 +1301,7 @@ body {
   background-color: #fff7e7;
   background-image: url(../images/sun.svg);
   background-size: 30%;
-  background-position: 70px !important;
+  background-position: 70px 12px !important;
   background-repeat: no-repeat;
   background-position: center;
   transition: all 1s;
@@ -1310,8 +1310,8 @@ body {
 .mode input[type='checkbox']:checked ~ label {
   background-color: var(--primary-600);
   background-image: url(../images/moon.svg);
-  background-size: 25%;
-  background-position: 17px 14px !important;
+  background-size: 20%;
+  background-position: 19px 18px !important;
 }
 .mode label:after {
   content: '';
