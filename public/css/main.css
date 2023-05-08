@@ -891,9 +891,6 @@ h6{
 .bg-primary-100{
   background-color: var(--primary-100, #f2eff5);
 }
-.bg-primary-200{
-  background-color: var(--primary-200, #e6dfec);
-}
 .p-0{
   padding: 0px;
 }
@@ -1301,13 +1298,20 @@ body {
   height: 3.25rem;
   width: 6.5rem;
   border-radius: 100px;
-  background-color: var(--primary-700);
-  position: relative;
-  background-image: url(output/img/darklight.svg);
+  background-color: #fff7e7;
+  background-image: url(../images/sun.svg);
+  background-size: 30%;
+  background-position: 70px !important;
   background-repeat: no-repeat;
   background-position: center;
   transition: all 1s;
   cursor: pointer;
+}
+.mode input[type='checkbox']:checked ~ label {
+  background-color: var(--primary-600);
+  background-image: url(../images/moon.svg);
+  background-size: 25%;
+  background-position: 17px 14px !important;
 }
 .mode label:after {
   content: '';
@@ -1317,7 +1321,7 @@ body {
   border-radius: 100px;
   border: solid 2px var(--primary-400);
   position: absolute;
-  box-shadow: 5px 5px 8px var(--primary-700) inset;
+  box-shadow: 3px 3px 8px #30293852 inset;
 }
 .mode label:before {
   content: '';
@@ -1333,9 +1337,6 @@ body {
   transition-timing-function: ease-in;
   transition-timing-function: cubic-bezier(0.42, 0, 1, 1);
   box-shadow: 6px 0px 6px #00000060;
-}
-.mode input[type='checkbox']:checked ~ label {
-  background-color: var(--primary-500);
 }
 .mode input[type='checkbox']:checked ~ label::before {
   margin-left: calc(3.5rem - 2px);
