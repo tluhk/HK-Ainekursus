@@ -59,7 +59,7 @@ html {
 }
 
 .hoverrow:hover .hoverrowchild {
-  @apply bg-primary-200;
+  @apply bg-table-hover-cell;
 }
 
 /* only for designsystem demo */

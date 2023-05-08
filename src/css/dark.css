@@ -21,4 +21,7 @@
   --button-link: #e6dfec;
   --button-link-hover: #ccbfd9;
   --button-link-active: #b39fc6;
+  --table-cell: #050208;
+  --table-header-cell: #4d2e6b;
+  --table-hover-cell: #331a4d;
 }
