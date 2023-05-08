@@ -48,7 +48,7 @@
     <!-- user preferences -->
     <div class="mr-8 lg:mr-0 flex flex-col lg:flex-row items-end group lg:items-center">
       <div class="flex items-center gap-2">
-        <img class="z-[51] relative" src="{{ user._json.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%"> 
+        <img class="z-[51] relative w-16 rounded-full" src="{{ user._json.avatar_url }}" alt="Avatar"> 
         <div class="z-[51]">
           {{#if user.displayName}}
             {{ user.displayName }}

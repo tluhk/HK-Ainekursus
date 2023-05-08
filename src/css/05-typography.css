@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 @import 'global.css';
 
 ::-webkit-input-placeholder {
@@ -57,4 +58,13 @@ h6 {
 }
 p {
   margin-bottom: var(--body-paragraph-spacing);
+}
+
+html {
+  font-size: 14px;
+}
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
 }

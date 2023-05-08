@@ -1,30 +1,26 @@
 
-<a class='!no-underline uppercase w-full'
-    href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
->
-  <div class='mb-4 bg-neutral-50 hover:bg-neutral-100 p-4'>
-    <div class='text-md font-bold mb-4'>{{this.courseName}}</div>
-    {{#if_not_equal user.team.slug 'teachers' }}
-      <div>
-        <div class="flex justify-between mb-1">
-          <span class="text-base font-medium ">Läbitud teemad:</span>
-          <span class="text-base font-medium">
-            {{matchingDoneComponentsCount ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}} / {{../this.courseBranchComponentsUUIDs.length }}
-          </span>
+  <a class='card block p-4 !pt-[0.1px] relative'
+      href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
+  >
+      <h3 class='text-lg'>{{this.courseName}}</h3>
+      {{#if_not_equal user.team.slug 'teachers' }}
+          <div class="flex justify-between mb-1">
+            <span class="text-base font-medium ">Läbitud teemad:</span>
+            <span class="text-base font-medium">
+              {{matchingDoneComponentsCount ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}} / {{../this.courseBranchComponentsUUIDs.length }}
+            </span>
+        <div class="w-full bg-pink rounded-full h-3 ">
+          <div class="bg-brand_red h-3 rounded-full" style="width: {{matchingDoneComponentsPercent ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}}%"></div>
         </div>
-      <div class="w-full bg-pink rounded-full h-3 ">
-        <div class="bg-brand_red h-3 rounded-full" style="width: {{matchingDoneComponentsPercent ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}}%"></div>
+        </div>
+      {{/if_not_equal }}
+      <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+        <p class="m-0 p-0">{{this.courseCode}}</p>
+        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
+        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
       </div>
+      <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
+        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
+        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername teachers)}}{{this.displayName}}{{/with }}</p>
       </div>
-    {{/if_not_equal }}
-    <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
-      <p class="m-0 p-0">{{this.courseCode}}</p>
-      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
-      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{this.courseGrading}}</p>
-    </div>
-    <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4">
-      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
-      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername teachers)}}{{this.displayName}}{{/with }}</p>
-    </div>
-  </div>
-</a>
+  </a>

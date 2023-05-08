@@ -24,4 +24,7 @@
   --table-cell: #050208;
   --table-header-cell: #4d2e6b;
   --table-hover-cell: #331a4d;
+  --card-background: linear-gradient(212deg, #61378d 0%, #58298a6e 100%);
+  --card-stroke: #80609f;
+  --card-hover-shadow: [object Object];
 }

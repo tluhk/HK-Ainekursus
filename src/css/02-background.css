@@ -5,6 +5,7 @@ body {
 .dark-theme body {
   background-image: url(/images/dark_bg.jpg);
   background-attachment: fixed;
+  background-position: right -85px top;
 }
 .light-theme body {
   background-image: url(/images/light_bg.jpg);

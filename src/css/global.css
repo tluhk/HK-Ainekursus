@@ -69,4 +69,6 @@
   --body-spacing: 0.5rem;
   --article-image-spacing: 3rem;
   --image-block-gap: 1rem;
+  --card-border-radius: 0.5rem;
+  --card-border-width: 2;
 }

@@ -1,3 +1,4 @@
+<!-- dashboard-teacher.notifications.handlebars -->
 <div>
   <h2>Teated</h2>
   <p>Siin näed viimaseid teateid enda ja teiste õppejõudude kursuste kohta. Teateid näed ainult vaikimisi harust.</p>
@@ -10,14 +11,15 @@
         <div>
           <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
           <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }} uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{this.course.courseName}}</b></a> {{this.course.refBranch}} haru: <br></p></div>
-          <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
+          <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2"><span class="material-symbols-outlined text-system-red-tlu">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
         </div>
         {{#unless @last}}
           <hr class="mt-4 mb-4">
         {{/unless}}
       {{/each }}
       <div class="pt-4">
-        <a class="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 hover:!no-underline !no-underline" href="/notifications">Kõik teated</a>
+
+        <a class="btn-link" href="/notifications"><span class="material-symbols-outlined">read_more</span>Kõik teated</a>
       </div>
     </div>
   </div>

@@ -2,6 +2,10 @@ html {
   scroll-behavior: smooth;
 }
 
+main {
+  margin-top: 7rem !important;
+}
+
 .dashboard_content {
   max-width: 100%;
   width: 65rem;
