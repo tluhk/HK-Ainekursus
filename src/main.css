@@ -321,3 +321,12 @@ a.table-of-contents:hover {
 .hoverrow:hover .hoverrowchild {
   @apply bg-neutral-100;
 }
+
+html {
+  font-size: 14px;
+}
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}

@@ -1951,6 +1951,16 @@ a.table-of-contents:hover {
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
 }
 
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}
+
 .hover\:bg-neutral-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(231 233 236 / var(--tw-bg-opacity));
