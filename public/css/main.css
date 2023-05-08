@@ -1181,6 +1181,10 @@ input:checked ~ .tab-label {
   width: 50%;
 }
 
+.w-16 {
+  width: 4rem;
+}
+
 .w-4 {
   width: 1rem;
 }
