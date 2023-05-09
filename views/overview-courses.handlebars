@@ -33,12 +33,12 @@
                 <h2 class="text-lg font-sans items-start m-0">{{this.courseName}}</h2>
                 <p class="m-0">{{this.courseCode}}</p>
               </div>
-              <div class="flex items-start gap-2 m-0 pb-2">Tiimid ja nende vaikimisi harud:</div>
+              <div class="flex items-start gap-2 m-0">Tiimid ja nende vaikimisi harud:</div>
                <div class="flex flex-nowrap justify-start gap-x-4 items-center">
                   <ul class="w-full">
                   {{#each this.courseConfigByTeam}}
-                    <li class="pl-8 cursor-pointer hover:border-b-[1] hover:border-solid" onclick="handleCourseClick('{{@key}}', '{{../this.courseSlug}}')">
-                    <div class="flex flex-nowrap justify-start gap-x-4 items-center">
+                    <li class="card cardlink px-4 flex flex-col gap-4 mt-2 cursor-pointer" onclick="handleCourseClick('{{@key}}', '{{../this.courseSlug}}')">
+                    <div class="flex flex-wrap gap-2">
                       <h5 class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">groups</span>
                       {{uppercase @key}} tiim</h5>
                       <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{this.refBranch}} haru</p>

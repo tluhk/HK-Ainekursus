@@ -23,10 +23,9 @@ body {
   border-radius: 100px;
   background-color: #fff7e7;
   background-image: url(../images/sun.svg);
-  background-size: 30%;
-  background-position: 70px 12px !important;
+  background-size: 38%;
+  background-position: 3.5rem 0.38rem !important;
   background-repeat: no-repeat;
-  background-position: center;
   transition: all 1s;
   cursor: pointer;
 }
@@ -34,7 +33,7 @@ body {
   background-color: var(--primary-600);
   background-image: url(../images/moon.svg);
   background-size: 20%;
-  background-position: 19px 18px !important;
+  background-position: 1rem 1rem !important;
 }
 .mode label:after {
   content: '';

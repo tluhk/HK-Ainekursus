@@ -1,3 +1,4 @@
+<!-- dashboard-teacher.teacherCourses.handlebars -->
 <div>
   <h2>Teised õppejõud</h2>
   <p>Siin näed infot teiste õppejõudude ja nende kursuste kohta.</p>
@@ -7,7 +8,7 @@
         {{#with (findTeacher @key ../teachers)}}
           <div class="flex flex-row gap-4 items-center">
             <div>
-              <img src="{{ this.avatar_url }}" alt="Avatar" width="70px" height="70px" style="border-radius: 50%" class="">
+              <img src="{{ this.avatar_url }}" alt="Avatar" class="w-16 rounded-full">
             </div>
             <div class="inline-block">
               <h3 class="mt-0 mb-1">{{this.displayName}}</h3>

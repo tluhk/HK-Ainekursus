@@ -14,7 +14,7 @@ main {
 
 /* sticky table */
 .headers {
-  top: 0;
+  top: 8rem;
   position: -webkit-sticky;
   position: sticky;
   z-index: 1;
