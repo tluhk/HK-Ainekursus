@@ -36,6 +36,7 @@
   --table-hover-cell: #f2eff5;
   --card-stroke: #80609f;
   --card-hover-shadow: [object Object];
+  --stroke: #9F8060;
 }
 .dark-theme {
   --text: #f1f2f4;
@@ -66,6 +67,7 @@
   --card-background: linear-gradient(212deg, #61378d 0%, #58298a6e 100%);
   --card-stroke: #80609f;
   --card-hover-shadow: [object Object];
+  --stroke: #80609f;
 }
 /*
 ! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
@@ -875,6 +877,14 @@ h6{
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
+.divide-y > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+.divide-system-red-tlu > :not([hidden]) ~ :not([hidden]){
+  border-color: var(--system-red-tlu, #b71234);
+}
 .overflow-x-hidden{
   overflow-x: hidden;
 }
@@ -1247,6 +1257,7 @@ code {
   --system-white: #ffffff;
   --system-focus: #EB6424;
   --system-primary: #80609f;
+  --system-primary-on-light: #9F8060;
   --article-bottom: 1rem;
   --article-section-bottom: 1rem;
   --body-line-height: 175%;

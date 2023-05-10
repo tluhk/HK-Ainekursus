@@ -1,3 +1,4 @@
+<!-- notifications.handlebars -->
 <div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
   <main id="main-content" class="w-full px-4 py-8 dashboard_content">
     <div class="flex flex-col flex-nowrap grow justify-between">
@@ -21,19 +22,18 @@
 
             {{#if courseUpdates30Days }}
               <h3>Viimase 30 päeva teated:</h3>
-              <div class="pb-8">
+              <div class="pb-8 divide-y divide-system-red-tlu/25">
                 {{#each courseUpdates30Days }} 
-                  <div>
-                    <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
+                  <div class="py-4">
+                    <div class=" flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
                     {{#if_equal ../this.user.team.slug 'teachers' }}
                       <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0">{{#with (findTeacher ../this.user.login ../../teachers)}}{{this.displayName}}{{/with }} uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{../this.course.courseName}}</b></a> {{../this.course.refBranch}} haru: <br></p></div>
                     {{else }}
                       <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0">{{#with (findTeacher ../this.user.login ../../teachers)}}{{this.displayName}}{{/with }} uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{../this.course.courseName}}</b></a> {{!-- {{this.course.refBranch}} haru --}}:<br></p></div>
                     {{/if_equal }}
-                    <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
+                    <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
                   </div>
                   {{#unless @last}}
-                    <hr class="mt-4 mb-4">
                   {{/unless}}
                 {{/each }}
               </div>
