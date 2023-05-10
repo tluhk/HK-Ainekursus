@@ -44,7 +44,7 @@
   --system-white: #ffffff;
   --system-focus: #EB6424;
   --system-primary: #80609f;
-  --system-primary-on-light: #9F8060;
+  --system-primary-revert: #9F8060;
   --article-bottom: 1rem;
   --article-section-bottom: 1rem;
   --body-line-height: 175%;
@@ -72,4 +72,5 @@
   --image-block-gap: 1rem;
   --card-border-radius: 0.5rem;
   --card-border-width: 2;
+  --primary-revert-100: #E2D9CF;
 }

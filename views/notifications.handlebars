@@ -22,7 +22,41 @@
 
             {{#if courseUpdates30Days }}
               <h3>Viimase 30 päeva teated:</h3>
-              <div class="pb-8 divide-y divide-system-red-tlu/25">
+              <div class="divide-y divide-stroke">
+                {{#each courseUpdates30Days }} 
+                  <div class="flex flex-wrap py-4">
+                    {{#if_equal ../this.user.team.slug 'teachers' }}
+                    <div class=" basis-[80%] shrink-0 grow-0">
+                      <span class="material-symbols-outlined text-sm text-system-red-tlu">notifications</span><!-- AINE --><a class=" text-sm" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
+                    </div>
+                    <div class=" text-sm basis-[20%] shrink-0 grow-0">
+                      <div><!-- AEG -->{{timeSince this.created_at }}</div>
+                    </div>
+                    {{/if_equal }}
+
+                    <div class=" basis-[80%] shrink-0 grow-0">
+                    <!-- Sisu -->{{this.body}}
+                    </div>
+
+                    <div class=" text-sm basis-[20%] shrink-0 grow-0">
+                    {{#if_equal ../this.user.team.slug 'teachers' }}
+                      <!-- ÕPPEJÕUD -->{{#with (findTeacher ../this.user.login ../../teachers)}}{{this.displayName}}{{/with }} <!-- OKS-->{{../this.course.refBranch}}
+                    {{/if_equal }}
+                    </div>
+
+                    
+                    
+                  </div>
+                  {{#unless @last}}
+                  {{/unless}}
+                {{/each }}
+              </div>
+            {{/if }}
+
+<!-- 
+            {{#if courseUpdates30Days }}
+              <h3>Viimase 30 päeva teated:</h3>
+              <div class="pb-8 divide-y divide-stroke">
                 {{#each courseUpdates30Days }} 
                   <div class="py-4">
                     <div class=" flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
@@ -37,7 +71,7 @@
                   {{/unless}}
                 {{/each }}
               </div>
-            {{/if }}
+            {{/if }} -->
             
           </div>
         </div>

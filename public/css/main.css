@@ -36,7 +36,7 @@
   --table-hover-cell: #f2eff5;
   --card-stroke: #80609f;
   --card-hover-shadow: [object Object];
-  --stroke: #9F8060;
+  --stroke: #E2D9CF;
 }
 .dark-theme {
   --text: #f1f2f4;
@@ -67,7 +67,7 @@
   --card-background: linear-gradient(212deg, #61378d 0%, #58298a6e 100%);
   --card-stroke: #80609f;
   --card-hover-shadow: [object Object];
-  --stroke: #80609f;
+  --stroke: #4d2e6b;
 }
 /*
 ! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
@@ -882,8 +882,8 @@ h6{
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
 }
-.divide-system-red-tlu > :not([hidden]) ~ :not([hidden]){
-  border-color: var(--system-red-tlu, #b71234);
+.divide-stroke > :not([hidden]) ~ :not([hidden]){
+  border-color: var(--stroke, #E2D9CF);
 }
 .overflow-x-hidden{
   overflow-x: hidden;
@@ -1257,7 +1257,7 @@ code {
   --system-white: #ffffff;
   --system-focus: #EB6424;
   --system-primary: #80609f;
-  --system-primary-on-light: #9F8060;
+  --system-primary-revert: #9F8060;
   --article-bottom: 1rem;
   --article-section-bottom: 1rem;
   --body-line-height: 175%;
@@ -1285,6 +1285,7 @@ code {
   --image-block-gap: 1rem;
   --card-border-radius: 0.5rem;
   --card-border-width: 2;
+  --primary-revert-100: #E2D9CF;
 }
 ::-moz-placeholder {
   font-style: italic;
