@@ -27,9 +27,9 @@
                   <div class="flex flex-wrap py-2">
                     {{#if_equal ../this.user.team.slug 'teachers' }}
                     <div class="basis-4/5 shrink-0 grow-0">
-                      <span class="material-symbols-outlined text-sm text-system-red-tlu">notifications</span><!-- AINE --><a class=" text-sm" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
+                      <span class="material-symbols-outlined text-base text-system-red-tlu">notifications</span><!-- AINE --><a class=" text-sm" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
                     </div>
-                    <div class=" text-sm basis-1/5 text-right shrink-0 grow-0">
+                    <div class="text-sm basis-1/5 text-right shrink-0 grow-0">
                       <div><!-- AEG -->{{timeSince this.created_at }}</div>
                     </div>
                     {{/if_equal }}

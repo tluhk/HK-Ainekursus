@@ -281,12 +281,14 @@ a.table-of-contents:hover {
 .scroller {
   overflow-x: hidden;
 }
-.tracks, .scroller {
+.tracks,
+.scroller {
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 .tracks {
   overflow: auto;
+  -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
 }
 .grid {
@@ -303,6 +305,7 @@ a.table-of-contents:hover {
 }
 
 .cell.fix {
+  position: -webkit-sticky;
   position: sticky;
   left: 0;
   z-index: 1;
@@ -314,8 +317,8 @@ a.table-of-contents:hover {
 }
 .tracks::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: rgba(0,0,0,.5);
-  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .hoverrow:hover .hoverrowchild {
