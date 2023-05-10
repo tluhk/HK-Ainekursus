@@ -6,6 +6,8 @@
   padding: 1rem;
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
+  box-shadow: var(--drop-shadow-x) var(--drop-shadow-y) var(--drop-shadow-blur)
+    var(--drop-shadow-color);
 }
 
 .dark-theme .card::before,

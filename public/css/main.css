@@ -4,7 +4,11 @@
 @tailwind base;
 @tailwind components;
 .light-theme {
-  --active-menu-stroke-on: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --active-menu-stroke-on: linear-gradient(
+    204deg,
+    #f2f8fd29 0%,
+    #f2fcfd00 100%
+  );
   --text: #414a58;
   --link: #2b313b;
   --link-idle: #5c6470;
@@ -13,10 +17,14 @@
   --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
   --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
   --menu-background-stroke: #dad7d38c;
-  --menu-item-background-stroke: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --menu-item-background-stroke: linear-gradient(
+    204deg,
+    #f2f8fd29 0%,
+    #f2fcfd00 100%
+  );
   --link-active: #4d2e6b;
   --link-hover: #80609f;
-  --page-background: #FAFCFF;
+  --page-background: #fafcff;
   --button-default: #80609f;
   --button-hover: #664d80;
   --button-active: #4d2e6b;
@@ -31,20 +39,41 @@
   --button-link: #4d2e6b;
   --button-link-hover: #664d80;
   --button-link-active: #80609f;
-  --table-cell: #FAFCFF;
+  --table-cell: #fafcff;
   --table-header-cell: #e6dfec;
   --table-hover-cell: #f2eff5;
   --card-stroke: #80609f;
-  --card-hover-shadow: [object Object];
-  --stroke: #E2D9CF;
+  --card-hover-shadow-x: 0;
+  --card-hover-shadow-y: 0;
+  --card-hover-shadow-blur: 22;
+  --card-hover-shadow-spread: 0;
+  --card-hover-shadow-color: #f2eff5;
+  --card-hover-shadow-type: innerShadow;
+  --stroke: #e2d9cf;
+  --drop-shadow-x: 4px;
+  --drop-shadow-y: 4px;
+  --drop-shadow-blur: 11px;
+  --drop-shadow-spread: 0;
+  --drop-shadow-color: #05020811;
+  --drop-shadow-type: dropShadow;
 }
 .dark-theme {
   --text: #f1f2f4;
   --link: #f1f2f4;
   --link-idle: #7b8593;
   --link-active: #664d80;
-  --dark-drop-shadow: [object Object];
-  --dark-drop-shadow-strong: [object Object];
+  --drop-shadow-x: 4px;
+  --drop-shadow-y: 4px;
+  --drop-shadow-blur: 11px;
+  --drop-shadow-spread: 0;
+  --drop-shadow-color: #05020850;
+  --drop-shadow-type: dropShadow;
+  --drop-shadow-strong-color: #ffffff8c;
+  --drop-shadow-strong-type: dropShadow;
+  --drop-shadow-strong-x: 0;
+  --drop-shadow-strong-y: 0;
+  --drop-shadow-strong-blur: 22;
+  --drop-shadow-strong-spread: 0;
   --link-hover: #c7cbd1;
   --page-background: #050208;
   --button-default: #80609f;
@@ -66,7 +95,12 @@
   --table-hover-cell: #331a4d;
   --card-background: linear-gradient(212deg, #61378d 0%, #58298a6e 100%);
   --card-stroke: #80609f;
-  --card-hover-shadow: [object Object];
+  --card-hover-shadow-x: 0;
+  --card-hover-shadow-y: 0;
+  --card-hover-shadow-blur: 22;
+  --card-hover-shadow-spread: 0;
+  --card-hover-shadow-color: #e3e5e8;
+  --card-hover-shadow-type: innerShadow;
   --stroke: #4d2e6b;
 }
 /*
@@ -624,6 +658,9 @@ h6{
 .top-2{
   top: 0.5rem;
 }
+.top-32{
+  top: 8rem;
+}
 .top-\[-700px\]{
   top: -700px;
 }
@@ -670,9 +707,6 @@ h6{
 }
 .mb-4{
   margin-bottom: 1rem;
-}
-.mb-8{
-  margin-bottom: 2rem;
 }
 .ml-2{
   margin-left: 0.5rem;
@@ -906,9 +940,6 @@ h6{
 .whitespace-nowrap{
   white-space: nowrap;
 }
-.break-all{
-  word-break: break-all;
-}
 .rounded{
   border-radius: 0.25rem;
 }
@@ -940,9 +971,6 @@ h6{
 .border-t-2{
   border-top-width: 2px;
 }
-.border-neutral-200{
-  border-color: var(--neutral-200, #e3e5e8);
-}
 .border-primary-600{
   border-color: var(--primary-600, #80609f);
 }
@@ -954,9 +982,6 @@ h6{
 }
 .bg-neutral-100{
   background-color: var(--neutral-100, #f1f2f4);
-}
-.bg-neutral-200{
-  background-color: var(--neutral-200, #e3e5e8);
 }
 .bg-page-background{
   background-color: var(--page-background, #FAFCFF);
@@ -1178,6 +1203,11 @@ main {
 .dashboard_content {
   max-width: 100%;
   width: 80rem;
+  margin: 0 auto;
+}
+.reading_content {
+  max-width: 100%;
+  width: 70ch;
   margin: 0 auto;
 }
 /* sticky table */
@@ -1512,6 +1542,8 @@ header::before {
   padding: 1rem;
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
+  box-shadow: var(--drop-shadow-x) var(--drop-shadow-y) var(--drop-shadow-blur)
+    var(--drop-shadow-color);
 }
 .dark-theme .card::before,
 .light-theme .card::before {
@@ -1551,9 +1583,6 @@ header::before {
 }
 .hover\:bg-neutral-200:hover{
   background-color: var(--neutral-200, #e3e5e8);
-}
-.hover\:bg-neutral-300:hover{
-  background-color: var(--neutral-300, #c7cbd1);
 }
 .hover\:bg-table-hover-cell:hover{
   background-color: var(--table-hover-cell, #f2eff5);

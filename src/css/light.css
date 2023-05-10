@@ -1,5 +1,9 @@
 .light-theme {
-  --active-menu-stroke-on: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --active-menu-stroke-on: linear-gradient(
+    204deg,
+    #f2f8fd29 0%,
+    #f2fcfd00 100%
+  );
   --text: #414a58;
   --link: #2b313b;
   --link-idle: #5c6470;
@@ -8,10 +12,14 @@
   --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
   --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
   --menu-background-stroke: #dad7d38c;
-  --menu-item-background-stroke: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --menu-item-background-stroke: linear-gradient(
+    204deg,
+    #f2f8fd29 0%,
+    #f2fcfd00 100%
+  );
   --link-active: #4d2e6b;
   --link-hover: #80609f;
-  --page-background: #FAFCFF;
+  --page-background: #fafcff;
   --button-default: #80609f;
   --button-hover: #664d80;
   --button-active: #4d2e6b;
@@ -26,10 +34,21 @@
   --button-link: #4d2e6b;
   --button-link-hover: #664d80;
   --button-link-active: #80609f;
-  --table-cell: #FAFCFF;
+  --table-cell: #fafcff;
   --table-header-cell: #e6dfec;
   --table-hover-cell: #f2eff5;
   --card-stroke: #80609f;
-  --card-hover-shadow: [object Object];
-  --stroke: #E2D9CF;
+  --card-hover-shadow-x: 0;
+  --card-hover-shadow-y: 0;
+  --card-hover-shadow-blur: 22;
+  --card-hover-shadow-spread: 0;
+  --card-hover-shadow-color: #f2eff5;
+  --card-hover-shadow-type: innerShadow;
+  --stroke: #e2d9cf;
+  --drop-shadow-x: 4px;
+  --drop-shadow-y: 4px;
+  --drop-shadow-blur: 11px;
+  --drop-shadow-spread: 0;
+  --drop-shadow-color: #05020811;
+  --drop-shadow-type: dropShadow;
 }

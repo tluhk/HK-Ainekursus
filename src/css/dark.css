@@ -3,8 +3,18 @@
   --link: #f1f2f4;
   --link-idle: #7b8593;
   --link-active: #664d80;
-  --dark-drop-shadow: [object Object];
-  --dark-drop-shadow-strong: [object Object];
+  --drop-shadow-x: 4px;
+  --drop-shadow-y: 4px;
+  --drop-shadow-blur: 11px;
+  --drop-shadow-spread: 0;
+  --drop-shadow-color: #05020850;
+  --drop-shadow-type: dropShadow;
+  --drop-shadow-strong-color: #ffffff8c;
+  --drop-shadow-strong-type: dropShadow;
+  --drop-shadow-strong-x: 0;
+  --drop-shadow-strong-y: 0;
+  --drop-shadow-strong-blur: 22;
+  --drop-shadow-strong-spread: 0;
   --link-hover: #c7cbd1;
   --page-background: #050208;
   --button-default: #80609f;
@@ -26,6 +36,11 @@
   --table-hover-cell: #331a4d;
   --card-background: linear-gradient(212deg, #61378d 0%, #58298a6e 100%);
   --card-stroke: #80609f;
-  --card-hover-shadow: [object Object];
+  --card-hover-shadow-x: 0;
+  --card-hover-shadow-y: 0;
+  --card-hover-shadow-blur: 22;
+  --card-hover-shadow-spread: 0;
+  --card-hover-shadow-color: #e3e5e8;
+  --card-hover-shadow-type: innerShadow;
   --stroke: #4d2e6b;
 }

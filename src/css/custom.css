@@ -11,6 +11,11 @@ main {
   width: 80rem;
   margin: 0 auto;
 }
+.reading_content {
+  max-width: 100%;
+  width: 70ch;
+  margin: 0 auto;
+}
 
 /* sticky table */
 .headers {
