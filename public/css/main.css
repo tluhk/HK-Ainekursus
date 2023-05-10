@@ -659,6 +659,9 @@ h6{
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
+.mb-0{
+  margin-bottom: 0px;
+}
 .mb-1{
   margin-bottom: 0.25rem;
 }
@@ -797,6 +800,18 @@ h6{
 .grow-0{
   flex-grow: 0;
 }
+.basis-1\/5{
+  flex-basis: 20%;
+}
+.basis-2\/6{
+  flex-basis: 33.333333%;
+}
+.basis-4\/5{
+  flex-basis: 80%;
+}
+.basis-4\/6{
+  flex-basis: 66.666667%;
+}
 .basis-48{
   flex-basis: 12rem;
 }
@@ -931,6 +946,9 @@ h6{
 .border-primary-600{
   border-color: var(--primary-600, #80609f);
 }
+.border-stroke{
+  border-color: var(--stroke, #E2D9CF);
+}
 .border-r-neutral-200{
   border-right-color: var(--neutral-200, #e3e5e8);
 }
@@ -1036,6 +1054,9 @@ h6{
 .pr-2{
   padding-right: 0.5rem;
 }
+.pr-4{
+  padding-right: 1rem;
+}
 .pr-8{
   padding-right: 2rem;
 }
@@ -1071,6 +1092,9 @@ h6{
 }
 .text-sm{
   font-size: 0.80rem;
+}
+.text-xl{
+  font-size: 1.56rem;
 }
 .text-xs{
   font-size: 0.64rem;
@@ -1150,7 +1174,7 @@ main {
 }
 .dashboard_content {
   max-width: 100%;
-  width: 65rem;
+  width: 80rem;
   margin: 0 auto;
 }
 /* sticky table */
@@ -1286,6 +1310,8 @@ code {
   --card-border-radius: 0.5rem;
   --card-border-width: 2;
   --primary-revert-100: #E2D9CF;
+  --body-sm-line-height: 125%;
+  --body-xs-line-height: 125%;
 }
 ::-moz-placeholder {
   font-style: italic;
@@ -1299,6 +1325,9 @@ section {
 body {
   line-height: var(--line-height-body);
   margin: var(--body-spacing);
+}
+.text-sm {
+  line-height: var(--body-sm-line-height);
 }
 h1 {
   line-height: var(--h1-line-height);

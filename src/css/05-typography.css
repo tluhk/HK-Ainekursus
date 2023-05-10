@@ -26,6 +26,9 @@ body {
   line-height: var(--line-height-body);
   margin: var(--body-spacing);
 }
+.text-sm {
+  line-height: var(--body-sm-line-height);
+}
 h1 {
   line-height: var(--h1-line-height);
   margin-top: var(--h1-spacing-top);
