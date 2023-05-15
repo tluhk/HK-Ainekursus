@@ -4,11 +4,7 @@
 @tailwind base;
 @tailwind components;
 .light-theme {
-  --active-menu-stroke-on: linear-gradient(
-    204deg,
-    #f2f8fd29 0%,
-    #f2fcfd00 100%
-  );
+  --active-menu-stroke-on: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
   --text: #414a58;
   --link: #2b313b;
   --link-idle: #5c6470;
@@ -17,14 +13,10 @@
   --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
   --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
   --menu-background-stroke: #dad7d38c;
-  --menu-item-background-stroke: linear-gradient(
-    204deg,
-    #f2f8fd29 0%,
-    #f2fcfd00 100%
-  );
+  --menu-item-background-stroke: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
   --link-active: #4d2e6b;
   --link-hover: #80609f;
-  --page-background: #fafcff;
+  --page-background: #FAFCFF;
   --button-default: #80609f;
   --button-hover: #664d80;
   --button-active: #4d2e6b;
@@ -39,7 +31,7 @@
   --button-link: #4d2e6b;
   --button-link-hover: #664d80;
   --button-link-active: #80609f;
-  --table-cell: #fafcff;
+  --table-cell: #FAFCFF;
   --table-header-cell: #e6dfec;
   --table-hover-cell: #f2eff5;
   --card-stroke: #80609f;
@@ -49,10 +41,10 @@
   --card-hover-shadow-spread: 0;
   --card-hover-shadow-color: #f2eff5;
   --card-hover-shadow-type: innerShadow;
-  --stroke: #e2d9cf;
-  --drop-shadow-x: 4px;
-  --drop-shadow-y: 4px;
-  --drop-shadow-blur: 11px;
+  --stroke: #E2D9CF;
+  --drop-shadow-x: 4;
+  --drop-shadow-y: 4;
+  --drop-shadow-blur: 11;
   --drop-shadow-spread: 0;
   --drop-shadow-color: #05020811;
   --drop-shadow-type: dropShadow;
@@ -62,9 +54,9 @@
   --link: #f1f2f4;
   --link-idle: #7b8593;
   --link-active: #664d80;
-  --drop-shadow-x: 4px;
-  --drop-shadow-y: 4px;
-  --drop-shadow-blur: 11px;
+  --drop-shadow-x: 4;
+  --drop-shadow-y: 4;
+  --drop-shadow-blur: 11;
   --drop-shadow-spread: 0;
   --drop-shadow-color: #05020850;
   --drop-shadow-type: dropShadow;
@@ -93,8 +85,10 @@
   --table-cell: #050208;
   --table-header-cell: #4d2e6b;
   --table-hover-cell: #331a4d;
-  --card-background: linear-gradient(212deg, #61378d 0%, #58298a6e 100%);
-  --card-stroke: #80609f;
+  --card-background: linear-gradient(35deg, #0d0811 0%, #553b6c30 100%);
+  --menu-card-background: linear-gradient(0deg, #291A37 0%, #291B37 11%, #3E314A 100%);
+  --menu-card-stroke: linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%);
+  --card-stroke: #331a4d;
   --card-hover-shadow-x: 0;
   --card-hover-shadow-y: 0;
   --card-hover-shadow-blur: 22;
@@ -667,82 +661,6 @@ pre{
   padding-right: 1rem;
   padding-top: 1.5rem;
   padding-bottom: 0.5rem;
-}
-/*--------------------------- accordion components ---------------------------*/
-.tabs{
-  overflow: hidden;
-}
-.tab{
-  width: 100%;
-  overflow: hidden;
-}
-.tab-label,
-  .no-tab-label{
-  display: flex;
-  cursor: pointer;
-  justify-content: space-between;
-  padding-left: 1rem;
-  font-weight: 700;
-}
-.tab-content{
-  max-height: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-.active-tab .no-tab-label,
-  .active-tab .tab-label{
-  background-color: var(--neutral-200, #e3e5e8);
-}
-.active-tab-content,
-  .tab-content:hover{
-  background-color: var(--system-red-tlu, #b71234);
-}
-.active-tab-content *,
-  .tab-content:hover *{
-  color: var(--system-white, #ffffff) !important;
-}
-.active-tab .tab-label:hover{
-  background-color: var(--neutral-200, #e3e5e8);
-}
-.active-tab .tab-label::after,
-  input:checked + .tab-label::after{
-  --tw-rotate: 90deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.active-tab .tab-content,
-  .tab-label{
-  border-bottom-width: 1px;
-  border-color: var(--neutral-200, #e3e5e8);
-}
-input:checked ~ .tab-label{
-  max-height: 100vh;
-}
-.tab-label::after{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  text-align: center;
-  --tw-content: '\276F';
-  content: var(--tw-content);
-}
-.active-tab .tab-label::after{
-  display: none;
-}
-/* opened accordion. If only with input:chekced: input:checked ~ .tab-content */
-.active-tab .tab-content,
-  input:checked ~ .tab-content{
-  max-height: 100vh;
-}
-.sidebar input{
-  position: absolute;
-  z-index: -10;
-  opacity: 0;
 }
 /*--------------------------- end of sidebar tab's -------------------------------*/
 .breadcrumb{
@@ -1701,7 +1619,6 @@ header::before {
   border-style: solid;
   border-color: var(--card-stroke);
   z-index: -1;
-  opacity: 0.5;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -1721,6 +1638,115 @@ header::before {
 .dark-theme .card.cardlink:active::before {
   opacity: 0.2;
   border-radius: 1rem;
+}
+/*--------------------------- accordion components ---------------------------*/
+.tab-close{
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+.tabs{
+  overflow: hidden;
+}
+.tab{
+  width: 100%;
+  overflow: hidden;
+}
+.tab-label,
+.no-tab-label{
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  padding-left: 1rem;
+  font-weight: 700;
+  color: var(--link-idle, #5c6470);
+}
+.tab-label:hover,
+.no-tab-label:hover{
+  color: var(--text, #414a58);
+  position: relative;
+  background: var(--menu-card-background) padding-box,
+    var(--menu-card-stroke) border-box;
+  border-radius: 0.75rem;
+}
+.tab-content{
+  max-height: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: var(--link-idle, #5c6470);
+}
+.active-tab .no-tab-label,
+.active-tab .tab-label{
+  color: var(--text, #414a58);
+}
+.active-tab-content,
+.tab-content:hover{
+  color: var(--text, #414a58);
+  position: relative;
+  background: var(--menu-card-background) padding-box,
+    var(--menu-card-stroke) border-box;
+  border-radius: 0.75rem;
+}
+.active-tab-content *,
+.tab-content:hover *{
+  color: var(--text, #414a58) !important;
+}
+.active-tab .tab-label{
+  color: var(--text, #414a58);
+  position: relative;
+  background: var(--menu-card-background) padding-box,
+    var(--menu-card-stroke) border-box;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+}
+.active-tab .tab-label:hover{
+  color: var(--text, #414a58);
+}
+.active-tab .tab-label::after,
+input:checked + .tab-label::after{
+  --tw-rotate: 90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+input:checked ~ .tab-label{
+  max-height: 100vh;
+}
+.tab-label::after{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+  text-align: center;
+  --tw-content: '\276F';
+  content: var(--tw-content);
+}
+.active-tab .tab-label::after{
+  display: none;
+}
+/* opened accordion. If only with input:chekced: input:checked ~ .tab-content */
+.active-tab .tab-content,
+input:checked ~ .tab-content{
+  max-height: 100vh;
+}
+.sidebar input{
+  position: absolute;
+  z-index: -10;
+  opacity: 0;
+}
+.menu-card {
+  position: relative;
+  background: var(--menu-card-background) padding-box,
+    var(--menu-card-stroke) border-box;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+}
+.light-theme .menu-card::before {
+  opacity: 0.1;
 }
 .hover\:bg-neutral-200:hover{
   background-color: var(--neutral-200, #e3e5e8);
