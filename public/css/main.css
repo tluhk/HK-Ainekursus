@@ -1694,14 +1694,6 @@ header::before {
 .tab-content:hover *{
   color: var(--text, #414a58) !important;
 }
-.active-tab .tab-label{
-  color: var(--text, #414a58);
-  position: relative;
-  background: var(--menu-card-background) padding-box,
-    var(--menu-card-stroke) border-box;
-  border: 2px solid transparent;
-  border-radius: 0.75rem;
-}
 .active-tab .tab-label:hover{
   color: var(--text, #414a58);
 }
