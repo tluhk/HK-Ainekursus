@@ -5,17 +5,17 @@
 
 {{#if_equal user.team.slug 'teachers'}}
   <h5 class="m-0 pt-4">Ainekursuse versioonid:</h5>
-  <ul class="pl-2 pb-4 mt-4 space-y-1 text-sm text-gray-700 dark:text-gray-200">
+  <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
   <!-- Radio buttons -->
     {{#each ../branches }}
-      <li>
-        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-          <input {{setDefaultChecked this ../../refBranch ../../selectedVersion ../../branches }} id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio" class="form-radio"  onclick="handleRadioClick('{{this}}')" >
-          <label for="default-radio-{{@index}}" class="w-full ml-2 text-sm font-medium" onclick="handleRadioClick('{{this}}')" > {{this }}</label>
+
+        <div class="radio flex items-center">
+          <input {{setDefaultChecked this ../../refBranch ../../selectedVersion ../../branches }} id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio" onclick="handleRadioClick('{{this}}')" >
+          <label for="default-radio-{{@index}}" class="radio-label w-full ml-2 text-sm font-medium" onclick="handleRadioClick('{{this}}')" > {{this }}</label><span class="radio-check"></span>
         </div>
-      </li>
+
     {{/each }}
-  </ul>
+  </div>
 
   <!-- Hidden forms to send req.body values -->
   <form id="my-form" style="display:none;" method="POST" action="/save-selected-version">
