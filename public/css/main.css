@@ -1327,6 +1327,13 @@ code {
   white-space: -o-pre-wrap !important; /* Opera 7 */
   word-wrap: break-word !important;
 }
+a.table-of-contents {
+  line-height: 1.5rem;
+}
+.markdown-wrapper {
+  padding-top: 10rem;
+  margin-top: -10rem;
+}
 :root {
   --root-font-family: Montserrat;
   --big-headlines-font-family: Roboto Serif;
