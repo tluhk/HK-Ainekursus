@@ -49,12 +49,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 1.6rem;
-  width: 1.6rem;
+  height: 1.5rem;
+  width: 1.5rem;
   border-radius: 50%;
   border: 2px solid #80609f;
   background-color: #e6dfec;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: inset var(--radio-shadow-x) var(--radio-shadow-y) var(--radio-shadow-blur) var(--radio-shadow-color);
 }
 
 /* Radio Button Indicator - Checked */
@@ -73,9 +73,9 @@
 /* Styling the inner dot */
 .radio .radio-check:after {
   content: '';
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 1rem;
-  height: 1rem;
+  box-shadow: inset var(--radio-shadow-x) var(--radio-shadow-y) var(--radio-shadow-blur) var(--radio-shadow-color);
+  width: 0.9rem;
+  height: 0.9rem;
   border-radius: 50%;
   background: #80609f;
   display: none;
@@ -91,7 +91,7 @@
 
 /* Hover effect */
 .radio:hover input ~ .radio-check {
-  box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--radio-shadow-hover-x) var(--radio-shadow-hover-y) var(--radio-shadow-hover-blur) var(--radio-shadow-hover-color);
 }
 
 /* Radio Button Label - Hover effect */

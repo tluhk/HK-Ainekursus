@@ -43,4 +43,16 @@
   --drop-shadow-spread: 0;
   --drop-shadow-color: #05020811;
   --drop-shadow-type: dropShadow;
+  --radio-shadow-x: 0;
+  --radio-shadow-y: 5px;
+  --radio-shadow-blur: 7px;
+  --radio-shadow-spread: 0;
+  --radio-shadow-color: #2b313b70;
+  --radio-shadow-type: innerShadow;
+  --radio-shadow-hover-x: 0;
+  --radio-shadow-hover-y: 0;
+  --radio-shadow-hover-blur: 22px;
+  --radio-shadow-hover-spread: 0;
+  --radio-shadow-hover-color: #8f97a3;
+  --radio-shadow-hover-type: dropShadow;
 }

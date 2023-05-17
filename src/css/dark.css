@@ -9,12 +9,12 @@
   --drop-shadow-spread: 0;
   --drop-shadow-color: #05020850;
   --drop-shadow-type: dropShadow;
-  --drop-shadow-strong-color: #ffffff8c;
-  --drop-shadow-strong-type: dropShadow;
   --drop-shadow-strong-x: 0;
   --drop-shadow-strong-y: 0;
   --drop-shadow-strong-blur: 22;
   --drop-shadow-strong-spread: 0;
+  --drop-shadow-strong-color: #f2eff5;
+  --drop-shadow-strong-type: dropShadow;
   --link-hover: #c7cbd1;
   --page-background: #050208;
   --button-default: #80609f;
@@ -40,9 +40,21 @@
   --card-stroke: #331a4d;
   --card-hover-shadow-x: 0;
   --card-hover-shadow-y: 0;
-  --card-hover-shadow-blur: 22;
+  --card-hover-shadow-blur: 22px;
   --card-hover-shadow-spread: 0;
   --card-hover-shadow-color: #e3e5e8;
   --card-hover-shadow-type: innerShadow;
   --stroke: #4d2e6b;
+  --radio-shadow-hover-x: 0;
+  --radio-shadow-hover-y: 0;
+  --radio-shadow-hover-blur: 22px;
+  --radio-shadow-hover-spread: 0;
+  --radio-shadow-hover-color: #f2eff5;
+  --radio-shadow-hover-type: dropShadow;
+  --radio-shadow-x: 0;
+  --radio-shadow-y: 5px;
+  --radio-shadow-blur: 7px;
+  --radio-shadow-spread: 0;
+  --radio-shadow-color: #331a4d70;
+  --radio-shadow-type: innerShadow;
 }

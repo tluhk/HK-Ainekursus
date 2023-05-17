@@ -48,6 +48,18 @@
   --drop-shadow-spread: 0;
   --drop-shadow-color: #05020811;
   --drop-shadow-type: dropShadow;
+  --radio-shadow-x: 0;
+  --radio-shadow-y: 5px;
+  --radio-shadow-blur: 7px;
+  --radio-shadow-spread: 0;
+  --radio-shadow-color: #2b313b70;
+  --radio-shadow-type: innerShadow;
+  --radio-shadow-hover-x: 0;
+  --radio-shadow-hover-y: 0;
+  --radio-shadow-hover-blur: 22px;
+  --radio-shadow-hover-spread: 0;
+  --radio-shadow-hover-color: #8f97a3;
+  --radio-shadow-hover-type: dropShadow;
 }
 .dark-theme {
   --text: #f1f2f4;
@@ -60,12 +72,12 @@
   --drop-shadow-spread: 0;
   --drop-shadow-color: #05020850;
   --drop-shadow-type: dropShadow;
-  --drop-shadow-strong-color: #ffffff8c;
-  --drop-shadow-strong-type: dropShadow;
   --drop-shadow-strong-x: 0;
   --drop-shadow-strong-y: 0;
   --drop-shadow-strong-blur: 22;
   --drop-shadow-strong-spread: 0;
+  --drop-shadow-strong-color: #f2eff5;
+  --drop-shadow-strong-type: dropShadow;
   --link-hover: #c7cbd1;
   --page-background: #050208;
   --button-default: #80609f;
@@ -91,11 +103,23 @@
   --card-stroke: #331a4d;
   --card-hover-shadow-x: 0;
   --card-hover-shadow-y: 0;
-  --card-hover-shadow-blur: 22;
+  --card-hover-shadow-blur: 22px;
   --card-hover-shadow-spread: 0;
   --card-hover-shadow-color: #e3e5e8;
   --card-hover-shadow-type: innerShadow;
   --stroke: #4d2e6b;
+  --radio-shadow-hover-x: 0;
+  --radio-shadow-hover-y: 0;
+  --radio-shadow-hover-blur: 22px;
+  --radio-shadow-hover-spread: 0;
+  --radio-shadow-hover-color: #f2eff5;
+  --radio-shadow-hover-type: dropShadow;
+  --radio-shadow-x: 0;
+  --radio-shadow-y: 5px;
+  --radio-shadow-blur: 7px;
+  --radio-shadow-spread: 0;
+  --radio-shadow-color: #331a4d70;
+  --radio-shadow-type: innerShadow;
 }
 /*
 ! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
@@ -1269,12 +1293,12 @@ pre{
   position: absolute;
   top: 0;
   left: 0;
-  height: 1.6rem;
-  width: 1.6rem;
+  height: 1.5rem;
+  width: 1.5rem;
   border-radius: 50%;
   border: 2px solid #80609f;
   background-color: #e6dfec;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: inset var(--radio-shadow-x) var(--radio-shadow-y) var(--radio-shadow-blur) var(--radio-shadow-color);
 }
 /* Radio Button Indicator - Checked */
 .radio input:checked ~ .radio-check {
@@ -1290,9 +1314,9 @@ pre{
 /* Styling the inner dot */
 .radio .radio-check:after {
   content: '';
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 1rem;
-  height: 1rem;
+  box-shadow: inset var(--radio-shadow-x) var(--radio-shadow-y) var(--radio-shadow-blur) var(--radio-shadow-color);
+  width: 0.9rem;
+  height: 0.9rem;
   border-radius: 50%;
   background: #80609f;
   display: none;
@@ -1306,7 +1330,7 @@ pre{
 }
 /* Hover effect */
 .radio:hover input ~ .radio-check {
-  box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--radio-shadow-hover-x) var(--radio-shadow-hover-y) var(--radio-shadow-hover-blur) var(--radio-shadow-hover-color);
 }
 /* Radio Button Label - Hover effect */
 .radio:hover .radio-label {
