@@ -46,4 +46,16 @@
 - Cache service: https://www.npmjs.com/package/node-cache, [guide](https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4)
 - MariaDB for database – allows relational data management: https://www.npmjs.com/package/mariadb 
 
+## Skeemid
+
+- [Kasutaja autentimine ja autoriseerimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/authProcess.drawio.svg)
+- [Andmebaasi struktuur](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/database.drawio.svg)
+- [Kõigi ainekursuste andmete pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getAllCoursesData.drawio.svg)
+- [Kõigi ainekursuste andmete kuvamine kasutajale](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getAllCourses.drawio.svg)
+- [Valitud ainekursuse aktiivsete harude pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/activeBranchesService.drawio.svg)
+- [Valitud ainekursuse sisu pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getSpecificCourse.drawio.svg)
+- [Kõigi ainekursuste teadete pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getCoursesUpdates.drawio.svg)
+- [Kasutaja suunamine ainekursuse õige versiooni materjalideni](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/refBranch.drawio.svg)
+
+
 [<Tagasi](../../README.md)
