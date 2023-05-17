@@ -40,7 +40,7 @@ Kasutatud töövahendite versioonid on nähtavad failis [package.json](https://g
 
 ## Teise versiooni edasiarenduse (uued) tööriistad
 
-- [Docker](https://www.docker.com/) – to run app and database containers. [Setup for this app](https://github.com/tluhk/rif20-valikpraktika-1#dockeri-%C3%BClesseadmine).  
+- [Docker](https://www.docker.com/) v20.10 – to run app and database containers. [Setup for this app](https://github.com/tluhk/rif20-valikpraktika-1#dockeri-%C3%BClesseadmine).  
 - https://www.npmjs.com/package/mariadb – MariaDB for relational database.
 - https://www.npmjs.com/package/passport-github2 – Enable authentication and authorization using GitHub accounts.
 - https://www.npmjs.com/package/node-cache –  Cache service, [guide](https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4)
