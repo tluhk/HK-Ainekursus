@@ -2,7 +2,7 @@
 
 [<Tagasi](../../README.md)
 
-Kasutatud töövahendite versioonid on nähtavad failis [package.json](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/package.json) või otse rakenduses käsuga ```npm list```.
+👉 Kasutatud töövahendite versioonid on nähtavad failis [package.json](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/package.json) või otse rakenduses käsuga ```npm list```.
 
 ## Esimeses versioonis kasutatud (uued) töövahendid
 
