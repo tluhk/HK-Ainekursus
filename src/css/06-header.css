@@ -36,7 +36,7 @@ header::before {
 
 /* menu */
 .menu-zero {
-  top: 0;
+  top: 0 !important;
   height: 100vh;
   @apply bg-page-background;
 }

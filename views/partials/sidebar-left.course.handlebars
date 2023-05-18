@@ -10,7 +10,7 @@
 
       <div class="card !p-10">
 
-        <div class="!no-underline">
+        <div class="!no-underline mb-4">
           <!-- Topic name and code -->
           {{#each courses}}
             {{#if_equal this.courseSlug ../path.courseSlug}}
@@ -51,7 +51,7 @@
                 <a class="grow py-3 !no-underline" href="/course/{{../path.courseSlug}}/{{this.slug}}?ref={{../path.refBranch}}">{{this.name}}
                 </a>
               </div>
-            </label>
+            </label>  
             
             <!-- Themes links -->
             {{#each this.components}}
