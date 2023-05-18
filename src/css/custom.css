@@ -12,8 +12,7 @@ main {
   margin: 0 auto;
 }
 .reading_content {
-  max-width: 100%;
-  width: 70ch;
+  max-width: 70ch;
   margin: 0 auto;
 }
 
@@ -71,11 +70,19 @@ main {
   @apply bg-table-hover-cell;
 }
 
-/* only for designsystem demo */
-
-pre[class*='language-'] {
-  margin: 0 !important;
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  border-radius: 0.25rem;
+  background-color: var(--neutral-800, #414a58);
+  color: var(--neutral-100, #f4f5f7);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
+
 /* if we want to wrap code element text */
 code {
   white-space: pre-wrap !important; /* css-3 */
@@ -105,7 +112,7 @@ code {
 
   /*--------------------------- end of sidebar tab's -------------------------------*/
   .breadcrumb {
-    @apply flex items-start gap-1;
+    @apply flex items-start gap-1 pb-8;
   }
   .breadcrumb > * {
     @apply whitespace-nowrap text-ellipsis inline-block overflow-hidden;
@@ -115,7 +122,27 @@ code {
 a.table-of-contents {
   line-height: 1.5rem;
 }
+/* those padding and margin are for correct placement, if someone clics on anchor links in the page and contenbt scrolls to top */
 .markdown-wrapper {
   padding-top: 10rem;
   margin-top: -10rem;
+}
+
+.iframe-container {
+  margin-bottom: 2rem;
+}
+
+/* article formattings */
+
+ul.markdown {
+  list-style-type: inherit;
+  -webkit-margin-before: 1em;
+  margin-block-start: 1em;
+  -webkit-margin-after: 2em;
+  margin-block-end: 2em;
+  padding-left: 1rem;
+}
+.markdown li {
+  padding-left: 0.5rem;
+  margin-bottom: 0.5rem;
 }

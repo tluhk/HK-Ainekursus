@@ -1,3 +1,4 @@
+<!-- content.course.handlebars -->
 <div class="reading_content">
 
   <div class='breadcrumb'>
@@ -46,15 +47,15 @@
   {{#if sources}}
     <div class='sources pt-4'>
       <h4>Allikad:</h4>
-      <ul class="markdown">
+      <div class="markdown">
         {{#each sources}}
-          <li><a
+          <a
               href='{{this.url}}'
               class="markdown"
               target='_blank'
-            >{{this.description}}</a></li>
+            >{{this.description}}</a>
         {{/each}}
-      </ul>
+      </div>
     </div>
   {{/if}}
 
@@ -73,17 +74,16 @@
   {{#if files}}
     <div class='files pt-4'>
       <h3>Failid:</h3>
-      <ul class="markdown"
->
+      <div class="markdown">
         {{#each files}}
-          <li><a
+          <a
               href="#"
               class="markdown"
               onclick="window.open(
                 '{{this.download_url}}','_blank');"
-            >{{this.name}}</a></li>
+            >{{this.name}}</a>
         {{/each}}
-      </ul>
+      </div>
     </div>
   {{/if}}
   
@@ -92,7 +92,7 @@
   {{backAndForwardPaths }}
   {{path.fullPath }} 
   -->
-  <div class='flex gap-4 justify-center'>
+  <div class='flex gap-4'>
   {{#ifInPaths path.fullPath backAndForwardPaths }}
     {{#if_not_equal ../path.fullPath ../backAndForwardPaths.[0].path }}
       <input type="button" class="btn btn-secondary"
@@ -101,7 +101,7 @@
     {{/if_not_equal }}
 
     {{#if_not_equal ../path.fullPath (last ../backAndForwardPaths) }}
-      <input type="button" class="btn btn-secondary"
+      <input type="button" class="btn btn-primary"
       onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath ../backAndForwardPaths}}?ref={{../path.refBranch}}';" value="Järgmine" />
     {{/if_not_equal }}
   {{/ifInPaths }}

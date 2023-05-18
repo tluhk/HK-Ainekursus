@@ -1,4 +1,5 @@
 body {
+  @apply bg-page-background text-text;
   background-position-x: right;
   background-repeat: no-repeat;
 }
@@ -10,8 +11,4 @@ body {
 .light-theme body {
   background-image: url(/images/light_bg.jpg);
   background-attachment: fixed;
-}
-
-body {
-  @apply bg-page-background text-text;
 }
