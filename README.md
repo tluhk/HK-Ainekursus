@@ -17,8 +17,8 @@ Disaini põhimõtted ja valikuteed leiad [UX](docs/content/ux/) kaustast.
 Kopeeri projekt oma masinasse ning installeeri vajalikud seosed:
 
 ```bash
-git clone https://github.com/tluhk/rif20-valikpraktika-1
-cd rif20-valikpraktika-1
+git clone https://github.com/tluhk/HK-Ainekursus
+cd HK-Ainekursus
 npm install
 ```
 
@@ -44,7 +44,7 @@ DB_PASSWORD=''
 
 **Terminid:**
 
-Esimene muutuja on sinu Githubi token, [juhend](https://github.com/tluhk/rif20-valikpraktika-1/#github-tokeni-lisamine-rakendusse).
+Esimene muutuja on sinu Githubi token, [juhend](https://github.com/tluhk/HK-Ainekursus/#github-tokeni-lisamine-rakendusse).
 ```
 AUTH=''
 ```
@@ -167,7 +167,7 @@ ssh ainekursus.kolledz
 
 ainekursus.kolledz serveris mine rakenduse kausta:
 ```
-cd rif20-valikpraktika-1
+cd HK-Ainekursus
 ```
 
 Tõmba rakenduse viimane versioon main branchist:
@@ -190,11 +190,20 @@ Uute ainekursuste lisamiseks järgi juhendeid sellest repositooriumist: https://
 
 Ainekursuste materjalid asuvad Githubis tluhk organisatsiooni repositooriumites. Rakendus loeb Githubist ainult õppeaineid, mille repositooriumide nimed algavad eesliidesega `HK_` ja mille `config.js` failis on `active: true` .
 
-## Valikpraktika I grupp
+## Projekti taustast
 
-Tiina, Kristi, Krister, Juho, Kalev
+**Rakenduse esimene versioon** loodud valikpraktika aine raames. Gruppi kuulusid: Tiina Kukli, Kristi Pruul, Krister Sepp, Juho Kalberg, Kalev Kask.
 
-Valikpraktika aine üldine repo: https://github.com/tluhk/rif20-valikpraktika
+Valikpraktika aine privaatne repo: https://github.com/tluhk/rif20-valikpraktika.
+Esimese versioon tootmiskood on näha ka siin: https://github.com/tluhk/HK-Ainekursus/tree/production_v1 . Live-link ei ole enam üleval.
+
+**Rakenduse teine versioon** loodi diplomitööde raames. Seda arendasid Krister Sepp ja Juho Kalberg.
+
+- Krister Sepp vastutas kõigi tagarakenduse funktsionaalsuste ning eesrakenduse esmase vaate arendamise eest.
+- Juho Kalberg vastutas eesrakendusele uue disaini loomise eest ning selle sünkroniseerimisega eesrakenduse koodi.
+
+Teise versiooni koos asub siin: https://github.com/tluhk/HK-Ainekursus.
+Teise versiooni live-link on siin: http://ainekursus.hk.tlu.ee.
 
 ## Projekti sisust
 
