@@ -144,7 +144,18 @@ code {
     @apply relative right-72 lg:right-0;
   }
   
-
+  /* this is for cover sidemenus with main content */
+  .right-pan .main, .left-pan .main {
+    z-index: 1;
+    background-image: url(/images/dark_bg.jpg);
+    background-attachment: fixed;
+    background-position: right -85px top;
+}
+.main {
+  background-image: url(/images/dark_bg.jpg);
+  background-attachment: fixed;
+  background-position: right -85px top;
+}
   
 
   pre {

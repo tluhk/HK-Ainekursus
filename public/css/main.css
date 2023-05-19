@@ -766,6 +766,18 @@ aside{
     right: 0px;
   }
 }
+/* this is for cover sidemenus with main content */
+.right-pan .main, .left-pan .main {
+    z-index: 1;
+    background-image: url(/images/dark_bg.jpg);
+    background-attachment: fixed;
+    background-position: right -85px top;
+}
+.main {
+  background-image: url(/images/dark_bg.jpg);
+  background-attachment: fixed;
+  background-position: right -85px top;
+}
 pre{
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -1995,6 +2007,18 @@ input:checked ~ .tab-content{
       right: 0px;
     }
   }
+  .lg\:right-pan .main {
+    z-index: 1;
+    background-image: url(/images/dark_bg.jpg);
+    background-attachment: fixed;
+    background-position: right -85px top;
+}
+  .lg\:left-pan .main {
+    z-index: 1;
+    background-image: url(/images/dark_bg.jpg);
+    background-attachment: fixed;
+    background-position: right -85px top;
+}
 }
 .hover\:bg-neutral-200:hover{
   background-color: var(--neutral-200, #e3e5e8);
