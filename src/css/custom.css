@@ -117,7 +117,7 @@ code {
   }
 
   .main {
-    @apply w-full lg:w-[70ch] relative right-0 left-0;
+    @apply w-full lg:w-[70ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
     transition: all .5s ease-in-out;
   }
   .left-side-menu {
@@ -131,10 +131,10 @@ code {
   
 
   .left-pan .main {
-    @apply relative -right-72 left-72 lg:inset-0;
+    @apply relative -right-72 left-72 lg:inset-0 lg:left-auto;
   }
   .left-pan .left-side-menu {
-    @apply relative left-72 lg:left-0;
+    @apply relative left-72 lg:left-0 lg:inset-0;
   }
 
   .right-pan .main {

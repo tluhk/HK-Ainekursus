@@ -696,6 +696,8 @@ aside{
 }
 @media (min-width: 1024px){
   .main{
+    left: auto !important;
+    right: auto !important;
     width: 70ch;
   }
 }
@@ -738,6 +740,7 @@ aside{
 @media (min-width: 1024px){
   .left-pan .main{
     inset: 0px;
+    left: auto;
   }
 }
 .left-pan .left-side-menu{
@@ -746,6 +749,7 @@ aside{
 }
 @media (min-width: 1024px){
   .left-pan .left-side-menu{
+    inset: 0px;
     left: 0px;
   }
 }
@@ -1964,6 +1968,7 @@ input:checked ~ .tab-content{
   @media (min-width: 1024px){
     .lg\:left-pan .main{
       inset: 0px;
+      left: auto;
     }
   }
   .lg\:left-pan .left-side-menu{
@@ -1972,6 +1977,7 @@ input:checked ~ .tab-content{
   }
   @media (min-width: 1024px){
     .lg\:left-pan .left-side-menu{
+      inset: 0px;
       left: 0px;
     }
   }
