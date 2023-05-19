@@ -610,11 +610,11 @@ main {
 }
 .tracks::-webkit-scrollbar {
   -webkit-appearance: none;
-  height: 7px;
+  height: 1rem;
 }
 .tracks::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--neutral-500);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 .hoverrow:hover .hoverrowchild{
@@ -1404,9 +1404,6 @@ input:checked ~ .tab-content{
 .top-2{
   top: 0.5rem;
 }
-.top-32{
-  top: 8rem;
-}
 .top-48{
   top: 12rem;
 }
@@ -1912,6 +1909,9 @@ input:checked ~ .tab-content{
 .leading-9{
   line-height: 2.25rem;
 }
+.text-primary-100{
+  color: var(--primary-100, #f2eff5);
+}
 .text-system-red-tlu{
   color: var(--system-red-tlu, #b71234);
 }
@@ -2059,6 +2059,9 @@ input:checked ~ .tab-content{
   }
   .lg\:top-32{
     top: 8rem;
+  }
+  .lg\:top-40{
+    top: 10rem;
   }
   .lg\:top-\[-4rem\]{
     top: -4rem;
