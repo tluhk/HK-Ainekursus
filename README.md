@@ -24,7 +24,13 @@ npm install
 
 ### .env faili struktuur ja terminid
 
-Loo juurkataloogi `.env` fail ja lisa järgmised muutujad:
+Loo juurkataloogi `.env` fail:
+```
+sudo nano .env
+
+```
+
+Lisa .env faili järgmised muutujad:
 
 ```
 AUTH=''
