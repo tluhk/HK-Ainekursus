@@ -93,17 +93,44 @@ code {
 }
 
 @layer components {
-  .sidebar {
-    @apply top-[194px] lg:top-0 w-full sm:w-[22rem];
+  .side-btn-wrapper {
+    @apply top-36 sticky z-10;
+  }
+  /*   .sidebar {
+    @apply top-[194px] lg:top-0 w-72;
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
   }
   .aside.menu-zero {
-    @apply ml-[calc(-100%+4rem)] sm:ml-[-21.5rem];
+    @apply -ml-72 lg:ml-0 lg:-left-72 lg:relative;
+  } */
+  aside {
+    @apply break-words;
   }
-  .aside {
-    @apply max-w-[calc(100%-3.5rem)] break-words;
+
+  .left-side-menu {
+    @apply w-72 -ml-72 lg:ml-0;
+  }
+  .right-side-menu {
+    @apply w-72 -mr-72 lg:mr-0;
+  }
+
+  .right-pan .main {
+    @apply relative -left-72;
+  }
+  .right-pan .right-side-menu {
+    @apply relative right-72 lg:right-0;
+  }
+  .left-pan .main {
+    @apply relative -right-72 lg:inset-0;
+  }
+  .left-pan .left-side-menu {
+    @apply relative left-72 lg:left-0;
+  }
+
+  .main {
+    @apply w-full lg:w-[70ch];
   }
 
   pre {
