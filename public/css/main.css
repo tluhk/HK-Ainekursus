@@ -707,6 +707,7 @@ aside{
 .left-side-menu{
   position: relative;
   left: 0px;
+  z-index: 1;
   margin-left: -18rem;
   width: 18rem;
 }

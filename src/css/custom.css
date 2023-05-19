@@ -120,7 +120,7 @@ code {
     transition: all 0.5s ease-in-out;
   }
   .left-side-menu {
-    @apply w-72 -ml-72 lg:ml-0 relative left-0;
+    @apply w-72 -ml-72 lg:ml-0 relative left-0 z-[1];
     transition: all 0.5s ease-in-out;
   }
   .right-side-menu {
