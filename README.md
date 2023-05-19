@@ -27,7 +27,6 @@ npm install
 Loo juurkataloogi `.env` fail:
 ```
 sudo nano .env
-
 ```
 
 Lisa .env faili järgmised muutujad:
