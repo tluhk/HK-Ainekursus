@@ -767,19 +767,20 @@ aside{
   }
 }
 /* this is for cover sidemenus with main content */
-.right-pan .main,
+/* .right-pan .main,
   .left-pan .main {
     z-index: 1;
     background-attachment: fixed;
     background-position: right -11rem top -1rem;
     background-repeat: no-repeat;
   }
-.main {
+  .main {
     background-attachment: fixed;
     background-position: right -11rem top -1rem;
     background-repeat: no-repeat;
   }
-@media (min-width: 1024px) {
+
+  @media (min-width: 1024px) {
     .right-pan .main,
     .left-pan .main {
       z-index: 1;
@@ -791,20 +792,21 @@ aside{
       background-position: right -85px top;
     }
   }
-.dark-theme .right-pan .main,
+
+  .dark-theme .right-pan .main,
   .dark-theme .left-pan .main {
     background-image: url(/images/dark_bg.jpg);
   }
-.dark-theme .main {
+  .dark-theme .main {
     background-image: url(/images/dark_bg.jpg);
   }
-.light-theme .right-pan .main,
+  .light-theme .right-pan .main,
   .light-theme .left-pan .main {
     background-image: url(/images/light_bg.jpg);
   }
-.light-theme .main {
+  .light-theme .main {
     background-image: url(/images/light_bg.jpg);
-  }
+  } */
 pre{
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -2045,55 +2047,6 @@ input:checked ~ .tab-content{
     .lg\:right-pan .right-side-menu{
       right: 0px;
     }
-  }
-  .lg\:right-pan .main {
-    z-index: 1;
-    background-attachment: fixed;
-    background-position: right -11rem top -1rem;
-    background-repeat: no-repeat;
-  }
-  .lg\:left-pan .main {
-    z-index: 1;
-    background-attachment: fixed;
-    background-position: right -11rem top -1rem;
-    background-repeat: no-repeat;
-  }
-
-  @media (min-width: 1024px) {
-    .lg\:right-pan .main {
-      z-index: 1;
-      background-attachment: fixed;
-      background-position: right -85px top;
-      background-repeat: no-repeat;
-    }
-     {
-      background-position: right -85px top;
-    }
-    .lg\:left-pan .main {
-      z-index: 1;
-      background-attachment: fixed;
-      background-position: right -85px top;
-      background-repeat: no-repeat;
-    }
-     {
-      background-position: right -85px top;
-    }
-  }
-
-  .dark-theme .lg\:right-pan .main {
-    background-image: url(/images/dark_bg.jpg);
-  }
-
-  
-  .dark-theme .lg\:left-pan .main {
-    background-image: url(/images/dark_bg.jpg);
-  }
-  .light-theme .lg\:right-pan .main {
-    background-image: url(/images/light_bg.jpg);
-  }
-  
-  .light-theme .lg\:left-pan .main {
-    background-image: url(/images/light_bg.jpg);
   }
 }
 .hover\:bg-neutral-200:hover{
