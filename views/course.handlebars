@@ -1,13 +1,14 @@
 <!-- course.handlebars -->
-<div class="side-btn-wrapper">
-  <button id="left-side-button" onclick='panMainContentLeft()' class="">
-    <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_left</i>
-  </button>
-  <button id="right-side-button" onclick='panMainContentRight()' class="">
-    <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_right</i>
-  </button>
+<div class="side-btn-wrapper lg:hidden">
+    <button id="left-side-button" onclick='panMainContentLeft()' class="flex bg-primary-900 p-4 rounded-r-full">
+      <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_left</i>
+    Kursuse menüü</button>
+    <button id="right-side-button" onclick='panMainContentRight()' class="flex bg-primary-900 p-4 rounded-l-full">Lehekülje menüü
+      <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_right</i>
+    </button>
 </div>
-<div class="main-wrapper flex flex-row grow justify-between overflow-x-hidden lg:overflow-x-clip lg:left-pan lg:right-pan">
+
+<div class="main-wrapper flex flex-row grow justify-between lg:left-pan lg:right-pan">
   <aside class="left-side-menu">
     <!-- Refers to sidebar-left-course.handlebars fail in /partials folder -->
     {{> sidebar-left.course }}

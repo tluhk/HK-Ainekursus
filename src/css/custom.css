@@ -94,7 +94,7 @@ code {
 
 @layer components {
   .side-btn-wrapper {
-    @apply top-36 sticky z-10;
+    @apply top-28 sticky z-[2] flex justify-between w-full;
   }
   /*   .sidebar {
     @apply top-[194px] lg:top-0 w-72;
@@ -105,15 +105,36 @@ code {
   .aside.menu-zero {
     @apply -ml-72 lg:ml-0 lg:-left-72 lg:relative;
   } */
+
+  /* to hide overwlof but keep sticky working */
+.main-wrapper {
+  contain: paint;
+}
+
+
   aside {
     @apply break-words;
   }
 
+  .main {
+    @apply w-full lg:w-[70ch] relative right-0 left-0;
+    transition: all .5s ease-in-out;
+  }
   .left-side-menu {
-    @apply w-72 -ml-72 lg:ml-0;
+    @apply w-72 -ml-72 lg:ml-0 relative left-0;
+    transition: all .5s ease-in-out;
   }
   .right-side-menu {
-    @apply w-72 -mr-72 lg:mr-0;
+    @apply w-72 -mr-72 lg:mr-0 relative right-0;
+    transition: all .5s ease-in-out;
+  }
+  
+
+  .left-pan .main {
+    @apply relative -right-72 left-72 lg:inset-0;
+  }
+  .left-pan .left-side-menu {
+    @apply relative left-72 lg:left-0;
   }
 
   .right-pan .main {
@@ -122,16 +143,9 @@ code {
   .right-pan .right-side-menu {
     @apply relative right-72 lg:right-0;
   }
-  .left-pan .main {
-    @apply relative -right-72 lg:inset-0;
-  }
-  .left-pan .left-side-menu {
-    @apply relative left-72 lg:left-0;
-  }
+  
 
-  .main {
-    @apply w-full lg:w-[70ch];
-  }
+  
 
   pre {
     @apply bg-neutral-800 pt-6 px-4 pb-2 rounded whitespace-pre-wrap break-words;

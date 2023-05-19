@@ -24,11 +24,11 @@ function handleTabletChange(e) {
     x.classList.toggle('menu-zero');
   }
 }
-// Register event listener
+/* // Register event listener
 mediaQuery.addListener(handleTabletChange);
 
 // Initial check
-handleTabletChange(mediaQuery);
+handleTabletChange(mediaQuery); */
 
 // Theme switcher
 function setTheme(name) {
