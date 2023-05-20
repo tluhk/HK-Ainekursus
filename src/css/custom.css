@@ -12,7 +12,7 @@ main {
   margin: 0 auto;
 }
 .reading_content {
-  max-width: 70ch;
+  max-width: 60ch;
   margin: 0 auto;
 }
 
@@ -116,7 +116,7 @@ code {
   }
 
   .main {
-    @apply w-full lg:w-[70ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
+    @apply w-full lg:w-[60ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
     transition: all 0.5s ease-in-out;
   }
   .left-side-menu {

@@ -571,7 +571,7 @@ main {
   margin: 0 auto;
 }
 .reading_content {
-  max-width: 70ch;
+  max-width: 60ch;
   margin: 0 auto;
 }
 /* sticky table */
@@ -704,7 +704,7 @@ aside{
   .main{
     left: auto !important;
     right: auto !important;
-    width: 70ch;
+    width: 60ch;
   }
 }
 .main {
