@@ -97,13 +97,13 @@ code {
     @apply top-32 sticky z-[2] flex justify-between w-full;
   }
   /*   .sidebar {
-    @apply top-[194px] lg:top-0 w-72;
+    @apply top-[194px] lg:top-0 w-80;
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
   }
   .aside.menu-zero {
-    @apply -ml-72 lg:ml-0 lg:-left-72 lg:relative;
+    @apply -ml-80 lg:ml-0 lg:-left-80 lg:relative;
   } */
 
   /* to hide overwlof but keep sticky working */
@@ -120,26 +120,26 @@ code {
     transition: all 0.5s ease-in-out;
   }
   .left-side-menu {
-    @apply w-72 -ml-72 lg:ml-0 relative left-0 z-[1];
+    @apply w-80 -ml-80 lg:ml-0 relative left-0 z-[1];
     transition: all 0.5s ease-in-out;
   }
   .right-side-menu {
-    @apply w-72 -mr-72 lg:mr-0 relative right-0;
+    @apply w-80 -mr-80 lg:mr-0 relative right-0;
     transition: all 0.5s ease-in-out;
   }
 
   .left-pan .main {
-    @apply relative -right-72 left-72 lg:inset-0 lg:left-auto;
+    @apply relative -right-80 left-80 lg:inset-0 lg:left-auto;
   }
   .left-pan .left-side-menu {
-    @apply relative left-72 lg:left-0 lg:inset-0;
+    @apply relative left-80 lg:left-0 lg:inset-0;
   }
 
   .right-pan .main {
-    @apply relative -left-72;
+    @apply relative -left-80;
   }
   .right-pan .right-side-menu {
-    @apply relative right-72 lg:right-0;
+    @apply relative right-80 lg:right-0;
   }
 
   /* this is for cover sidemenus with main content */
@@ -201,9 +201,16 @@ a.table-of-contents {
   line-height: 1.5rem;
 }
 /* those padding and margin are for correct placement, if someone clics on anchor links in the page and contenbt scrolls to top */
+
 .markdown-wrapper {
-  padding-top: 10rem;
-  margin-top: -10rem;
+  padding-top: 12.5rem;
+  margin-top: -12.5rem;
+}
+@media (min-width: 1024px) {
+  .markdown-wrapper {
+    padding-top: 10rem;
+    margin-top: -10rem;
+  }
 }
 
 .iframe-container {

@@ -645,8 +645,14 @@ a.table-of-contents {
 }
 /* those padding and margin are for correct placement, if someone clics on anchor links in the page and contenbt scrolls to top */
 .markdown-wrapper {
-  padding-top: 10rem;
-  margin-top: -10rem;
+  padding-top: 12.5rem;
+  margin-top: -12.5rem;
+}
+@media (min-width: 1024px) {
+  .markdown-wrapper {
+    padding-top: 10rem;
+    margin-top: -10rem;
+  }
 }
 .iframe-container {
   margin-bottom: 2rem;
@@ -673,13 +679,13 @@ ul.markdown {
   justify-content: space-between;
 }
 /*   .sidebar {
-    @apply top-[194px] lg:top-0 w-72;
+    @apply top-[194px] lg:top-0 w-80;
   }
   .sidebar.menu-zero {
     @apply top-[194px] lg:top-0 left-0 z-10;
   }
   .aside.menu-zero {
-    @apply -ml-72 lg:ml-0 lg:-left-72 lg:relative;
+    @apply -ml-80 lg:ml-0 lg:-left-80 lg:relative;
   } */
 /* to hide overwlof but keep sticky working */
 .main-wrapper {
@@ -708,8 +714,8 @@ aside{
   position: relative;
   left: 0px;
   z-index: 1;
-  margin-left: -18rem;
-  width: 18rem;
+  margin-left: -20rem;
+  width: 20rem;
 }
 @media (min-width: 1024px){
   .left-side-menu{
@@ -722,8 +728,8 @@ aside{
 .right-side-menu{
   position: relative;
   right: 0px;
-  margin-right: -18rem;
-  width: 18rem;
+  margin-right: -20rem;
+  width: 20rem;
 }
 @media (min-width: 1024px){
   .right-side-menu{
@@ -735,8 +741,8 @@ aside{
   }
 .left-pan .main{
   position: relative;
-  right: -18rem;
-  left: 18rem;
+  right: -20rem;
+  left: 20rem;
 }
 @media (min-width: 1024px){
   .left-pan .main{
@@ -746,7 +752,7 @@ aside{
 }
 .left-pan .left-side-menu{
   position: relative;
-  left: 18rem;
+  left: 20rem;
 }
 @media (min-width: 1024px){
   .left-pan .left-side-menu{
@@ -756,11 +762,11 @@ aside{
 }
 .right-pan .main{
   position: relative;
-  left: -18rem;
+  left: -20rem;
 }
 .right-pan .right-side-menu{
   position: relative;
-  right: 18rem;
+  right: 20rem;
 }
 @media (min-width: 1024px){
   .right-pan .right-side-menu{
@@ -2015,8 +2021,8 @@ input:checked ~ .tab-content{
 
   .lg\:left-pan .main{
     position: relative;
-    right: -18rem;
-    left: 18rem;
+    right: -20rem;
+    left: 20rem;
   }
 
   @media (min-width: 1024px){
@@ -2027,7 +2033,7 @@ input:checked ~ .tab-content{
   }
   .lg\:left-pan .left-side-menu{
     position: relative;
-    left: 18rem;
+    left: 20rem;
   }
   @media (min-width: 1024px){
     .lg\:left-pan .left-side-menu{
@@ -2038,11 +2044,11 @@ input:checked ~ .tab-content{
 
   .lg\:right-pan .main{
     position: relative;
-    left: -18rem;
+    left: -20rem;
   }
   .lg\:right-pan .right-side-menu{
     position: relative;
-    right: 18rem;
+    right: 20rem;
   }
   @media (min-width: 1024px){
     .lg\:right-pan .right-side-menu{
