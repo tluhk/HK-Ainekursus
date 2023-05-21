@@ -420,8 +420,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 1. ENABLE FULL else STATEMENT
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
-   */
-  /* else {
+   */ else {
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -433,22 +432,25 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
         type: 'User',
       },
-    team: {
+      team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      }, 
+      },
     };
 
     if (req.user && !req.user.team) {
       const { user } = req;
-      const userTeam = await teamsController.getUserTeam(user.id, res.locals.teamAssignments);
+      const userTeam = await teamsController.getUserTeam(
+        user.id,
+        res.locals.teamAssignments
+      );
       // console.log('user1:', user);
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */ /*
+  } /*
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',

@@ -1,5 +1,5 @@
 <!-- dashboard-course-component.handlebars -->
-  <a class='card cardlink block p-4 !pt-[0.1px] relative'
+  <a class='card cardlink block p-4 mb-4 !pt-[0.1px] relative'
       href='/course/{{this.courseSlug}}/about?ref={{this.refBranch}}'
   >
       <h3 class='text-lg'>{{this.courseName}}</h3>
@@ -9,8 +9,8 @@
             <span class="text-base font-medium">
               {{matchingDoneComponentsCount ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}} / {{../this.courseBranchComponentsUUIDs.length }}
             </span>
-        <div class="w-full bg-pink rounded-full h-3 ">
-          <div class="bg-brand_red h-3 rounded-full" style="width: {{matchingDoneComponentsPercent ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}}%"></div>
+        <div class="w-full progress rounded-full">
+          <div class="progress-inner rounded-full" style="width: {{matchingDoneComponentsPercent ../this.markedAsDoneComponentsUUIDs ../this.courseBranchComponentsUUIDs}}%"></div>
         </div>
         </div>
       {{/if_not_equal }}
