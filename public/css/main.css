@@ -2026,6 +2026,9 @@ input:checked ~ .tab-content{
 .pr-8{
   padding-right: 2rem;
 }
+.pr-\[calc\(6ch\+3rem\)\]{
+  padding-right: calc(6ch + 3rem);
+}
 .pt-0{
   padding-top: 0px;
 }
