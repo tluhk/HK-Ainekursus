@@ -1,24 +1,30 @@
+<!-- dashboard-teacher.notifications.handlebars -->
 <div>
   <h2>Teated</h2>
-  <p>Siin näed viimaseid teateid enda ja teiste õppejõudude kursuste kohta. Teateid näed ainult vaikimisi harust.</p>
-  <div class="">
-    <div class="flex flex-col gap-2 pt-4 pb-4">
+  <p class="border-b border-stroke mb-0 pb-2">Siin näed viimaseid teateid enda ja teiste õppejõudude kursuste kohta. Teateid näed ainult vaikimisi harust.</p>
+    <div class="flex flex-col divide-y divide-stroke">
       {{#unless courseUpdates7Days }}
         <div class='text-md'>Hiljutised teated puuduvad.</div>
       {{/unless }}
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
-        <div>
-          <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0 text-sm text-gray-400">{{timeSince this.created_at }}</p></div>
-          <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }} uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{this.course.courseName}}</b></a> {{this.course.refBranch}} haru: <br></p></div>
-          <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
+
+        <div class="flex flex-wrap w-full py-2">
+          <div class="basis-4/6 shrink-0 grow-0 pr-4">
+            <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>{{this.course.courseName}}</div>
+          </div>
+          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}</div>
+           
+          <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
+
+          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}<div>{{this.course.refBranch}}</div></div>
         </div>
+
         {{#unless @last}}
-          <hr class="mt-4 mb-4">
         {{/unless}}
       {{/each }}
       <div class="pt-4">
-        <a class="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 hover:!no-underline !no-underline" href="/notifications">Kõik teated</a>
+
+        <a class="btn-link" href="/notifications"><span class="material-symbols-outlined">read_more</span>Kõik teated</a>
       </div>
     </div>
-  </div>
 </div>

@@ -1,6 +1,7 @@
+<!-- dashboard-teatcher.handlebars -->
 <div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
 
-  <main id="main-content" class="w-full px-4 py-8 dashboard_content">
+  <main id="main-content" class="px-4 py-8 dashboard_content">
     {{#unless user }}  
       <h3 class='mt-4 ml-4'>Logi sisse, et näha töölauda</h3>
     {{/unless }}
@@ -17,12 +18,12 @@
         {{/if_equal }} --}}
       </div>
       
-      <div class="flex flex-row flex-wrap grow justify-between">
+      <div class="md:grid grid-cols-6 gap-8">
         <!-- refers to content.handlebars fail in /partials folder -->
-        <div class="md:w-3/5">
+        <div class="col-span-4">
           {{> dashboard-teacher.courses }} <br>
         </div>
-        <div class="md:w-2/5">
+        <div class="col-span-2">
           {{> dashboard-teacher.notifications }} <br>
           {{> dashboard-teacher.teacherCourses }} <br>
         </div>

@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import 'global.css';
+
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+::-moz-placeholder {
+  font-style: italic;
+}
+:-ms-input-placeholder {
+  font-style: italic;
+}
+::-ms-input-placeholder {
+  font-style: italic;
+}
+::placeholder {
+  font-style: italic;
+}
+
+section {
+  margin-bottom: var(--article-bottom);
+}
+body {
+  line-height: var(--line-height-body);
+  margin: var(--body-spacing);
+}
+.text-sm {
+  line-height: var(--body-sm-line-height);
+}
+h1 {
+  line-height: var(--h1-line-height);
+  margin-top: var(--h1-spacing-top);
+  margin-bottom: var(--h1-spacing-bottom);
+}
+h2 {
+  line-height: var(--h2-line-height);
+  margin-top: var(--h2-spacing-top);
+  margin-bottom: var(--h2-spacing-bottom);
+}
+h3 {
+  line-height: var(--h3-line-height);
+  margin-top: var(--h3-spacing-top);
+  margin-bottom: var(--h3-spacing-bottom);
+}
+h4 {
+  line-height: var(--h4-line-height);
+  margin-top: var(--h4-spacing-top);
+  margin-bottom: var(--h4-spacing-bottom);
+}
+h5 {
+  line-height: var(--h5-line-height);
+  margin-top: var(--h5-spacing-top);
+  margin-bottom: var(--h5-spacing-bottom);
+}
+h6 {
+  line-height: var(--h6-line-height);
+  margin-top: var(--h6-spacing-top);
+  margin-bottom: var(--h6-spacing-bottom);
+}
+p {
+  margin-bottom: var(--body-paragraph-spacing);
+}
+
+html {
+  font-size: 14px;
+}
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+.material-symbols-outlined {
+  font-size: 1.5rem;
+}

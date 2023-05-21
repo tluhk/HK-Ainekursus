@@ -1,7 +1,7 @@
 <nav class='sidebar h-fit relative lg:sticky top-0' id='sidebar'>
   <button
     onclick='closeSideMenu()'
-    class='flex items-center p-1 top-2 h-fit bg-neutral-100 rounded-r-lg absolute right-[-3rem]'
+    class='flex items-center p-1 top-2 h-fit rounded-r-lg absolute right-[-3rem]'
   >
     <i
       class='material-symbols-outlined cursor-pointer text-xxxl text-brand_red transition ease-in-out duration-1000'
@@ -9,20 +9,23 @@
     >chevron_left</i>
   </button>
   <!-- sidebar sticky behavior beginning from lg size -->
-  <div class='p-2 lg:max-h-screen drop-shadow-2xl w-full'>
-      <div class=''>
-      {{#unless user }}  
-        <div class='text-md font-bold mt-4 ml-4'>Logi sisse, et näha kursuseid</div>
-      {{/unless }}
+  <div class='p-2 lg:max-h-screen w-full'>
+    <div class=''>
+      {{#unless user}}
+        <div class='text-md mt-4 ml-4'>Logi sisse, et näha kursuseid</div>
+      {{/unless}}
 
       {{#if user}}
-        {{#unless courses }}  
-          <div class='text-md font-bold mt-4 ml-4'>Sul pole ligipääsu ühelegi kursusele.</div>
-          <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
-        {{/unless }}
-        {{#if courses }}
+        {{#unless courses}}
+          <div class='text-md font-bold mt-4 ml-4'>Sul pole ligipääsu ühelegi
+            kursusele.</div>
+          <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti
+            Raaveliga:
+            <a href='mailto: mrt@tlu.ee'>mrt@tlu.ee</a></p>
+        {{/unless}}
+        {{#if courses}}
           {{#each courses}}
-            <div class='mb-2 bg-neutral-100 hover:bg-neutral-200 flex'>
+            <div class='mb-2 hover:bg-neutral-200 flex'>
 
               <a
                 class='p-4 !no-underline uppercase w-full'
@@ -41,10 +44,8 @@
             </div>
           {{/each}}
 
-      <!-- ??? Kas siia lehele lisada veel alamenüü lehti?
-    Nt otseviide kursuse ainekaardi lingile või kuvada loengute pealkirjad siin ära, et oleks mugav Kõigi Kursuste lehelt juba kindla kursuse materjalini jõuda.  -->
-      <div class='tabs'>
-        <!--
+          <div class='tabs'>
+            <!--
             {{#each loengud}}
             <div class="tab">
               <input type="checkbox" id="chck{{@index}}">
@@ -67,9 +68,9 @@
             </div>
             {{/each}}
             -->
-          </div>    
-        {{/if }}
-      {{/if }}
+          </div>
+        {{/if}}
+      {{/if}}
     </div>
   </div>
 </nav>

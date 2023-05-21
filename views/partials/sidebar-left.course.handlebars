@@ -1,32 +1,30 @@
-<nav class="sidebar h-fit relative lg:sticky top-0" id="sidebar">
-    <button onclick='closeSideMenu()' class="flex items-center p-1 top-2 h-fit bg-neutral-100 rounded-r-lg absolute right-[-3rem]">
-    <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_left</i>
-    </button>
+<!-- sidebar-left.course.handlebars -->
+<nav class="sidebar h-fit relative sticky top-48 lg:top-32" id="sidebar">
     <!-- sidebar sticky behavior beginning from lg size -->
-    <div class="p-2 lg:max-h-screen drop-shadow-2xl w-full">
+    <div class="p-2 lg:max-h-screen w-full">
 
       <!-- DROPDOWN MENU -->
 
-      <div class="bg-neutral-100 mb-8 ">
+      <div class="card !p-10">
 
-        <div class="!no-underline p-4 border-b border-neutral-200 btn-primary">
+        <div class="!no-underline mb-4">
           <!-- Topic name and code -->
           {{#each courses}}
             {{#if_equal this.courseSlug ../path.courseSlug}}
             <a href="/course/{{../../path.courseSlug}}/{{../../docs.[0].slug}}?ref={{../../path.refBranch}}" class="!no-underline">
             <div class="mb-2 w-[22rem] max-w-full">
-              <div class="!text-white text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
+              <div class="text-md font-bold mb-2 d uppercase">{{../this.courseName}}</div>
             </div>
             <div class="flex flex-row justify-between flex-wrap flex-end">
               <div class="flex flex-col gap-y-0">
-                <div class="flex flex-nowrap justify-start gap-x-4 items-center !text-white py-2 pr-2">
                   <p class="flex items-start gap-2 m-0 p-0">{{../this.courseCode}}</p>
-                  <p class="flex whitespace-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span><span>{{../this.courseEAP}} EAP</span></p>
-                  <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize ../this.courseGrading}}</p>
+                <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
+                  <p class="flex whitespace-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">confirmation_number</span><span>{{../this.courseEAP}} EAP</span></p>
+                  <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">grading</span>{{capitalize ../this.courseGrading}}</p>
                 </div>
-                <div class="flex flex-nowrap justify-start gap-x-4 items-center !text-white py-2 pr-2">
-                  <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{../../config.semester}}</p>
-                  <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher ../../config.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
+                <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
+                  <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">calendar_month</span>{{../../config.semester}}</p>
+                  <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">person</span>{{#with (findTeacher ../../config.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
                 </div>
               </div>
             </a>
@@ -44,19 +42,19 @@
               active-tab
             {{/if_equal }}
           ">
-            <input type="checkbox" id="chck{{@index}}"> <!-- @index loeb iga elemendi indeksit "loengud" arrays. Tulemus: unikaalsed ID-d chck0, chck1, chck2 jne -->
+            <input type="checkbox" id="chck{{@index}}"> <!-- @index reads every element index in "loengud" arrays. result: unique ID-s chck0, chck1, chck2 jne -->
             <label class="tab-label" for="chck{{@index}}">
               <div class="flex gap-2 w-full">
                 <a class="grow py-3 !no-underline" href="/course/{{../path.courseSlug}}/{{this.slug}}?ref={{../path.refBranch}}">{{this.name}}
                 </a>
               </div>
-            </label>
+            </label>  
             
             <!-- Themes links -->
             {{#each this.components}}
               <div class="tab-content flex gap-2
                 {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
-                  active-tab-content
+                  active-tab-content menu-card
                 {{/if_equal }}
               " >
                 <a class="flex flex-row justify-between grow py-3 !no-underline" 
@@ -111,23 +109,7 @@
       </div>
 
 
-      <!-- other courses -->
-      <div class="!no-underline">
-          {{#each courses}}
-            {{#if_not_equal this.courseSlug ../path.courseSlug}}
-            <!-- beginning of loupe -->
-            <div class="mb-2 bg-neutral-200 break-all">
-
-                <a class="flex p-4 text-sm font-bold !no-underline uppercase hover:bg-neutral-300" href="/course/{{../this.courseSlug}}/about?ref={{../this.refBranch}}">{{../this.courseName}}</a>
-
-              <div class="flex justify-between items-center">
-                {{!-- <a class="!no-underline hover:!underline" href="/{{../this.courseSlug}}/about">{{../this.courseCode}}</a> --}}
-                {{!-- <a class="px-4 py-2 bg-neutral-200 hover:bg-neutral-300 !no-underline" href="/{{../this.courseSlug}}/about">Ainekursusest</a> --}}
-              </div>
-            </div>
-            {{/if_not_equal}}
-          {{/each}}
-      </div>
+      
  
 
     </div>

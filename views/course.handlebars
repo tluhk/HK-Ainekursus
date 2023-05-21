@@ -1,18 +1,26 @@
-<div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
-  <aside class="flex aside bg-neutral-100">
+<!-- course.handlebars -->
+<div class="side-btn-wrapper lg:hidden">
+    <button id="left-side-button" onclick='panMainContentLeft()' class="flex  bg-primary-900 text-primary-100 py-4 pl-4 pr-8 rounded-r-full">
+      <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_left</i>
+    Kursuse menüü</button>
+    <button id="right-side-button" onclick='panMainContentRight()' class="flex  bg-primary-900 text-primary-100 py-4 pl-8 pr-4 rounded-l-full">Lehekülje menüü
+      <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000" aria-hidden="true">chevron_right</i>
+    </button>
+</div>
 
-    <!-- sticky: sticky h-screen top-0 -->
+<div class="main-wrapper flex flex-row grow justify-between lg:left-pan lg:right-pan">
+  <aside class="left-side-menu">
     <!-- Refers to sidebar-left-course.handlebars fail in /partials folder -->
     {{> sidebar-left.course }}
   </aside>
 
-  <main id="main-content" class="w-full px-4 py-16">
+  <main id="main-content" class="main px-4 py-16">
  
     <!-- Refers to content.handlebars fail in /partials folder -->
     {{> content.course }}
 
   </main>
-  <aside class="lg:hidden 2xl:block px-4 py-16">
+  <aside class="right-side-menu block px-4 py-16">
    
     {{> sidebar-right.anchors }}
 

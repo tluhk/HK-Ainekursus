@@ -1,6 +1,7 @@
-  <div class="max-w-fit">
-    <h2>Minu õpetatavad kursused</h2>
-      <div class='max-w-30'>
+<!-- dashboard-teacher.courses.handlebars -->
+  <div>
+    <h2>Sinu õpetatavad kursused</h2>
+      <div class='max-w-30 flex flex-col gap-4'>
         {{#unless courses }}  
           <div class='text-md font-bold mt-4 ml-4'>Sul pole mitte ühtegi õpetatavat kursust.</div>
           <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
@@ -26,18 +27,17 @@
                 teachers=../../teachers }}
             {{/each}}
           {{/if_equal}}
-
+          <!-- list with month -->
           {{#if_equal coursesDisplayBy 'semester' }}
             {{#each ../courses }}
-              <h3 class="mt-1 mb-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100">{{@key}}</h3>
-
-              <ul class="list-none mt-2">
+               <div>
+              <div class="font-bold">{{@key}}</div>
               {{#each this }}
                 {{> dashboard-course-component 
                 user=../../../user
                 teachers=../../../teachers }}
               {{/each }}
-              </ul>
+              </div>
             {{/each }}
           {{/if_equal }}
 

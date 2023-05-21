@@ -42,7 +42,9 @@ const markdown = new MarkdownIt({
       } catch (__) {}
     }
 
-    return `<pre class="markdown-pre"><code>${markdown.utils.escapeHtml(str)}</code></pre>`;
+    return `<pre class="markdown-pre"><code>${markdown.utils.escapeHtml(
+      str
+    )}</code></pre>`;
   },
 }).enable('image');
 
@@ -124,8 +126,4 @@ markdown.use(markdownImagination, {
   lazy: true,
 });
 
-export {
-  base64,
-  utf8,
-  markdown,
-};
+export { base64, utf8, markdown };
