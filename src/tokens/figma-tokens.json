@@ -307,7 +307,7 @@
         "description": "tets"
       }
     },
-    "Leading": {
+    "card-header": {
       "value": {
         "fontFamily": "{Montserrat}",
         "fontWeight": "600",
