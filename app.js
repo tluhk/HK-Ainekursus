@@ -448,7 +448,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */ /*
+  } */ 
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',
@@ -465,7 +465,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      }, */ /*
+      }, */ 
     };
     if (req.user && !req.user.team) {
       const { user } = req;
@@ -477,7 +477,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  } 
 
   next();
 });
