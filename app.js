@@ -410,7 +410,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
     // eslint-disable-next-line brace-style
-  } else {
+  } /* else {
 
   /**
    * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
