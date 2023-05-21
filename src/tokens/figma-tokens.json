@@ -316,7 +316,7 @@
         "letterSpacing": "",
         "paragraphSpacing": "",
         "paragraphIndent": "",
-        "textCase": "",
+        "textCase": "uppercase",
         "textDecoration": ""
       },
       "type": "typography"
