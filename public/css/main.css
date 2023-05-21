@@ -688,6 +688,10 @@ ul.markdown {
     @apply -ml-80 lg:ml-0 lg:-left-80 lg:relative;
   } */
 /* to hide overwlof but keep sticky working */
+:root {
+    --sidebar-width: 20rem;
+    --main-width: calc(100% - (2*var(--sidebar-width)));
+  }
 .main-wrapper {
     contain: paint;
   }
@@ -704,7 +708,8 @@ aside{
   .main{
     left: auto !important;
     right: auto !important;
-    width: 60ch;
+    width: var(--main-width);
+    max-width: 60ch;
   }
 }
 .main {
@@ -714,8 +719,8 @@ aside{
   position: relative;
   left: 0px;
   z-index: 1;
-  margin-left: -20rem;
-  width: 20rem;
+  margin-left: calc(var(--sidebar-width) * -1);
+  width: var(--sidebar-width);
 }
 @media (min-width: 1024px){
   .left-side-menu{
@@ -728,8 +733,8 @@ aside{
 .right-side-menu{
   position: relative;
   right: 0px;
-  margin-right: -20rem;
-  width: 20rem;
+  margin-right: calc(var(--sidebar-width) * -1);
+  width: var(--sidebar-width);
 }
 @media (min-width: 1024px){
   .right-side-menu{
@@ -741,8 +746,8 @@ aside{
   }
 .left-pan .main{
   position: relative;
-  right: -20rem;
-  left: 20rem;
+  right: calc(var(--sidebar-width) * -1);
+  left: var(--sidebar-width);
 }
 @media (min-width: 1024px){
   .left-pan .main{
@@ -752,7 +757,7 @@ aside{
 }
 .left-pan .left-side-menu{
   position: relative;
-  left: 20rem;
+  left: var(--sidebar-width);
 }
 @media (min-width: 1024px){
   .left-pan .left-side-menu{
@@ -762,11 +767,11 @@ aside{
 }
 .right-pan .main{
   position: relative;
-  left: -20rem;
+  left: calc(var(--sidebar-width) * -1);
 }
 .right-pan .right-side-menu{
   position: relative;
-  right: 20rem;
+  right: var(--sidebar-width);
 }
 @media (min-width: 1024px){
   .right-pan .right-side-menu{
@@ -2021,8 +2026,8 @@ input:checked ~ .tab-content{
 
   .lg\:left-pan .main{
     position: relative;
-    right: -20rem;
-    left: 20rem;
+    right: calc(var(--sidebar-width) * -1);
+    left: var(--sidebar-width);
   }
 
   @media (min-width: 1024px){
@@ -2033,7 +2038,7 @@ input:checked ~ .tab-content{
   }
   .lg\:left-pan .left-side-menu{
     position: relative;
-    left: 20rem;
+    left: var(--sidebar-width);
   }
   @media (min-width: 1024px){
     .lg\:left-pan .left-side-menu{
@@ -2044,11 +2049,11 @@ input:checked ~ .tab-content{
 
   .lg\:right-pan .main{
     position: relative;
-    left: -20rem;
+    left: calc(var(--sidebar-width) * -1);
   }
   .lg\:right-pan .right-side-menu{
     position: relative;
-    right: 20rem;
+    right: var(--sidebar-width);
   }
   @media (min-width: 1024px){
     .lg\:right-pan .right-side-menu{

@@ -107,6 +107,10 @@ code {
   } */
 
   /* to hide overwlof but keep sticky working */
+  :root {
+    --sidebar-width: 20rem;
+    --main-width: calc(100% - (2*var(--sidebar-width)));
+  }
   .main-wrapper {
     contain: paint;
   }
@@ -116,30 +120,30 @@ code {
   }
 
   .main {
-    @apply w-full lg:w-[60ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
+    @apply w-full lg:w-[var(--main-width)] lg:max-w-[60ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
     transition: all 0.5s ease-in-out;
   }
   .left-side-menu {
-    @apply w-80 -ml-80 lg:ml-0 relative left-0 z-[1];
+    @apply w-[var(--sidebar-width)] -ml-[var(--sidebar-width)] lg:ml-0 relative left-0 z-[1];
     transition: all 0.5s ease-in-out;
   }
   .right-side-menu {
-    @apply w-80 -mr-80 lg:mr-0 relative right-0;
+    @apply w-[var(--sidebar-width)] -mr-[var(--sidebar-width)] lg:mr-0 relative right-0;
     transition: all 0.5s ease-in-out;
   }
 
   .left-pan .main {
-    @apply relative -right-80 left-80 lg:inset-0 lg:left-auto;
+    @apply relative -right-[var(--sidebar-width)] left-[var(--sidebar-width)] lg:inset-0 lg:left-auto;
   }
   .left-pan .left-side-menu {
-    @apply relative left-80 lg:left-0 lg:inset-0;
+    @apply relative left-[var(--sidebar-width)] lg:left-0 lg:inset-0;
   }
 
   .right-pan .main {
-    @apply relative -left-80;
+    @apply relative -left-[var(--sidebar-width)];
   }
   .right-pan .right-side-menu {
-    @apply relative right-80 lg:right-0;
+    @apply relative right-[var(--sidebar-width)] lg:right-0;
   }
 
   /* this is for cover sidemenus with main content */
