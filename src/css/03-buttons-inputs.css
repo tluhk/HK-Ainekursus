@@ -95,3 +95,11 @@
 .radio:hover .radio-label {
   color: #555;
 }
+
+/* progressbar */
+.progress {
+  @apply border-primary-600 bg-primary-100 border-2 rounded-full h-5;
+}
+.progress-inner {
+  @apply bg-primary-600 rounded-full h-full;
+}

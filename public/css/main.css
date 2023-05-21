@@ -1035,6 +1035,19 @@ body{
 .radio:hover .radio-label {
   color: #555;
 }
+/* progressbar */
+.progress{
+  height: 1.25rem;
+  border-radius: 9999px;
+  border-width: 2px;
+  border-color: var(--primary-600, #80609f);
+  background-color: var(--primary-100, #f2eff5);
+}
+.progress-inner{
+  height: 100%;
+  border-radius: 9999px;
+  background-color: var(--primary-600, #80609f);
+}
 /* Dark-light mode switch */
 body {
   transition: all 0.2s ease-in-out !important;
@@ -1690,9 +1703,6 @@ input:checked ~ .tab-content{
 }
 .h-10{
   height: 2.5rem;
-}
-.h-3{
-  height: 0.75rem;
 }
 .h-4{
   height: 1rem;
