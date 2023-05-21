@@ -4,7 +4,7 @@
 <!-- Branch (version) selection menu. Only visible to 'teachers' team -->
 
 {{#if_equal user.team.slug 'teachers'}}
-  <h5 class="m-0 pt-4">Ainekursuse versioonid:</h5>
+  <div class="card-header m-0 pt-4">Ainekursuse versioonid:</div>
   <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
   <!-- Radio buttons -->
     {{#each ../branches }}
@@ -30,7 +30,7 @@
 
   <!-- sidebar sticky behavior beginning from lg size -->
   <div>
-    <h5 class="m-0 pt-4">Lehekülje teemad:</h5>
+    <div class="card-header m-0 pt-4">Lehekülje teemad:</div>
     <div class="pl-2 mt-2 lg:max-h-screen drop-shadow-2xl w-full text-sm">
       {{{ ToC }}}
     </div>
