@@ -1,0 +1,247 @@
+{
+  "text": {
+    "value": "#f1f2f4",
+    "type": "color"
+  },
+  "link": {
+    "value": "#f1f2f4",
+    "type": "color"
+  },
+  "link-idle": {
+    "value": "#7b8593",
+    "type": "color"
+  },
+  "link-active": {
+    "value": "#664d80",
+    "type": "color"
+  },
+  "drop-shadow": {
+    "x": {
+      "value": 4,
+      "type": "x"
+    },
+    "y": {
+      "value": 4,
+      "type": "y"
+    },
+    "blur": {
+      "value": 11,
+      "type": "blur"
+    },
+    "spread": {
+      "value": 0,
+      "type": "spread"
+    },
+    "color": {
+      "value": "#05020850",
+      "type": "color"
+    },
+    "type": {
+      "value": "dropShadow",
+      "type": "type"
+    }
+  },
+  "drop-shadow-strong": {
+    "x": {
+      "value": 0,
+      "type": "x"
+    },
+    "y": {
+      "value": 0,
+      "type": "y"
+    },
+    "blur": {
+      "value": 22,
+      "type": "blur"
+    },
+    "spread": {
+      "value": 0,
+      "type": "spread"
+    },
+    "color": {
+      "value": "#f2eff5",
+      "type": "color"
+    },
+    "type": {
+      "value": "dropShadow",
+      "type": "type"
+    }
+  },
+  "link-hover": {
+    "value": "#c7cbd1",
+    "type": "color"
+  },
+  "page-background": {
+    "value": "#050208",
+    "type": "color"
+  },
+  "button": {
+    "default": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "hover": {
+      "value": "#664d80",
+      "type": "color"
+    },
+    "active": {
+      "value": "#4d2e6b",
+      "type": "color"
+    },
+    "focus": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "disabled": {
+      "value": "#abb1ba",
+      "type": "color"
+    },
+    "secondary-default": {
+      "value": "#b39fc6",
+      "type": "color"
+    },
+    "secondary-label-default": {
+      "value": "#f1f2f4",
+      "type": "color"
+    },
+    "secondary-hover": {
+      "value": "#9980b3",
+      "type": "color"
+    },
+    "secondary-active": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "secondary-focus": {
+      "value": "#b39fc6",
+      "type": "color"
+    },
+    "secondary-disabled": {
+      "value": "#e3e5e8",
+      "type": "color"
+    },
+    "link": {
+      "value": "#e6dfec",
+      "type": "color"
+    },
+    "link-hover": {
+      "value": "#ccbfd9",
+      "type": "color"
+    },
+    "link-active": {
+      "value": "#b39fc6",
+      "type": "color"
+    }
+  },
+  "table-cell": {
+    "value": "#050208",
+    "type": "color"
+  },
+  "table-header-cell": {
+    "value": "#4d2e6b",
+    "type": "color"
+  },
+  "table-hover-cell": {
+    "value": "#331a4d",
+    "type": "color"
+  },
+  "card-background": {
+    "value": "linear-gradient(35deg, #0d0811 0%, #553b6c30 100%)",
+    "type": "color"
+  },
+  "menu-card-background": {
+    "value": "linear-gradient(0deg, #291A37 0%, #291B37 11%, #3E314A 100%)",
+    "type": "color"
+  },
+  "menu-card-stroke": {
+    "value": "linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+    "type": "color"
+  },
+  "card-stroke": {
+    "value": "#331a4d",
+    "type": "color"
+  },
+  "card-hover-shadow": {
+    "x": {
+      "value": 0,
+      "type": "x"
+    },
+    "y": {
+      "value": 0,
+      "type": "y"
+    },
+    "blur": {
+      "value": "22px",
+      "type": "blur"
+    },
+    "spread": {
+      "value": 0,
+      "type": "spread"
+    },
+    "color": {
+      "value": "#e3e5e8",
+      "type": "color"
+    },
+    "type": {
+      "value": "innerShadow",
+      "type": "type"
+    }
+  },
+  "stroke": {
+    "value": "#4d2e6b",
+    "type": "color",
+    "description": "Use with 50% opacity"
+  },
+  "radio-shadow-hover": {
+    "x": {
+      "value": 0,
+      "type": "x"
+    },
+    "y": {
+      "value": 0,
+      "type": "y"
+    },
+    "blur": {
+      "value": "22px",
+      "type": "blur"
+    },
+    "spread": {
+      "value": 0,
+      "type": "spread"
+    },
+    "color": {
+      "value": "#f2eff5",
+      "type": "color"
+    },
+    "type": {
+      "value": "dropShadow",
+      "type": "type"
+    }
+  },
+  "radio-shadow": {
+    "x": {
+      "value": 0,
+      "type": "x"
+    },
+    "y": {
+      "value": "5px",
+      "type": "y"
+    },
+    "blur": {
+      "value": "7px",
+      "type": "blur"
+    },
+    "spread": {
+      "value": 0,
+      "type": "spread"
+    },
+    "color": {
+      "value": "#331a4d70",
+      "type": "color"
+    },
+    "type": {
+      "value": "innerShadow",
+      "type": "type"
+    }
+  }
+}
