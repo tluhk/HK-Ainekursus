@@ -615,6 +615,14 @@
         "value": "{button.default}",
         "type": "color"
       },
+      "secondary-fill-hover": {
+        "value": "{primary.100}",
+        "type": "color"
+      },
+      "secondary-fill-active": {
+        "value": "{primary.200}",
+        "type": "color"
+      },
       "secondary-label-default": {
         "value": "{text}",
         "type": "color"
@@ -784,6 +792,14 @@
       },
       "secondary-default": {
         "value": "{primary.400}",
+        "type": "color"
+      },
+      "secondary-fill-hover": {
+        "value": "{primary.100}",
+        "type": "color"
+      },
+      "secondary-fill-active": {
+        "value": "{primary.200}",
         "type": "color"
       },
       "secondary-label-default": {
