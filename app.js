@@ -482,8 +482,8 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('user1:', user);
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
-    } */
-  }
+    }
+  } */
 
   next();
 });
