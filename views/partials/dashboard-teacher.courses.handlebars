@@ -31,7 +31,7 @@
           {{#if_equal coursesDisplayBy 'semester' }}
             {{#each ../courses }}
                <div>
-              <div class="font-bold">{{@key}}</div>
+              <div class="font-bold mb-2">{{@key}}</div>
               {{#each this }}
                 {{> dashboard-course-component 
                 user=../../../user

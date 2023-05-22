@@ -43,15 +43,13 @@
 
           {{#if_equal coursesDisplayBy 'semester' }}
             {{#each ../courses }}
-              <h3 class="mt-1 mb-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100">{{@key}}</h3>
-
-              <ul class="list-none mt-2">
+              <div class=""><div class="font-bold mb-2">{{@key}}</div>
               {{#each this }}
                 {{> dashboard-course-component 
                 user=../../../user
                 teachers=../../../teachers }}
               {{/each }}
-              </ul>
+              </div>
             {{/each }}
           {{/if_equal }}
 
