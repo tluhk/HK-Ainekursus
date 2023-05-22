@@ -101,11 +101,11 @@
       "type": "color"
     },
     "secondary-fill-hover": {
-      "value": "#4d2e6b",
+      "value": "#331a4d",
       "type": "color"
     },
     "secondary-fill-active": {
-      "value": "#331a4d",
+      "value": "#050208",
       "type": "color"
     },
     "secondary-label-default": {
