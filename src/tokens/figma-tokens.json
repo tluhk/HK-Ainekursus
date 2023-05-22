@@ -555,7 +555,7 @@
       "type": "color"
     },
     "card-background": {
-      "value": "linear-gradient(194deg, #a57e43 0%, #4f4536 100%)",
+      "value": "linear-gradient(194deg, #a57e4322 0%, #4f453622 100%)",
       "type": "color"
     },
     "menu-item-background": {
