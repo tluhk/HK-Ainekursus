@@ -466,12 +466,12 @@ app.use(getTeamAssignments, async (req, res, next) => {
         avatar_url: 'https://avatars.githubusercontent.com/u/132268493?v=4',
         type: 'User',
       },
-      /* team: {
+      team: {
         name: 'rif20',
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      }, */
+      },
     };
     if (req.user && !req.user.team) {
       const { user } = req;
