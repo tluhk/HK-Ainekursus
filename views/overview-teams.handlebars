@@ -39,36 +39,38 @@
             {{#with (findTeamCourses this.slug ../teamsCourses)}}
             <div class="flex items-start gap-2 m-0 pb-2">Tiimile nähtavad ainekursused ja nende vaikimisi harud:</div>
               
-              {{#each this}}
-               <!-- Hidden form to send req.body values -->
-               {{!-- ../../this: {{../../this}}
-               ../../this.slug: {{../../this.slug}}
-               ../this: {{../this}}
-               this: {{this}}
-               this.courseSlug: {{this.courseSlug}}
-               this.slug: {{this.slug}}
-               index: {{@index}}
-               overview-{{../../this.slug}}-{{this.courseSlug}} --}}
-                <div class='card cardlink !pt-[0.1px] mb-4' onclick="handleCourseClick('{{../../this.slug}}', '{{this.courseSlug}}')" >
-                  <div><h3 class='text-lg'>{{this.courseName}}</h3>
-                  </div>
-                    <div class="flex justify-start gap-2 items-center px-4 mt-4 flex-wrap">
-                      <p class="m-0 p-0">{{this.courseCode}}</p>
-                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{this.refBranch}} haru</p>
-                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
-                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize this.courseGrading}}</p>
-                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
-                      <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../../teachers)}}{{this.displayName}}{{/with }}</p>
-                    </div>
-                </div>
-                <form id="overview-{{../../this.slug}}-{{this.courseSlug}}" name="overview-{{../../this.slug}}-{{this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
-                  <!-- Hidden form inputs to send req.body values -->
-                  <input type="hidden" name="selectedTeam" id="selectedTeam-{{../../this.slug}}" value="{{../../this.slug}}" >
-                  <input type="hidden" name="selectedCourse" id="selectedCourse-{{this.courseSlug}}" value="{{this.courseSlug}}" >
-                  <input type="hidden" name="selectedCourseData" id="selectedCourseData-{{this.courseSlug}}" value="{{jsonStringify this}}" >
-                </form>
-              {{/each}}
+              <div class="sm:grid grid-cols-2 gap-4">
 
+                {{#each this}}
+                <!-- Hidden form to send req.body values -->
+                {{!-- ../../this: {{../../this}}
+                ../../this.slug: {{../../this.slug}}
+                ../this: {{../this}}
+                this: {{this}}
+                this.courseSlug: {{this.courseSlug}}
+                this.slug: {{this.slug}}
+                index: {{@index}}
+                overview-{{../../this.slug}}-{{this.courseSlug}} --}}
+                  <div class='card cardlink !pt-[0.1px]' onclick="handleCourseClick('{{../../this.slug}}', '{{this.courseSlug}}')" >
+                    <div><h3 class='text-lg'>{{this.courseName}}</h3>
+                    </div>
+                      <div class="flex justify-start gap-2 items-center px-4 mt-4 flex-wrap">
+                        <p class="m-0 p-0">{{this.courseCode}}</p>
+                        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{this.refBranch}} haru</p>
+                        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{this.courseEAP}} EAP</p>
+                        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize this.courseGrading}}</p>
+                        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{this.courseSemester}}</p>
+                        <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher this.teacherUsername ../../../teachers)}}{{this.displayName}}{{/with }}</p>
+                      </div>
+                  </div>
+                  <form id="overview-{{../../this.slug}}-{{this.courseSlug}}" name="overview-{{../../this.slug}}-{{this.courseSlug}}" style="display:none;" method="POST" action="/progress-overview" >
+                    <!-- Hidden form inputs to send req.body values -->
+                    <input type="hidden" name="selectedTeam" id="selectedTeam-{{../../this.slug}}" value="{{../../this.slug}}" >
+                    <input type="hidden" name="selectedCourse" id="selectedCourse-{{this.courseSlug}}" value="{{this.courseSlug}}" >
+                    <input type="hidden" name="selectedCourseData" id="selectedCourseData-{{this.courseSlug}}" value="{{jsonStringify this}}" >
+                  </form>
+                {{/each}}
+              </div>
             {{/with }}
 
           {{/each }}

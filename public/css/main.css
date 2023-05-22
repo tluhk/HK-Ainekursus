@@ -2222,6 +2222,9 @@ input:checked ~ .tab-content{
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 @media (min-width: 640px){
+  .sm\:grid{
+    display: grid;
+  }
   .sm\:w-64{
     width: 16rem;
   }
