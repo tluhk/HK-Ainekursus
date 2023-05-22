@@ -766,7 +766,7 @@
       "type": "color"
     },
     "page-background": {
-      "value": "{primary.1000}",
+      "value": "#11031D",
       "type": "color"
     },
     "button": {
