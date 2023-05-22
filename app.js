@@ -66,6 +66,10 @@ liveReloadServer.server.once('connection', () => {
 });
 app.use(connectLivereload()); */
 
+app.get('/login', (req, res) => {
+  res.render('login', { layout: 'index' });
+});
+
 /** Set up Handlebars views */
 const handlebars = handlebarsFactory(exphbs);
 app.engine('handlebars', handlebars.engine);
@@ -84,6 +88,8 @@ app.get('/ping', (req, res) => {
     message: 'API is working',
   });
 });
+
+
 
 /** Set up Github credentials */
 const loginConfig = {
