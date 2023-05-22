@@ -217,7 +217,7 @@ a.table-of-contents {
   }
 }
 
-.iframe-container {
+.iframe-container, .block-embed {
   margin-bottom: 2rem;
 }
 

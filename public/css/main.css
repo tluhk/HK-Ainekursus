@@ -654,7 +654,7 @@ a.table-of-contents {
     margin-top: -10rem;
   }
 }
-.iframe-container {
+.iframe-container, .block-embed {
   margin-bottom: 2rem;
 }
 /* article formattings */
