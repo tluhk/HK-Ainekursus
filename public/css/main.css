@@ -1323,7 +1323,7 @@ section {
   margin-bottom: var(--article-bottom);
 }
 body {
-  line-height: var(--line-height-body);
+  line-height: var(--body-line-height);
   margin: var(--body-spacing);
 }
 .text-sm {
