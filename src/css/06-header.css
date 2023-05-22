@@ -38,8 +38,10 @@ header::before {
 }
 
 /* menu */
-.menu-zero {
-  top: 0 !important;
-  height: 100vh;
-  @apply bg-page-background;
+@media (max-width: 1023px) {
+  .menu-zero {
+    top: 0 !important;
+    height: 100vh;
+    @apply bg-page-background;
+  }
 }
