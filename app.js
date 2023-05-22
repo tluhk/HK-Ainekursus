@@ -89,8 +89,6 @@ app.get('/ping', (req, res) => {
   });
 });
 
-
-
 /** Set up Github credentials */
 const loginConfig = {
   clientID: process.env.GITHUB_CLIENT_ID,
@@ -426,7 +424,8 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * 1. ENABLE FULL else STATEMENT
    * 2. COMMENT OUT team: {} KEY.
    * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
-   */  else {
+   */ else {
+    /*
     req.user = {
       id: '62253084',
       nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
@@ -456,7 +455,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } /*
+  } /* */
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',
@@ -473,7 +472,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
         id: 6514564,
         node_id: 'T_kwDOBqxQ5c4AY2eE',
         slug: 'rif20',
-      }, */ /*
+      }, */
     };
     if (req.user && !req.user.team) {
       const { user } = req;
@@ -485,7 +484,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
   next();
 });

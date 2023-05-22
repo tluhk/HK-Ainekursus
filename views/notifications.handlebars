@@ -24,28 +24,17 @@
               <h2 class="font-sans text-xl font-bold">Viimase 30 päeva teated:</h2 class="font-sans text-xl font-bold">
               <div class="divide-y divide-stroke">
                 {{#each courseUpdates30Days }} 
-                  <div class="flex flex-wrap py-2">
-                    {{#if_equal ../this.user.team.slug 'teachers' }}
-                    <div class="basis-4/5 shrink-0 grow-0">
-                      <span class="material-symbols-outlined text-base text-system-red-tlu">notifications</span><!-- AINE --><a class=" text-sm" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
-                    </div>
-                    <div class="text-sm basis-1/5 text-right shrink-0 grow-0">
-                      <div><!-- AEG -->{{timeSince this.created_at }}</div>
-                    </div>
-                    {{/if_equal }}
+                  <div class="flex flex-wrap w-full py-2">
+          <div class="basis-4/6 shrink-0 grow-0 pr-4">
+            <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>{{this.course.courseName}}</div>
+          </div>
+          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}</div>
+           
+          <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
 
-                    <div class="basis-4/5 shrink-0 grow-0">
-                    <!-- Sisu -->{{this.body}}
-                    </div>
+          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
+        </div>
 
-                    <div class=" text-sm basis-1/5 text-right shrink-0 grow-0">
-                    {{#if_equal ../this.user.team.slug 'teachers' }}
-                      <div><!-- ÕPPEJÕUD -->{{#with (findTeacher ../this.user.login ../../teachers)}}{{this.displayName}}{{/with }}</div><div> <!-- OKS-->{{../this.course.refBranch}}</div>
-                    {{/if_equal }}
-                    </div>
-
-                    
-                    
                   </div>
                   {{#unless @last}}
                   {{/unless}}
@@ -101,7 +90,7 @@
                     {{else }}
                       <div class="flex items-start gap-2 pb-2"><p class="p-0 m-0">{{#with (findTeacher ../this.user.login ../../teachers)}}{{this.displayName}}{{/with }} uuendas <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}"><b>{{../this.course.courseName}}</b></a> {{!-- {{this.course.refBranch}} haru --}}:<br></p></div>
                     {{/if_equal }}
-                    <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2 bg-neutral-100"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
+                    <div class="flex items-start gap-2 pt-4 pb-4 pl-3 pr-2"><span class="material-symbols-outlined">notifications</span> <p class="pt-0 m-0">{{this.body}}</p></div>
                   </div>
                   {{#unless @last}}
                     <hr class="mt-4 mb-4">

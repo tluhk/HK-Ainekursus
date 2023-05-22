@@ -1775,14 +1775,8 @@ input:checked ~ .tab-content{
 .grow-0{
   flex-grow: 0;
 }
-.basis-1\/5{
-  flex-basis: 20%;
-}
 .basis-2\/6{
   flex-basis: 33.333333%;
-}
-.basis-4\/5{
-  flex-basis: 80%;
 }
 .basis-4\/6{
   flex-basis: 66.666667%;
@@ -2253,11 +2247,8 @@ input:checked ~ .tab-content{
   .lg\:\!top-0{
     top: 0px !important;
   }
-  .lg\:right-4{
-    right: 1rem;
-  }
-  .lg\:right-\[-0\.5rem\]{
-    right: -0.5rem;
+  .lg\:right-\[-9rem\]{
+    right: -9rem;
   }
   .lg\:top-32{
     top: 8rem;
@@ -2289,6 +2280,9 @@ input:checked ~ .tab-content{
   .lg\:max-h-screen{
     max-height: 100vh;
   }
+  .lg\:w-\[41rem\]{
+    width: 41rem;
+  }
   .lg\:w-auto{
     width: auto;
   }
@@ -2317,8 +2311,8 @@ input:checked ~ .tab-content{
   .lg\:pr-0{
     padding-right: 0px;
   }
-  .lg\:pt-4{
-    padding-top: 1rem;
+  .lg\:pr-\[11rem\]{
+    padding-right: 11rem;
   }
   .lg\:pt-\[6rem\]{
     padding-top: 6rem;
