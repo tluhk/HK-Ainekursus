@@ -1,3 +1,4 @@
+<!-- dashboard-student -->
 <div class="flex flex-row grow 2xl:justify-between overflow-x-hidden lg:overflow-x-clip">
 
   <main id="main-content" class="px-4 py-8 dashboard_content">
@@ -17,12 +18,12 @@
         {{/if_not_equal }} --}}
       </div>
       
-      <div class="md:grid grid-cols-6 gap-4">
+      <div class="md:grid grid-cols-2 gap-8">
         <!-- refers to content.handlebars fail in /partials folder -->
-        <div class="col-span-4">
+        <div class="col-span-1">
           {{> dashboard-student.courses }} <br>
         </div>
-        <div class="col-span-2">
+        <div class="col-span-1">
           {{> dashboard-student.notifications }} <br>
           {{> dashboard-student.teacherCourses }} <br>
         </div>

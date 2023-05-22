@@ -1618,6 +1618,9 @@ input:checked ~ .tab-content{
 .z-\[52\]{
   z-index: 52;
 }
+.col-span-1{
+  grid-column: span 1 / span 1;
+}
 .col-span-2{
   grid-column: span 2 / span 2;
 }
@@ -1745,10 +1748,6 @@ input:checked ~ .tab-content{
   width: -moz-max-content;
   width: max-content;
 }
-.max-w-fit{
-  max-width: -moz-fit-content;
-  max-width: fit-content;
-}
 .max-w-full{
   max-width: 100%;
 }
@@ -1793,6 +1792,9 @@ input:checked ~ .tab-content{
 }
 .list-none{
   list-style-type: none;
+}
+.grid-cols-2{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .grid-cols-6{
   grid-template-columns: repeat(6, minmax(0, 1fr));
