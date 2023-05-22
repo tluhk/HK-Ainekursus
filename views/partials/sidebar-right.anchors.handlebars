@@ -1,10 +1,11 @@
 <!-- sidebar-right.anchor.handlebars -->
-<nav class="card top-48 lg:top-40 h-fit relative sticky top-0" id="sidebar-course-anchor">
+<nav class="card !p-10 top-[12.5rem] lg:top-[8.5rem] h-fit relative sticky p-2" id="sidebar-course-anchor">
 
 <!-- Branch (version) selection menu. Only visible to 'teachers' team -->
 
 {{#if_equal user.team.slug 'teachers'}}
-  <div class="card-header m-0 pt-4">Ainekursuse versioonid:</div>
+<div class="">
+  <div class="card-header m-0">Ainekursuse versioonid:</div>
   <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
   <!-- Radio buttons -->
     {{#each ../branches }}
@@ -23,14 +24,14 @@
   <input type="hidden" name="currentPath" id="currentPath" value="/course/{{../path.courseSlug}}/about/" >
   <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}" >
   </form>
-
+</div>
 {{/if_equal}}
 
 <!-- Table of contents -->
 
   <!-- sidebar sticky behavior beginning from lg size -->
-  <div>
-    <div class="card-header m-0 pt-4">Lehekülje teemad:</div>
+  <div class="">
+    <div class="card-header m-0">Lehekülje teemad:</div>
     <div class="pl-2 mt-2 lg:max-h-screen drop-shadow-2xl w-full text-sm">
       {{{ ToC }}}
     </div>

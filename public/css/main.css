@@ -1606,6 +1606,9 @@ input:checked ~ .tab-content{
 .top-\[-700px\]{
   top: -700px;
 }
+.top-\[12\.5rem\]{
+  top: 12.5rem;
+}
 .z-10{
   z-index: 10;
 }
@@ -2259,11 +2262,11 @@ input:checked ~ .tab-content{
   .lg\:top-32{
     top: 8rem;
   }
-  .lg\:top-40{
-    top: 10rem;
-  }
   .lg\:top-\[-4rem\]{
     top: -4rem;
+  }
+  .lg\:top-\[8\.5rem\]{
+    top: 8.5rem;
   }
   .lg\:mb-0{
     margin-bottom: 0px;
