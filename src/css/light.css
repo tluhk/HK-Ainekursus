@@ -7,7 +7,8 @@
   --card-background: linear-gradient(194deg, #a57e4322 0%, #4f453622 100%);
   --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
   --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
-  --menu-background-stroke: #dad7d38c;
+  --menu-card-background: linear-gradient(232deg, #9e794222 0%, #645b4e22 100%);
+  --menu-card-stroke: linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%);
   --menu-item-background-stroke: linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%);
   --link-active: #4d2e6b;
   --link-hover: #80609f;

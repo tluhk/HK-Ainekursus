@@ -31,8 +31,12 @@
     "value": "linear-gradient(232deg, #9e7942 0%, #645b4e 100%)",
     "type": "color"
   },
-  "menu-background-stroke": {
-    "value": "#dad7d38c",
+  "menu-card-background": {
+    "value": "linear-gradient(232deg, #9e794222 0%, #645b4e22 100%)",
+    "type": "color"
+  },
+  "menu-card-stroke": {
+    "value": "linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%)",
     "type": "color"
   },
   "menu-item-background-stroke": {
