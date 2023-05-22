@@ -1621,12 +1621,6 @@ input:checked ~ .tab-content{
 .col-span-1{
   grid-column: span 1 / span 1;
 }
-.col-span-2{
-  grid-column: span 2 / span 2;
-}
-.col-span-4{
-  grid-column: span 4 / span 4;
-}
 .m-0{
   margin: 0px;
 }
@@ -1795,9 +1789,6 @@ input:checked ~ .tab-content{
 }
 .grid-cols-2{
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.grid-cols-6{
-  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 .grid-cols-7{
   grid-template-columns: repeat(7, minmax(0, 1fr));
