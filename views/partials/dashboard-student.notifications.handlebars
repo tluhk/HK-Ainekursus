@@ -18,7 +18,6 @@
           <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
         </div>
         {{#unless @last}}
-          <hr class="mt-4 mb-4">
         {{/unless}}
       {{/each }}
       <div class="pt-4">
