@@ -109,7 +109,7 @@ code {
   /* to hide overwlof but keep sticky working */
   :root {
     --sidebar-width: 20rem;
-    --main-width: calc(100% - (2*var(--sidebar-width)));
+    --main-width: calc(100% - (2 * var(--sidebar-width)));
   }
   .main-wrapper {
     contain: paint;
@@ -217,7 +217,8 @@ a.table-of-contents {
   }
 }
 
-.iframe-container, .block-embed {
+.iframe-container,
+.block-embed {
   margin-bottom: 2rem;
 }
 

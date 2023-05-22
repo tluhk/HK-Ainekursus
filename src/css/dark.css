@@ -42,8 +42,8 @@
   --card-hover-shadow-y: 0;
   --card-hover-shadow-blur: 22px;
   --card-hover-shadow-spread: 0;
-  --card-hover-shadow-color: #e3e5e8;
-  --card-hover-shadow-type: innerShadow;
+  --card-hover-shadow-color: #80609f;
+  --card-hover-shadow-type: dropShadow;
   --stroke: #4d2e6b;
   --radio-shadow-hover-x: 0;
   --radio-shadow-hover-y: 0;

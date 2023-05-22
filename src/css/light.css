@@ -4,7 +4,7 @@
   --link: #2b313b;
   --link-idle: #5c6470;
   --link-action: #80609f;
-  --card-background: linear-gradient(194deg, #a57e43 0%, #4f4536 100%);
+  --card-background: linear-gradient(194deg, #a57e4322 0%, #4f453622 100%);
   --menu-item-background: linear-gradient(194deg, #5d4e39 0%, #a57e43 100%);
   --menu-background: linear-gradient(232deg, #9e7942 0%, #645b4e 100%);
   --menu-background-stroke: #dad7d38c;
@@ -29,13 +29,13 @@
   --table-cell: #FAFCFF;
   --table-header-cell: #e6dfec;
   --table-hover-cell: #f2eff5;
-  --card-stroke: #80609f;
+  --card-stroke: #E2D9CF;
   --card-hover-shadow-x: 0;
   --card-hover-shadow-y: 0;
   --card-hover-shadow-blur: 22;
   --card-hover-shadow-spread: 0;
-  --card-hover-shadow-color: #f2eff5;
-  --card-hover-shadow-type: innerShadow;
+  --card-hover-shadow-color: #c7cbd1;
+  --card-hover-shadow-type: dropShadow;
   --stroke: #E2D9CF;
   --drop-shadow-x: 4;
   --drop-shadow-y: 4;

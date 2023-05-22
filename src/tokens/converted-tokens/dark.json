@@ -179,11 +179,11 @@
       "type": "spread"
     },
     "color": {
-      "value": "#e3e5e8",
+      "value": "#80609f",
       "type": "color"
     },
     "type": {
-      "value": "innerShadow",
+      "value": "dropShadow",
       "type": "type"
     }
   },

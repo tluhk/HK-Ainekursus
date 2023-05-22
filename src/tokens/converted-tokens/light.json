@@ -20,7 +20,7 @@
     "type": "color"
   },
   "card-background": {
-    "value": "linear-gradient(194deg, #a57e43 0%, #4f4536 100%)",
+    "value": "linear-gradient(194deg, #a57e4322 0%, #4f453622 100%)",
     "type": "color"
   },
   "menu-item-background": {
@@ -122,7 +122,7 @@
     "type": "color"
   },
   "card-stroke": {
-    "value": "#80609f",
+    "value": "#E2D9CF",
     "type": "color"
   },
   "card-hover-shadow": {
@@ -143,11 +143,11 @@
       "type": "spread"
     },
     "color": {
-      "value": "#f2eff5",
+      "value": "#c7cbd1",
       "type": "color"
     },
     "type": {
-      "value": "innerShadow",
+      "value": "dropShadow",
       "type": "type"
     }
   },
