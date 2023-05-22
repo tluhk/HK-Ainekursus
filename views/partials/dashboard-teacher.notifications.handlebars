@@ -7,7 +7,6 @@
         <div class='text-md'>Hiljutised teated puuduvad.</div>
       {{/unless }}
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
-
         <div class="flex flex-wrap w-full py-2">
           <div class="basis-4/6 shrink-0 grow-0 pr-4">
             <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>{{this.course.courseName}}</div>
