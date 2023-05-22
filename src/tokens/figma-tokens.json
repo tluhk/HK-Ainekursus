@@ -795,11 +795,11 @@
         "type": "color"
       },
       "secondary-fill-hover": {
-        "value": "{primary.100}",
+        "value": "{primary.800}",
         "type": "color"
       },
       "secondary-fill-active": {
-        "value": "{primary.200}",
+        "value": "{primary.900}",
         "type": "color"
       },
       "secondary-label-default": {
