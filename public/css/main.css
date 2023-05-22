@@ -2207,9 +2207,6 @@ input:checked ~ .tab-content{
 .hover\:underline:hover{
   text-decoration-line: underline;
 }
-.hover\:\!no-underline:hover{
-  text-decoration-line: none !important;
-}
 .focus\:outline-none:focus{
   outline: 2px solid transparent;
   outline-offset: 2px;
