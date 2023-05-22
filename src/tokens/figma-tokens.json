@@ -657,7 +657,7 @@
       "type": "color"
     },
     "card-stroke": {
-      "value": "{primary.600}",
+      "value": "{primary-revert.100}",
       "type": "color"
     },
     "card-hover-shadow": {
