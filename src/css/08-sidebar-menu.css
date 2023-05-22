@@ -80,3 +80,10 @@ input:checked ~ .tab-content {
 .light-theme .menu-card::before {
   opacity: 0.1;
 }
+
+.right-side-menu a {
+  @apply text-link-idle;
+}
+.right-side-menu a:hover {
+  @apply text-link;
+}

@@ -1564,6 +1564,12 @@ input:checked ~ .tab-content{
 .light-theme .menu-card::before {
   opacity: 0.1;
 }
+.right-side-menu a{
+  color: var(--link-idle, #5c6470);
+}
+.right-side-menu a:hover{
+  color: var(--link, #2b313b);
+}
 .visible{
   visibility: visible;
 }
