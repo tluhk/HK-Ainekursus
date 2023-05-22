@@ -23,6 +23,8 @@
   --button-focus: #80609f;
   --button-disabled: #abb1ba;
   --button-secondary-default: #b39fc6;
+  --button-secondary-fill-hover: #4d2e6b;
+  --button-secondary-fill-active: #331a4d;
   --button-secondary-label-default: #f1f2f4;
   --button-secondary-hover: #9980b3;
   --button-secondary-active: #80609f;

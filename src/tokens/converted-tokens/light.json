@@ -80,6 +80,14 @@
       "value": "#80609f",
       "type": "color"
     },
+    "secondary-fill-hover": {
+      "value": "#f2eff5",
+      "type": "color"
+    },
+    "secondary-fill-active": {
+      "value": "#e6dfec",
+      "type": "color"
+    },
     "secondary-label-default": {
       "value": "#414a58",
       "type": "color"

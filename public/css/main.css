@@ -462,6 +462,8 @@ h6{
   --button-focus: #80609f;
   --button-disabled: #abb1ba;
   --button-secondary-default: #80609f;
+  --button-secondary-fill-hover: #f2eff5;
+  --button-secondary-fill-active: #e6dfec;
   --button-secondary-label-default: #414a58;
   --button-secondary-hover: #664d80;
   --button-secondary-active: #4d2e6b;
@@ -525,6 +527,8 @@ h6{
   --button-focus: #80609f;
   --button-disabled: #abb1ba;
   --button-secondary-default: #b39fc6;
+  --button-secondary-fill-hover: #4d2e6b;
+  --button-secondary-fill-active: #331a4d;
   --button-secondary-label-default: #f1f2f4;
   --button-secondary-hover: #9980b3;
   --button-secondary-active: #80609f;
@@ -907,6 +911,7 @@ body{
 }
 .btn-secondary:hover{
   border-color: var(--button-secondary-hover, #664d80);
+  background-color: var(--button-secondary-fill-hover, #f2eff5);
   color: var(--button-secondary-hover, #664d80);
 }
 .btn-secondary:focus-visible{
@@ -918,6 +923,7 @@ body{
 }
 .btn-secondary:active{
   border-color: var(--button-secondary-active, #4d2e6b);
+  background-color: var(--button-secondary-fill-active, #e6dfec);
   color: var(--button-secondary-active, #4d2e6b);
 }
 .btn-link{
@@ -1677,9 +1683,6 @@ input:checked ~ .tab-content{
 }
 .mt-0{
   margin-top: 0px;
-}
-.mt-16{
-  margin-top: 4rem;
 }
 .mt-2{
   margin-top: 0.5rem;

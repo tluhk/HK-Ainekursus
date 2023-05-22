@@ -19,6 +19,8 @@
   --button-focus: #80609f;
   --button-disabled: #abb1ba;
   --button-secondary-default: #80609f;
+  --button-secondary-fill-hover: #f2eff5;
+  --button-secondary-fill-active: #e6dfec;
   --button-secondary-label-default: #414a58;
   --button-secondary-hover: #664d80;
   --button-secondary-active: #4d2e6b;
