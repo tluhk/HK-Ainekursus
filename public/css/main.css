@@ -872,6 +872,22 @@ body{
     background-position: right -85px top;
   }
 }
+.first-page body {
+  background-image: url(/images/jooned.svg),
+    conic-gradient(
+      from 133deg at center center,
+      rgba(14, 2, 25, 1) 0%,
+      rgba(24, 8, 46, 1) 25%,
+      rgba(78, 28, 148, 1) 50%,
+      rgba(23, 8, 45, 1) 75%,
+      rgba(14, 2, 25, 1) 99%
+    );
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--primary-100, #f2eff5);
+}
 .btn{
   display: flex;
   height: auto;
@@ -1576,6 +1592,21 @@ input:checked ~ .tab-content{
 }
 .right-side-menu a:hover{
   color: var(--link, #2b313b);
+}
+.first-page main:before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  background-image: url(/images/kolledz.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: hard-light;
+  background-size: auto 150%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  z-index: -1;
 }
 .visible{
   visibility: visible;

@@ -1,0 +1,15 @@
+.first-page main:before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  background-image: url(/images/kolledz.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: hard-light;
+  background-size: auto 150%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
