@@ -1,7 +1,6 @@
 .first-page body {
   background-image: url(/images/jooned.svg),
-
-  radial-gradient(circle, rgba(14,2,25,1) 0%, rgba(14,2,25,0) 29%),
+    radial-gradient(circle, rgba(14, 2, 25, 1) 0%, rgba(14, 2, 25, 0) 29%),
     conic-gradient(
       from 133deg at center center,
       rgba(14, 2, 25, 1) 0%,
@@ -20,18 +19,32 @@
 
 .first-page main:before {
   content: '';
-    position: absolute;
-    height: 44rem;
-    background-image: url(/images/kolledz.png);
-    background-repeat: no-repeat;
-    background-position: 15% center;
-    mix-blend-mode: hard-light;
-    background-size: auto 98%;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    z-index: -1;
-    opacity: 0.7;
+  position: absolute;
+  height: 44rem;
+  background-image: url(/images/kolledz.png);
+  background-repeat: no-repeat;
+  background-position: calc(50% - 15rem) center;
+  mix-blend-mode: hard-light;
+  background-size: auto 98%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  z-index: -2;
+  opacity: 0.7;
+}
+.first-page body:after {
+  content: '';
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  background-image: url(/images/noise.png);
+  mix-blend-mode: color;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  opacity: 0.4;
+  background-attachment: fixed;
+  /* filter: hue-rotate(-270deg) saturate(50%);*/
 }
 
 .greeting {
