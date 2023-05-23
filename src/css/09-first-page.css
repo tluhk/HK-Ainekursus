@@ -15,6 +15,7 @@
   background-color: rgba(0, 0, 0, 0);
   @apply text-primary-100;
   background-attachment: fixed;
+  margin: 0;
 }
 
 .first-page main:before {
@@ -49,5 +50,13 @@
 
 .greeting {
   width: 56rem;
+  max-width: 100%;
   margin: 5rem auto !important;
+}
+@media (max-width: 1023px) {
+  .greeting {
+    margin: 5rem auto !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
