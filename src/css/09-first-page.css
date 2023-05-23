@@ -20,21 +20,21 @@
 
 .first-page main:before {
   content: '';
-  position: absolute;
-  height: 100%;
-  background-image: url(/images/kolledz.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  mix-blend-mode: hard-light;
-  background-size: auto 150%;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  opacity: 0.7;
+    position: absolute;
+    height: 44rem;
+    background-image: url(/images/kolledz.png);
+    background-repeat: no-repeat;
+    background-position: 15% center;
+    mix-blend-mode: hard-light;
+    background-size: auto 98%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0.7;
 }
 
 .greeting {
   width: 56rem;
-  margin: 5rem auto 0 !important;
+  margin: 5rem auto !important;
 }
