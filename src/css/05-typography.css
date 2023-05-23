@@ -63,14 +63,14 @@ p {
   margin-bottom: var(--body-paragraph-spacing);
 }
 .display-big {
-  font-size: var(--display-big-font-size);
+  @apply text-7xl;
   line-height: var(--display-big-line-height);
 }
 .display-sub-serif {
-  font-size: var(--display-sub-serif-font-size);
+  @apply text-2xl;
 }
 .display-sub-sans {
-  font-size: var(--display-sub-sans-font-size);
+  @apply text-lg;
 }
 .card-header {
   font-size: var(--card-header-font-size);

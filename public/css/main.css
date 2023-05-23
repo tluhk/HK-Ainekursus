@@ -1370,15 +1370,15 @@ h6 {
 p {
   margin-bottom: var(--body-paragraph-spacing);
 }
-.display-big {
-  font-size: var(--display-big-font-size);
+.display-big{
+  font-size: 5.96rem;
   line-height: var(--display-big-line-height);
 }
-.display-sub-serif {
-  font-size: var(--display-sub-serif-font-size);
+.display-sub-serif{
+  font-size: 1.95rem;
 }
-.display-sub-sans {
-  font-size: var(--display-sub-sans-font-size);
+.display-sub-sans{
+  font-size: 1.25rem;
 }
 .card-header {
   font-size: var(--card-header-font-size);
