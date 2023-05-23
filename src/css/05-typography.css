@@ -62,6 +62,16 @@ h6 {
 p {
   margin-bottom: var(--body-paragraph-spacing);
 }
+.display-big {
+  font-size: var(--display-big-font-size);
+  line-height: var(--display-big-line-height);
+}
+.display-sub-serif {
+  font-size: var(--display-sub-serif-font-size);
+}
+.display-sub-sans {
+  font-size: var(--display-sub-sans-font-size);
+}
 .card-header {
   font-size: var(--card-header-font-size);
   font-weight: var(--card-header-font-weight);
