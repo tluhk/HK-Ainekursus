@@ -107,8 +107,7 @@
 
 .first-page .bg::after {
   background: url(/images/jooned.svg);
-  background-size: cover;
-  background-position: center;
+  background-position: center 100%;
   background-repeat: no-repeat;
 }
 
