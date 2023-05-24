@@ -1595,8 +1595,11 @@ input:checked ~ .tab-content{
   color: var(--link, #2b313b);
 }
 .first-page body {
-  background-image: url(/images/jooned.svg),
-    radial-gradient(circle, rgba(14, 2, 25, 1) 0%, rgba(14, 2, 25, 0) 29%),
+  background-image: /*url(/images/jooned.svg),*/ radial-gradient(
+      circle,
+      rgba(14, 2, 25, 1) 0%,
+      rgba(14, 2, 25, 0) 29%
+    ),
     conic-gradient(
       from 133deg at center center,
       rgba(14, 2, 25, 1) 0%,
@@ -1617,7 +1620,7 @@ input:checked ~ .tab-content{
   content: '';
   position: absolute;
   height: 44rem;
-  background-image: url(/images/kolledz.png);
+  /* background-image: url(/images/kolledz.png); */
   background-repeat: no-repeat;
   background-position: calc(50% - 15rem) center;
   mix-blend-mode: hard-light;
@@ -1653,6 +1656,65 @@ input:checked ~ .tab-content{
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+/* parallax test */
+.first-page body {
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+.first-page .main {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  perspective: 2px;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0 !important;
+  overflow-y: scroll; /* Allow vertical scrolling */
+  scroll-behavior: smooth; /* Enable smooth scrolling */
+}
+.first-page .section {
+  transform-style: preserve-3d;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.first-page .parallax::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateZ(-2px) scale(2.5);
+  background-size: 100%;
+  z-index: -1;
+}
+.first-page .bg::after {
+  background: url('/images/jooned.svg');
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.first-page .content {
+  height: 200px;
+  postition: relative;
+  transform-style: preserve-3d;
+}
+.first-page .content::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: -1;
+  background-image: url(/images/kolledz.png);
+  background-repeat: no-repeat;
+  transform: translateZ(-0.5px) scale(1.5);
 }
 .visible{
   visibility: visible;
