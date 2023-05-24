@@ -1699,12 +1699,12 @@ input:checked ~ .tab-content{
   background-position: center;
   background-repeat: no-repeat;
 }
-.first-page .content {
-  height: 200px;
-  postition: relative;
+.first-page .landing-content {
+  position: relative;
   transform-style: preserve-3d;
+  height: 100vh;
 }
-.first-page .content::after {
+.first-page .landing-content::after {
   content: '';
   position: absolute;
   left: 0;
