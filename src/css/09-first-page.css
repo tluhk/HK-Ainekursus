@@ -120,15 +120,17 @@
 }
 .first-page .landing-content::after {
   content: '';
-  position: absolute;
-  left: 0px;
-  right: 0;
-  width: 100vh;
-  bottom: 0;
-  top: 4rem;
-  z-index: -1;
-  background-image: url(/images/kolledz.png);
-  background-repeat: no-repeat;
-  transform: translateZ(-0.5px) scale(1.35);
-  margin-left: -4rem;
+    position: absolute;
+    left: 0px;
+    right: 0;
+    bottom: 0;
+    top: 4rem;
+    z-index: -1;
+    background-image: url(/images/kolledz.png);
+    background-repeat: no-repeat;
+    transform: translateZ(-0.5px) scale(1.35);
+    margin-left: -4rem;
+    margin-bottom: -40rem;
+    margin-top: 4rem;
+    background-size: 80%;
 }
