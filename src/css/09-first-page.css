@@ -1,5 +1,8 @@
-.first-page body {
-  background-image: /*url(/images/jooned.svg),*/ radial-gradient(
+body {
+  margin: 0;
+  overflow-x: hidden;
+
+  background-image: radial-gradient(
       circle,
       rgba(14, 2, 25, 1) 0%,
       rgba(14, 2, 25, 0) 29%
@@ -12,29 +15,9 @@
       rgba(23, 8, 45, 1) 75%,
       rgba(14, 2, 25, 1) 99%
     );
-  background-size: auto;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: rgba(0, 0, 0, 0);
-  @apply text-primary-100;
-  background-attachment: fixed;
-  margin: 0;
-}
 
-.first-page main:before {
-  content: '';
-  position: absolute;
-  height: 44rem;
-  /* background-image: url(/images/kolledz.png); */
-  background-repeat: no-repeat;
-  background-position: calc(50% - 15rem) center;
-  mix-blend-mode: hard-light;
-  background-size: auto 98%;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  z-index: -2;
-  opacity: 0.7;
+  background-attachment: fixed;
+  @apply text-primary-100;
 }
 .first-page body:after {
   content: '';
@@ -45,92 +28,48 @@
   mix-blend-mode: color;
   left: 0;
   right: 0;
-  z-index: -1;
   opacity: 0.4;
   background-attachment: fixed;
-  /* filter: hue-rotate(-270deg) saturate(50%);*/
 }
 
-.greeting {
+.parallax-bg-slower,
+.parallax-bg-slow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.parallax-bg-slower {
+  /* background-image: url(/images/jooned.svg); */
+  z-index: -1;
+}
+.parallax-bg-slower img {
+  margin: 0 auto;
+}
+
+.parallax-bg-slow {
+  /* background-image: url(/images/kolledz.png); */
+  z-index: -2;
+}
+.parallax-bg-slow img {
+  margin: 0 auto;
+  margin-top: 5rem;
+  margin-right: calc(50% - 16rem);
+  width: 50rem;
+}
+
+.first-page-content {
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  z-index: 1;
+  flex-direction: column;
   width: 56rem;
   max-width: 100%;
   margin: 5rem auto !important;
-}
-@media (max-width: 1023px) {
-  .greeting {
-    margin: 5rem auto !important;
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-/* parallax test */
-
-.first-page body {
-  margin: 0 !important;
-  overflow: hidden !important;
-}
-
-.first-page .main {
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  perspective: 2px;
-  width: 100%;
-  max-width: 100%;
-  margin-top: 0 !important;
-  overflow-y: scroll; /* Allow vertical scrolling */
-  scroll-behavior: smooth; /* Enable smooth scrolling */
-}
-
-.first-page .section {
-  transform-style: preserve-3d;
-  position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.first-page .parallax::after {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: translateZ(-2px) scale(2.5);
-  background-size: 100%;
-  z-index: -1;
-}
-
-.first-page .bg::after {
-  background: url(/images/jooned.svg);
-  background-position: center 100%;
-  background-repeat: no-repeat;
-}
-
-.first-page .landing-content {
-  position: relative;
-  transform-style: preserve-3d;
-  height: 100vh;
-  width: 56rem;
-  max-width: 100%;
-}
-.first-page .landing-content::after {
-  content: '';
-    position: absolute;
-    left: 0px;
-    right: 0;
-    bottom: 0;
-    top: 4rem;
-    z-index: -1;
-    background-image: url(/images/kolledz.png);
-    background-repeat: no-repeat;
-    transform: translateZ(-0.5px) scale(1.35);
-    margin-left: -4rem;
-    margin-bottom: -40rem;
-    margin-top: 4rem;
-    background-size: 80%;
 }

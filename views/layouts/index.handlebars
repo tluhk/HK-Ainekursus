@@ -25,5 +25,17 @@
       href='#main-content'
     >Liigu põhisisu juurde</a>
     {{{body}}}
+    <script>
+      window.addEventListener('scroll', function () { var scrollPosition =
+      window.pageYOffset; // Adjust the parallax background scroll speed var
+      parallaxBg = document.querySelector('.parallax-bg-slower');
+      parallaxBg.style.transform = 'translateY(' + -scrollPosition * 0.5 +
+      'px)'; // Adjust the slower parallax background scroll speed var
+      parallaxBgSlower = document.querySelector('.parallax-bg-slow');
+      parallaxBgSlower.style.transform = 'translateY(' + -scrollPosition * 0.8 +
+      'px)'; // Adjust the main section scroll speed var mainSection =
+      document.querySelector('.first-page-content'); mainSection.style.transform
+      = 'translateY(' + -scrollPosition * 0.9 + 'px)'; });
+    </script>
   </body>
 </html>
