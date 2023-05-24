@@ -1594,7 +1594,7 @@ input:checked ~ .tab-content{
 .right-side-menu a:hover{
   color: var(--link, #2b313b);
 }
-body {
+.first-page body {
   margin: 0;
   overflow-x: hidden;
 
