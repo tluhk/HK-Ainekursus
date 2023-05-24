@@ -60,6 +60,7 @@ body {
   margin: 0 auto;
   margin-top: 5rem;
   margin-right: calc(50% - 16rem);
+  width: 50rem;
 }
 
 .first-page-content {
