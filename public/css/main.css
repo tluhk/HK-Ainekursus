@@ -1891,6 +1891,9 @@ input:checked ~ .tab-content{
 .h-6{
   height: 1.5rem;
 }
+.h-96{
+  height: 24rem;
+}
 .h-auto{
   height: auto;
 }
@@ -2112,6 +2115,9 @@ input:checked ~ .tab-content{
 }
 .bg-page-background{
   background-color: var(--page-background, #FAFCFF);
+}
+.bg-primary-800{
+  background-color: var(--primary-800, #4d2e6b);
 }
 .bg-primary-900{
   background-color: var(--primary-900, #331a4d);
