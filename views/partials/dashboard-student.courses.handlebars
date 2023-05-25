@@ -7,7 +7,7 @@
           <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust Martti Raaveliga: <a href = "mailto: mrt@tlu.ee">mrt@tlu.ee</a></p>
         {{/unless }}
         {{#if courses }}
-          <div class="flex flex-row justify-start gap-x-4 pt-2 pb-4">
+          <div class="flex flex-wrap gap-4 pt-2 pb-4"> 
             <form method="POST" action="/courses-display-by" name="displayByName" id="displayByName">
               <!-- Hidden form inputs to send req.body values -->
               <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="name" >

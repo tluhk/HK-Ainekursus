@@ -32,8 +32,8 @@
     {{/if}}
   </div>
 
-  <!-- Viitab app.js failis "content" optionile, mis antakse iga res.render() funktsiooniga kaasa. 
-  "Content" option sisaldab github APIga päritud about.md faili, mis on dekodeeritud ja mille markdown on lahti renderdatud -->
+  <!-- Refers to the "content" option in the app.js file, which is passed along with every res.render() function. 
+        The "content" option contains the about.md file fetched with the GitHub API, which is decoded and its Markdown is rendered. -->
   <div id="markdown-content">
     {{#unless component}}
       <h3>Midagi läks valesti. Lehekülje sisu ei ole võimalik laadida.</h3>
@@ -59,18 +59,18 @@
     </div>
   {{/if}}
 
-  <!-- NB! Ainekava linki config.json failist kuvatakse ainult "about"/Ainekursusest lehel -->
+  <!-- NB! The course syllabus link from the config.json file is only displayed on the "about" / Course Information page. -->
 
   {{#if_equal path.contentSlug 'about'}}
   <br>
   <b>Ainekava: </b><a href='{{../course.courseUrl}}' target='_blank'>{{../course.courseName}} ({{../course.courseCode}})</a>
   {{/if_equal}}
 
-  <!-- NB! Faile kuvatakse ainult Lisamaterjalid lehekülgedel.
-  Kuna github lisab igasse kausta ".DS_Store" faili ja seda faili me ei taha kuvada, siis on see välja hardcode'tud. 
+  <!-- NB! Files are only displayed on the Additional Materials pages.
+Since GitHub adds a ".DS_Store" file to each folder and we don't want to display that file, it has been hard-coded to be excluded. 
   
-  Github raw download_url juhend: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
-  Download_url token muutub iga 7 päeva tagant Githubi poolt: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866-->
+  Github raw download_url howto: https://stackoverflow.com/questions/73819136/how-do-i-get-and-download-the-contents-of-a-file-in-github-using-the-rest-api/73824136
+  The download_url token changes every 7 days by GitHub's system: https://github.com/orgs/community/discussions/23845#discussioncomment-3241866-->
   {{#if files}}
     <div class='files pt-4'>
       <h3>Failid:</h3>
@@ -92,7 +92,8 @@
   {{backAndForwardPaths }}
   {{path.fullPath }} 
   -->
-  <div class='flex gap-4'>
+  
+  <div class='flex flex-wrap gap-4'>
   {{#ifInPaths path.fullPath backAndForwardPaths }}
     {{#if_not_equal ../path.fullPath ../backAndForwardPaths.[0].path }}
       <input type="button" class="btn btn-secondary"
@@ -106,7 +107,7 @@
     {{/if_not_equal }}
   {{/ifInPaths }}
 
-  <br>
+
   {{#ifInPaths path.fullPath markAsDonePaths }}
     {{#if_not_equal ../user.team.slug 'teachers'}}
       {{#ifInMarkedComponents ../path.componentUUID ../markedAsDoneComponentsArr }}

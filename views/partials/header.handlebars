@@ -1,5 +1,5 @@
 <nav
-  class='nav bg-neutral flex flex-col lg:flex-row justify-between text-white p-8 relative z-10'
+  class='nav bg-neutral flex flex-col lg:flex-row justify-between text-white p-8 relative z-10 text-lg lg:text-base'
 >
   <div class='flex justify-between items-center'>
     <a href='/' class='w-40 sm:w-64 h-auto'>
@@ -35,7 +35,7 @@
     </span>
   {{#if user}}
     <!-- menu -->
-    <div class="mr-8 z-[52] flex flex-col lg:flex-row lg:justify-evenly items-end lg:items-center gap-4 lg:mr-4 mb-4 lg:mb-0">
+    <div class="mr-8 z-[52] flex flex-col lg:flex-row lg:justify-evenly items-end lg:items-center gap-4 lg:mr-4 mb-4 lg:mb-0 border-b border-stroke lg:border-0 w-[calc(100%-4rem)] lg:w-[inherit] pb-4 lg:pb-0">
       <a href="/" class="!text-white !no-underline hover:!underline">Avaleht</a>
       {{!-- <a href="/" class="!text-white !no-underline hover:!underline">Kursused</a> --}}
       <a href="/notifications" class="!text-white !no-underline hover:!underline">Teated</a>
@@ -47,7 +47,7 @@
   {{#if user}}
     <!-- user preferences -->
     <div class="mr-8 lg:mr-0 flex flex-col lg:flex-row items-end group lg:items-center">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-4">
         <img class="z-[51] relative w-16 rounded-full" src="{{ user._json.avatar_url }}" alt="Avatar"> 
         <div class="z-[51]">
           {{#if user.displayName}}
@@ -79,7 +79,7 @@
           <li  class="py-2">GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank" class="!text-white">{{ user.username }}</a></li>
           <li>GitHubi tiim: {{ user.team.name }}</li>
         
-          <li  class="py-2"><a href="/logout" class="text-text">Logi välja</a></li>
+          <li  class="py-8"><a href="/logout" class="text-text">Logi välja</a></li>
 
         </ul>  
   

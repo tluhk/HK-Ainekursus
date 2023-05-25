@@ -1875,6 +1875,9 @@ input:checked ~ .tab-content{
 .w-\[22rem\]{
   width: 22rem;
 }
+.w-\[calc\(100\%-4rem\)\]{
+  width: calc(100% - 4rem);
+}
 .w-full{
   width: 100%;
 }
@@ -2479,6 +2482,9 @@ input:checked ~ .tab-content{
   .lg\:w-\[41rem\]{
     width: 41rem;
   }
+  .lg\:w-\[inherit\]{
+    width: inherit;
+  }
   .lg\:w-auto{
     width: auto;
   }
@@ -2502,6 +2508,9 @@ input:checked ~ .tab-content{
   }
   .lg\:overflow-x-clip{
     overflow-x: clip;
+  }
+  .lg\:border-0{
+    border-width: 0px;
   }
   .lg\:p-4{
     padding: 1rem;
@@ -2539,6 +2548,9 @@ input:checked ~ .tab-content{
   }
   .lg\:text-end{
     text-align: end;
+  }
+  .lg\:text-base{
+    font-size: 1.00rem;
   }
   .group:hover .lg\:group-hover\:block{
     display: block;
