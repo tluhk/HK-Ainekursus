@@ -69,7 +69,13 @@
   position: relative;
   z-index: 1;
   flex-direction: column;
-  width: 56rem;
+  width: 48rem;
   max-width: 100%;
   margin: 5rem auto !important;
+}
+
+@media (min-width:1024px) {
+  .first-page-content {
+    width: 56rem;
+  }
 }

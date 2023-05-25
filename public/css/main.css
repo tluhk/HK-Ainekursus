@@ -1662,9 +1662,14 @@ input:checked ~ .tab-content{
   position: relative;
   z-index: 1;
   flex-direction: column;
-  width: 56rem;
+  width: 48rem;
   max-width: 100%;
   margin: 5rem auto !important;
+}
+@media (min-width:1024px) {
+  .first-page-content {
+    width: 56rem;
+  }
 }
 .visible{
   visibility: visible;
@@ -1860,6 +1865,9 @@ input:checked ~ .tab-content{
 }
 .w-56{
   width: 14rem;
+}
+.w-96{
+  width: 24rem;
 }
 .w-\[22rem\]{
   width: 22rem;
@@ -2396,6 +2404,9 @@ input:checked ~ .tab-content{
   .lg\:\!top-0{
     top: 0px !important;
   }
+  .lg\:left-0{
+    left: 0px;
+  }
   .lg\:right-\[-9rem\]{
     right: -9rem;
   }
@@ -2443,6 +2454,9 @@ input:checked ~ .tab-content{
   }
   .lg\:w-auto{
     width: auto;
+  }
+  .lg\:w-full{
+    width: 100%;
   }
   .lg\:basis-1\/3{
     flex-basis: 33.333333%;
