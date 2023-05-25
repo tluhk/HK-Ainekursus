@@ -17,46 +17,40 @@
         <div class="">
           <div>
             {{#unless courseUpdates30Days }}
-              <h2 class="font-sans text-xl font-bold">Viimase 30 päeva jooksul teated puuduvad.</h2 class="font-sans text-xl font-bold">
+              <h2 class="font-sans text-xl font-bold">Viimase 30 päeva jooksul teated puuduvad.</h2>
             {{/unless }}
 
+            
+            
+
             {{#if courseUpdates30Days }}
-              <h2 class="font-sans text-xl font-bold">Viimase 30 päeva teated:</h2 class="font-sans text-xl font-bold">
-              <div class="divide-y divide-stroke">
+              <h2 class="font-sans text-xl font-bold">Viimase 30 päeva teated:</h2>
+
                 {{#each courseUpdates30Days }} 
-                  <div class="flex flex-wrap w-full py-2">
-          <div class="basis-4/6 shrink-0 grow-0 pr-4">
-            <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>
-            
-            
-            {{#if_equal ../this.user.team.slug 'teachers' }}
-              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}} {{../this.course.refBranch}}:</a>
-            {{else }}
-              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
-            {{/if_equal }}
-            
-            
-            
-            
-            
-            </div>
-          </div>
-          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}</div>
-           
-          <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
-
-          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
-        </div>
-
+              <div class="flex flex-col divide-y divide-stroke">
+                <div class="flex flex-wrap w-full py-2">
+                  <div class="basis-4/6 shrink-0 grow-0 pr-4">
+                    <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>
+                      {{#if_equal ../this.user.team.slug 'teachers' }}
+                        <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}} {{../this.course.refBranch}}:</a>
+                      {{else }}
+                        <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
+                      {{/if_equal }}
+                    </div>
                   </div>
+                  <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}
+                  </div>
+                  <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
+                  <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}
+                  </div>
+                </div>
                   {{#unless @last}}
                   {{/unless}}
-                {{/each }}
+                  {{/each }}
               </div>
-            {{/if }}
-
-            
           </div>
+            {{/if }}
+        </div>
         </div>
       {{/if }}
     </div>
