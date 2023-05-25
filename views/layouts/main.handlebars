@@ -37,12 +37,6 @@
     <script src="/js/dmswitch.js" defer></script>
     <script src='/js/js.js' defer></script>
   </head>
-
-<!-- Refers to header.handlebars fail in /partials folder -->
-<header>
-  {{> header }}
-</header>
-
   <body
     onload="document.getElementById('main-content') .style.opacity='1'"
     class='min-h-screen flex flex-col justify-between m-0'
@@ -51,7 +45,10 @@
       class='btn skip absolute left-[-1000px] mt-4 ml-4 px-4 py-2 bg-white'
       href='#main-content'
     >Liigu põhisisu juurde</a>
-
+    <!-- Refers to header.handlebars fail in /partials folder -->
+<header>
+  {{> header }}
+</header>
     <!-- body shows /views folder content, at the moment home.handlebars. -->
     {{{body}}}
 
