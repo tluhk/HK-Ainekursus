@@ -36,6 +36,8 @@
     
     <script src="/js/dmswitch.js" defer></script>
     <script src='/js/js.js' defer></script>
+
+
   </head>
   <body
     onload="document.getElementById('main-content') .style.opacity='1'"
@@ -46,11 +48,15 @@
       href='#main-content'
     >Liigu põhisisu juurde</a>
     <!-- Refers to header.handlebars fail in /partials folder -->
-<header>
-  {{> header }}
-</header>
+    <header>
+      {{> header }}
+    </header>
     <!-- body shows /views folder content, at the moment home.handlebars. -->
     {{{body}}}
+    <!-- Refers to footer.handlebars fail in /partials folder -->
+    <footer>
+      {{> footer }}
+    </footer>
 
     <script>
     function handleRadioClick(value) {
@@ -70,12 +76,33 @@
     </script>
 
 
+
+
+  <!-- script for avoiding flickering on theme change -->
+  <script>
+    // Retrieve the HTML element
+    const htmlElement = document.documentElement;
+
+    // Retrieve the saved theme from local storage
+    const savedTheme = localStorage.getItem('theme');
+
+    // Add the saved theme class to the HTML element if it exists
+    if (savedTheme) {
+      htmlElement.classList.add(savedTheme);
+    } else {
+      htmlElement.style.visibility = 'visible';
+    }
+
+    // Function to change the theme
+    function changeTheme(newTheme) {
+      if (savedTheme) {
+        htmlElement.classList.remove(savedTheme);
+      }
+
+      htmlElement.classList.add(newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+  </script>
   </body>
-
-
-<!-- Refers to footer.handlebars fail in /partials folder -->
-<footer>
-  {{> footer }}
-</footer>
-
 </html>
