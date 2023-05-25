@@ -78,31 +78,44 @@
 
 
 
-  <!-- script for avoiding flickering on theme change -->
+  <!-- script for avoiding flickering on theme change and keeping button in used state -->
   <script>
-    // Retrieve the HTML element
-    const htmlElement = document.documentElement;
+  // Retrieve the HTML element
+  const htmlElement = document.documentElement;
 
-    // Retrieve the saved theme from local storage
-    const savedTheme = localStorage.getItem('theme');
+  // Retrieve the saved theme from local storage
+  const savedTheme = localStorage.getItem('theme');
 
-    // Add the saved theme class to the HTML element if it exists
-    if (savedTheme) {
-      htmlElement.classList.add(savedTheme);
+  // Add the saved theme class to the HTML element if it exists
+  if (savedTheme) {
+    htmlElement.classList.add(savedTheme);
+  } else {
+    htmlElement.style.visibility = 'visible';
+  }
+
+  // Get the checkbox element
+  const checkbox = document.getElementById('switch');
+
+  // Function to toggle the theme
+  function toggleTheme() {
+    if (htmlElement.classList.contains('light-theme')) {
+      htmlElement.classList.remove('light-theme');
+      checkbox.checked = true; // Check the checkbox
+      localStorage.setItem('theme', 'dark-theme');
     } else {
-      htmlElement.style.visibility = 'visible';
+      htmlElement.classList.add('light-theme');
+      checkbox.checked = false; // Uncheck the checkbox
+      localStorage.setItem('theme', 'light-theme');
     }
+  }
 
-    // Function to change the theme
-    function changeTheme(newTheme) {
-      if (savedTheme) {
-        htmlElement.classList.remove(savedTheme);
-      }
+  // Initialize the checkbox state based on the saved theme
+  checkbox.checked = savedTheme !== 'light-theme';
+</script>
+  
 
-      htmlElement.classList.add(newTheme);
-      localStorage.setItem('theme', newTheme);
-    }
 
-  </script>
+
+  
   </body>
 </html>

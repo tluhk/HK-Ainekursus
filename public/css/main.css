@@ -1713,6 +1713,9 @@ input:checked ~ .tab-content{
 .top-2{
   top: 0.5rem;
 }
+.top-4{
+  top: 1rem;
+}
 .top-48{
   top: 12rem;
 }
@@ -2404,11 +2407,14 @@ input:checked ~ .tab-content{
   .lg\:\!top-0{
     top: 0px !important;
   }
-  .lg\:left-0{
-    left: 0px;
+  .lg\:-left-4{
+    left: -1rem;
   }
   .lg\:right-\[-9rem\]{
     right: -9rem;
+  }
+  .lg\:top-0{
+    top: 0px;
   }
   .lg\:top-16{
     top: 4rem;
