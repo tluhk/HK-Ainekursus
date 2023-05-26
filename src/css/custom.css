@@ -3,7 +3,7 @@ html {
 }
 
 main {
-  margin-top: 7rem !important;
+  @apply !mt-16 lg:!mt-28;
 }
 
 .dashboard_content {

@@ -567,8 +567,13 @@ h6{
 html {
   scroll-behavior: smooth;
 }
-main {
-  margin-top: 7rem !important;
+main{
+  margin-top: 4rem !important;
+}
+@media (min-width: 1024px){
+  main{
+    margin-top: 7rem !important;
+  }
 }
 .dashboard_content {
   max-width: 100%;
