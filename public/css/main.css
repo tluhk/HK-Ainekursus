@@ -2137,10 +2137,6 @@ input:checked ~ .tab-content{
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-.py-16{
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-}
 .py-2{
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -2148,6 +2144,10 @@ input:checked ~ .tab-content{
 .py-2\.5{
   padding-top: 0.625rem;
   padding-bottom: 0.625rem;
+}
+.py-20{
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 .py-3{
   padding-top: 0.75rem;
@@ -2487,6 +2487,9 @@ input:checked ~ .tab-content{
   }
   .lg\:block{
     display: block;
+  }
+  .lg\:flex{
+    display: flex;
   }
   .lg\:grid{
     display: grid;

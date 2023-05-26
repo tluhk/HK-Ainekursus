@@ -25,7 +25,7 @@ const panMainContentRight = () => {
 };
 
 // function to close sidebar menus, when clicked outside
-const remMainContent = () => {
+/* const remMainContent = () => {
   const x = document.querySelector('.main-wrapper');
   const y = document.querySelector('.side-btn-wrapper');
   x.classList.remove('left-pan');
@@ -33,7 +33,7 @@ const remMainContent = () => {
 
   y.classList.remove('left-pan');
   y.classList.remove('right-pan');
-};
+}; */
 
 // add class on mediaquery change
 const mediaQuery = window.matchMedia('(min-width: 1024px)');
