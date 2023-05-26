@@ -568,12 +568,7 @@ html {
   scroll-behavior: smooth;
 }
 main{
-  margin-top: 4rem !important;
-}
-@media (min-width: 1024px){
-  main{
-    margin-top: 7rem !important;
-  }
+  margin-top: 5rem !important;
 }
 .dashboard_content {
   max-width: 100%;
@@ -682,12 +677,17 @@ ul.markdown {
   margin-bottom: 0.5rem;
 }
 .side-btn-wrapper{
-  position: sticky;
-  top: 8rem;
+  position: relative;
+  top: 7rem;
   z-index: 2;
   display: flex;
   width: 100%;
   justify-content: space-between;
+}
+@media (min-width: 768px){
+  .side-btn-wrapper{
+    position: sticky;
+  }
 }
 /*   .sidebar {
     @apply top-[194px] lg:top-0 w-80;
@@ -1721,8 +1721,8 @@ input:checked ~ .tab-content{
 .top-8{
   top: 2rem;
 }
-.top-\[-700px\]{
-  top: -700px;
+.top-\[-42rem\]{
+  top: -42rem;
 }
 .top-\[12\.5rem\]{
   top: 12.5rem;
@@ -1767,6 +1767,9 @@ input:checked ~ .tab-content{
 }
 .mb-1{
   margin-bottom: 0.25rem;
+}
+.mb-12{
+  margin-bottom: 3rem;
 }
 .mb-2{
   margin-bottom: 0.5rem;
