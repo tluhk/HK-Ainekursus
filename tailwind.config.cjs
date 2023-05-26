@@ -44,7 +44,7 @@ module.exports = {
     plugin(({ addBase, theme }) => {
       addBase({
         html: {
-          fontSize: '18px',
+          fontSize: '1.125rem',
           fontFamily: 'Montserrat',
         },
         h1: {

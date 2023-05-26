@@ -63,7 +63,8 @@ p {
   margin-bottom: var(--body-paragraph-spacing);
 }
 .display-big {
-  @apply text-6xl lg:text-7xl;
+  /*@apply text-6xl lg:text-7xl;*/
+  font-size: clamp(2.8rem, 16vw, 5.96rem);
   line-height: var(--display-big-line-height);
 }
 .display-sub-serif {
@@ -78,11 +79,11 @@ p {
   text-transform: var(--card-header-text-case);
 }
 html {
-  font-size: 14px;
+  font-size: 87.5%;
 }
 @media (min-width: 1440px) {
   html {
-    font-size: 18px;
+    font-size: 112.5%;
   }
 }
 

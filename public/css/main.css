@@ -315,7 +315,7 @@ video {
   display: none;
 }
 html{
-  font-size: 18px;
+  font-size: 1.125rem;
   font-family: Montserrat;
 }
 h1{
@@ -1370,15 +1370,9 @@ h6 {
 p {
   margin-bottom: var(--body-paragraph-spacing);
 }
-.display-big{
-  font-size: 4.77rem;
-}
-@media (min-width: 1024px){
-  .display-big{
-    font-size: 5.96rem;
-  }
-}
 .display-big {
+  /*@apply text-6xl lg:text-7xl;*/
+  font-size: clamp(2.8rem, 16vw, 5.96rem);
   line-height: var(--display-big-line-height);
 }
 .display-sub-serif{
@@ -1393,11 +1387,11 @@ p {
   text-transform: var(--card-header-text-case);
 }
 html {
-  font-size: 14px;
+  font-size: 87.5%;
 }
 @media (min-width: 1440px) {
   html {
-    font-size: 18px;
+    font-size: 112.5%;
   }
 }
 .material-symbols-outlined {
@@ -1664,7 +1658,7 @@ input:checked ~ .tab-content{
   flex-direction: column;
   width: 48rem;
   max-width: 100%;
-  margin: 5rem auto !important;
+  margin: auto;
 }
 @media (min-width:1024px) {
   .first-page-content {
@@ -1920,6 +1914,9 @@ input:checked ~ .tab-content{
 }
 .basis-48{
   flex-basis: 12rem;
+}
+.basis-\[calc\(75\%-1rem\)\]{
+  flex-basis: calc(75% - 1rem);
 }
 .transform{
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -2399,6 +2396,9 @@ input:checked ~ .tab-content{
   background-color: var(--button-active, #4d2e6b);
 }
 @media (min-width: 640px){
+  .sm\:mt-20{
+    margin-top: 5rem;
+  }
   .sm\:grid{
     display: grid;
   }
