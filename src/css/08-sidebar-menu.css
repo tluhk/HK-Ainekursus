@@ -85,3 +85,11 @@ input:checked ~ .tab-content {
 .right-side-menu a:hover {
   @apply text-link;
 }
+
+/* arrow animations */
+.left-pan #left-side-button i {
+  transform: rotate(900deg);
+}
+.right-pan #right-side-button i {
+  transform: rotate(-900deg);
+}

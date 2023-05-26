@@ -5,21 +5,34 @@ function closeMenu() {
 //function to add or togle sidebar menus
 const panMainContentLeft = () => {
   const x = document.querySelector('.main-wrapper');
+  const y = document.querySelector('.side-btn-wrapper');
   x.classList.toggle('left-pan');
   x.classList.remove('right-pan');
+
+
+  y.classList.toggle('left-pan');
+  y.classList.remove('right-pan');
 };
 
 const panMainContentRight = () => {
   const x = document.querySelector('.main-wrapper');
+  const y = document.querySelector('.side-btn-wrapper');
   x.classList.remove('left-pan');
   x.classList.toggle('right-pan');
+
+  y.classList.remove('left-pan');
+  y.classList.toggle('right-pan');
 };
 
 // function to close sidebar menus, when clicked outside
 const remMainContent = () => {
   const x = document.querySelector('.main-wrapper');
+  const y = document.querySelector('.side-btn-wrapper');
   x.classList.remove('left-pan');
   x.classList.remove('right-pan');
+
+  y.classList.remove('left-pan');
+  y.classList.remove('right-pan');
 };
 
 // add class on mediaquery change
@@ -31,6 +44,17 @@ function handleTabletChange(e) {
     x.classList.toggle('menu-zero');
   }
 }
+
+// scroll first horisontally then vertically, you must use it with: scrollToAnchor('myAnchor');
+const scrollToAnchor = (anchorId) => {
+  const anchorElement = document.getElementById(anchorId);
+  if (anchorElement) {
+    const horizontalOffset = anchorElement.getBoundingClientRect().left + window.scrollX;
+    window.scrollTo({ top: window.scrollY, left: horizontalOffset });
+    anchorElement.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
 
 /* // Register event listener
 mediaQuery.addListener(handleTabletChange);
