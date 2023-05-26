@@ -678,7 +678,7 @@ ul.markdown {
 }
 .side-btn-wrapper{
   position: relative;
-  top: 7rem;
+  top: 8rem;
   z-index: 2;
   display: flex;
   width: 100%;
@@ -1712,20 +1712,17 @@ input:checked ~ .tab-content{
 .top-2{
   top: 0.5rem;
 }
+.top-36{
+  top: 9rem;
+}
 .top-4{
   top: 1rem;
-}
-.top-48{
-  top: 12rem;
 }
 .top-8{
   top: 2rem;
 }
 .top-\[-42rem\]{
   top: -42rem;
-}
-.top-\[12\.5rem\]{
-  top: 12.5rem;
 }
 .z-10{
   z-index: 10;
@@ -2419,6 +2416,15 @@ input:checked ~ .tab-content{
   }
 }
 @media (min-width: 768px){
+  .md\:sticky{
+    position: sticky;
+  }
+  .md\:top-52{
+    top: 13rem;
+  }
+  .md\:top-\[13\.5rem\]{
+    top: 13.5rem;
+  }
   .md\:grid{
     display: grid;
   }
@@ -2451,14 +2457,14 @@ input:checked ~ .tab-content{
   .lg\:top-16{
     top: 4rem;
   }
-  .lg\:top-32{
-    top: 8rem;
+  .lg\:top-36{
+    top: 9rem;
   }
   .lg\:top-\[-4rem\]{
     top: -4rem;
   }
-  .lg\:top-\[8\.5rem\]{
-    top: 8.5rem;
+  .lg\:top-\[9\.5rem\]{
+    top: 9.5rem;
   }
   .lg\:mb-0{
     margin-bottom: 0px;

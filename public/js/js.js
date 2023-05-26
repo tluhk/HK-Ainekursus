@@ -2,7 +2,7 @@ function closeMenu() {
   let x = document.querySelector('.closing-menu');
   x.classList.toggle('menu-zero');
 }
-
+//function to add or togle sidebar menus
 const panMainContentLeft = () => {
   const x = document.querySelector('.main-wrapper');
   x.classList.toggle('left-pan');
@@ -13,6 +13,13 @@ const panMainContentRight = () => {
   const x = document.querySelector('.main-wrapper');
   x.classList.remove('left-pan');
   x.classList.toggle('right-pan');
+};
+
+// function to close sidebar menus, when clicked outside
+const remMainContent = () => {
+  const x = document.querySelector('.main-wrapper');
+  x.classList.remove('left-pan');
+  x.classList.remove('right-pan');
 };
 
 // add class on mediaquery change

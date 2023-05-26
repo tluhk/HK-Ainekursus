@@ -94,7 +94,7 @@ code {
 
 @layer components {
   .side-btn-wrapper {
-    @apply top-28 relative md:sticky z-[2] flex justify-between w-full;
+    @apply top-32 relative md:sticky z-[2] flex justify-between w-full;
   }
   /*   .sidebar {
     @apply top-[194px] lg:top-0 w-80;
