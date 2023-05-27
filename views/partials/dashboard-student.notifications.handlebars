@@ -7,14 +7,14 @@
         <div class='text-md'>Hiljutised teated puuduvad.</div>
       {{/unless }}
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
-        <div class="flex">
+        <div class="flex py-2">
           <div class="!text-base material-symbols-outlined text-system-red-tlu">notifications</div>
-          <div>
+          <div class="w-full">
             <div class="flex justify-between">
               <div class="text-sm">{{this.course.courseName}}</div>
               <div class="text-sm basis-20 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
             </div>
-            <div>
+            <div class="notifications py-2">
               <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
             </div>
             <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}</div>

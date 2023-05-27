@@ -90,3 +90,7 @@ html {
 .material-symbols-outlined {
   font-size: 1.5rem;
 }
+
+.notifications {
+  line-height: var(--notifications-line-height);
+}

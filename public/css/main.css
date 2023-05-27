@@ -1343,6 +1343,7 @@ body {
   --primary-revert-100: #E2D9CF;
   --body-sm-line-height: 125%;
   --body-xs-line-height: 125%;
+  --notifications-line-height: 125%;
 }
 ::-moz-placeholder {
   font-style: italic;
@@ -1419,6 +1420,9 @@ html {
 }
 .material-symbols-outlined {
   font-size: 1.5rem;
+}
+.notifications {
+  line-height: var(--notifications-line-height);
 }
 .dark-theme .logo-on-light {
   display: none;
