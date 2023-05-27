@@ -61,48 +61,6 @@ mediaQuery.addListener(handleTabletChange);
 // Initial check
 handleTabletChange(mediaQuery); */
 
-// ------------------------------ Theme switcher -------------------------------//
-// Retrieve the HTML element
-const htmlElement = document.documentElement;
-
-// Retrieve the saved theme from local storage
-const savedTheme = localStorage.getItem('theme');
-
-// Add the saved theme class to the HTML element if it exists
-if (savedTheme) {
-  htmlElement.classList.add(savedTheme);
-} else {
-  htmlElement.classList.add('dark-theme'); // Add 'dark-theme' class by default
-  localStorage.setItem('theme', 'dark-theme'); // Save the default theme in local storage
-}
-
-// Get the checkbox element
-const checkbox = document.getElementById('switch');
-
-// Function to toggle theme
-function toggleTheme() {
-  if (htmlElement.classList.contains('light-theme')) {
-    htmlElement.classList.remove('light-theme');
-    checkbox.checked = true; // Update the checkbox state first
-    setTimeout(function () {
-      htmlElement.classList.add('dark-theme'); // Add the new class after a short delay
-      localStorage.setItem('theme', 'dark-theme');
-    }, 0);
-  } else {
-    htmlElement.classList.add('light-theme');
-    checkbox.checked = false; // Update the checkbox state first
-    setTimeout(function () {
-      htmlElement.classList.remove('dark-theme'); // Remove the old class after a short delay
-      localStorage.setItem('theme', 'light-theme');
-    }, 0);
-  }
-}
-
-// Initialize the checkbox state based on the saved theme
-checkbox.checked = savedTheme !== 'light-theme';
-
-// ------------------------------ End of Theme switcher -------------------------------//
-
 // copy the anchor link into memory for coping
 
 document.addEventListener('DOMContentLoaded', () => {
