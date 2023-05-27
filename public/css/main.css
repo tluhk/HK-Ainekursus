@@ -2492,8 +2492,8 @@ input:checked ~ .tab-content{
   .md\:h-screen{
     height: 100vh;
   }
-  .md\:w-\[36rem\]{
-    width: 36rem;
+  .md\:w-\[41rem\]{
+    width: 41rem;
   }
   .md\:w-\[inherit\]{
     width: inherit;
