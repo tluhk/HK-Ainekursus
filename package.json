@@ -62,6 +62,7 @@
     "instantclick": "^3.1.0-2",
     "jquery": "^3.6.1",
     "js-base64": "^3.7.2",
+    "js.js": "^0.1.19",
     "jsdom": "^20.0.3",
     "json": "^11.0.0",
     "jsonrepair": "^3.0.3",
