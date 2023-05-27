@@ -7,27 +7,33 @@
         <div class='text-md'>Hiljutised teated puuduvad.</div>
       {{/unless }}
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
-        <div class="flex flex-wrap w-full py-2">
-          <div class="basis-4/6 shrink-0 grow-0 pr-4">
-            <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>
-            {{#if_equal ../this.user.team.slug 'teachers' }}
-              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}} {{../this.course.refBranch}}:</a>
-            {{else }}
-              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
-            {{/if_equal }}</div>
+        <div class="flex py-2">
+                  <div class="!text-base material-symbols-outlined text-system-red-tlu">notifications</div>
+                    <div class="w-full">
+                      <div class="flex justify-between">
+                        <div class="text-sm">
+                          
+                            {{#if_equal ../this.user.team.slug 'teachers' }}
+                              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}} {{../this.course.refBranch}}:</a>
+                            {{else }}
+                              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
+                            {{/if_equal }}
 
-            
-          </div>
-          <div class="text-sm text-right">{{timeSince this.created_at }}</div>
-           
-          <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
-
-          <div class="text-sm text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
-        </div>
-
-        {{#unless @last}}
-        {{/unless}}
-      {{/each }}
+                        </div>
+                        <div class="text-sm basis-20 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}
+                        </div>
+                      </div>
+                      <div class="notifications py-2">
+                        <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
+                      </div>
+                      <div class="text-sm text-right">{{timeSince this.created_at }}
+                      </div>
+                    </div>
+                  </div>
+                  {{#unless @last}}
+                  {{/unless}}
+                  {{/each }}
+                </div>
       <div class="pt-4">
 
         <a class="btn-link" href="/notifications"><span class="material-symbols-outlined">read_more</span>Kõik teated</a>
