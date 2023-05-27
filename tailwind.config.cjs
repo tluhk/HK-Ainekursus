@@ -1,3 +1,4 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
 const { filterTokensByType } = require('./src/tokens/fns.cjs');
 const tokens = require('./src/css/light.json');
 const globalTokens = require('./src/css/global.json');
@@ -21,6 +22,10 @@ module.exports = {
   content: ['./views/**/*.{handlebars,html,js}', './views/home.handlebars'],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
+    screens: {
+      'lgbig': '1160px',
+      ...defaultTheme.screens,
+    },
     fontSize: {
       xs: modularScale(-2),
       sm: modularScale(-1),

@@ -2,6 +2,10 @@ html {
   scroll-behavior: smooth;
 }
 
+a.markdown {
+  text-decoration: underline !important;
+}
+
 main {
   @apply !mt-20;
 }
@@ -120,7 +124,7 @@ code {
   }
 
   .main {
-    @apply w-full lg:w-[var(--main-width)] lg:max-w-[60ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
+    @apply w-full /*lg:w-[var(--main-width)]*/ lg:max-w-[60ch] relative right-0 left-0 lg:!left-auto lg:!right-auto;
     transition: all 0.5s ease-in-out;
   }
   .left-side-menu {
@@ -128,7 +132,7 @@ code {
     transition: all 0.5s ease-in-out;
   }
   .right-side-menu {
-    @apply w-[var(--sidebar-width)] -mr-[var(--sidebar-width)] lg:mr-0 relative right-0;
+    @apply w-[var(--sidebar-width)] -mr-[var(--sidebar-width)] lgbig:mr-0 relative right-0;
     transition: all 0.5s ease-in-out;
   }
 
@@ -143,7 +147,7 @@ code {
     @apply relative -left-[var(--sidebar-width)];
   }
   .right-pan .right-side-menu {
-    @apply relative right-[var(--sidebar-width)] lg:right-0;
+    @apply relative right-[var(--sidebar-width)] lg:-right-8 lgbig:right-0;
   }
 
   /* this is for cover sidemenus with main content */
@@ -235,4 +239,11 @@ ul.markdown {
 .markdown li {
   padding-left: 0.5rem;
   margin-bottom: 0.5rem;
+}
+.markdown li ul li {
+  list-style-type: circle;
+}
+li ul.markdown {
+  margin-top: 0;
+  margin-bottom: 0;
 }

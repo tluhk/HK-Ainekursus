@@ -567,6 +567,9 @@ h6{
 html {
   scroll-behavior: smooth;
 }
+a.markdown {
+  text-decoration: underline !important;
+}
 main{
   margin-top: 5rem !important;
 }
@@ -676,6 +679,13 @@ ul.markdown {
   padding-left: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.markdown li ul li {
+  list-style-type: circle;
+}
+li ul.markdown {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .side-btn-wrapper{
   position: relative;
   top: 8rem;
@@ -719,7 +729,6 @@ aside{
   .main{
     left: auto !important;
     right: auto !important;
-    width: var(--main-width);
     max-width: 60ch;
   }
 }
@@ -747,7 +756,7 @@ aside{
   margin-right: calc(var(--sidebar-width) * -1);
   width: var(--sidebar-width);
 }
-@media (min-width: 1024px){
+@media (min-width: 1160px){
   .right-side-menu{
     margin-right: 0px;
   }
@@ -785,6 +794,11 @@ aside{
   right: var(--sidebar-width);
 }
 @media (min-width: 1024px){
+  .right-pan .right-side-menu{
+    right: -2rem;
+  }
+}
+@media (min-width: 1160px){
   .right-pan .right-side-menu{
     right: 0px;
   }
@@ -2284,6 +2298,9 @@ input:checked ~ .tab-content{
 .text-text{
   color: var(--text, #414a58);
 }
+.underline{
+  text-decoration-line: underline;
+}
 .\!no-underline{
   text-decoration-line: none !important;
 }
@@ -2355,6 +2372,11 @@ input:checked ~ .tab-content{
     right: var(--sidebar-width);
   }
   @media (min-width: 1024px){
+    .lg\:right-pan .right-side-menu{
+      right: -2rem;
+    }
+  }
+  @media (min-width: 1160px){
     .lg\:right-pan .right-side-menu{
       right: 0px;
     }
@@ -2539,12 +2561,11 @@ input:checked ~ .tab-content{
   .lg\:border-0{
     border-width: 0px;
   }
+  .lg\:\!p-10{
+    padding: 2.5rem !important;
+  }
   .lg\:p-4{
     padding: 1rem;
-  }
-  .lg\:\!px-4{
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
   }
   .lg\:px-0{
     padding-left: 0px;
@@ -2586,9 +2607,6 @@ input:checked ~ .tab-content{
 @media (min-width: 1280px){
   .xl\:top-24{
     top: 6rem;
-  }
-  .xl\:\!p-10{
-    padding: 2.5rem !important;
   }
 }
 @media (min-width: 1536px){

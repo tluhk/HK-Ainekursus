@@ -83,3 +83,30 @@ function toggleTheme() {
     setTheme('light-theme');
   }
 })();
+
+// copy the anchor link into memory for coping
+
+document.addEventListener("DOMContentLoaded", function() {
+  var anchors = document.querySelectorAll(".header-anchor");
+
+  anchors.forEach(function(anchor) {
+    anchor.addEventListener("click", function(event) {
+      event.preventDefault();
+
+      var href = window.location.href;
+      var anchorHref = href.split("#")[0] + this.getAttribute("href");
+
+      copyToClipboard(anchorHref);
+      alert("Aadress kopeeritud: " + anchorHref);
+    });
+  });
+});
+
+function copyToClipboard(text) {
+  var dummyElement = document.createElement("textarea");
+  document.body.appendChild(dummyElement);
+  dummyElement.value = text;
+  dummyElement.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummyElement);
+}
