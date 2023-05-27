@@ -9,7 +9,6 @@ const panMainContentLeft = () => {
   x.classList.toggle('left-pan');
   x.classList.remove('right-pan');
 
-
   y.classList.toggle('left-pan');
   y.classList.remove('right-pan');
 };
@@ -49,12 +48,12 @@ function handleTabletChange(e) {
 const scrollToAnchor = (anchorId) => {
   const anchorElement = document.getElementById(anchorId);
   if (anchorElement) {
-    const horizontalOffset = anchorElement.getBoundingClientRect().left + window.scrollX;
+    const horizontalOffset =
+      anchorElement.getBoundingClientRect().left + window.scrollX;
     window.scrollTo({ top: window.scrollY, left: horizontalOffset });
     anchorElement.scrollIntoView({ behavior: 'smooth' });
   }
 };
-
 
 /* // Register event listener
 mediaQuery.addListener(handleTabletChange);
@@ -62,39 +61,17 @@ mediaQuery.addListener(handleTabletChange);
 // Initial check
 handleTabletChange(mediaQuery); */
 
-// Theme switcher
-function setTheme(name) {
-  localStorage.setItem('theme', name);
-  document.documentElement.className = name;
-}
-
-function toggleTheme() {
-  if (localStorage.getItem('theme') === 'dark-theme') {
-    setTheme('light-theme');
-  } else {
-    setTheme('dark-theme');
-  }
-}
-
-(function () {
-  if (localStorage.getItem('theme') === 'dark-theme') {
-    setTheme('dark-theme');
-  } else {
-    setTheme('light-theme');
-  }
-})();
-
 // copy the anchor link into memory for coping
 
-document.addEventListener("DOMContentLoaded", () => {
-  const anchors = document.querySelectorAll(".header-anchor");
+document.addEventListener('DOMContentLoaded', () => {
+  const anchors = document.querySelectorAll('.header-anchor');
 
-  anchors.forEach(anchor => {
-    anchor.addEventListener("click", event => {
+  anchors.forEach((anchor) => {
+    anchor.addEventListener('click', (event) => {
       event.preventDefault();
 
       const href = window.location.href;
-      const anchorHref = `${href.split("#")[0]}${anchor.getAttribute("href")}`;
+      const anchorHref = `${href.split('#')[0]}${anchor.getAttribute('href')}`;
 
       copyToClipboard(anchorHref);
       alert(`Kopeerisid veebiaadressi: ${anchorHref}`);
@@ -102,11 +79,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-const copyToClipboard = text => {
-  const dummyElement = document.createElement("textarea");
+const copyToClipboard = (text) => {
+  const dummyElement = document.createElement('textarea');
   document.body.appendChild(dummyElement);
   dummyElement.value = text;
   dummyElement.select();
-  document.execCommand("copy");
+  document.execCommand('copy');
   document.body.removeChild(dummyElement);
 };
+
+// radiobuttons behavior in lessons pages
+function handleRadioClick(value) {
+  //  console.log('value1:', value);
+  document.getElementById('selectedVersion').value = value;
+  document.getElementById('my-form').submit();
+}
+
+function handleCourseClick(team, courseSlug) {
+  const formId = `overview-${team}-${courseSlug}`;
+  // console.log('formId:', formId);
+  document.getElementById(formId).submit();
+  // console.log('team:', team);
+  // console.log('courseSlug:', courseSlug);
+  document.getElementById(`overview-${team}-${courseSlug}`).submit();
+}
