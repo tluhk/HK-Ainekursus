@@ -78,7 +78,7 @@ markdown.use(mila, {
 // https://github.com/valeriangalliat/markdown-it-anchor
 markdown.use(anchor, {
   permalink: true,
-  permalinkSymbol: '<span class="material-symbols-outlined">link</span>',
+  permalinkSymbol: '<span class="material-symbols-outlined" style="0.75em">share</span>',
 });
 
 // Add anchors' table of contents for right sidebar
