@@ -23,7 +23,7 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     screens: {
-      'lgbig': '1160px',
+      lgbig: '1160px',
       ...defaultTheme.screens,
     },
     fontSize: {

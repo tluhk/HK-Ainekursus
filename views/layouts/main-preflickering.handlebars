@@ -58,6 +58,26 @@
       {{> footer }}
     </footer>
 
+    <script>
+    function handleRadioClick(value) {
+     //  console.log('value1:', value);
+      document.getElementById("selectedVersion").value = value;
+      document.getElementById("my-form").submit();
+    }
+    
+    function handleCourseClick(team, courseSlug) {
+      const formId = `overview-${team}-${courseSlug}`;
+      // console.log('formId:', formId);
+      document.getElementById(formId).submit();
+      // console.log('team:', team);
+      // console.log('courseSlug:', courseSlug);
+      document.getElementById(`overview-${team}-${courseSlug}`).submit(); 
+    }
+    </script>
+
+
+
+
   <!-- script for avoiding flickering on theme change and keeping button in used state -->
   <script>
   // Retrieve the HTML element
@@ -70,35 +90,29 @@
   if (savedTheme) {
     htmlElement.classList.add(savedTheme);
   } else {
-    htmlElement.classList.add('dark-theme'); // Add 'dark-theme' class by default
-    localStorage.setItem('theme', 'dark-theme'); // Save the default theme in local storage
+    htmlElement.style.visibility = 'visible';
   }
 
   // Get the checkbox element
   const checkbox = document.getElementById('switch');
 
-  // Function to toggle theme
+  // Function to toggle the theme
   function toggleTheme() {
     if (htmlElement.classList.contains('light-theme')) {
       htmlElement.classList.remove('light-theme');
-      checkbox.checked = true; // Update the checkbox state first
-      setTimeout(function() {
-        htmlElement.classList.add('dark-theme'); // Add the new class after a short delay
-        localStorage.setItem('theme', 'dark-theme');
-      }, 0);
+      checkbox.checked = true; // Check the checkbox
+      localStorage.setItem('theme', 'dark-theme');
     } else {
       htmlElement.classList.add('light-theme');
-      checkbox.checked = false; // Update the checkbox state first
-      setTimeout(function() {
-        htmlElement.classList.remove('dark-theme'); // Remove the old class after a short delay
-        localStorage.setItem('theme', 'light-theme');
-      }, 0);
+      checkbox.checked = false; // Uncheck the checkbox
+      localStorage.setItem('theme', 'light-theme');
     }
   }
 
   // Initialize the checkbox state based on the saved theme
   checkbox.checked = savedTheme !== 'light-theme';
-</script>
 
+
+</script>
   </body>
 </html>

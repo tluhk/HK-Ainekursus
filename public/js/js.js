@@ -9,7 +9,6 @@ const panMainContentLeft = () => {
   x.classList.toggle('left-pan');
   x.classList.remove('right-pan');
 
-
   y.classList.toggle('left-pan');
   y.classList.remove('right-pan');
 };
@@ -49,12 +48,12 @@ function handleTabletChange(e) {
 const scrollToAnchor = (anchorId) => {
   const anchorElement = document.getElementById(anchorId);
   if (anchorElement) {
-    const horizontalOffset = anchorElement.getBoundingClientRect().left + window.scrollX;
+    const horizontalOffset =
+      anchorElement.getBoundingClientRect().left + window.scrollX;
     window.scrollTo({ top: window.scrollY, left: horizontalOffset });
     anchorElement.scrollIntoView({ behavior: 'smooth' });
   }
 };
-
 
 /* // Register event listener
 mediaQuery.addListener(handleTabletChange);
@@ -63,38 +62,56 @@ mediaQuery.addListener(handleTabletChange);
 handleTabletChange(mediaQuery); */
 
 // Theme switcher
-function setTheme(name) {
-  localStorage.setItem('theme', name);
-  document.documentElement.className = name;
+// Retrieve the HTML element
+const htmlElement = document.documentElement;
+
+// Retrieve the saved theme from local storage
+const savedTheme = localStorage.getItem('theme');
+
+// Add the saved theme class to the HTML element if it exists
+if (savedTheme) {
+  htmlElement.classList.add(savedTheme);
+} else {
+  htmlElement.classList.add('dark-theme'); // Add 'dark-theme' class by default
+  localStorage.setItem('theme', 'dark-theme'); // Save the default theme in local storage
 }
 
+// Get the checkbox element
+const checkbox = document.getElementById('switch');
+
+// Function to toggle theme
 function toggleTheme() {
-  if (localStorage.getItem('theme') === 'dark-theme') {
-    setTheme('light-theme');
+  if (htmlElement.classList.contains('light-theme')) {
+    htmlElement.classList.remove('light-theme');
+    checkbox.checked = true; // Update the checkbox state first
+    setTimeout(function () {
+      htmlElement.classList.add('dark-theme'); // Add the new class after a short delay
+      localStorage.setItem('theme', 'dark-theme');
+    }, 0);
   } else {
-    setTheme('dark-theme');
+    htmlElement.classList.add('light-theme');
+    checkbox.checked = false; // Update the checkbox state first
+    setTimeout(function () {
+      htmlElement.classList.remove('dark-theme'); // Remove the old class after a short delay
+      localStorage.setItem('theme', 'light-theme');
+    }, 0);
   }
 }
 
-(function () {
-  if (localStorage.getItem('theme') === 'dark-theme') {
-    setTheme('dark-theme');
-  } else {
-    setTheme('light-theme');
-  }
-})();
+// Initialize the checkbox state based on the saved theme
+checkbox.checked = savedTheme !== 'light-theme';
 
 // copy the anchor link into memory for coping
 
-document.addEventListener("DOMContentLoaded", () => {
-  const anchors = document.querySelectorAll(".header-anchor");
+document.addEventListener('DOMContentLoaded', () => {
+  const anchors = document.querySelectorAll('.header-anchor');
 
-  anchors.forEach(anchor => {
-    anchor.addEventListener("click", event => {
+  anchors.forEach((anchor) => {
+    anchor.addEventListener('click', (event) => {
       event.preventDefault();
 
       const href = window.location.href;
-      const anchorHref = `${href.split("#")[0]}${anchor.getAttribute("href")}`;
+      const anchorHref = `${href.split('#')[0]}${anchor.getAttribute('href')}`;
 
       copyToClipboard(anchorHref);
       alert(`Kopeerisid veebiaadressi: ${anchorHref}`);
@@ -102,11 +119,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-const copyToClipboard = text => {
-  const dummyElement = document.createElement("textarea");
+const copyToClipboard = (text) => {
+  const dummyElement = document.createElement('textarea');
   document.body.appendChild(dummyElement);
   dummyElement.value = text;
   dummyElement.select();
-  document.execCommand("copy");
+  document.execCommand('copy');
   document.body.removeChild(dummyElement);
 };
+
+// radiobuttons behavior in lessons pages
+function handleRadioClick(value) {
+  //  console.log('value1:', value);
+  document.getElementById('selectedVersion').value = value;
+  document.getElementById('my-form').submit();
+}
+
+function handleCourseClick(team, courseSlug) {
+  const formId = `overview-${team}-${courseSlug}`;
+  // console.log('formId:', formId);
+  document.getElementById(formId).submit();
+  // console.log('team:', team);
+  // console.log('courseSlug:', courseSlug);
+  document.getElementById(`overview-${team}-${courseSlug}`).submit();
+}
