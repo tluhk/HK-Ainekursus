@@ -531,6 +531,10 @@
     "body-xs-line-height": {
       "value": "125%",
       "type": "lineHeights"
+    },
+    "notifications-line-height": {
+      "value": "125%",
+      "type": "lineHeights"
     }
   },
   "light": {
