@@ -1,5 +1,5 @@
 <nav
-  class='nav bg-neutral flex flex-col lg:flex-row justify-between text-white p-8 relative z-10 text-lg lg:text-base'
+  class='nav bg-neutral flex flex-col md:flex-row justify-between text-white p-8 relative z-10 text-lg md:text-base'
 >
   <div class='flex justify-between items-center'>
     <a href='/' class='w-40 sm:w-64 h-auto'>
@@ -18,24 +18,24 @@
     </a>
     <span
       onclick='closeMenu()'
-      class='material-symbols-outlined text-4xl cursor-pointer absolute right-8 lg:hidden'
+      class='material-symbols-outlined text-4xl cursor-pointer absolute right-8 md:hidden'
     >
       menu
     </span>
   </div>
   
   <div
-    class=' gap-4 closing-menu flex flex-col lg:flex-row items-end lg:items-center fixed lg:relative w-full lg:w-auto left-0 lg:pr-0 pb-8 lg:pb-0 top-[-42rem] lg:!top-0'
+    class=' gap-4 closing-menu flex flex-col md:flex-row items-end md:items-center fixed md:relative w-full md:w-auto left-0 md:pr-0 pb-8 md:pb-0 top-[-42rem] md:!top-0'
   >
     <span
       onclick='closeMenu()'
-      class='mt-8 material-symbols-outlined text-4xl cursor-pointer right-8 relative lg:hidden'
+      class='mt-8 material-symbols-outlined text-4xl cursor-pointer right-8 relative md:hidden'
     >
       close
     </span>
   {{#if user}}
     <!-- menu -->
-    <div class="mr-8 z-[52] flex flex-col lg:flex-row lg:justify-evenly items-end lg:items-center gap-4 lg:mr-4 mb-4 lg:mb-0 border-b border-stroke lg:border-0 w-[calc(100%-4rem)] lg:w-[inherit] pb-4 lg:pb-0">
+    <div class="mr-8 z-[52] flex flex-col md:flex-row md:justify-evenly items-end md:items-center gap-4 md:mr-4 mb-4 md:mb-0 border-b border-stroke md:border-0 w-[calc(100%-4rem)] md:w-[inherit] pb-4 md:pb-0">
       <a href="/" class="!text-white !no-underline hover:!underline">Avaleht</a>
       {{!-- <a href="/" class="!text-white !no-underline hover:!underline">Kursused</a> --}}
       <a href="/notifications" class="!text-white !no-underline hover:!underline">Teated</a>
@@ -46,7 +46,7 @@
   {{/if}}
   {{#if user}}
     <!-- user preferences -->
-    <div class="mr-8 lg:mr-0 flex flex-col lg:flex-row items-end group lg:items-center">
+    <div class="mr-8 md:mr-0 flex flex-col md:flex-row items-end group md:items-center">
       <div class="flex items-center gap-4">
         <img class="z-[51] relative w-16 rounded-full" src="{{ user._json.avatar_url }}" alt="Avatar"> 
         <div class="z-[51]">
@@ -63,7 +63,7 @@
 
       <div class="flex flex-row relative text-right">
 
-        <ul class="lg:hidden lg:absolute lg:group-hover:block lg:h-screen lg:top-[-4rem] lg:pt-[6rem] lg:right-[-9rem] lg:px-[2.5rem] lg:pr-[11rem] bg-page-background z-49 list-none lg:p-4 lg:text-end w-max lg:w-[41rem]">
+        <ul class="md:hidden md:absolute md:group-hover:block md:h-screen md:top-[-4rem] md:pt-[6rem] md:-right-40 md:px-[2.5rem] md:pr-[12.5rem] bg-page-background z-49 list-none md:p-4 md:text-end w-max md:w-[36rem]">
           
           <li class="py-2"><a href="/save-displayName" class="underline text-text"><span class="material-symbols-rounded">Muuda nime</span></a></li>
 
@@ -87,7 +87,7 @@
     </div>
   {{/if}}
 
-  <div class="mr-8 lg:mr-0 mode z-10">
+  <div class="mr-8 md:mr-0 mode z-10">
     <input onclick="toggleTheme()" type="checkbox" id="switch" checked="checked">
     <label for="switch">
       <!-- <img src="../images/moon.svg" alt=""> -->

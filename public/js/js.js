@@ -61,7 +61,7 @@ mediaQuery.addListener(handleTabletChange);
 // Initial check
 handleTabletChange(mediaQuery); */
 
-// Theme switcher
+// ------------------------------ Theme switcher -------------------------------//
 // Retrieve the HTML element
 const htmlElement = document.documentElement;
 
@@ -100,6 +100,8 @@ function toggleTheme() {
 
 // Initialize the checkbox state based on the saved theme
 checkbox.checked = savedTheme !== 'light-theme';
+
+// ------------------------------ End of Theme switcher -------------------------------//
 
 // copy the anchor link into memory for coping
 
