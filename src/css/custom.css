@@ -3,7 +3,7 @@ html {
 }
 
 a.markdown {
-  text-decoration: underline !important;
+  @apply border-b-2 border-link-idle hover:border-link-active;
 }
 
 main {

@@ -7,16 +7,20 @@
         <div class='text-md'>Hiljutised teated puuduvad.</div>
       {{/unless }}
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
-        <div class="flex flex-wrap w-full py-2">
-          <div class="basis-4/6 shrink-0 grow-0 pr-4">
-            <div class="text-sm flex" ><span class="!text-base material-symbols-outlined text-system-red-tlu">notifications</span>{{this.course.courseName}}</div>
+        <div class="flex">
+          <div class="!text-base material-symbols-outlined text-system-red-tlu">notifications</div>
+          <div>
+            <div class="flex justify-between">
+              <div class="text-sm">{{this.course.courseName}}</div>
+              <div class="text-sm basis-20 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
+            </div>
+            <div>
+              <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
+            </div>
+            <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}</div>
           </div>
-          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{timeSince this.created_at }}</div>
-           
-          <a class="basis-4/6 shrink-0 grow-0 pr-4" href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{this.body}}</a>
-
-          <div class="text-sm basis-2/6 shrink-0 grow-0 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
         </div>
+
         {{#unless @last}}
         {{/unless}}
       {{/each }}

@@ -47,17 +47,20 @@
   {{#if sources}}
     <div class='sources pt-4'>
       <h4>Allikad:</h4>
-      <div class="markdown flex flex-col">
+      <ul class="markdown">
         {{#each sources}}
-          <a
+        <li>
+            <a
               href='{{this.url}}'
               class="markdown"
               target='_blank'
             >{{this.description}}</a>
+        </li>
         {{/each}}
-      </div>
+      </ul>
     </div>
-  {{/if}}
+  {{/if
+    }}
 
   <!-- NB! The course syllabus link from the config.json file is only displayed on the "about" / Course Information page. -->
 
@@ -74,16 +77,18 @@ Since GitHub adds a ".DS_Store" file to each folder and we don't want to display
   {{#if files}}
     <div class='files pt-4'>
       <h3>Failid:</h3>
-      <div class="markdown">
+      <ul class="markdown">
         {{#each files}}
+        <li>
           <a
               href="#"
               class="markdown"
               onclick="window.open(
                 '{{this.download_url}}','_blank');"
             >{{this.name}}</a>
+        </li> 
         {{/each}}
-      </div>
+      </ul>
     </div>
   {{/if}}
   

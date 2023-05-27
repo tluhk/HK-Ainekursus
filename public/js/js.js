@@ -86,27 +86,27 @@ function toggleTheme() {
 
 // copy the anchor link into memory for coping
 
-document.addEventListener("DOMContentLoaded", function() {
-  var anchors = document.querySelectorAll(".header-anchor");
+document.addEventListener("DOMContentLoaded", () => {
+  const anchors = document.querySelectorAll(".header-anchor");
 
-  anchors.forEach(function(anchor) {
-    anchor.addEventListener("click", function(event) {
+  anchors.forEach(anchor => {
+    anchor.addEventListener("click", event => {
       event.preventDefault();
 
-      var href = window.location.href;
-      var anchorHref = href.split("#")[0] + this.getAttribute("href");
+      const href = window.location.href;
+      const anchorHref = `${href.split("#")[0]}${anchor.getAttribute("href")}`;
 
       copyToClipboard(anchorHref);
-      alert("Aadress kopeeritud: " + anchorHref);
+      alert(`Kopeerisid veebiaadressi: ${anchorHref}`);
     });
   });
 });
 
-function copyToClipboard(text) {
-  var dummyElement = document.createElement("textarea");
+const copyToClipboard = text => {
+  const dummyElement = document.createElement("textarea");
   document.body.appendChild(dummyElement);
   dummyElement.value = text;
   dummyElement.select();
   document.execCommand("copy");
   document.body.removeChild(dummyElement);
-}
+};

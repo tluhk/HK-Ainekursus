@@ -567,8 +567,12 @@ h6{
 html {
   scroll-behavior: smooth;
 }
-a.markdown {
-  text-decoration: underline !important;
+a.markdown{
+  border-bottom-width: 2px;
+  border-color: var(--link-idle, #5c6470);
+}
+a.markdown:hover{
+  border-color: var(--link-active, #4d2e6b);
 }
 main{
   margin-top: 5rem !important;
@@ -1931,6 +1935,9 @@ input:checked ~ .tab-content{
 }
 .basis-2\/6{
   flex-basis: 33.333333%;
+}
+.basis-20{
+  flex-basis: 5rem;
 }
 .basis-3\/4{
   flex-basis: 75%;
