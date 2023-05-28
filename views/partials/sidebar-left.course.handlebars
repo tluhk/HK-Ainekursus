@@ -5,19 +5,27 @@
 
       <!-- DROPDOWN MENU -->
 
-      <div class="sidebarheight card !p-10">
+      <div class="sidebarheight card !p-6">
 
-        <div class="!no-underline mb-4">
+        <div class="!no-underline mb-4 pr-4">
           <!-- Topic name and code -->
           {{#each courses}}
             {{#if_equal this.courseSlug ../path.courseSlug}}
             <a href="/course/{{../../path.courseSlug}}/{{../../docs.[0].slug}}?ref={{../../path.refBranch}}" class="!no-underline">
             <div class="mb-2 w-[22rem] max-w-full">
-              <div class="card-header mb-2">{{../this.courseName}}</div>
-            </div>
+              <div class="card-header mb-2 flex justify-between hover:ml-[-10px] hover:pl-[8px] hover:border-l-2 hover:border-link-action">{{../this.courseName}}<span class="material-symbols-outlined pt-[0.1rem]" style="0.75em">refresh</span></div>
+            </div></a>
             <div class="flex flex-row justify-between flex-wrap flex-end">
               <div class="flex flex-col gap-y-0">
-                  <p class="flex items-start gap-2 m-0 p-0">{{../this.courseCode}}</p>
+              {{/if_equal}}
+            {{/each}}
+
+                  {{#if_equal path.contentSlug 'about'}}
+                    <a class="" href='{{../course.courseUrl}}' target='_blank'>{{../course.courseCode}}</a>
+                  {{/if_equal}}
+
+            {{#each courses}}
+              {{#if_equal this.courseSlug ../path.courseSlug}}
                 <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
                   <p class="flex whitespace-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">confirmation_number</span><span>{{../this.courseEAP}} EAP</span></p>
                   <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">grading</span>{{capitalize ../this.courseGrading}}</p>
@@ -27,7 +35,7 @@
                   <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">person</span>{{#with (findTeacher ../../config.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}</p>
                 </div>
               </div>
-            </a>
+            
             {{/if_equal}}
             {{/each}}
             </div>

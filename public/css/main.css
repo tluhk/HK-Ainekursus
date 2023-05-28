@@ -2082,11 +2082,17 @@ input:checked ~ .tab-content{
 .border-b{
   border-bottom-width: 1px;
 }
+.border-b-2{
+  border-bottom-width: 2px;
+}
 .border-r{
   border-right-width: 1px;
 }
 .border-t-2{
   border-top-width: 2px;
+}
+.border-link-idle{
+  border-color: var(--link-idle, #5c6470);
 }
 .border-primary-600{
   border-color: var(--primary-600, #80609f);
@@ -2112,8 +2118,8 @@ input:checked ~ .tab-content{
 .bg-table-header-cell{
   background-color: var(--table-header-cell, #e6dfec);
 }
-.\!p-10{
-  padding: 2.5rem !important;
+.\!p-6{
+  padding: 1.5rem !important;
 }
 .p-0{
   padding: 0px;
@@ -2236,6 +2242,9 @@ input:checked ~ .tab-content{
 }
 .pt-4{
   padding-top: 1rem;
+}
+.pt-\[0\.1rem\]{
+  padding-top: 0.1rem;
 }
 .text-center{
   text-align: center;
@@ -2387,6 +2396,18 @@ input:checked ~ .tab-content{
     }
   }
 }
+.hover\:ml-\[-10px\]:hover{
+  margin-left: -10px;
+}
+.hover\:border-l-2:hover{
+  border-left-width: 2px;
+}
+.hover\:border-link-action:hover{
+  border-color: var(--link-action, #80609f);
+}
+.hover\:border-link-hover:hover{
+  border-color: var(--link-hover, #80609f);
+}
 .hover\:bg-button-hover:hover{
   background-color: var(--button-hover, #664d80);
 }
@@ -2395,6 +2416,9 @@ input:checked ~ .tab-content{
 }
 .hover\:bg-table-hover-cell:hover{
   background-color: var(--table-hover-cell, #f2eff5);
+}
+.hover\:pl-\[8px\]:hover{
+  padding-left: 8px;
 }
 .hover\:\!underline:hover{
   text-decoration-line: underline !important;
@@ -2600,8 +2624,8 @@ input:checked ~ .tab-content{
   .lg\:overflow-x-clip{
     overflow-x: clip;
   }
-  .lg\:\!p-10{
-    padding: 2.5rem !important;
+  .lg\:\!p-6{
+    padding: 1.5rem !important;
   }
   .lg\:px-0{
     padding-left: 0px;
