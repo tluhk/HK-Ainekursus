@@ -22,6 +22,12 @@ module.exports = {
   content: ['./views/**/*.{handlebars,html,js}', './views/home.handlebars'],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+        serif: ['Roboto', 'serif'],
+      },
+    },
     screens: {
       lgbig: '1160px',
       ...defaultTheme.screens,
