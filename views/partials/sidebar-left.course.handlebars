@@ -17,15 +17,19 @@
             </div></a>
             <div class="flex flex-row justify-between flex-wrap flex-end">
               <div class="flex flex-col gap-y-0">
-              {{/if_equal}}
+                <p class="flex items-start gap-2 m-0 p-0">{{../this.courseCode}}</p>
+                
+              {{!-- {{/if_equal}}
             {{/each}}
 
-                  {{#if_equal path.contentSlug 'about'}}
+                  {{#if_equal this.courseSlug ../path.courseSlug}}
                     <a class="" href='{{../course.courseUrl}}' target='_blank'>{{../course.courseCode}}</a>
                   {{/if_equal}}
 
             {{#each courses}}
-              {{#if_equal this.courseSlug ../path.courseSlug}}
+              {{#if_equal this.courseSlug ../path.courseSlug}} --}}
+
+
                 <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
                   <p class="flex whitespace-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">confirmation_number</span><span>{{../this.courseEAP}} EAP</span></p>
                   <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span class="material-symbols-outlined !text-base">grading</span>{{capitalize ../this.courseGrading}}</p>
