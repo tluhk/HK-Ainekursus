@@ -1537,7 +1537,7 @@ header::before {
   position: relative;
   background: var(--menu-card-background) padding-box,
     var(--menu-card-stroke) border-box;
-  border-radius: 0.75rem;
+  border-radius: 100px;
 }
 .tab-content{
   max-height: 0px;
@@ -1557,7 +1557,7 @@ header::before {
   position: relative;
   background: var(--menu-card-background) padding-box,
     var(--menu-card-stroke) border-box;
-  border-radius: 0.75rem;
+  border-radius: 100px;
 }
 .active-tab-content *,
 .tab-content:hover *{
@@ -1604,7 +1604,7 @@ input:checked ~ .tab-content{
   background: var(--menu-card-background) padding-box,
     var(--menu-card-stroke) border-box;
   border: 2px solid transparent;
-  border-radius: 0.75rem;
+  border-radius: 100px;
 }
 .light-theme .menu-card::before {
   opacity: 0.1;
