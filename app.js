@@ -889,15 +889,35 @@ app.get('/save-email', ensureAuthenticated, (req, res) => {
   if (req.query && req.query.email) message = 'Sisestatud email pole korrektne';
 
   res.send(`
-        <html>
-        <body>
-            <a href="/dashboard"">Tagasi avalehele</a><br>
-            <form action="/save-email" method="post">
-                <span>Sisesta enda email:</span>
-                <input name="email" type="email" placeholder="${email}"/><br>
-                <input type="submit" value="Salvesta"/>
+      <!DOCTYPE html>
+      <html lang='et'>
+      <head>
+      <meta charset='UTF-8' />
+      <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+      <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+      <link rel='stylesheet' href='/css/main.css' />
+      <link
+      rel='stylesheet'
+      href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
+    />
+        <body style="margin:0; display:flex; width:100%; height:100vh; justify-content:center; align-items:center; background-color: #261d30;">
+          <div style="width: 34rem; max-width:100%;
+          padding: 2rem;
+          background-color: white;
+          border-radius: 2rem; position:relative;">
+            <div style="position:absolute;    right: 1rem;
+            top: 1rem;">
+              <a href="javascript:history.back()"><span style="font-size:3rem" class="material-symbols-outlined">
+              cancel
+              </span></a>
+            </div>
+            <div class=" text-lg mt-16 mb-4">Sisesta oma e-mail:</div>
+            <form action="/save-email" method="post" class="input-w-button w-full mb-8">
+                <input class="input-single pr-[calc(6ch+3rem)]" name="email"  type="email" placeholder="${email}"/><br>
+                <input class="btn btn-primary" type="submit" value="Salvesta"/>
             </form>
             <p style="color:red;">${message}</p>
+          </div>  
         </body>
         </html>
     `);
