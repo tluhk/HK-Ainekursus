@@ -18,7 +18,7 @@ const pool = mariadb.createPool({
   sessionTimeout: 60000,
   /* Setting acquireTimeout helps running app WITHOUT Docker quicker (npm run start-app).
   Do NOT enable acquireTimeout on live site WITH Docker (npm start) – this will close database pools to quickly and DB actions will get ignored.  */
-   acquireTimeout: 50, // acquireTimeout option defines the maximum number of milliseconds to wait for a connection to become available in the pool before throwing an error.
+  // acquireTimeout: 50, // acquireTimeout option defines the maximum number of milliseconds to wait for a connection to become available in the pool before throwing an error.
 });
 
 export default pool;
