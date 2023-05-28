@@ -2,8 +2,15 @@ html {
   scroll-behavior: smooth;
 }
 
+a.markdown::after {
+  font-family: 'Material Symbols Outlined';
+  content: 'open_in_new';
+  font-size: 1.25rem;
+  margin-left: 0.25rem;
+}
 a.markdown {
-  @apply border-b-2 border-link-idle hover:border-link-active;
+  display: flex;
+  @apply hover:text-link-action;
 }
 
 main {

@@ -567,12 +567,17 @@ h6{
 html {
   scroll-behavior: smooth;
 }
-a.markdown{
-  border-bottom-width: 2px;
-  border-color: var(--link-idle, #5c6470);
+a.markdown::after {
+  font-family: 'Material Symbols Outlined';
+  content: 'open_in_new';
+  font-size: 1.25rem;
+  margin-left: 0.25rem;
+}
+a.markdown {
+  display: flex;
 }
 a.markdown:hover{
-  border-color: var(--link-active, #4d2e6b);
+  color: var(--link-action, #80609f);
 }
 main{
   margin-top: 5rem !important;
@@ -2082,17 +2087,11 @@ input:checked ~ .tab-content{
 .border-b{
   border-bottom-width: 1px;
 }
-.border-b-2{
-  border-bottom-width: 2px;
-}
 .border-r{
   border-right-width: 1px;
 }
 .border-t-2{
   border-top-width: 2px;
-}
-.border-link-idle{
-  border-color: var(--link-idle, #5c6470);
 }
 .border-primary-600{
   border-color: var(--primary-600, #80609f);
@@ -2405,9 +2404,6 @@ input:checked ~ .tab-content{
 .hover\:border-link-action:hover{
   border-color: var(--link-action, #80609f);
 }
-.hover\:border-link-hover:hover{
-  border-color: var(--link-hover, #80609f);
-}
 .hover\:bg-button-hover:hover{
   background-color: var(--button-hover, #664d80);
 }
@@ -2419,6 +2415,9 @@ input:checked ~ .tab-content{
 }
 .hover\:pl-\[8px\]:hover{
   padding-left: 8px;
+}
+.hover\:text-link-action:hover{
+  color: var(--link-action, #80609f);
 }
 .hover\:\!underline:hover{
   text-decoration-line: underline !important;

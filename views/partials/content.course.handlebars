@@ -65,8 +65,9 @@
   <!-- NB! The course syllabus link from the config.json file is only displayed on the "about" / Course Information page. -->
 
   {{#if_equal path.contentSlug 'about'}}
-  <br>
-  <b>Ainekava: </b><a class=" border-b-2 border-link-idle hover:border-link-hover" href='{{../course.courseUrl}}' target='_blank'>{{../course.courseName}} ({{../course.courseCode}})</a>
+  <div class=""><b>Ainekava: </b><a class="flex items-center hover:text-link-action" href='{{../course.courseUrl}}' target='_blank'>{{../course.courseName}} ({{../course.courseCode}})<span class="material-symbols-outlined">
+open_in_new
+</span></a></div>
   {{/if_equal}}
 
   <!-- NB! Files are only displayed on the Additional Materials pages.
