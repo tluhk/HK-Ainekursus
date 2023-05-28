@@ -811,7 +811,7 @@ app.get('/save-displayName', ensureAuthenticated, (req, res) => {
       rel='stylesheet'
       href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
     />
-        <body style="display:flex; width:100%; height:100vh; justify-content:center; align-items:center; background-color: #7e7e7e;">
+        <body style="display:flex; width:100%; height:100vh; justify-content:center; align-items:center; background-color: #261d30;">
           <div style="width: 34rem; max-width:100%;
           padding: 2rem;
           background-color: white;
@@ -822,7 +822,7 @@ app.get('/save-displayName', ensureAuthenticated, (req, res) => {
               cancel
               </span></a>
             </div>
-            <div class="mt-16 mb-4">Sisesta enda profiilinimi:</div>
+            <div class="mt-16 mb-4">Sisesta sobiv profiilinimi:</div>
             <form action="/save-displayName" method="post" class="input-w-button w-full mb-8">
                 <input class="input-single pr-[calc(6ch+3rem)]" name="displayName" type="text" placeholder="${displayName}"/><br>
                 <input class="btn btn-primary" type="submit" value="Salvesta"/>
