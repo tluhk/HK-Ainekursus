@@ -29,7 +29,7 @@
         <div class="flex flex-nowrap justify-start gap-x-4 items-center mt-4 mb-4 pb-4 pl-4">
           <p class="m-0 p-0">{{courseData.courseCode}}</p>
           <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">account_tree</span>{{courseData.refBranch}} haru</p>
-          <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">confirmation_number</span>{{courseData.courseEAP}} EAP</p>
+          <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grade</span>{{courseData.courseEAP}} EAP</p>
           <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">grading</span>{{capitalize courseData.courseGrading}}</p>
           <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">calendar_month</span>{{courseData.courseSemester}}</p>
           <p class="flex items-start gap-2 m-0 p-0"><span class="material-symbols-outlined">person</span>{{#with (findTeacher courseData.teacherUsername teachers)}}{{this.displayName}}{{/with }}</p>
