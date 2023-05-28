@@ -414,9 +414,8 @@ app.use(getTeamAssignments, async (req, res, next) => {
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
     // eslint-disable-next-line brace-style
-  } /* else {
-
-  /**
+  } else {
+    /**
    * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
    * FOR TESTING, THE APP IS BY DEFAULT LOGGED IN AS seppkh IN TEAM rif20
    *
@@ -454,7 +453,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } 
+  } */
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',
@@ -483,7 +482,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } */
+  }
 
   next();
 });
@@ -800,15 +799,36 @@ app.get('/save-displayName', ensureAuthenticated, (req, res) => {
   // console.log('req.body.displayName1:', req.user);
 
   res.send(`
-        <html>
-        <body>
-            <a href="/dashboard"">Tagasi avalehele</a><br>
-            <form action="/save-displayName" method="post">
-                <span>Sisesta enda profiilinimi:</span>
-                <input name="displayName" type="text" placeholder="${displayName}"/><br>
-                <input type="submit" value="Salvesta"/>
+  <!DOCTYPE html>
+  <html lang='et'>
+  
+    <head>
+      <meta charset='UTF-8' />
+      <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+      <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+      <link rel='stylesheet' href='/css/main.css' />
+      <link
+      rel='stylesheet'
+      href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
+    />
+        <body style="display:flex; width:100%; height:100vh; justify-content:center; align-items:center; background-color: #7e7e7e;">
+          <div style="width: 34rem; max-width:100%;
+          padding: 2rem;
+          background-color: white;
+          border-radius: 2rem; position:relative;">
+            <div style="position:absolute;    right: 1rem;
+            top: 1rem;">
+              <a href="javascript:history.back()"><span style="font-size:3rem" class="material-symbols-outlined">
+              cancel
+              </span></a>
+            </div>
+            <div class="mt-16 mb-4">Sisesta enda profiilinimi:</div>
+            <form action="/save-displayName" method="post" class="input-w-button w-full mb-8">
+                <input class="input-single pr-[calc(6ch+3rem)]" name="displayName" type="text" placeholder="${displayName}"/><br>
+                <input class="btn btn-primary" type="submit" value="Salvesta"/>
             </form>
             <p style="color:red;">${message}</p>
+          </div>  
         </body>
         </html>
     `);
