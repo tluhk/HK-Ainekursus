@@ -414,7 +414,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
     // console.log('userTeam1:', userTeam);
     req.user.team = userTeam;
     // eslint-disable-next-line brace-style
-  } /* else {
+  } else {
     /**
    * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
    * FOR TESTING, THE APP IS BY DEFAULT LOGGED IN AS seppkh IN TEAM rif20
@@ -453,7 +453,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  } 
+  } */
     req.user = {
       id: '132268493',
       nodeId: 'U_kgDOB-JBzQ=',
@@ -482,7 +482,7 @@ app.use(getTeamAssignments, async (req, res, next) => {
       // console.log('userTeam1:', userTeam);
       req.user.team = userTeam;
     }
-  }*/
+  }
 
   next();
 });

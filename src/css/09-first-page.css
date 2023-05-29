@@ -79,3 +79,49 @@
     width: 56rem;
   }
 }
+
+/* first page – fp – decoration */
+@media (min-width: 1024px) {
+
+.fp-bullets{
+  position: relative;
+  padding-left: 0rem;
+}
+.fp-bullets::before {
+  content: '';
+    background-image: url(/images/bullets.png);
+    width: 0.9rem;
+    position: absolute;
+    background-repeat: no-repeat;
+    height: 150%;
+    left: -1.4rem;
+    background-size: 83%;
+    margin-top: 0.7rem;
+}
+.fp-deco {
+  position: relative;
+}
+.fp-deco::before {
+  content: '';
+    background-image: url(/images/crosses.png);
+    position: absolute;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    background-position: 0rem 12.2rem;
+    left: -1rem;
+    background-size: 55%;
+}
+.fp-deco::after {
+  content: '';
+    background-image: url(/images/waves.png);
+    position: absolute;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    background-position: right bottom;
+    bottom: -3rem;
+    left: 0;
+    background-size: 45%;
+}
+}
