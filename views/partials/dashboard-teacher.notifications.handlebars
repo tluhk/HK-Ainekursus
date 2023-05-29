@@ -8,17 +8,13 @@
       {{/unless }}
       {{#each (limit courseUpdates7Days 3) }} {{! Limit displayed notifications to 3 }}
         <div class="flex py-2">
-                  <div class="!text-base material-symbols-outlined text-system-red-tlu">notifications</div>
+                  <div class="!text-base material-symbols-outlined text-system-red-tlu pr-2">notifications</div>
                     <div class="w-full">
                       <div class="flex justify-between">
                         <div class="text-sm">
-                          
-                            {{#if_equal ../this.user.team.slug 'teachers' }}
-                              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}} {{../this.course.refBranch}}:</a>
-                            {{else }}
-                              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
-                            {{/if_equal }}
-
+                          <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">
+                            <div class="text-sm"><span class="font-bold">{{this.course.courseName}}</span> {{this.course.refBranch}} haru</div>
+                          </a>
                         </div>
                         <div class="text-sm basis-20 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}
                         </div>

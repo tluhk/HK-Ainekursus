@@ -30,17 +30,15 @@
               <div class="flex flex-col divide-y divide-stroke">
 
                   <div class="flex py-2">
-          <div class="!text-base material-symbols-outlined text-system-red-tlu">notifications</div>
+          <div class="!text-base material-symbols-outlined text-system-red-tlu pr-2">notifications</div>
           <div class="w-full">
             <div class="flex justify-between">
               <div class="text-sm">
-                
-                  {{#if_equal ../this.user.team.slug 'teachers' }}
-              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}} {{../this.course.refBranch}}:</a>
-            {{else }}
-              <a href="/course/{{this.course.courseSlug}}/about?ref={{this.course.refBranch}}">{{../this.course.courseName}}:</a>
-            {{/if_equal }}
-
+              {{#if_equal ../this.user.team.slug 'teachers' }}
+                <a href="/course/{{../this.course.courseSlug}}/about?ref={{../this.course.refBranch}}"><span class="font-bold">{{../this.course.courseName}}</span> {{../this.course.refBranch}} haru</a>
+              {{else }}
+                <a href="/course/{{../this.course.courseSlug}}/about?ref={{../this.course.refBranch}}"><span class="font-bold">{{../this.course.courseName}}</span></a>
+              {{/if_equal }}
               </div>
               <div class="text-sm basis-20 text-right">{{#with (findTeacher this.user.login ../teachers)}}{{this.displayName}}{{/with }}</div>
             </div>
