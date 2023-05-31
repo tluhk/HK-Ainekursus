@@ -39,7 +39,7 @@
             {{#with (findTeamCourses this.slug ../teamsCourses)}}
             <div class="flex items-start gap-2 m-0 pb-2">Tiimile nähtavad ainekursused ja nende vaikimisi harud:</div>
               
-              <div class="sm:grid grid-cols-2 gap-4">
+              <div class="flex flex-col sm:grid grid-cols-2 gap-4">
 
                 {{#each this}}
                 <!-- Hidden form to send req.body values -->
