@@ -1,1 +1,0 @@
-window.onload=function(){var e=document.documentElement,t=document.getElementById("switch");e.classList.contains("light-theme")&&(t.checked=!1)};
