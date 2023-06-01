@@ -9,10 +9,6 @@ import path, { join } from 'path';
 import exphbs from 'express-handlebars';
 import favicon from 'serve-favicon';
 
-// compression
-import compression from 'compression';
-import expressStaticGzip from 'express-static-gzip';
-
 /** Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
@@ -56,9 +52,6 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Enable Brotli compression for dynamic responses
-app.use(compression());
-
 /** To run app live in Railway, then chekout production branch and delete the following block refering Livereload – this blocks Railway page */
 /* import { createServer } from 'livereload';
 import connectLivereload from 'connect-livereload';
@@ -84,24 +77,7 @@ app.set('view engine', 'handlebars');
 app.set('views', join(__dirname, '/views'));
 
 /** Define application static folder */
-// delete comment idf not using compression in next line // app.use(express.static(join(__dirname, '/public')));
-// use compression instead of previos line
-// Serve static files from the 'public' directory with Brotli compression
-app.use(
-  '/',
-  expressStaticGzip(join(__dirname, '/public'), {
-    enableBrotli: true,
-    orderPreference: ['br', 'gz'],
-    setHeaders: (res, path) => {
-      if (path.endsWith('.br')) {
-        res.setHeader('Content-Encoding', 'br');
-      } else if (path.endsWith('.gz')) {
-        res.setHeader('Content-Encoding', 'gzip');
-      }
-    },
-  })
-);
-// end of compression
+app.use(express.static(join(__dirname, '/public')));
 
 /** Define favicon file */
 app.use(favicon(join(__dirname, '/public/images', 'favicon.ico')));
