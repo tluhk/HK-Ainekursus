@@ -21,7 +21,8 @@
     "build-tw": "NODE_ENV=production postcss ./src/css/01-main-style-mixer.css -o ./public/css/main.css",
     "build-tw-minify": "NODE_ENV=production postcss ./src/css/01-main-style-mixer.css -o ./public/css/main.min.css",
     "compress:css": "./node_modules/brotli/compress.js -Z ./public/css/main.min.css",
-    "build": "npm run build-transform && npm run build-sd && npm run build-tw"
+    "build": "npm run build-transform && npm run build-sd && npm run build-tw",
+    "minify-js": "node --experimental-modules minify.js"
   },
   "repository": {
     "type": "git",
@@ -58,6 +59,7 @@
     "express-session": "^1.17.3",
     "express-static-gzip": "^2.1.7",
     "flowbite": "^1.6.3",
+    "fs-extra": "^11.1.1",
     "github-username-regex": "^1.0.0",
     "handlebars-utils": "^1.0.6",
     "helmet": "^6.0.1",
@@ -100,6 +102,7 @@
     "read-markdown": "^1.0.2",
     "serve-favicon": "^2.5.0",
     "shelljs": "^0.8.5",
+    "terser": "^5.17.6",
     "tooltip": "^1.6.1",
     "use": "^3.1.1",
     "utf8": "^3.0.0"

@@ -103,3 +103,5 @@ function handleCourseClick(team, courseSlug) {
   // console.log('courseSlug:', courseSlug);
   document.getElementById(`overview-${team}-${courseSlug}`).submit();
 }
+
+
