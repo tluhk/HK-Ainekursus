@@ -83,9 +83,6 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', join(__dirname, '/views'));
 
-/** Define application static folder */
-// delete comment idf not using compression in next line // app.use(express.static(join(__dirname, '/public')));
-// use compression instead of previos line
 // Serve static files from the 'public' directory with Brotli compression
 app.use(
   '/',
@@ -101,7 +98,7 @@ app.use(
     },
   })
 );
-// end of compression
+
 
 /** Define favicon file */
 app.use(favicon(join(__dirname, '/public/images', 'favicon.ico')));
