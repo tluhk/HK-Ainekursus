@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-empty */
 /* eslint-disable import/newline-after-import */
-import base64 from 'base-64';
 
-import utf8 from 'utf8';
 import mila from 'markdown-it-link-attributes';
 import blockEmbedPlugin from 'markdown-it-block-embed';
 import playgroundPlugin from 'markdown-it-playground';
@@ -126,4 +124,4 @@ markdown.use(markdownImagination, {
   lazy: true,
 });
 
-export { base64, utf8, markdown };
+export default markdown ;

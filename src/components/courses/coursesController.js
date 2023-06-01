@@ -3,7 +3,9 @@
 import 'core-js/actual/array/group-by.js';
 
 import { performance } from 'perf_hooks';
-import { base64, utf8, markdown } from '../../setup/setupMarkdown.js';
+import markdown from '../../setup/setupMarkdown.js';
+import base64 from 'base-64';
+import utf8 from 'utf8';
 
 // Enable in-memory cache
 import getAllCoursesData from '../../functions/getAllCoursesData.js';

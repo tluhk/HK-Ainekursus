@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import { jsonrepair } from 'jsonrepair';
 import base64 from 'base-64';
-
 import utf8 from 'utf8';
+
 import { axios, authToken } from '../setup/setupGithub.js';
 
 import { cacheConfig } from '../setup/setupCache.js';
