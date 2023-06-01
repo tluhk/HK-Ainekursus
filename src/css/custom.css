@@ -16,11 +16,6 @@ a.markdown {
 main {
   @apply !mt-20;
 }
-/* for going to main content */
-.skip:focus {
-  left: 0;
-  z-index: 99999;
-}
 
 .dashboard_content {
   max-width: 100%;
