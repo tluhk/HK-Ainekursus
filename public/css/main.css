@@ -582,6 +582,11 @@ a.markdown:hover{
 main{
   margin-top: 5rem !important;
 }
+/* for going to main content */
+.skip:focus {
+  left: 0;
+  z-index: 99999;
+}
 .dashboard_content {
   max-width: 100%;
   width: 60rem;
