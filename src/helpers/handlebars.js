@@ -1,19 +1,16 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable max-len */
-/* eslint-disable no-script-url */
 // https://stackoverflow.com/a/40956931
 // CommonJS export Alternative:
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
 
-import moment from 'moment';
+import moment from "moment";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // import { checkServerIdentity } from 'tls';
 
-moment.locale('et');
+moment.locale("et");
 
 // Siin saab defineerida handlebarsiga seotud detaile.
 // Helpers objekti alla saab lisada funktsioone, mida kasutada lisaks built-in helpersitele
@@ -21,19 +18,21 @@ moment.locale('et');
 // handlebar options: https://stackoverflow.com/a/40898191
 export default function hbsHelpers(hbs) {
   return hbs.create({
-    defaultLayout: 'main',
-    layoutsDir: path.join(__dirname, '../..', '/views/layouts'),
-    partialsDir: path.join(__dirname, '../..', '/views/partials'),
+    defaultLayout: "main",
+    layoutsDir: path.join(__dirname, "../..", "/views/layouts"),
+    partialsDir: path.join(__dirname, "../..", "/views/partials"),
     helpers: {
       if_equal: (a, b, opts) => {
         if (a === b) {
           return opts.fn(this);
-        } return opts.inverse(this);
+        }
+        return opts.inverse(this);
       },
       if_not_equal: (a, b, opts) => {
         if (a !== b) {
           return opts.fn(this);
-        } return opts.inverse(this);
+        }
+        return opts.inverse(this);
       },
       last: (array) => array[array.length - 1].path,
 
@@ -77,19 +76,23 @@ export default function hbsHelpers(hbs) {
       },
       componentIcon: (type) => {
         switch (type) {
-          case 'docs': return 'attach_file';
-          case 'concepts': return 'sticky_note_2';
-          case 'practice': return 'home_repair_service';
-          default: return '';
-            // do nothing
+          case "docs":
+            return "attach_file";
+          case "concepts":
+            return "sticky_note_2";
+          case "practice":
+            return "home_repair_service";
+          default:
+            return "";
+          // do nothing
         }
       },
       showComponentType: (component, concepts, practices) => {
         // https://stackoverflow.com/a/50909930
         const checkMatch = (obj) => obj.slug === component;
-        if (concepts.some(checkMatch)) return 'sticky_note_2';
-        if (practices.some(checkMatch)) return 'build';
-        return 'attach_file';
+        if (concepts.some(checkMatch)) return "sticky_note_2";
+        if (practices.some(checkMatch)) return "build";
+        return "attach_file";
       },
       showComponentName: (componentUppercase, concepts, practices) => {
         const component = componentUppercase.toLowerCase();
@@ -97,7 +100,7 @@ export default function hbsHelpers(hbs) {
         // console.log('component5:', component);
         // console.log('components5:', components);
 
-        const comp = components.find((x) => (x.slug.toLowerCase()) === component);
+        const comp = components.find((x) => x.slug.toLowerCase() === component);
         // console.log('comp.name5:', comp.name);
         return comp.name;
       },
@@ -106,11 +109,12 @@ export default function hbsHelpers(hbs) {
         const components = concepts.concat(practices);
         // console.log('components6:', components);
 
-        const comp = components.find((x) => (x.slug.toLowerCase()) === component);
+        const comp = components.find((x) => x.slug.toLowerCase() === component);
         // console.log('comp.uuid6:', comp.uuid);
         return comp.uuid;
       },
-      capitalize: (aString) => aString.charAt(0).toUpperCase() + aString.slice(1),
+      capitalize: (aString) =>
+        aString.charAt(0).toUpperCase() + aString.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       findTeacher: (teacherName, teachers) => {
         // console.log('teacherName2:', teacherName);
@@ -124,9 +128,9 @@ export default function hbsHelpers(hbs) {
          */
         if (!teacherData) {
           teacher = {
-            login: 'Määramata',
-            displayName: 'Määramata õppejõud',
-            avatar_url: '/images/anonymous-avatar.png',
+            login: "Määramata",
+            displayName: "Määramata õppejõud",
+            avatar_url: "/images/anonymous-avatar.png",
           };
         } else {
           teacher = {
@@ -161,14 +165,19 @@ export default function hbsHelpers(hbs) {
          * For students
          */
         if (selectedVersion && branchSlug === selectedVersion) {
-          return 'checked';
+          return "checked";
         }
         if (!selectedVersion && branchSlug === refBranch) {
-          return 'checked';
+          return "checked";
         }
-        if (!selectedVersion && !branches.includes(refBranch) && branchSlug === 'master') {
-          return 'checked';
-        } return '';
+        if (
+          !selectedVersion &&
+          !branches.includes(refBranch) &&
+          branchSlug === "master"
+        ) {
+          return "checked";
+        }
+        return "";
       },
       add: (a, b) => {
         return a + b;
@@ -176,28 +185,44 @@ export default function hbsHelpers(hbs) {
       createPath: (currentPath) => {
         const { courseSlug, contentSlug, componentSlug } = currentPath;
 
-        if (courseSlug && contentSlug && componentSlug) return `/course/${courseSlug}/${contentSlug}/${componentSlug}`;
-        if (courseSlug && contentSlug && !componentSlug) return `/course/${courseSlug}/${contentSlug}`;
-        if (courseSlug && !contentSlug && !componentSlug) return `/course/${courseSlug}`;
-        return '';
+        if (courseSlug && contentSlug && componentSlug)
+          return `/course/${courseSlug}/${contentSlug}/${componentSlug}`;
+        if (courseSlug && contentSlug && !componentSlug)
+          return `/course/${courseSlug}/${contentSlug}`;
+        if (courseSlug && !contentSlug && !componentSlug)
+          return `/course/${courseSlug}`;
+        return "";
       },
       limit: (arr, limit) => {
-        if (!Array.isArray(arr)) { return []; }
+        if (!Array.isArray(arr)) {
+          return [];
+        }
         return arr.slice(0, limit);
       },
       timeSince: (date) => moment(date).fromNow(),
-      matchingDoneComponentsCount: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
+      matchingDoneComponentsCount: (
+        markedAsDoneComponentsUUIDs,
+        courseBranchComponentsUUIDs,
+      ) => {
         // console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
         // console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
-        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) =>
+          courseBranchComponentsUUIDs.includes(item),
+        ).length;
 
         return commonElementsCount;
       },
-      matchingDoneComponentsPercent: (markedAsDoneComponentsUUIDs, courseBranchComponentsUUIDs) => {
+      matchingDoneComponentsPercent: (
+        markedAsDoneComponentsUUIDs,
+        courseBranchComponentsUUIDs,
+      ) => {
         // console.log('markedAsDoneComponentsUUIDs7:', markedAsDoneComponentsUUIDs);
         // console.log('courseBranchComponentsUUIDs7:', courseBranchComponentsUUIDs);
-        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) => courseBranchComponentsUUIDs.includes(item)).length;
-        const percent = commonElementsCount/courseBranchComponentsUUIDs.length*100;
+        const commonElementsCount = markedAsDoneComponentsUUIDs.filter((item) =>
+          courseBranchComponentsUUIDs.includes(item),
+        ).length;
+        const percent =
+          (commonElementsCount / courseBranchComponentsUUIDs.length) * 100;
 
         // console.log('percent1:', percent);
         return percent;

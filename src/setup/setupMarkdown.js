@@ -2,28 +2,28 @@
 /* eslint-disable no-empty */
 /* eslint-disable import/newline-after-import */
 
-import mila from 'markdown-it-link-attributes';
-import blockEmbedPlugin from 'markdown-it-block-embed';
-import playgroundPlugin from 'markdown-it-playground';
-import hljs from 'highlight.js';
-import iframe from 'markdown-it-iframe';
-import markdownImagination from 'markdown-it-imagination';
-import MarkdownIt from 'markdown-it';
+import mila from "markdown-it-link-attributes";
+import blockEmbedPlugin from "markdown-it-block-embed";
+import playgroundPlugin from "markdown-it-playground";
+import hljs from "highlight.js";
+import iframe from "markdown-it-iframe";
+import markdownImagination from "markdown-it-imagination";
+import MarkdownIt from "markdown-it";
 
 // Enable markdown file parser
 // https://github.com/markdown-it/markdown-it
 
-// Add anchors to markdown headings
+// Add anchors to Markdown headings
 // https://github.com/valeriangalliat/markdown-it-anchor
-import anchor from 'markdown-it-anchor';
+import anchor from "markdown-it-anchor";
 
 // Add anchors' table of contents for right sidebar
 // https://www.npmjs.com/package/markdown-it-toc-done-right
-import anchorToc from 'markdown-it-toc-done-right';
+import anchorToc from "markdown-it-toc-done-right";
 
 //  Add certain classes to selected elements in markdown files, needed for CSS
 // https://github.com/HiroshiOkada/markdown-it-class
-import markdownItClass from '@toycode/markdown-it-class';
+import markdownItClass from "@toycode/markdown-it-class";
 const markdown = new MarkdownIt({
   html: true, // Enable HTML tags in source
   xhtmlOut: true, // Use '/' to close single tags (<br />).
@@ -41,21 +41,21 @@ const markdown = new MarkdownIt({
     }
 
     return `<pre class="markdown-pre"><code>${markdown.utils.escapeHtml(
-      str
+      str,
     )}</code></pre>`;
   },
-}).enable('image');
+}).enable("image");
 
 const mapContent = {
-  ol: 'markdown',
-  ul: 'markdown',
-  a: 'markdown',
-  h1: 'markdown-wrapper',
-  h2: 'markdown-wrapper',
-  h3: 'markdown-wrapper',
-  h4: 'markdown-wrapper',
-  iframe: 'markdown-iframe',
-  img: 'markdown-iframe',
+  ol: "markdown",
+  ul: "markdown",
+  a: "markdown",
+  h1: "markdown-wrapper",
+  h2: "markdown-wrapper",
+  h3: "markdown-wrapper",
+  h4: "markdown-wrapper",
+  iframe: "markdown-iframe",
+  img: "markdown-iframe",
 };
 markdown.use(markdownItClass, mapContent);
 
@@ -64,11 +64,11 @@ markdown.use(markdownItClass, mapContent);
 markdown.use(mila, {
   // Don't add attributes to links that start with '#', e.g. anchor links: https://www.npmjs.com/package/markdown-it-link-attributes
   matcher(href) {
-    return !href.startsWith('#');
+    return !href.startsWith("#");
   },
   attrs: {
-    target: '_blank',
-    rel: 'noopener',
+    target: "_blank",
+    rel: "noopener",
   },
 });
 
@@ -76,24 +76,25 @@ markdown.use(mila, {
 // https://github.com/valeriangalliat/markdown-it-anchor
 markdown.use(anchor, {
   permalink: true,
-  permalinkSymbol: '<span class="material-symbols-outlined" style="0.75em">share</span>',
+  permalinkSymbol:
+    '<span class="material-symbols-outlined" style="0.75em">share</span>',
 });
 
 // Add anchors' table of contents for right sidebar
 // https://www.npmjs.com/package/markdown-it-toc-done-right
 markdown.use(anchorToc, {
-  containerClass: 'table-of-contents-from-markdown-123',
-  listClass: 'table-of-contents',
-  listType: 'ul',
-  itemClass: 'table-of-contents',
-  linkClass: 'table-of-contents',
+  containerClass: "table-of-contents-from-markdown-123",
+  listClass: "table-of-contents",
+  listType: "ul",
+  itemClass: "table-of-contents",
+  linkClass: "table-of-contents",
   level: 1,
 });
 
 // Add embed video support
 // https://github.com/rotorz/markdown-it-block-embed
 markdown.use(blockEmbedPlugin, {
-  containerClassName: 'video-embed',
+  containerClassName: "video-embed",
   /* services: {
     sisuloome: {
       width: 600,
@@ -114,8 +115,8 @@ markdown.use(iframe, {
   allowfullscreen: false,
   frameborder: 0, // default: 0
   renderIframe: true, // default: true
-  width: '100%',
-  height: '500px',
+  width: "100%",
+  height: "500px",
 });
 
 // Specify image rendering
@@ -124,4 +125,4 @@ markdown.use(markdownImagination, {
   lazy: true,
 });
 
-export default markdown ;
+export default markdown;
