@@ -23,6 +23,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
   <html lang='et'>
   
     <head>
+    <title></title>
       <meta charset='UTF-8' />
       <meta http-equiv='X-UA-Compatible' content='IE=edge' />
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -70,18 +71,14 @@ router.post("/", ensureAuthenticated, async (req, res) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      // console.log('Connected to MariaDB!');
 
-      const res1 = await conn.query(
-        "UPDATE users SET displayName = ? WHERE githubID = ?;",
-        [req.body.displayName, user.id],
-      );
-      // console.log('res1:', res1);
+      await conn.query("UPDATE users SET displayName = ? WHERE githubID = ?;", [
+        req.body.displayName,
+        user.id,
+      ]);
       req.user.displayName = req.body.displayName;
 
       // Flush caches that store users names so that users names would be shown correctly across app.
-      // console.log(`usersInTeam1: usersInTeam+${user.team.slug}`);
-
       cacheTeamUsers.del(`usersInTeam+${user.team.slug}`);
       cacheCommitComments.flushAll();
     } catch (err) {
@@ -91,10 +88,6 @@ router.post("/", ensureAuthenticated, async (req, res) => {
       if (conn) conn.release(); // release to pool
     }
   }
-  // console.log('req.user1:', req.user);
-  // console.log('user.id1:', user.id);
-  // console.log('req.body.displayName1:', req.body.displayName);
-
   return res.redirect("/dashboard");
 });
 

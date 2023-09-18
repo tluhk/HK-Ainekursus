@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable no-empty */
-/* eslint-disable import/newline-after-import */
-
 import mila from "markdown-it-link-attributes";
 import blockEmbedPlugin from "markdown-it-block-embed";
 import playgroundPlugin from "markdown-it-playground";
@@ -37,7 +33,9 @@ const markdown = new MarkdownIt({
         return `<pre class="markdown-pre"><code>${
           hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
         }</code></pre>`;
-      } catch (__) {}
+      } catch (__) {
+        // do nothing here
+      }
     }
 
     return `<pre class="markdown-pre"><code>${markdown.utils.escapeHtml(

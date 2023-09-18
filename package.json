@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "bash setup-docker.sh && npm run start-app",
     "start-app": "nodemon --ext js,mjs,json,css,handlebars --es-module-specifier-resolution=node app.js",
-    "lint": "eslint",
+    "lint": "eslint src",
     "pull-tokens": "node src/tokens/pulltokens.cjs",
     "build-transform-global": "npx token-transformer --expandTypography=true src/tokens/figma-tokens.json src/tokens/converted-tokens/global.json global",
     "build-transform-light": "npx token-transformer --expandShadow=true src/tokens/figma-tokens.json src/tokens/converted-tokens/light.json global,light,theme global",

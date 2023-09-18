@@ -24,7 +24,7 @@ router.post("/", ensureAuthenticated, async (req, res) => {
       );
 
       if (res6[0]) {
-        const res7 = await conn.query(
+        await conn.query(
           "UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT('$.', ?)) WHERE githubID = ? AND courseCode = ?;",
           [componentUUID, githubID, courseSlug],
         );

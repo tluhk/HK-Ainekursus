@@ -19,6 +19,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
       <!DOCTYPE html>
       <html lang='et'>
       <head>
+      <title></title>
       <meta charset='UTF-8' />
       <meta http-equiv='X-UA-Compatible' content='IE=edge' />
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -58,7 +59,7 @@ router.post("/", ensureAuthenticated, async (req, res) => {
    */
   if (
     !req.body.email ||
-    !req.body.email.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)
+    !req.body.email.trim().match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/)
   ) {
     return res.redirect("/save-email?email=true");
   }
@@ -67,11 +68,10 @@ router.post("/", ensureAuthenticated, async (req, res) => {
   try {
     conn = await pool.getConnection();
 
-    const res2 = await conn.query(
-      "UPDATE users SET email = ? WHERE githubID = ?;",
-      [req.body.email, user.id],
-    );
-    // console.log('res2:', res2);
+    await conn.query("UPDATE users SET email = ? WHERE githubID = ?;", [
+      req.body.email,
+      user.id,
+    ]);
     req.user.email = req.body.email;
 
     // Flush caches that stores users emails so that users emails would be shown correctly across app.
@@ -83,9 +83,6 @@ router.post("/", ensureAuthenticated, async (req, res) => {
   } finally {
     if (conn) conn.release(); // release to pool
   }
-  // console.log('req.user1:', req.user);
-  // console.log('user.id1:', user.id);
-  // console.log('req.body.email1:', req.body.email);
 
   return res.redirect("/dashboard");
 });

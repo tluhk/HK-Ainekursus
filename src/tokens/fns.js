@@ -4,7 +4,7 @@ function deepen(obj) {
   // For each object path (property key) in the object
   for (const objectPath in obj) {
     // Split path into component parts
-    const parts = objectPath.split('.');
+    const parts = objectPath.split(".");
 
     // Create sub-objects along path as needed
     let target = result;
@@ -14,13 +14,13 @@ function deepen(obj) {
     }
 
     // Set value at end of path
-    target[parts[0]] = obj[objectPath]
+    target[parts[0]] = obj[objectPath];
   }
 
   return result;
 }
 
-function createArray({ dictionary, platform }) {
+function createArray({ dictionary }) {
   const arr = dictionary.allTokens;
   return JSON.stringify(arr);
 }
@@ -28,13 +28,12 @@ function createArray({ dictionary, platform }) {
 function filterTokensByType(type, tokens) {
   const obj = tokens.reduce((acc, cur) => {
     if (cur.type === type) {
-      acc[cur.path.join(".")] = `var(--${cur.name}, ${cur.value})`
+      acc[cur.path.join(".")] = `var(--${cur.name}, ${cur.value})`;
     }
-    return acc
-  }, {})
+    return acc;
+  }, {});
 
-  const deep = deepen(obj)
-  return deep
+  return deepen(obj);
 }
 
-module.exports = { createArray, filterTokensByType };
+export { createArray, filterTokensByType };

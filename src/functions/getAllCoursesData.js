@@ -1,19 +1,15 @@
-/* eslint-disable max-len */
-/* eslint-disable camelcase */
-import { performance } from 'perf_hooks';
-
-import cheerio from 'cheerio';
-
-import { axios, authToken } from '../setup/setupGithub.js';
-import { cacheTeamCourses, cacheOisContent } from '../setup/setupCache.js';
-import githubReposRequests from './githubReposRequests.js';
-import getConfig from './getConfigFuncs.js';
-import apiRequests from '../components/courses/coursesService.js';
+import { performance } from "perf_hooks";
+import * as cheerio from "cheerio";
+import { authToken, axios } from "../setup/setupGithub.js";
+import { cacheOisContent, cacheTeamCourses } from "../setup/setupCache.js";
+import githubReposRequests from "./githubReposRequests.js";
+import getConfig from "./getConfigFuncs.js";
+import apiRequests from "../components/courses/coursesService.js";
 
 const { requestTeamCourses, requestRepos } = githubReposRequests;
 
-const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_name, refBranch)
-  .then(async (config) => {
+const coursePromise = (param, refBranch, validBranches) =>
+  getConfig(param.full_name, refBranch).then(async (config) => {
     if (!config) {
       console.log(`No config found for ${param.full_name}, ${refBranch}`);
       return {};
@@ -38,16 +34,21 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
           const { data } = response;
           const $ = cheerio.load(data);
 
-          $('.yldaine_r', data).each(function () {
-            const ryhmHeader = $(this).find('div.ryhmHeader').text();
-            const yldaine_c1 = $(this).find('div.yldaine_c1').text();
-            const yldaine_c2 = $(this).find('div.yldaine_c2').text();
+          $(".yldaine_r", data).each(function () {
+            const ryhmHeader = $(this).find("div.ryhmHeader").text();
+            const yldaine_c1 = $(this).find("div.yldaine_c1").text();
+            const yldaine_c2 = $(this).find("div.yldaine_c2").text();
 
-            if (ryhmHeader && ryhmHeader !== '') oisContent.oisName = ryhmHeader;
-            if (yldaine_c1 && yldaine_c1 === 'Õppeaine kood') oisContent.code = yldaine_c2;
-            if (yldaine_c1 && yldaine_c1 === 'Õppeaine nimetus eesti k') oisContent.name = yldaine_c2;
-            if (yldaine_c1 && yldaine_c1 === 'Õppeaine maht EAP') oisContent.EAP = yldaine_c2;
-            if (yldaine_c1 && yldaine_c1 === 'Kontrollivorm') oisContent.grading = yldaine_c2;
+            if (ryhmHeader && ryhmHeader !== "")
+              oisContent.oisName = ryhmHeader;
+            if (yldaine_c1 && yldaine_c1 === "Õppeaine kood")
+              oisContent.code = yldaine_c2;
+            if (yldaine_c1 && yldaine_c1 === "Õppeaine nimetus eesti k")
+              oisContent.name = yldaine_c2;
+            if (yldaine_c1 && yldaine_c1 === "Õppeaine maht EAP")
+              oisContent.EAP = yldaine_c2;
+            if (yldaine_c1 && yldaine_c1 === "Kontrollivorm")
+              oisContent.grading = yldaine_c2;
             // if (yldaine_c1 && yldaine_c1 === 'Õppeaine eesmärgid') oisContent.eesmargid = yldaine_c2;
             // if (yldaine_c1 && yldaine_c1 === 'Õppeaine sisu lühikirjeldus') oisContent.summary = yldaine_c2;
             // if (yldaine_c1 && yldaine_c1 === 'Õppeaine õpiväljundid') oisContent.opivaljundid = yldaine_c2;
@@ -78,8 +79,12 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
     // console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
 
     const allComponentsUUIDs = [
-      ...config.concepts.filter((concept) => allComponentSlugsFlat.includes(concept.slug)).map((concept) => concept.uuid),
-      ...config.practices.filter((practice) => allComponentSlugsFlat.includes(practice.slug)).map((practice) => practice.uuid),
+      ...config.concepts
+        .filter((concept) => allComponentSlugsFlat.includes(concept.slug))
+        .map((concept) => concept.uuid),
+      ...config.practices
+        .filter((practice) => allComponentSlugsFlat.includes(practice.slug))
+        .map((practice) => practice.uuid),
     ];
 
     // console.log('allComponentsUUIDs5:', allComponentsUUIDs);
@@ -106,7 +111,7 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_
     };
   });
 
-const getAllCoursesData = (async (teamSlug, req) => {
+const getAllCoursesData = async (teamSlug, req) => {
   // console.log('teamSlug4:', teamSlug);
   /**
    * Read Course repos only if the user exists, they are in a team and team.slug exists!
@@ -123,15 +128,18 @@ const getAllCoursesData = (async (teamSlug, req) => {
     console.log(`❌❌ team courses IS NOT from cache: ${routePath}`);
 
     /** For TEACHERS get all possible HK_ repos  */
-    if (teamSlug && (teamSlug === 'master' || teamSlug === 'teachers')) {
+    if (teamSlug && (teamSlug === "master" || teamSlug === "teachers")) {
       courses = await axios.get(requestRepos, authToken).catch((error) => {
         console.error(error);
       });
-    /** For STUDENTS get only HK_ repos where they have access to */
-    } if (teamSlug && teamSlug !== 'master' && teamSlug !== 'teachers') {
-      courses = await axios.get(requestTeamCourses(teamSlug), authToken).catch((error) => {
-        console.error(error);
-      });
+      /** For STUDENTS get only HK_ repos where they have access to */
+    }
+    if (teamSlug && teamSlug !== "master" && teamSlug !== "teachers") {
+      courses = await axios
+        .get(requestTeamCourses(teamSlug), authToken)
+        .catch((error) => {
+          console.error(error);
+        });
     }
     cacheTeamCourses.set(routePath, courses);
   } else {
@@ -144,66 +152,57 @@ const getAllCoursesData = (async (teamSlug, req) => {
   // console.log('courses1:', courses);
 
   /*
-  * Filter only repos that start with "HK_" prefix.
+   * Filter only repos that start with "HK_" prefix.
    */
-  const coursesStartingWithHK = courses.data.filter((x) => x.name.startsWith('HK_')); // && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
+  const coursesStartingWithHK = courses.data.filter((x) =>
+    x.name.startsWith("HK_"),
+  ); // && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
 
   /**
    * Return empty array if tluhk org doesn't have any repos starting with "HK_"
    */
   if (!coursesStartingWithHK) return [];
 
-  // console.log('coursesStartingWithHK:', coursesStartingWithHK);
-
   const allCourses = coursesStartingWithHK.map(async (course) => {
-    // const start5 = performance.now();
-    const validBranches = await apiRequests.validBranchesService(course.full_name);
-    // const end5 = performance.now();
-    // console.log(`Execution time validBranches: ${end5 - start5} ms`);
+    const validBranches = await apiRequests.validBranchesService(
+      course.full_name,
+    );
 
-    // console.log('course.full_name4:', course.full_name);
-    // console.log('validBranches4:', validBranches);
     let refBranch;
     if (validBranches && validBranches.includes(teamSlug)) {
       refBranch = teamSlug;
-    } else if (validBranches.length && teamSlug === 'teachers') {
+    } else if (validBranches.length && teamSlug === "teachers") {
       // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20 branchi ainet. Pead kontrollima kõiki branche!
       const branchConfigPromises = validBranches.map(async (branch) => {
         const config = await getConfig(course.full_name, branch);
-        // console.log('config4:', config);
         if (config) return config;
       });
       const branchConfigs = await Promise.all(branchConfigPromises);
-      // console.log('branchConfigs1:', branchConfigs);
-
-      const correctBranchIndex = branchConfigs.findIndex((config) => config.teacherUsername === user.username);
-
-      // console.log('branchConfigs1:', branchConfigs);
-      // console.log('correctBranchIndex1:', correctBranchIndex);
+      const correctBranchIndex = branchConfigs.findIndex(
+        (config) => config.teacherUsername === user.username,
+      );
 
       if (correctBranchIndex > -1) {
         refBranch = validBranches[correctBranchIndex];
       } else if (correctBranchIndex <= -1) {
-        const firstActiveBranchIndex = branchConfigs.findIndex((config) => config.active === true);
+        const firstActiveBranchIndex = branchConfigs.findIndex(
+          (config) => config.active === true,
+        );
         refBranch = validBranches[firstActiveBranchIndex];
-      } else refBranch = 'master';
+      } else refBranch = "master";
     } else {
-      refBranch = 'master';
+      refBranch = "master";
     }
-    // console.log('refBranch4:', refBranch);
 
-    /** Get selected course info from ÕIS Ainekaart with coursePromise() func. */
-    const courseDataWithOIS = await coursePromise(course, refBranch, validBranches);
-
-    return courseDataWithOIS;
+    return await coursePromise(course, refBranch, validBranches);
   });
-  // console.log('map1:', map1);
 
   /** Filter out and return only course object where the object is not empty.
    * It's possible that getConfig()
    */
-  return Promise.all(allCourses)
-    .then((results) => results.filter((item) => Object.keys(item).length > 0));
-});
+  return Promise.all(allCourses).then((results) =>
+    results.filter((item) => Object.keys(item).length > 0),
+  );
+};
 
 export default getAllCoursesData;

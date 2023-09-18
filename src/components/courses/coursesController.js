@@ -1,15 +1,10 @@
-/* eslint-disable max-len */
-/* eslint-disable no-undef */
 import "core-js/actual/array/group-by.js";
 
 import { performance } from "perf_hooks";
 import markdown from "../../setup/setupMarkdown.js";
 import base64 from "base-64";
 import utf8 from "utf8";
-
-// Enable in-memory cache
 import getAllCoursesData from "../../functions/getAllCoursesData.js";
-
 import getConfig from "../../functions/getConfigFuncs.js";
 import { function1 } from "../../functions/imgFunctions.js";
 import {
@@ -31,8 +26,8 @@ const responseAction = async (req, res, next) => {
   const { githubRequest } = res.locals;
 
   let apiResponse;
-  // eslint-disable-next-line no-prototype-builtins
-  if (apiRequests.hasOwnProperty(githubRequest)) {
+  //if (apiRequests.hasOwnProperty(githubRequest)) {
+  if (Object.prototype.hasOwnProperty.call(apiRequests, githubRequest)) {
     let func;
 
     try {
@@ -41,32 +36,23 @@ const responseAction = async (req, res, next) => {
       console.log(`Unable to get ${githubRequest}`);
       console.error(error);
     }
-    // console.log('func1:', func);
     await func(req, res).then((response) => {
-      // console.log('response1:', response);
       apiResponse = response;
     });
   }
-  // console.log('githubRequest1:', githubRequest);
-  // console.log('githubRequest1type:', typeof githubRequest);
 
   const { components, files, sources } = apiResponse;
-  // console.log('components1:', components);
-  // console.log('files1:', files);
-  // console.log('sources1:', sources);
-
-  res.locals.resComponents = components;
-  res.locals.resFiles = files;
-  res.locals.resSources = sources;
 
   /** If GitHub API responds with no data for components, sources or files, then save those as empty to res.locals + render an empty page.
    * GitHub API responds with no data if there's inconsistency in the course repo files or folder. E.g. if the config file refers to a folder with lowercase ("arvuti"), but the folder name in GitHub is actually camelcase ("Arvuti"). This is inconsistent and GitHub API does not respond with data if the folder name is sent incorrectly with the API request.
    * We require the teacher to write all folder names lowercase.
    * There's no good way to validate that folder names are all in lowercase, and if not, then change to lowercase from GitHub's side.
    */
-  if (!components) res.locals.resComponents = { data: { content: "" } };
-  if (!sources) res.locals.resSources = { data: { content: "" } };
-  if (!files) res.locals.resFiles = [];
+  res.locals.resComponents = components
+    ? components
+    : { data: { content: "" } };
+  res.locals.resFiles = files ? files : [];
+  res.locals.resSources = sources ? sources : { data: { content: "" } };
 
   return next();
 };
@@ -92,12 +78,6 @@ const renderPage = async (req, res) => {
   } = res.locals;
 
   const { resComponents, resFiles, resSources, refBranch } = res.locals;
-
-  // console.log('req.user55:', req.user);
-
-  // console.log('resComponents in responseAction:', resComponents);
-  // console.log('resFiles in responseAction:', resComponents);
-
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
   const componentDecoded = base64.decode(resComponentsContent);
@@ -122,7 +102,6 @@ const renderPage = async (req, res) => {
   /** Add Table of Contents markdown element to Markdown before rendering Markdown */
   const markdownWithModifiedImgSourcesToc =
     markdownWithModifiedImgSources.concat("\n\n ${toc} \n");
-  // console.log('markdownWithModifiedImgSourcesToc:', markdownWithModifiedImgSourcesToc);
 
   /** Render Markdown */
   const start2 = performance.now();
@@ -131,7 +110,6 @@ const renderPage = async (req, res) => {
   );
   const end2 = performance.now();
   console.log(`Execution time componentMarkdown: ${end2 - start2} ms`);
-  // console.log('componentMarkdown:', componentMarkdown);
 
   /** Select html from rendered Markdown, but exclude Table of Contents */
   const componentMarkdownWithoutTOC = componentMarkdown.substring(
@@ -146,6 +124,7 @@ const renderPage = async (req, res) => {
     const result = str.match(new RegExp(`${start}(.*)${end}`));
     return result[1];
   }
+
   const componentMarkdownOnlyTOCWithoutNav = getStringBetween(
     componentMarkdown,
     '<nav class="table-of-contents-from-markdown-123">',
@@ -157,8 +136,6 @@ const renderPage = async (req, res) => {
    * componentMarkdownWithoutTOC
    * componentMarkdownOnlyTOC
    */
-  // console.log('componentMarkdownWithoutTOC:', componentMarkdownWithoutTOC);
-  // console.log('componentMarkdownOnlyTOC:', componentMarkdownOnlyTOC);
 
   /** Each sisuleht (concepts, practices) has a sources reference which is stored in sources.json file in GitHub. */
   // define sources as NULL by default.
@@ -174,13 +151,10 @@ const renderPage = async (req, res) => {
     const sources = resSources.data;
     const sourcesDecoded = base64.decode(sources.content);
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
-    // console.log('sourcesDecodedUtf8:', sourcesDecodedUtf8);
     if (sourcesDecodedUtf8) sourcesJSON = JSON.parse(sourcesDecodedUtf8);
   }
 
   /** Finally you can render the course view with all correct information you've collected from GitHub, and with all correctly rendered Markdown content! */
-
-  // console.log('branches1:', branches);
   res.render("course", {
     component: componentMarkdownWithoutTOC,
     docs: config.docs,
@@ -227,9 +201,7 @@ const allCoursesController = {
     const allCourses = await getAllCoursesData(teamSlug, req);
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
-    // console.log('allCourses5:', allCourses);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    // console.log('allCoursesActive5:', allCoursesActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
@@ -240,12 +212,10 @@ const allCoursesController = {
     res.locals.allCoursesActive = allCoursesActive;
     res.locals.allTeacher = allTeachers;
 
-    /* By default, courses are displayed on dashboard by their name. Set coursesDisplayBy to 'name'
+    /** By default, courses are displayed on dashboard by their name. Set coursesDisplayBy to 'name'
      * If coursesDisplayBy is provided, use this instead - courses are then displayed on dashboard by Name, Progress or Semester.
      * Save coursesDisplayBy to req.session, so dashboard would be loaded with last visited coursesDisplayBy.
      */
-    // console.log('req.session.coursesDisplayBy1:', req.session.coursesDisplayBy);
-    // console.log('req.query.coursesDisplayBy1:', req.query.coursesDisplayBy);
     let coursesDisplayBy = req.session.coursesDisplayBy || "name";
 
     /** For INVALID coursesDisplayBy parameters, OR if teacher tries to load courses by Progress, redirect back to /dashboard page.
@@ -281,7 +251,7 @@ const allCoursesController = {
     /** Following describes different DASHBOARD logics for TEACHER, based on given coursesDisplayBy */
     if (isTeacher) {
       /*
-       * Filter allCoursesActive where the teacher is logged in user
+       * Filter allCoursesActive where the teacher is logged-in user
        */
       const allTeacherCourses = allCoursesActive.filter(
         (course) => course.teacherUsername === req.user.username,
@@ -319,10 +289,6 @@ const allCoursesController = {
           );
           return acc;
         }, {});
-      // console.log('allTeacherCourses5:', allTeacherCourses);
-      // console.log('allCoursesGroupedByTeacher1:', allCoursesGroupedByTeacher);
-      // console.log('allTeachers1:', allTeachers);
-      // console.log('sortedCoursesGroupedByTeacher1:', sortedCoursesGroupedByTeacher);
 
       /**
        * Get last 7 day notifications for active courses, needed for dashboard
@@ -459,17 +425,17 @@ const allCoursesController = {
 
       /** Test entries for student: */
       /* courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
-      courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
-      courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
-      courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
-      // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
-      // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
-      // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
-      courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
-      courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
-      courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
-      courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
-      courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
+                  courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
+                  courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
+                  courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
+                  // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
+                  // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
+                  // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
+                  courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
+                  courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
+                  courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
+                  courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
+                  courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
 
       // console.log('allTeachers1:', allTeachers);
       /** Rendering student's dashboard if courses are displayed by Name */

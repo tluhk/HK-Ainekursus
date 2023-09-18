@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const auth = process.env.AUTH;
-
 // console.log('auth0:', auth);
 
 // GitHub API token

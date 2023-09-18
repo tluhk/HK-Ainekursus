@@ -1,9 +1,6 @@
-/* eslint-disable max-len */
-
-import axios from 'axios';
-
-import githubAuthRequests from '../../functions/githubAuthRequests.js';
-import { authToken } from '../../setup/setupGithub.js';
+import axios from "axios";
+import githubAuthRequests from "../../functions/githubAuthRequests.js";
+import { authToken } from "../../setup/setupGithub.js";
 
 const { searchUsers, getUser } = githubAuthRequests;
 
@@ -12,20 +9,19 @@ const { searchUsers, getUser } = githubAuthRequests;
  */
 const apiRequests = {
   getUsernameLinkedToPublicEmail: async (email) => {
-    const usernameRaw = await axios.get(searchUsers(email), authToken).catch((error) => {
-      console.error(error);
-    });
-    // console.log('usernameRaw1:', usernameRaw);
-    const user = usernameRaw.data;
-    // console.log('user1:', user);
-
-    return user;
+    const usernameRaw = await axios
+      .get(searchUsers(email), authToken)
+      .catch((error) => {
+        console.error(error);
+      });
+    return usernameRaw.data;
   },
   getUserFromGithub: async (username) => {
-    const userFromGithub = await axios.get(getUser(username), authToken).catch((error) => {
-      console.error(error);
-    });
-    // console.log('userFromGithub1.5:', userFromGithub);
+    const userFromGithub = await axios
+      .get(getUser(username), authToken)
+      .catch((error) => {
+        console.error(error);
+      });
     return userFromGithub;
   },
 };
