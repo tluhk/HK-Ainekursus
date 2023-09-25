@@ -1,10 +1,13 @@
 const baseUrl = "https://api.github.com";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Github API request endpoints
 const githubReposRequests = {
-  requestRepos: `${baseUrl}/orgs/tluhk/repos`,
+  requestRepos: `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/repos`,
   requestTeamCourses: (teamSlug) =>
-    `${baseUrl}/orgs/tluhk/teams/${teamSlug}/repos`,
+    `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/teams/${teamSlug}/repos`,
   requestRepoBranches: (coursePathInGithub) =>
     `${baseUrl}/repos/${coursePathInGithub}/branches`,
   // config

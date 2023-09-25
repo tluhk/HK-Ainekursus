@@ -3,7 +3,6 @@ import express from "express";
 import path, { join } from "path";
 import exphbs from "express-handlebars";
 import favicon from "serve-favicon";
-
 /** Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
@@ -23,12 +22,10 @@ import otherController from "./src/components/other/otherController.js";
 import membersController from "./src/components/members/membersController.js";
 import teamsController from "./src/components/teams/teamsController.js";
 import allNotificationsController from "./src/components/notifications/notificationsController.js";
-
 /** Import handlebars helpers: https://stackoverflow.com/a/32707476 */
 import handlebarsFactory from "./src/helpers/handlebars.js";
-
-import resetSelectedVersion from "./src/middleware/resetSelectedVersion.js";
 /** Import middleware's */
+import resetSelectedVersion from "./src/middleware/resetSelectedVersion.js";
 import ensureAuthenticated from "./src/middleware/ensureAuthenticated.js";
 import validateTeacher from "./src/middleware/validateTeacher.js";
 import getTeamAssignments from "./src/middleware/getTeamAssignments.js";
@@ -60,10 +57,6 @@ liveReloadServer.server.once('connection', () => {
   }, 100);
 });
 app.use(connectLivereload()); */
-
-/*app.get("/login", (req, res) => {
-  res.render("login", { layout: "index" });
-});*/
 
 /** Set up Handlebars views */
 const handlebars = handlebarsFactory(exphbs);
@@ -534,3 +527,5 @@ app.all("*", resetSelectedVersion, otherController.notFound);
 app.listen(port, () => {
   console.log(`App is running`);
 });
+
+export default app;
