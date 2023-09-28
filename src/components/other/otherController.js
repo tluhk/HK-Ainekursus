@@ -9,7 +9,14 @@ const otherController = {
   /**
    * for not authorized not login (GitHub user not part of tluhk organisation)
    */
-  noAuth: (req, res) => res.render("noauth", {}),
+  noAuth: (req, res) => {
+    const adminName = process.env.ADMIN_NAME;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    res.render("noauth", {
+      adminName,
+      adminEmail,
+    });
+  },
 };
 
 export default otherController;

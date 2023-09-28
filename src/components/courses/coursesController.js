@@ -186,6 +186,9 @@ const renderPage = async (req, res) => {
 const allCoursesController = {
   /** For '/dashboard' route: */
   getAllCourses: async (req, res) => {
+    const adminName = process.env.ADMIN_NAME;
+    const adminEmail = process.env.ADMIN_EMAIL;
+
     let teamSlug;
     if (req.user && req.user.team) teamSlug = req.user.team.slug;
     /**
@@ -302,6 +305,8 @@ const allCoursesController = {
       /** Rendering teacher's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === "name") {
         return res.render("dashboard-teacher", {
+          adminName,
+          adminEmail,
           coursesDisplayBy,
           courses: allTeacherCourses,
           user: req.user,
@@ -362,6 +367,8 @@ const allCoursesController = {
         // console.log('sortedCoursesGroupedBySemesterWithFullNames1:', sortedCoursesGroupedBySemesterWithFullNames);
 
         return res.render("dashboard-teacher", {
+          adminName,
+          adminEmail,
           coursesDisplayBy,
           courses: sortedCoursesGroupedBySemesterWithFullNames,
           user: req.user,
@@ -443,6 +450,8 @@ const allCoursesController = {
         return res.render("dashboard-student", {
           coursesDisplayBy,
           courses,
+          adminName,
+          adminEmail,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
           teachers: allTeachers,
@@ -483,6 +492,8 @@ const allCoursesController = {
         return res.render("dashboard-student", {
           coursesDisplayBy,
           courses,
+          adminName,
+          adminEmail,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
           teachers: allTeachers,
@@ -542,6 +553,8 @@ const allCoursesController = {
 
         return res.render("dashboard-student", {
           coursesDisplayBy,
+          adminName,
+          adminEmail,
           courses: sortedCoursesGroupedBySemesterWithFullNames,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
