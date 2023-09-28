@@ -51,7 +51,7 @@ router.post("/", ensureAuthenticated, async (req, res) => {
       console.log("Unable to mark component as done");
       console.error(err);
     } finally {
-      if (conn) conn.release(); // release to pool
+      if (conn) await conn.release(); // release to pool
     }
   }
 

@@ -81,7 +81,7 @@ router.post("/", ensureAuthenticated, async (req, res) => {
     console.error(err);
     console.log("Unable to update user email in database");
   } finally {
-    if (conn) conn.release(); // release to pool
+    if (conn) await conn.release(); // release to pool
   }
 
   return res.redirect("/dashboard");

@@ -3,7 +3,6 @@ import express from "express";
 import path, { join } from "path";
 import exphbs from "express-handlebars";
 import favicon from "serve-favicon";
-
 /** Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
@@ -23,17 +22,15 @@ import otherController from "./src/components/other/otherController.js";
 import membersController from "./src/components/members/membersController.js";
 import teamsController from "./src/components/teams/teamsController.js";
 import allNotificationsController from "./src/components/notifications/notificationsController.js";
-
 /** Import handlebars helpers: https://stackoverflow.com/a/32707476 */
 import handlebarsFactory from "./src/helpers/handlebars.js";
-
-import resetSelectedVersion from "./src/middleware/resetSelectedVersion.js";
 /** Import middleware's */
+import resetSelectedVersion from "./src/middleware/resetSelectedVersion.js";
 import ensureAuthenticated from "./src/middleware/ensureAuthenticated.js";
 import validateTeacher from "./src/middleware/validateTeacher.js";
 import getTeamAssignments from "./src/middleware/getTeamAssignments.js";
 /** Import routes */
-import authRoutes from "./src/routes/auth-routes.js";
+import logoutRoutes from "./src/routes/logout.js";
 import progressRoutes from "./src/routes/progress.js";
 import saveEmailRoutes from "./src/routes/save-email.js";
 import saveDisplayNameRoutes from "./src/routes/save-username.js";
@@ -47,7 +44,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-/** To run app live in Railway, then chekout production branch and delete the following block refering Livereload – this blocks Railway page */
+/** To run app live in Railway, then checkout production branch and delete the following block refering Livereload – this blocks Railway page */
 /* import { createServer } from 'livereload';
 import connectLivereload from 'connect-livereload';
 
@@ -60,10 +57,6 @@ liveReloadServer.server.once('connection', () => {
   }, 100);
 });
 app.use(connectLivereload()); */
-
-/*app.get("/login", (req, res) => {
-  res.render("login", { layout: "index" });
-});*/
 
 /** Set up Handlebars views */
 const handlebars = handlebarsFactory(exphbs);
@@ -116,7 +109,7 @@ app.use(passport.session());
 
 /** Middleware for parsing bodies from URL. Options can be found here. Source code can be found here.
  * https://github.com/expressjs/body-parser#bodyparserurlencodedoptions
- * // { extended: true } precises that the req.body object will contain values of any type instead of just strings. https://stackoverflow.com/a/55558485
+ * // { extended: true } precises that the req.Body object will contain values of any type instead of just strings. https://stackoverflow.com/a/55558485
  */
 const { urlencoded } = pkg;
 app.use(urlencoded({ extended: true }));
@@ -129,12 +122,13 @@ app.use(urlencoded({ extended: true }));
 };*/
 
 /** Setup passport session.
- //   To support persistent login sessions, Passport needs to be able to
- //   serialize users into and deserialize users out of the session.  Typically,
- //   this will be as simple as storing the user ID when serializing, and finding
- //   the user by ID when deserializing. However, since this example does not
- //   have a database of user records, the complete GitHub profile is serialized
- //   and deserialized. */
+ To support persistent login sessions, Passport needs to be able to
+ serialize users into and deserialize users out of the session.  Typically,
+ this will be as simple as storing the user ID when serializing, and finding
+ the user by ID when deserializing. However, since this example does not
+ have a database of user records, the complete GitHub profile is serialized
+ and deserialized.
+ */
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -157,7 +151,7 @@ passport.deserializeUser((obj, done) => {
  * check if githubID exists in users
  * -- if yes, check that DB user data is up-to-date with GitHub user data
  * -- if no, add githubUser to DB users
- * -- if yes, read user's displayName and/or email info from Database. Everything else about the user is read from Github.
+ * -- if yes, read user's displayName and/or email info from Database. Everything else about the user is read from GitHub.
  */
 
 /** Function to check if user exists in DB and insert/update/read user's displayName and email from DB.
@@ -168,18 +162,14 @@ async function userDBFunction(userData) {
   let conn;
   try {
     conn = await pool.getConnection();
-    // console.log('Connected to MariaDB1');
-    // console.log(`connected ! connection id is ${conn.threadId}`);
-
     /**
      * If user exists in DB, don't insert new user. Check if DB data matches with BE data. If not, get users' displayName and email data from DB.
-     * If user doesn't exist in DB, insert it to DB based on values in github. If displayName doesn't exist, use username to save this to DB. Return same github values you insert to DB.
+     * If user doesn't exist in DB, insert it to DB based on values in GitHub. If displayName doesn't exist, use username to save this to DB. Return same GitHub values you insert to DB.
      */
 
     const user = await conn.query("SELECT * FROM users WHERE githubID = ?", [
       githubID,
     ]);
-    // console.log('user1:', user);
 
     if (user[0]) {
       if (user[0].displayName && displayName !== user[0].displayName) {
@@ -232,8 +222,6 @@ passport.use(
         // console.log('GitHubStrategy1:', { accessToken, refreshToken, profile });
         // console.log('accessToken1:', accessToken);
 
-        // eslint-disable-next-line no-param-reassign
-
         /** Double check that GitHub user is part of tluhk GitHub org members.
          * If not, forbid access by not returning passport profile.
          * If yes, return GitHub user profile with the passport.
@@ -260,11 +248,6 @@ passport.use(
           email,
         };
 
-        // console.log('id1:', id);
-        // console.log('username1:', username);
-        // console.log('displayName1:', displayName);
-        // console.log('_json.email1:', _json.email);
-
         /**
          * Read user data from DB.
          * If user NOT in DB, insert user data.
@@ -280,10 +263,6 @@ passport.use(
             profile.displayName = userDataAfterDB.displayName;
           if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
         }
-
-        // console.log('userInOrgMembers1:', userInOrgMembers);
-        // console.log('profile1:', profile);
-        // console.log('Logged in');
 
         console.log("Logging in...");
         /**
@@ -396,7 +375,7 @@ app.get("/login", (req, res) => {
    */
   if (req.query.invalid)
     message =
-      "Sisestatud Githubi kasutajanimi pole korrektne või ei kuulu kolledži kasutajate hulka";
+      "Sisestatud Github kasutajanimi pole korrektne või ei kuulu kolledži kasutajate hulka";
   if (req.query.email) message = "Emaili sisestamine pole lubatud";
 
   return res.render("login", {
@@ -406,13 +385,13 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res, next) => {
   /**
-   * If entered value is empty, redirect back to login and show "invalid username" message
+   * If entered value is empty, redirect back to log in and show "invalid username" message
    */
   if (!req.body.login || !req.body.login.trim())
     return res.redirect("/login?invalid=true");
 
   /**
-   * If entered value is email, redirect back to login and show "entering email is not allowed" message
+   * If entered value is email, redirect back to log in and show "entering email is not allowed" message
    */
   // eslint-disable-next-line no-useless-escape
   if (req.body.login.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) {
@@ -420,11 +399,11 @@ app.post("/login", async (req, res, next) => {
     return res.redirect("/login?email=true");
   }
 
-  /** If entered username doesn't exist in Github, redirect back to login and show "invalid username" message */
+  /** If entered username doesn't exist in GitHub, redirect back to log in and show "invalid username" message */
   // const userFromGithub = await apiRequests.getUserFromGithub(req.body.login);
   // if (!userFromGithub) return res.redirect('/login?invalid=true');
 
-  /**  If entered username doesn't exist in Github tluhk organisation members, redirect back to login and show "invalid username" message */
+  /**  If entered username doesn't exist in GitHub tluhk organisation members, redirect back to log in and show "invalid username" message */
   const userInOrgMembers = await membersController.isUserInOrgMembers(
     req.body.login,
   );
@@ -525,7 +504,7 @@ app.get("/noauth", otherController.noAuth);
 app.use("/save-displayName", saveDisplayNameRoutes);
 app.use("/save-email", saveEmailRoutes);
 app.use("/progress-overview", progressRoutes);
-app.use("/auth", authRoutes);
+app.use("/logout", logoutRoutes);
 
 /** Redirect all unknown paths to 404 page */
 app.all("*", resetSelectedVersion, otherController.notFound);
@@ -534,3 +513,5 @@ app.all("*", resetSelectedVersion, otherController.notFound);
 app.listen(port, () => {
   console.log(`App is running`);
 });
+
+export default app;

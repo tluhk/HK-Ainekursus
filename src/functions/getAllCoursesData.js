@@ -5,6 +5,9 @@ import { cacheOisContent, cacheTeamCourses } from "../setup/setupCache.js";
 import githubReposRequests from "./githubReposRequests.js";
 import getConfig from "./getConfigFuncs.js";
 import apiRequests from "../components/courses/coursesService.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { requestTeamCourses, requestRepos } = githubReposRequests;
 
@@ -155,7 +158,7 @@ const getAllCoursesData = async (teamSlug, req) => {
    * Filter only repos that start with "HK_" prefix.
    */
   const coursesStartingWithHK = courses.data.filter((x) =>
-    x.name.startsWith("HK_"),
+    x.name.startsWith(process.env.REPO_PREFIX),
   ); // && x.html_url !== 'https://github.com/tluhk/HK_Programmeerimine_II');
 
   /**
