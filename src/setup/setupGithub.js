@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const auth = process.env.AUTH;
-// console.log('auth0:', auth);
+const auth = `Bearer ${process.env.AUTH}`;
 
 // GitHub API token
 const authToken = {
