@@ -23,17 +23,20 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
 
 const validateConfig = (configObj, selectedCourse, refBranch) => {
   /** Validate that config includes all expected keys */
-  const expectedKeys = [
-    "courseUrl",
-    "teacherUsername",
-    "active",
-    "semester",
-    "docs",
-    "teacherUsername",
-    "lessons",
-    "concepts",
-    "practices",
-  ];
+
+  const expectedKeys =
+    refBranch === "master"
+      ? ["courseUrl", "active", "docs", "lessons", "concepts", "practices"]
+      : [
+          "courseUrl",
+          "active",
+          "semester",
+          "docs",
+          "teacherUsername",
+          "lessons",
+          "concepts",
+          "practices",
+        ];
 
   const objectKeys = Object.keys(configObj);
   const hasAllKeys = expectedKeys.every((key) => objectKeys.includes(key));
@@ -157,7 +160,7 @@ const getConfig = async (selectedCourse, refBranch) => {
 
   /** Check if cache already has course branch config.
    * If yes, read config from cache.
-   * If not, make new github request for config and cache it.
+   * If not, make new GitHub request for config and cache it.
    */
   // console.log('selectedCourse1:', selectedCourse);
   // console.log('refBranch1:', refBranch);
