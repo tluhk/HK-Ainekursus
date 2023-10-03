@@ -19,17 +19,17 @@ async function getFile(owner, repo, path) {
   if (content && content.status === 200) {
     return {
       sha: content.data.sha,
-      content: JSON.parse(base64.decode(content.data.content)),
+      content: base64.decode(content.data.content),
     };
   }
   return false;
 }
 
 async function updateFile(owner, repo, path, file, commitMessage) {
-  const upl = await octokit
+  return await octokit
     .request(`PUT /repos/${owner}/${repo}/contents/${path}`, {
       message: commitMessage,
-      content: base64.encode(JSON.stringify(file.content)),
+      content: base64.encode(file.content),
       sha: file.sha,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
@@ -39,7 +39,7 @@ async function updateFile(owner, repo, path, file, commitMessage) {
       console.log(err);
     });
 
-  return upl.status;
+  //return us;
 }
 
 export { getFile, updateFile };

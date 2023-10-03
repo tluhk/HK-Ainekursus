@@ -118,7 +118,7 @@ const getAllCoursesData = async (teamSlug, req) => {
   // console.log('teamSlug4:', teamSlug);
   /**
    * Read Course repos only if the user exists, they are in a team and team.slug exists!
-   * Otherwise load courses array as empty (no courses to show).
+   * Otherwise, load courses array as empty (no courses to show).
    */
   const { user } = req;
 
@@ -132,9 +132,24 @@ const getAllCoursesData = async (teamSlug, req) => {
 
     /** For TEACHERS get all possible HK_ repos  */
     if (teamSlug && (teamSlug === "master" || teamSlug === "teachers")) {
-      courses = await axios.get(requestRepos, authToken).catch((error) => {
-        console.error(error);
-      });
+      // ask per_page=100 and add page=x, repeat until data exists or results is <100
+      let page = 1;
+      let isMoreData = true;
+
+      while (isMoreData) {
+        const requestUrl = `${requestRepos}&page=${page}`;
+        const tempRes = await axios
+          .get(requestUrl, authToken)
+          .catch((error) => {
+            console.error(error);
+          });
+        courses.data = [...tempRes.data, ...courses.data];
+        if (tempRes.data.length === 100) {
+          page++;
+        } else {
+          isMoreData = false;
+        }
+      }
       /** For STUDENTS get only HK_ repos where they have access to */
     }
     if (teamSlug && teamSlug !== "master" && teamSlug !== "teachers") {
@@ -152,7 +167,8 @@ const getAllCoursesData = async (teamSlug, req) => {
   }
 
   if (!courses) return [];
-  // console.log('courses1:', courses);
+  //
+  //  console.log("courses1:", courses);
 
   /*
    * Filter only repos that start with "HK_" prefix.

@@ -8,15 +8,14 @@ import getAllCoursesData from "../../functions/getAllCoursesData.js";
 import getConfig from "../../functions/getConfigFuncs.js";
 import { function1 } from "../../functions/imgFunctions.js";
 import {
-  returnPreviousPage,
   returnNextPage,
+  returnPreviousPage,
   setCourseButtonPaths,
 } from "../../functions/navButtonFunctions.js";
 import apiRequests from "./coursesService.js";
 import teamsController from "../teams/teamsController.js";
 import allNotificationsController from "../notifications/notificationsController.js";
 import getMarkedAsDoneComponents from "../../functions/getListOfDoneComponentUUIDs.js";
-import { Octokit } from "octokit";
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via apiRequests[githubRequest] statement.
@@ -203,6 +202,9 @@ const allCoursesController = {
 
     const start3 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug, req);
+    allCourses.forEach((c) => {
+      console.log(c.courseName);
+    });
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${end3 - start3} ms`);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
@@ -608,7 +610,6 @@ const allCoursesController = {
     console.log(`Execution time allCourses: ${end7 - start7} ms`);
 
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    console.log(allCoursesActive);
     await allCoursesActive.sort((a, b) =>
       a.courseName.localeCompare(b.courseName),
     );
@@ -684,8 +685,7 @@ const allCoursesController = {
       // 4.
     } else if (!selectedVersion && !validBranches.includes(teamSlug)) {
       const validBranchConfigPromises = validBranches.map(async (branch) => {
-        const config = await getConfig(course.coursePathInGithub, branch);
-        return config;
+        return await getConfig(course.coursePathInGithub, branch);
       });
       const validBranchConfigs = await Promise.all(validBranchConfigPromises);
       // console.log('validBranchConfigs1:', validBranchConfigs);
@@ -698,13 +698,13 @@ const allCoursesController = {
         // console.log('correctBranchIndex1:', correctBranchIndex);
 
         // 4a.
-        if (correctBranchIndex > -1) {
+        /*if (correctBranchIndex > -1) {
           refBranch = validBranches[correctBranchIndex];
           // 4b.
         } else if (correctBranchIndex <= -1 && validBranches.length >= 0) {
           refBranch = validBranches[0];
           // 4c.
-        }
+        }*/
         return res.redirect("/notfound");
       }
       // 5.
@@ -979,40 +979,6 @@ const allCoursesController = {
     /** You now have a list of active courses where each course has a list of markedAsDone components' UUIDs by the given user. */
     // console.log('allCoursesActive1:', allCoursesActive);
     return allCoursesActive;
-  },
-
-  addNew: async (req, res) => {
-    /*
-      req.body = {
-        courseName
-        courseDescription
-        semester
-        oisUrl
-      }
-    */
-    const octokit = new Octokit({
-      auth: process.env.AUTH,
-    });
-
-    const template_owner = process.env.REPO_ORG_NAME;
-    const template_repo = process.env.TEMPLATE_REPO;
-
-    return req.body;
-    /*const created = await octokit.request(
-      `POST /repos/${template_owner}/${template_repo}/generate`,
-      {
-        template_owner: template_owner,
-        template_repo: template_repo,
-        owner: process.env.REPO_ORG_NAME, //req.user.username,
-        name: `${process.env.REPO_PREFIX}${req.body.courseName}`,
-        description: req.body.courseDescription,
-        include_all_branches: false,
-        private: true,
-        headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
-      },
-    );*/
   },
 };
 

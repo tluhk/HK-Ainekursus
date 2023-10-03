@@ -5,7 +5,7 @@ dotenv.config();
 
 // Github API request endpoints
 const githubReposRequests = {
-  requestRepos: `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/repos`,
+  requestRepos: `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/repos?per_page=100`,
   requestTeamCourses: (teamSlug) =>
     `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/teams/${teamSlug}/repos`,
   requestRepoBranches: (coursePathInGithub) =>
