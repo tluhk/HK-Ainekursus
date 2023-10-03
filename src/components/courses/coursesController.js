@@ -16,6 +16,7 @@ import apiRequests from "./coursesService.js";
 import teamsController from "../teams/teamsController.js";
 import allNotificationsController from "../notifications/notificationsController.js";
 import getMarkedAsDoneComponents from "../../functions/getListOfDoneComponentUUIDs.js";
+import { Octokit } from "octokit";
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via apiRequests[githubRequest] statement.
@@ -288,7 +289,7 @@ const allCoursesController = {
         .sort()
         .reduce((acc, teacher) => {
           acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) =>
-            a.courseName.localeCompare(b.courseName),
+            a.courseName?.localeCompare(b.courseName),
           );
           return acc;
         }, {});
@@ -432,17 +433,17 @@ const allCoursesController = {
 
       /** Test entries for student: */
       /* courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
-                  courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
-                  courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
-                  courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
-                  // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
-                  // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
-                  // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
-                  courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
-                  courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
-                  courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
-                  courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
-                  courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
+                              courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
+                              courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
+                              courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
+                              // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
+                              // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
+                              // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
+                              courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
+                              courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
+                              courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
+                              courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
+                              courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
 
       // console.log('allTeachers1:', allTeachers);
       /** Rendering student's dashboard if courses are displayed by Name */
@@ -607,6 +608,7 @@ const allCoursesController = {
     console.log(`Execution time allCourses: ${end7 - start7} ms`);
 
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+    console.log(allCoursesActive);
     await allCoursesActive.sort((a, b) =>
       a.courseName.localeCompare(b.courseName),
     );
@@ -977,6 +979,40 @@ const allCoursesController = {
     /** You now have a list of active courses where each course has a list of markedAsDone components' UUIDs by the given user. */
     // console.log('allCoursesActive1:', allCoursesActive);
     return allCoursesActive;
+  },
+
+  addNew: async (req, res) => {
+    /*
+      req.body = {
+        courseName
+        courseDescription
+        semester
+        oisUrl
+      }
+    */
+    const octokit = new Octokit({
+      auth: process.env.AUTH,
+    });
+
+    const template_owner = process.env.REPO_ORG_NAME;
+    const template_repo = process.env.TEMPLATE_REPO;
+
+    return req.body;
+    /*const created = await octokit.request(
+      `POST /repos/${template_owner}/${template_repo}/generate`,
+      {
+        template_owner: template_owner,
+        template_repo: template_repo,
+        owner: process.env.REPO_ORG_NAME, //req.user.username,
+        name: `${process.env.REPO_PREFIX}${req.body.courseName}`,
+        description: req.body.courseDescription,
+        include_all_branches: false,
+        private: true,
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      },
+    );*/
   },
 };
 

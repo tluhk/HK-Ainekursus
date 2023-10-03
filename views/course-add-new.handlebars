@@ -1,0 +1,62 @@
+<!-- course.handlebars -->
+<div class="side-btn-wrapper lg:hidden">
+    <button id="left-side-button" onclick='panMainContentLeft()'
+            class="flex items-center bg-button-default hover:bg-button-hover active:bg-button-active focus-visible:outline-system-focus focus-visible:border-solid focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-primary-100 py-4 pl-4 pr-8 rounded-r-full">
+        <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000"
+           aria-hidden="true">chevron_right</i>
+        Kursuse menüü
+    </button>
+    <button id="right-side-button" onclick='panMainContentRight()'
+            class="hidden lg:flex items-center bg-button-default hover:bg-button-hover active:bg-button-active focus-visible:outline-system-focus focus-visible:border-solid focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-primary-100 py-4 pl-8 pr-4 rounded-l-full">
+        Lehekülje menüü
+        <i class="material-symbols-outlined cursor-pointer text-xxxl text-brand_red  transition ease-in-out duration-1000"
+           aria-hidden="true">chevron_left</i>
+    </button>
+</div>
+
+<div class="main-wrapper flex flex-row grow justify-between lg:px-6 lg:left-pan lg:right-pan">
+    <aside class="left-side-menu">
+        <!-- Refers to sidebar-left-course.handlebars fail in /partials folder -->
+        {{> sidebar-left.course }}
+    </aside>
+
+    <main id="main-content" class="main px-4 py-20">
+        <form action="/add-course" method="post">
+            <label class="block">
+                Kursuse URL
+                <input class="input-single" type="text" placeholder="ois url" name="oisUrl" required/>
+            </label>
+
+            <label class="block">
+                Nimi
+                <input class="input-single" type="text" placeholder="nimi" name="courseName" required/>
+            </label>
+
+            <label class="block">
+                Lühike kirjeldus
+                <textarea class="input-single" name="description" cols="30" rows="10"
+                          placeholder="kirjeldus"></textarea>
+            </label>
+
+            <div class="block">
+                Pikem kirjeldus
+                <div id="tinymde_commandbar"></div>
+                <div class="txtcontainer">
+                    <label for="txt"></label>
+                    <textarea id="txt" cols="30" rows="30" name="readme">siia võiks panna **kursuse kirjelduse**</textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-primary mt-4" type="submit">Saada</button>
+        </form>
+    </main>
+    <aside class="right-side-menu p-2">
+
+        {{> sidebar-right.anchors }}
+
+    </aside>
+</div>
+<script>
+    var tinyMDE = new TinyMDE.Editor({textarea: 'txt'});
+    var commandBar1 = new TinyMDE.CommandBar({element: 'tinymde_commandbar', editor: tinyMDE});
+</script>

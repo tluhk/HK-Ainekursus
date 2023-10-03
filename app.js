@@ -36,6 +36,7 @@ import saveEmailRoutes from "./src/routes/save-email.js";
 import saveDisplayNameRoutes from "./src/routes/save-username.js";
 import removeAsDone from "./src/routes/remove-as-done.js";
 import markAsDone from "./src/routes/mark-as-done.js";
+import addNewCourseRoutes from "./src/routes/add-new-course.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -297,66 +298,65 @@ app.use(getTeamAssignments, async (req, res, next) => {
    * IF YOU WANT TO LOG IN AS seppkh AND USE ITS TRUE GITHUB TEAM:
    * 1. ENABLE FULL else STATEMENT
    * 2. COMMENT OUT team: {} KEY.
-   * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION
-   /* else {
-    req.user = {
-      id: '62253084',
-      nodeId: 'MDQ6VXNlcjYyMjUzMDg0',
-      displayName: null,
-      username: 'seppkh',
-      profileUrl: 'https://github.com/seppkh',
-      provider: 'github',
-      _json: {
-        avatar_url: 'https://avatars.githubusercontent.com/u/62253084?v=4',
-        type: 'User',
-      },
-      team: {
-        name: 'rif20',
-        id: 6514564,
-        node_id: 'T_kwDOBqxQ5c4AY2eE',
-        slug: 'rif20',
-      },
-    };
+   * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION */
+  // else {
+  /*req.user = {
+    id: "62253084",
+    nodeId: "MDQ6VXNlcjYyMjUzMDg0",
+    displayName: null,
+    username: "seppkh",
+    profileUrl: "https://github.com/seppkh",
+    provider: "github",
+    _json: {
+      avatar_url: "https://avatars.githubusercontent.com/u/62253084?v=4",
+      type: "User",
+    },
+    team: {
+      name: "rif20",
+      id: 6514564,
+      node_id: "T_kwDOBqxQ5c4AY2eE",
+      slug: "rif20",
+    },
+  };
 
-    if (req.user && !req.user.team) {
-      const { user } = req;
-      const userTeam = await teamsController.getUserTeam(
-        user.id,
-        res.locals.teamAssignments
-      );
-      // console.log('user1:', user);
-      // console.log('userTeam1:', userTeam);
-      req.user.team = userTeam;
-    }
-  }
-    req.user = {
-      id: '132268493',
-      nodeId: 'U_kgDOB-JBzQ=',
-      displayName: null,
-      username: 'vile-ja-kell',
-      profileUrl: 'https://github.com/vile-ja-kell',
-      provider: 'github',
-      _json: {
-        avatar_url: 'https://avatars.githubusercontent.com/u/132268493?v=4',
-        type: 'User',
-      },
-      team: {
-        name: 'rif20',
-        id: 6514564,
-        node_id: 'T_kwDOBqxQ5c4AY2eE',
-        slug: 'rif20',
-      },
-    };
-    if (req.user && !req.user.team) {
-      const { user } = req;
-      const userTeam = await teamsController.getUserTeam(
-        user.id,
-        res.locals.teamAssignments
-      );
-      // console.log('user1:', user);
-      // console.log('userTeam1:', userTeam);
-      req.user.team = userTeam;
-    }
+  if (req.user && !req.user.team) {
+    const { user } = req;
+    const userTeam = await teamsController.getUserTeam(
+      user.id,
+      res.locals.teamAssignments,
+    );
+    // console.log('user1:', user);
+    // console.log('userTeam1:', userTeam);
+    req.user.team = userTeam;
+  }*/
+
+  /*req.user = {
+    id: "132268493",
+    nodeId: "U_kgDOB-JBzQ=",
+    displayName: null,
+    username: "vile-ja-kell",
+    profileUrl: "https://github.com/vile-ja-kell",
+    provider: "github",
+    _json: {
+      avatar_url: "https://avatars.githubusercontent.com/u/132268493?v=4",
+      type: "User",
+    },
+    team: {
+      name: "rif20",
+      id: 6514564,
+      node_id: "T_kwDOBqxQ5c4AY2eE",
+      slug: "rif20",
+    },
+  };
+  if (req.user && !req.user.team) {
+    const { user } = req;
+    const userTeam = await teamsController.getUserTeam(
+      user.id,
+      res.locals.teamAssignments,
+    );
+    // console.log('user1:', user);
+    // console.log('userTeam1:', userTeam);
+    req.user.team = userTeam;
   }*/
 
   next();
@@ -505,6 +505,7 @@ app.use("/save-displayName", saveDisplayNameRoutes);
 app.use("/save-email", saveEmailRoutes);
 app.use("/progress-overview", progressRoutes);
 app.use("/logout", logoutRoutes);
+app.use("/add-course", addNewCourseRoutes);
 
 /** Redirect all unknown paths to 404 page */
 app.all("*", resetSelectedVersion, otherController.notFound);

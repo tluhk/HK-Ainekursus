@@ -94,10 +94,11 @@ const apiRequests = {
 
     if (!cachePageContent.has(routePath)) {
       console.log(`❌❌ docs components IS NOT from cache: ${routePath}`);
-      components = await axios.get(
-        requestDocs(coursePathInGithub, refBranch),
-        authToken,
-      );
+      components = await axios
+        .get(requestDocs(coursePathInGithub, refBranch), authToken)
+        .catch((err) => {
+          console.log(`❌❌ get docs failed: ${routePath}`);
+        });
 
       cachePageContent.set(routePath, components);
     } else {

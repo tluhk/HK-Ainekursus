@@ -678,9 +678,7 @@ a.table-of-contents {
 /* article formattings */
 ul.markdown {
   list-style-type: inherit;
-  -webkit-margin-before: 1em;
   margin-block-start: 1em;
-  -webkit-margin-after: 2em;
   margin-block-end: 2em;
   padding-left: 1rem;
 }
@@ -1751,6 +1749,35 @@ input:checked ~ .tab-content{
     left: 0;
     background-size: 45%;
 }
+}
+.TinyMDE {
+    height: 300px;
+    border-radius: 0 0 32px 32px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--system-primary, #80609f);
+    border-top: none;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    color: var(--primary-900, #331a4d);
+}
+.TMCommandBar {
+    -ms-overflow-style: none;
+    border-radius: 32px 32px 0 0;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--system-primary, #80609f);
+    border-bottom: none;
+    padding: 1.5rem;
+    color: var(--primary-900, #331a4d);
+    box-sizing: content-box;
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+         user-select: none;
 }
 .visible{
   visibility: visible;
