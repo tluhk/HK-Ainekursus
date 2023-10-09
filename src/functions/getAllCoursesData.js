@@ -58,7 +58,8 @@ const coursePromise = (param, refBranch, validBranches) =>
           });
         });
       } catch (error) {
-        console.error(error);
+        //console.error(error);
+        console.error("ÕIS fetch error: ", config.courseUrl);
       }
 
       cacheOisContent.set(routePathOisContent, oisContent);

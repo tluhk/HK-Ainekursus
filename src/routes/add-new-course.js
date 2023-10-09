@@ -4,7 +4,7 @@ import { Octokit } from "octokit";
 import { v4 as uuidv4 } from "uuid";
 import validateTeacher from "../middleware/validateTeacher.js";
 import slugify from "slugify";
-import { getFile, updateFile } from "../functions/githubFieFunctions.js";
+import { delay, getFile, updateFile } from "../functions/githubFieFunctions.js";
 
 const router = express.Router();
 router.get("/", ensureAuthenticated, validateTeacher, (req, res) => {
@@ -24,6 +24,7 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
     const template_repo = process.env.TEMPLATE_REPO;
     const repo_prefix = process.env.REPO_PREFIX;
 
+    // create repo
     const created = await octokit
       .request(`POST /repos/${template_owner}/${template_repo}/generate`, {
         owner: template_owner,
@@ -45,12 +46,14 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
       let contentOK = false;
       let timeOut = false;
       let waitCounter = 0;
+      // wait for content be available and fetch config.json file
       while (!contentOK && !timeOut) {
         await delay(1000);
 
         const config = await getFile(template_owner, repo, "config.json");
         if (config) {
           contentOK = true;
+          // fix some config.json fields
           const newConfig = updateConfig(
             config.content,
             req.body.courseName,
@@ -58,6 +61,7 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
             user.username,
           );
 
+          // upload modified file
           updateFile(
             template_owner,
             repo,
@@ -76,7 +80,7 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
         timeOut = waitCounter > 20;
       }
 
-      //kursusele oma readme.md
+      // replace readme file
       getFile(template_owner, repo, "README.md").then((readme) => {
         if (readme) {
           readme.content = req.body.readme;
@@ -115,12 +119,6 @@ function updateConfig(content, courseName, courseUrl, userName) {
   conf.concepts.forEach((c) => (c.uuid = uuidv4()));
   conf.practices.forEach((p) => (p.uuid = uuidv4()));
   return JSON.stringify(conf);
-}
-
-function delay(milliseconds) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, milliseconds);
-  });
 }
 
 export default router;

@@ -22,28 +22,28 @@ const githubReposRequests = {
       `${baseUrl}/repos/${coursePathInGithub}/contents/config.json?ref=${refBranch}`,
   // docs related
   requestDocs: (coursePathInGithub, refBranch) =>
-    `${baseUrl}/repos/${coursePathInGithub}/contents/docs/readme.md?ref=${refBranch}`,
+    `${baseUrl}/repos/${coursePathInGithub}/contents/docs/README.md?ref=${refBranch}`,
   requestCourseAdditionalMaterials: (coursePathInGithub, refBranch) =>
     `${baseUrl}/repos/${coursePathInGithub}/contents/docs/lisamaterjalid.md?ref=${refBranch}`,
   requestCourseFiles: (coursePathInGithub, refBranch) =>
     `${baseUrl}/repos/${coursePathInGithub}/contents/docs/files?ref=${refBranch}`,
   // lessons related
   requestLessons: (coursePathInGithub, opt, refBranch) =>
-    `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/readme.md?ref=${refBranch}`,
+    `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/README.md?ref=${refBranch}`,
   requestLessonAdditionalMaterials: (coursePathInGithub, opt, refBranch) =>
     `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/lisamaterjalid.md?ref=${refBranch}`,
   requestLessonFiles: (coursePathInGithub, opt, refBranch) =>
     `${baseUrl}/repos/${coursePathInGithub}/contents/lessons/${opt}/files?ref=${refBranch}`,
   // concepts related
   requestConcepts: (coursePathInGithub, opt, refBranch) =>
-    `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/readme.md?ref=${refBranch}`,
+    `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/README.md?ref=${refBranch}`,
   requestSources: (coursePathInGithub, opt, refBranch) =>
     `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/sources.json?ref=${refBranch}`,
   requestStaticURL: (coursePathInGithub, opt, refBranch) =>
     `${baseUrl}/repos/${coursePathInGithub}/contents/concepts/${opt}/images?ref=${refBranch}`,
   // practices related
   requestPractices: (coursePathInGithub, opt, refBranch) =>
-    `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/readme.md?ref=${refBranch}`,
+    `${baseUrl}/repos/${coursePathInGithub}/contents/practices/${opt}/README.md?ref=${refBranch}`,
   // images related
   requestImgURL: (coursePathInGithub, path, url, refBranch) => {
     if (path.type === "docs")

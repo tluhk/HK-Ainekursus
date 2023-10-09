@@ -13,9 +13,7 @@ const apiRequests = {
       console.error(error);
     });
     if (!teamsRaw) return [];
-    const teams = teamsRaw.data;
-
-    return teams;
+    return teamsRaw.data;
   },
   getTeamMembersService: async (teamSlug) => {
     const teamMembersRaw = await axios
@@ -26,8 +24,7 @@ const apiRequests = {
 
     if (!teamMembersRaw) return [];
 
-    const teamMembersMapped = teamMembersRaw.data.map((member) => member);
-    return teamMembersMapped;
+    return teamMembersRaw.data.map((member) => member);
   },
 };
 

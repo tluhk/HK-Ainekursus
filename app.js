@@ -37,6 +37,7 @@ import saveDisplayNameRoutes from "./src/routes/save-username.js";
 import removeAsDone from "./src/routes/remove-as-done.js";
 import markAsDone from "./src/routes/mark-as-done.js";
 import addNewCourseRoutes from "./src/routes/add-new-course.js";
+import addNewBranchRoutes from "./src/routes/add-new-branch.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -506,6 +507,7 @@ app.use("/save-email", saveEmailRoutes);
 app.use("/progress-overview", progressRoutes);
 app.use("/logout", logoutRoutes);
 app.use("/add-course", addNewCourseRoutes);
+app.use("/add-branch", addNewBranchRoutes);
 
 /** Redirect all unknown paths to 404 page */
 app.all("*", resetSelectedVersion, otherController.notFound);

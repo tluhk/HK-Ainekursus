@@ -16,7 +16,8 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
     );
   } catch (err) {
     // Handle Error Here
-    console.error(err);
+    //console.error(err);
+    console.error(`Fetch config failed: ${selectedCourse}`);
   }
   return response;
 };

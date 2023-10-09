@@ -65,7 +65,7 @@ const apiRequests = {
         .then((resolvedArr) => {
           const resolvedObj = Object.fromEntries(resolvedArr);
           return Object.entries(resolvedObj).filter(
-            ([, value]) => value.active,
+            ([, value]) => value && value.active,
           );
         })
         .catch((error) => {
@@ -96,7 +96,7 @@ const apiRequests = {
       console.log(`❌❌ docs components IS NOT from cache: ${routePath}`);
       components = await axios
         .get(requestDocs(coursePathInGithub, refBranch), authToken)
-        .catch((err) => {
+        .catch(() => {
           console.log(`❌❌ get docs failed: ${routePath}`);
         });
 
