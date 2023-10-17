@@ -21,39 +21,6 @@
                     </div>
 
                 {{/each }}
-                <hr>
-                <form action="/add-branch" method="post">
-                    <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}">
-                    <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
-                    <label for="team" class="radio-label w-full ml-2 mb-2 text-sm font-medium">Lisa uus grupp: </label>
-                    <select name="team" id="team" class="input-single" required>
-                        <option value="0"></option>
-                        {{#each ../allTeams }}
-                            <option value="{{this}}" class="text-sm font-medium">{{this}}</option>
-                        {{/each }}
-                    </select>
-                    <label for="year" class="radio-label w-full ml-2 mb-2 text-sm font-medium">Vali aasta: </label>
-                    <select name="year" id="year" class="input-single" required>
-                        <option value="0"></option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-
-                    </select>
-                    <div class="radio flex items-center">
-                        <input id="semester1" type="radio" value="S" name="semester">
-                        <label for="semester1" class="radio-label w-full ml-2 text-sm font-medium">Sügis</label>
-                        <span class="radio-check"></span>
-                    </div>
-                    <div class="radio flex items-center">
-                        <input id="semester2" type="radio" value="K" name="semester">
-                        <label for="semester2" class="radio-label w-full ml-2 text-sm font-medium">Kevad</label>
-                        <span class="radio-check"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-full mt-2">Lisa</button>
-                </form>
-
-
             </div>
 
             <!-- Hidden forms to send req.body values -->
@@ -62,7 +29,41 @@
                 <input type="hidden" name="currentPath" id="currentPath" value="/course/{{../path.courseSlug}}/about">
                 <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
             </form>
+
         </div>
+        <hr class="my-4">
+        <form action="/add-branch" method="post">
+            <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}">
+            <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
+            <label for="team" class="radio-label w-full ml-2 mb-2 text-lg font-bold">Lisa versioon: </label>
+            <select name="team" id="team" class="input-single h-8" required>
+                <option value="0" disabled></option>
+                {{#each ../allTeams }}
+                    <option value="{{this}}" class="text-sm font-medium">{{this}}</option>
+                {{/each }}
+            </select>
+            <label for="year" class="radio-label w-full ml-2 mb-2 text-sm font-medium">Vali aasta: </label>
+            <select name="year" id="year" class="input-single h-8" required>
+                <option value="0" disabled></option>
+                {{#each ../years }}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each }}
+            </select>
+            <div class="flex w-100">
+                <div class="radio flex items-center mr-4 mt-2">
+                    <input id="semester1" type="radio" value="S" name="semester">
+                    <label for="semester1" class="radio-label w-full ml-2 text-sm font-medium">Sügis</label>
+                    <span class="radio-check"></span>
+                </div>
+                <div class="radio flex items-center mt-2">
+                    <input id="semester2" type="radio" value="K" name="semester">
+                    <label for="semester2" class="radio-label w-full ml-2 text-sm font-medium">Kevad</label>
+                    <span class="radio-check"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-full mt-2">Lisa</button>
+        </form>
+        <hr class="my-4">
     {{/if_equal}}
 
     <!-- Table of contents -->
@@ -74,6 +75,7 @@
             {{{ ToC }}}
         </div>
     </div>
+
 
 </nav>
 

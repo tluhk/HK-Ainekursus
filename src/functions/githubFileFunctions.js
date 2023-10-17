@@ -1,5 +1,6 @@
 import base64 from "base-64";
 import { Octokit } from "octokit";
+import utf8 from "utf8";
 
 const octokit = new Octokit({
   auth: process.env.AUTH,
@@ -8,9 +9,7 @@ const octokit = new Octokit({
 async function getFile(owner, repo, path, ref = null) {
   const content = await octokit
     .request(
-      `GET /repos/${owner}/${repo}/contents/${path}${
-        ref ? "?ref=" + ref : null
-      }`,
+      `GET /repos/${owner}/${repo}/contents/${path}${ref ? "?ref=" + ref : ""}`,
       {
         headers: {
           "X-GitHub-Api-Version": "2022-11-28",
@@ -24,8 +23,37 @@ async function getFile(owner, repo, path, ref = null) {
   if (content && content.status === 200) {
     return {
       sha: content.data.sha,
-      content: content.data.content ? base64.decode(content.data.content) : {},
+      content: content.data.content
+        ? utf8.decode(base64.decode(content.data.content))
+        : "",
     };
+  }
+  return false;
+}
+
+async function getFolder(owner, repo, path, ref = null) {
+  const content = await octokit
+    .request(
+      `GET /repos/${owner}/${repo}/contents/${path}${ref ? "?ref=" + ref : ""}`,
+      {
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      },
+    )
+    .catch((err) => {
+      console.log(err);
+    });
+
+  if (content && content.status === 200) {
+    return content.data
+      .filter((folder) => folder.type === "dir")
+      .map((folder) => {
+        return {
+          sha: folder.sha,
+          name: folder.name,
+        };
+      });
   }
   return false;
 }
@@ -59,4 +87,4 @@ function delay(milliseconds) {
   });
 }
 
-export { getFile, updateFile, delay };
+export { getFile, updateFile, delay, getFolder };

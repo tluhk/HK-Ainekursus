@@ -4,7 +4,11 @@ import { Octokit } from "octokit";
 import validateTeacher from "../middleware/validateTeacher.js";
 import getAllCoursesData from "../functions/getAllCoursesData.js";
 import { cacheBranches } from "../setup/setupCache.js";
-import { delay, getFile, updateFile } from "../functions/githubFieFunctions.js";
+import {
+  delay,
+  getFile,
+  updateFile,
+} from "../functions/githubFileFunctions.js";
 
 const router = express.Router();
 

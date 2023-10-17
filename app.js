@@ -15,6 +15,7 @@ import { fileURLToPath } from "url";
 import pool from "./db.js";
 import {
   allCoursesController,
+  renderEditPage,
   renderPage,
   responseAction,
 } from "./src/components/courses/coursesController.js";
@@ -45,20 +46,6 @@ const __dirname = path.dirname(__filename);
 /** Create express app */
 const app = express();
 const port = process.env.PORT || 3000;
-
-/** To run app live in Railway, then checkout production branch and delete the following block refering Livereload – this blocks Railway page */
-/* import { createServer } from 'livereload';
-import connectLivereload from 'connect-livereload';
-
-const liveReloadServer = createServer();
-liveReloadServer.watch(join(__dirname, '/views'));
-liveReloadServer.watch(join(__dirname, 'public'));
-liveReloadServer.server.once('connection', () => {
-  setTimeout(() => {
-    liveReloadServer.refresh('/');
-  }, 100);
-});
-app.use(connectLivereload()); */
 
 /** Set up Handlebars views */
 const handlebars = handlebarsFactory(exphbs);
@@ -115,13 +102,6 @@ app.use(passport.session());
  */
 const { urlencoded } = pkg;
 app.use(urlencoded({ extended: true }));
-
-/** GitHub Oauth2 authentication in Node.js with a page inviting user to choose the preferred login account.
- * https://gist.github.com/bertrandmartel/13caa379cfc6c59743937e5eab88cb51
- */
-/*GitHubStrategy.prototype.authorizationParams = function (options) {
-  return options || {};
-};*/
 
 /** Setup passport session.
  To support persistent login sessions, Passport needs to be able to
@@ -460,6 +440,14 @@ app.get(
   renderPage,
 );
 
+app.get(
+  "/course-edit/:courseSlug/:contentSlug?/:componentSlug?",
+  ensureAuthenticated,
+  validateTeacher,
+  allCoursesController.getSpecificCourse,
+  responseAction,
+  renderEditPage,
+);
 /** Endpoints to change course version.
  * Only available for teachers.
  */

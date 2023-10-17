@@ -21,15 +21,15 @@
     var(--menu-card-stroke) border-box;
   border-radius: 100px;
 }
-.tab-content {
+/*.tab-content {
   @apply max-h-0 py-0 px-4 text-link-idle;
-}
+}*/
 .active-tab .no-tab-label,
 .active-tab .tab-label {
   @apply text-text;
 }
 
-.active-tab-content,
+/*.active-tab-content,
 .tab-content:hover {
   @apply text-text;
   position: relative;
@@ -48,7 +48,7 @@
 .active-tab .tab-label::after,
 input:checked + .tab-label::after {
   @apply rotate-90;
-}
+}*/
 input:checked ~ .tab-label {
   @apply max-h-screen;
 }
@@ -59,10 +59,10 @@ input:checked ~ .tab-label {
   @apply hidden;
 }
 /* opened accordion. If only with input:chekced: input:checked ~ .tab-content */
-.active-tab .tab-content,
+/*.active-tab .tab-content,
 input:checked ~ .tab-content {
   @apply max-h-screen;
-}
+}*/
 .sidebar input {
   @apply absolute opacity-0 -z-10;
 }

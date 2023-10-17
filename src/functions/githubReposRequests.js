@@ -7,7 +7,7 @@ dotenv.config();
 const githubReposRequests = {
   requestRepos: `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/repos?per_page=100`,
   requestTeamCourses: (teamSlug) =>
-    `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/teams/${teamSlug}/repos`,
+    `${baseUrl}/orgs/${process.env.REPO_ORG_NAME}/teams/${teamSlug}/repos?per_page=100`,
   requestRepoBranches: (coursePathInGithub) =>
     `${baseUrl}/repos/${coursePathInGithub}/branches`,
   // config

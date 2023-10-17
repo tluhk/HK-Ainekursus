@@ -4,7 +4,12 @@ import { Octokit } from "octokit";
 import { v4 as uuidv4 } from "uuid";
 import validateTeacher from "../middleware/validateTeacher.js";
 import slugify from "slugify";
-import { delay, getFile, updateFile } from "../functions/githubFieFunctions.js";
+import {
+  delay,
+  getFile,
+  updateFile,
+} from "../functions/githubFileFunctions.js";
+import { cacheTeamCourses } from "../setup/setupCache.js";
 
 const router = express.Router();
 router.get("/", ensureAuthenticated, validateTeacher, (req, res) => {
@@ -59,6 +64,7 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
             req.body.courseName,
             req.body.oisUrl,
             user.username,
+            repo,
           );
 
           // upload modified file
@@ -96,7 +102,7 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
 
       const tmpSlug = req.body.oisUrl.split("/").slice(-1);
       console.log(`✅✅  /course/${tmpSlug}/`);
-      //await allCoursesController.getAllCourses(req, res);
+      cacheTeamCourses.del("allCoursesData+teachers");
       res.redirect(`/course/${tmpSlug}`);
     } else {
       error = "repo loomine ebaõnnestus";
@@ -109,14 +115,17 @@ router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
   }
 });
 
-function updateConfig(content, courseName, courseUrl, userName) {
+function updateConfig(content, courseName, courseUrl, userName, repoName) {
   const conf = JSON.parse(content);
   conf.courseName = courseName;
   conf.courseUrl = courseUrl;
   conf.teacherUsername = userName;
   conf.semester = "";
   conf.lessons.forEach((l) => (l.uuid = uuidv4()));
-  conf.concepts.forEach((c) => (c.uuid = uuidv4()));
+  conf.concepts.forEach((c) => {
+    c.uuid = uuidv4();
+    c.repo = repoName;
+  });
   conf.practices.forEach((p) => (p.uuid = uuidv4()));
   return JSON.stringify(conf);
 }

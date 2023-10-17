@@ -1,6 +1,6 @@
 // Add in-memory cache
 // https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4
-import NodeCache from 'node-cache';
+import NodeCache from "node-cache";
 
 // useClones is set to false to avoid this error: https://github.com/node-cache/node-cache/issues/231
 
@@ -17,12 +17,17 @@ const cachePageContent = new NodeCache({ stdTTL: 1800, useClones: false }); // f
 const cacheFiles = new NodeCache({ stdTTL: 1800, useClones: false }); // for Course Files, set cache for 30 minutes
 const cacheImages = new NodeCache({ stdTTL: 86400, useClones: false }); // for Course Images, set cache for 30 minutes
 const cacheTeamAssignments = new NodeCache({ stdTTL: 1800, useClones: false }); // for Team Assignments, set cache for 30 minutes
-const cacheMarkedAsDoneComponents = new NodeCache({ stdTTL: 86400, useClones: false }); // for Marked Aa Done Components, set cache for 24 hours. This is flushed every time user marks a new components as done or removes it for specific course.
+const cacheMarkedAsDoneComponents = new NodeCache({
+  stdTTL: 86400,
+  useClones: false,
+}); // for Marked Aa Done Components, set cache for 24 hours. This is flushed every time user marks a new components as done or removes it for specific course.
 const cacheOrgMembers = new NodeCache({ stdTTL: 1800, useClones: false }); // for Org Members, set cache for 30 minutes.
 
+const cacheConcepts = new NodeCache({ stdTTL: 1800, useClones: false }); // for Concepts, set cache for 30 minutes.
+const cacheLessons = new NodeCache({ stdTTL: 1800, useClones: false }); // for Lessons, set cache for 30 minutes.
 
 /** Reusable function to check if Cache exists. If yes, then results are saved to res.locals.  */
-const cacheService = (async (req, res) => {
+const cacheService = async (req, res) => {
   let cacheName;
   // console.log('cacheName1:', cacheName);
   try {
@@ -34,10 +39,28 @@ const cacheService = (async (req, res) => {
     }
     return console.log(`${cacheName} loaded with API`);
   } catch (err) {
-    console.log('Error with cacheService:');
+    console.log("Error with cacheService:");
     return console.error(err);
     // throw new Error(err);
   }
-});
+};
 
-export { cacheService, cache, cacheTeamUsers, cacheTeamCourses, cacheCommits, cacheCommitComments, cacheOisContent, cacheConfig, cacheBranches, cachePageContent, cacheFiles, cacheImages, cacheTeamAssignments, cacheMarkedAsDoneComponents, cacheOrgMembers };
+export {
+  cacheService,
+  cache,
+  cacheTeamUsers,
+  cacheTeamCourses,
+  cacheCommits,
+  cacheCommitComments,
+  cacheOisContent,
+  cacheConfig,
+  cacheBranches,
+  cachePageContent,
+  cacheFiles,
+  cacheImages,
+  cacheTeamAssignments,
+  cacheMarkedAsDoneComponents,
+  cacheOrgMembers,
+  cacheConcepts,
+  cacheLessons,
+};

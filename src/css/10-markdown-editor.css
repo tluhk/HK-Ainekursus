@@ -1,5 +1,6 @@
 .TinyMDE {
-    height: 300px;
+    height: auto;
+    min-height: 300px;
     border-radius: 0 0 32px 32px;
     border-width: 2px;
     border-style: solid;
@@ -26,4 +27,16 @@
     scrollbar-width: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+.tab-btn {
+    @apply px-4 py-2 rounded-lg cursor-pointer;
+}
+
+.tab-btn.active {
+    background: #80609f;
+}
+
+.tab-pane {
+    @apply p-4;
 }
