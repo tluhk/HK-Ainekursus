@@ -81,10 +81,32 @@ async function updateFile(
     });
 }
 
+async function deleteFile(
+  owner,
+  repo,
+  path,
+  sha,
+  commitMessage,
+  branch = "master",
+) {
+  return await octokit
+    .request(`DELETE /repos/${owner}/${repo}/contents/${path}`, {
+      message: commitMessage,
+      sha: sha,
+      branch: branch,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
 }
 
-export { getFile, updateFile, delay, getFolder };
+export { getFile, updateFile, deleteFile, delay, getFolder };
