@@ -103,10 +103,34 @@ async function deleteFile(
     });
 }
 
+async function uploadFile(
+  owner,
+  repo,
+  path, // folder + new filename
+  file, // req.files.file
+  commitMessage,
+  branch = "master",
+) {
+  const base64Content = new Buffer.from(file.data).toString("base64");
+
+  return await octokit
+    .request(`PUT /repos/${owner}/${repo}/contents/${path}`, {
+      message: commitMessage,
+      content: base64Content,
+      branch: branch,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
 }
 
-export { getFile, updateFile, deleteFile, delay, getFolder };
+export { getFile, updateFile, deleteFile, delay, getFolder, uploadFile };
