@@ -1,46 +1,130 @@
 <!-- dashboard-teacher.courses.handlebars -->
-  <div>
+<div>
     <h2>Sinu õpetatavad kursused</h2>
-      <div class='max-w-30 flex flex-col gap-4'>
-        {{#unless courses }}  
-          <div class='text-md font-bold mt-4 ml-4'>Sul pole mitte ühtegi õpetatavat kursust.</div>
-          <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust {{adminName}}: <a href = "mailto: {{adminEmail}}">{{adminEmail}}</a></p>
+    <div class='max-w-30 flex flex-col gap-4'>
+        {{#unless courses }}
+            <div class='text-md font-bold mt-4 ml-4'>Sul pole mitte ühtegi õpetatavat kursust.</div>
+            <p class='mt-4 ml-4'>Kui see ei tundu õige, võta ühendust {{adminName}}: <a
+                    href="mailto: {{adminEmail}}">{{adminEmail}}</a></p>
         {{/unless }}
         {{#if courses }}
-          <div class="flex flex-row justify-start gap-x-4 pt-2 pb-4">
-            <form method="POST" action="/courses-display-by" name="displayByName" id="displayByName">
-              <!-- Hidden form inputs to send req.body values -->
-              <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="name" >
-              <button name="displayByNameButton" class="btn {{#if_equal coursesDisplayBy 'name'}} btn-primary{{else}}btn-secondary{{/if_equal}}">Nime järgi</button>
-            </form>
-            <form method="POST" action="/courses-display-by" name="displayBySemester" id="displayBySemester">
-              <!-- Hidden form inputs to send req.body values -->
-              <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="semester" >
-              <button name="displayBySemesterButton" class="btn {{#if_equal coursesDisplayBy 'semester'}}btn-primary{{else}}btn-secondary{{/if_equal}}">Semestri järgi</button>
-            </form>
-          </div>
-          
-          {{#if_equal coursesDisplayBy 'name' }}
-            {{#each ../courses}}
-              {{> dashboard-course-component 
-                user=../../user
-                teachers=../../teachers }}
-            {{/each}}
-          {{/if_equal}}
-          <!-- list with month -->
-          {{#if_equal coursesDisplayBy 'semester' }}
-            {{#each ../courses }}
-               <div>
-              <div class="font-bold mb-2">{{@key}}</div>
-              {{#each this }}
-                {{> dashboard-course-component 
-                user=../../../user
-                teachers=../../../teachers }}
-              {{/each }}
-              </div>
-            {{/each }}
-          {{/if_equal }}
+            <div class="flex flex-row justify-start gap-x-4 pt-2 pb-4">
+                <form method="POST" action="/courses-display-by" name="displayByName" id="displayByName">
+                    <!-- Hidden form inputs to send req.body values -->
+                    <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="name">
+                    <button name="displayByNameButton" class="btn {{#if_equal coursesDisplayBy
+                                                                              'name'}} btn-primary{{else}}btn-secondary{{/if_equal}}">
+                        Nime järgi
+                    </button>
+                </form>
+                <form method="POST" action="/courses-display-by" name="displayBySemester" id="displayBySemester">
+                    <!-- Hidden form inputs to send req.body values -->
+                    <input type="hidden" name="coursesDisplayBy" id="coursesDisplayBy" value="semester">
+                    <button name="displayBySemesterButton" class="btn {{#if_equal coursesDisplayBy
+                                                                                  'semester'}}btn-primary{{else}}btn-secondary{{/if_equal}}">
+                        Semestri järgi
+                    </button>
+                </form>
+            </div>
+
+            {{#if_equal coursesDisplayBy 'name' }}
+                {{#each ../courses}}
+                    {{> dashboard-course-component
+                            user=../../user
+                            teachers=../../teachers }}
+                {{/each}}
+            {{/if_equal}}
+            <!-- list with month -->
+            {{#if_equal coursesDisplayBy 'semester' }}
+                {{#each ../courses }}
+                    <div>
+                        <div class="font-bold mb-2">{{@key}}</div>
+                        {{#each this }}
+                            {{> dashboard-course-component
+                                    user=../../../user
+                                    teachers=../../../teachers }}
+                        {{/each }}
+                    </div>
+                {{/each }}
+            {{/if_equal }}
 
         {{/if }}
+        <label for="oisUrl" class="block mt-4">Lisa uus ainekursus:</label>
+        <form action="" method="post" class="input-w-button" id="newCourseForm">
+            <input class="input-single pr-[calc(6ch+3rem)]" name="oisUrl" id="oisUrl" type="text"
+                   placeholder="Kursuse kood või ÕIS'i link"/>
+            <button class="btn btn-primary" type="submit" value="add" id="submitForm">
+                Lisa
+            </button>
+        </form>
     </div>
-  </div> 
+</div>
+
+<div id="modal" class="hidden fixed top-0 left-0 w-full h-full items-center justify-center custom-backdrop">
+    <div class="card p-8 rounded shadow-md custom-modal-content">
+        <p class="mb-4 text-lg" id="errorMsg"></p>
+        <div class="flex justify-end">
+            <button id="confirmBtn" class="btn btn-primary mr-4 hidden" onclick="confirmAction()">Muuda</button>
+            <button class="btn btn-secondary" onclick="cancelAction()">Katkesta</button>
+        </div>
+    </div>
+</div>
+<script>
+    function showModal(message) {
+        document.getElementById('errorMsg').innerHTML = message;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function hideModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    function confirmAction() {
+        // Handle the OK button action
+        window.location.href = "http://localhost:3000/course-edit/" + courseCode + "/about?ref=master"
+        hideModal();
+    }
+
+    function cancelAction() {
+        // Handle the Cancel button action
+        hideModal();
+    }
+
+    let newCourseForm = document.getElementById("newCourseForm");
+    let courseCode = "";
+
+    newCourseForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        document.getElementById("submitForm").disabled = true;
+        // handle submit
+        fetch("http://localhost:3000/add-course", {
+            method: 'post',
+            body: JSON.stringify({oisUrl: document.getElementById("oisUrl").value}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((res) => {
+            document.getElementById("submitForm").disabled = false;
+            if (res.ok) {
+                return res.json();
+            }
+            return Promise.reject(res); // 2. reject instead of throw
+        }).then((res) => {
+            if (res.status === 201) {
+                console.log("Post successfully created!")
+            }
+        }).catch((response) => {
+            //console.log(response.status, response.statusText)
+            response.json().then((json) => {
+                if (json.msg === "duplicate") {
+                    document.getElementById("confirmBtn").classList.replace("hidden", "block");
+                    showModal("Sellise koodiga kursus on juba olemas!<br>Kas soovid seda muuta?");
+                    courseCode = json.courseCode;
+                } else {
+                    document.getElementById("confirmBtn").classList.replace("block", "hidden")
+                    showModal(json.msg)
+                }
+            })
+        });
+    });
+</script>

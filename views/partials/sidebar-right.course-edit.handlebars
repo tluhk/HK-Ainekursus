@@ -6,7 +6,7 @@
 
     {{#if_equal user.team.slug 'teachers'}}
 
-        <div class="card-header m-0">Ainekursuse versioonid:</div>
+        <div class="card-header m-0">Ainekursuse grupp:</div>
         <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
             <!-- Radio buttons -->
             {{#each ../branches }}
@@ -26,11 +26,11 @@
             <select name="year" id="year" class="input-single h-8" required>
                 <option value="0" disabled></option>
                 {{#each ../years }}
-                    <option value="{{this}}" {{#if_contains this
-                                                         ../../config.semester}}selected{{/if_contains}}>{{this}}</option>
+                    <option value="K{{this}}" {{#if_equal this ../../config.semester}}selected{{/if_equal}}>Kevad {{this}}</option>
+                    <option value="S{{this}}" {{#if_equal this ../../config.semester}}selected{{/if_equal}}>Sügis {{this}}</option>
                 {{/each }}
             </select>
-            <div class="flex w-100 mb-4">
+            <!--div class="flex w-100 mb-4">
                 <div class="radio flex items-center mr-4 mt-2">
                     <input id="semester1" type="radio" value="S" name="semester" {{#if_contains "S"
                                                                                                 ../config.semester}}checked{{/if_contains}}>
@@ -43,7 +43,7 @@
                     <label for="semester2" class="radio-label w-full ml-2 text-sm font-medium">Kevad</label>
                     <span class="radio-check"></span>
                 </div>
-            </div>
+            </div!-->
             <hr class="my-4">
             <label for="teacher" class="radio-label w-full ml-2 mb-2 text-base font-medium">Õppejõud:</label>
             <select name="teacher" id="teacher" class="input-single h-8" required>

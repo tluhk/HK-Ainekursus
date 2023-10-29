@@ -45,10 +45,10 @@
             content.classList.toggle('hidden');
         });
         const tinyMDE = new TinyMDE.Editor({textarea: 'lessons_content_'+index});
-        TinyMDE.CommandBar({element: 'tinymde_commandbar_lessons_content_'+index, editor: tinyMDE});
+        const cm = new TinyMDE.CommandBar({element: 'tinymde_commandbar_lessons_content_'+index, editor: tinyMDE});
 
         const tinyMDE2 = new TinyMDE.Editor({textarea: 'lessons_add_'+index});
-        TinyMDE.CommandBar({element: 'tinymde_commandbar_lessons_add_'+index, editor: tinyMDE2});
+        const cm2 = new  TinyMDE.CommandBar({element: 'tinymde_commandbar_lessons_add_'+index, editor: tinyMDE2});
     });
 
 
