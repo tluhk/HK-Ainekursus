@@ -22,33 +22,20 @@
 
             {{/each }}
             <hr class="my-4">
-            <label for="year" class="radio-label w-full ml-2 mb-2 text-base font-medium">Semester: </label>
+            <label for="year" class="radio-label w-full ml-2 mb-2 text-sm font-medium">Vali semester: </label>
             <select name="year" id="year" class="input-single h-8" required>
                 <option value="0" disabled></option>
                 {{#each ../years }}
-                    <option value="K{{this}}" {{#if_equal this ../../config.semester}}selected{{/if_equal}}>Kevad {{this}}</option>
-                    <option value="S{{this}}" {{#if_equal this ../../config.semester}}selected{{/if_equal}}>Sügis {{this}}</option>
+                    <option value="K{{this}}">Kevad {{this}}</option>
+                    <option value="S{{this}}">Sügis {{this}}</option>
                 {{/each }}
             </select>
-            <!--div class="flex w-100 mb-4">
-                <div class="radio flex items-center mr-4 mt-2">
-                    <input id="semester1" type="radio" value="S" name="semester" {{#if_contains "S"
-                                                                                                ../config.semester}}checked{{/if_contains}}>
-                    <label for="semester1" class="radio-label w-full ml-2 text-sm font-medium">Sügis</label>
-                    <span class="radio-check"></span>
-                </div>
-                <div class="radio flex items-center mt-2">
-                    <input id="semester2" type="radio" value="K" name="semester" {{#if_contains "K"
-                                                                                               ../config.semester}}checked{{/if_contains}}>
-                    <label for="semester2" class="radio-label w-full ml-2 text-sm font-medium">Kevad</label>
-                    <span class="radio-check"></span>
-                </div>
-            </div!-->
+
             <hr class="my-4">
             <label for="teacher" class="radio-label w-full ml-2 mb-2 text-base font-medium">Õppejõud:</label>
             <select name="teacher" id="teacher" class="input-single h-8" required>
                 {{#each ../teachers }}
-                    <option value="{{this.id}}"{{#if_equal this.login
+                    <option value="{{this.id}}" {{#if_equal this.login
                                                            ../../config.teacherUsername}}selected{{/if_equal}}>{{this.login}}</option>
                 {{/each }}
             </select>
