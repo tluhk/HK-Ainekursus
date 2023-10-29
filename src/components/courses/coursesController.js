@@ -258,7 +258,7 @@ const renderEditPage = async (req, res) => {
   );
 
   // for each lessons get README and lisamaterjalid.md
-  for await (const material of config.lessons.map((lesson) => {
+  for await (const _m of config.lessons.map((lesson) => {
     getFile(
       process.env.REPO_ORG_NAME,
       repoPath,
@@ -332,7 +332,7 @@ const renderEditPage = async (req, res) => {
     allConcepts,
   };
   //console.log(JSON.stringify(config.lessons));
-  const test = {
+  /*const test = {
     component:
       '<h1 class="markdown-wrapper" id="kursuse-%C3%BClesehitus" tabindex="-1">Kursuse ülesehitus <a class="header-anchor" href="#kursuse-%C3%BClesehitus"><span class="material-symbols-outlined" style="0.75em">share</span></a></h1>\n' +
       "</ul>\n",
@@ -937,7 +937,7 @@ const renderEditPage = async (req, res) => {
     markedAsDoneComponentsArr: [],
     allTeams: ["rif20", "rif22", "rif23"],
     years: [2023, 2024, 2025],
-  };
+  };*/
 
   res.render("course-edit", viewVars);
 };
@@ -1762,7 +1762,7 @@ const allCoursesController = {
         }),
       );
       cacheConcepts.set("concepts", allConcepts);
-      // return only with course, sort by name then by course
+
       return allConcepts
         .filter((c) => !!c.course)
         .sort((a, b) =>

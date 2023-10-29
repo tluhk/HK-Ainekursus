@@ -3,6 +3,7 @@ import express from "express";
 import path, { join } from "path";
 import exphbs from "express-handlebars";
 import favicon from "serve-favicon";
+import fileUpload from "express-fileupload";
 /** Create a session middleware with the given options using passport
  * https://gist.github.com/jwo/ea79620b5229e7821e4ae61055899cf9
  * https://www.npmjs.com/package/passport-github2
@@ -58,6 +59,10 @@ app.use(express.static(join(__dirname, "/public")));
 
 /** Define favicon file */
 app.use(favicon(join(__dirname, "/public/images", "favicon.ico")));
+
+app.use(fileUpload());
+
+app.use(express.json());
 
 /** Testing API endpoints */
 app.get("/ping", (req, res) => {

@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 /*
-! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -143,6 +143,8 @@ optgroup,
 select,
 textarea {
   font-family: inherit; /* 1 */
+  font-feature-settings: inherit; /* 1 */
+  font-variation-settings: inherit; /* 1 */
   font-size: 100%; /* 1 */
   font-weight: inherit; /* 1 */
   line-height: inherit; /* 1 */
@@ -252,6 +254,12 @@ ul,
 menu {
   list-style: none;
   margin: 0;
+  padding: 0;
+}
+/*
+Reset default styling for dialogs.
+*/
+dialog {
   padding: 0;
 }
 /*
@@ -653,7 +661,7 @@ pre {
 code {
   white-space: pre-wrap !important; /* css-3 */
   white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-  white-space: -pre-wrap !important; /* Opera 4-6 */
+  white-space: pre-wrap !important; /* Opera 4-6 */
   white-space: -o-pre-wrap !important; /* Opera 7 */
   word-wrap: break-word !important;
 }
@@ -1788,6 +1796,22 @@ input:checked ~ .tab-content {
 .tab-pane{
   padding: 1rem;
 }
+/* Custom styles for the modal */
+.custom-modal {
+    display: none;
+}
+.custom-backdrop {
+    background: rgba(255, 255, 255, 0.27);
+}
+.custom-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.custom-modal .card {
+    background-color: var(--button-default);
+}
 .visible{
   visibility: visible;
 }
@@ -1956,6 +1980,9 @@ input:checked ~ .tab-content {
 .h-10{
   height: 2.5rem;
 }
+.h-12{
+  height: 3rem;
+}
 .h-4{
   height: 1rem;
 }
@@ -1975,11 +2002,17 @@ input:checked ~ .tab-content {
   height: -moz-fit-content;
   height: fit-content;
 }
+.h-full{
+  height: 100%;
+}
 .min-h-screen{
   min-height: 100vh;
 }
 .w-1\/2{
   width: 50%;
+}
+.w-12{
+  width: 3rem;
 }
 .w-16{
   width: 4rem;
@@ -2008,6 +2041,9 @@ input:checked ~ .tab-content {
 .w-max{
   width: -moz-max-content;
   width: max-content;
+}
+.max-w-\[128px\]{
+  max-width: 128px;
 }
 .max-w-full{
   max-width: 100%;
@@ -2053,6 +2089,14 @@ input:checked ~ .tab-content {
 }
 .transform{
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+@keyframes spin{
+  to{
+    transform: rotate(360deg);
+  }
+}
+.animate-spin{
+  animation: spin 1s linear infinite;
 }
 .cursor-pointer{
   cursor: pointer;
@@ -2105,6 +2149,9 @@ input:checked ~ .tab-content {
 .justify-start{
   justify-content: flex-start;
 }
+.justify-end{
+  justify-content: flex-end;
+}
 .justify-center{
   justify-content: center;
 }
@@ -2154,6 +2201,9 @@ input:checked ~ .tab-content {
 .whitespace-nowrap{
   white-space: nowrap;
 }
+.rounded{
+  border-radius: 0.25rem;
+}
 .rounded-full{
   border-radius: 9999px;
 }
@@ -2181,6 +2231,9 @@ input:checked ~ .tab-content {
 .border-2{
   border-width: 2px;
 }
+.border-8{
+  border-width: 8px;
+}
 .border-b{
   border-bottom-width: 1px;
 }
@@ -2192,6 +2245,9 @@ input:checked ~ .tab-content {
 }
 .border-t-2{
   border-top-width: 2px;
+}
+.border-solid{
+  border-style: solid;
 }
 .border-primary-600{
   border-color: var(--primary-600, #80609f);
@@ -2420,6 +2476,11 @@ input:checked ~ .tab-content {
 .shadow-lg{
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-md{
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .outline{

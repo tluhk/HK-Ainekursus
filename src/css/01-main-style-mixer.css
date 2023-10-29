@@ -13,5 +13,6 @@
 @import '08-sidebar-menu.css';
 @import '09-first-page.css';
 @import '10-markdown-editor.css';
+@import '11-modal.css';
 
 @import 'tailwindcss/utilities';

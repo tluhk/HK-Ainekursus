@@ -10,110 +10,198 @@ import {
   updateFile,
 } from "../functions/githubFileFunctions.js";
 import { cacheTeamCourses } from "../setup/setupCache.js";
+import { axios } from "../setup/setupGithub.js";
+import * as cheerio from "cheerio";
+import getAllCoursesData from "../functions/getAllCoursesData.js";
 
 const router = express.Router();
 router.get("/", ensureAuthenticated, validateTeacher, (req, res) => {
   return res.render("course-add-new");
 });
 
-router.post("/", ensureAuthenticated, validateTeacher, async (req, res) => {
-  let error = "";
-  // validate request
-  if (req.body.courseName && req.body.oisUrl) {
-    const octokit = new Octokit({
-      auth: process.env.AUTH,
-    });
-
-    const { user } = req;
-    const template_owner = process.env.REPO_ORG_NAME;
-    const template_repo = process.env.TEMPLATE_REPO;
-    const repo_prefix = process.env.REPO_PREFIX;
-
-    // create repo
-    const created = await octokit
-      .request(`POST /repos/${template_owner}/${template_repo}/generate`, {
-        owner: template_owner,
-        name: slugify(`${repo_prefix}${req.body.courseName}`),
-        description: req.body.description,
-        include_all_branches: false,
-        private: true,
-        headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-        error = "repo loomine ebaõnnestus";
+router.post(
+  "/",
+  ensureAuthenticated,
+  validateTeacher,
+  async (req, res, next) => {
+    let errorMessage = "";
+    // validate request
+    if (req.body.oisUrl) {
+      const octokit = new Octokit({
+        auth: process.env.AUTH,
       });
 
-    if (created.status === 201) {
-      const repo = slugify(`${repo_prefix}${req.body.courseName}`); //created.data.name;
-      let contentOK = false;
-      let timeOut = false;
-      let waitCounter = 0;
-      // wait for content be available and fetch config.json file
-      while (!contentOK && !timeOut) {
-        await delay(1000);
+      const { user } = req;
+      const template_owner = process.env.REPO_ORG_NAME;
+      const template_repo = process.env.TEMPLATE_REPO;
+      const repo_prefix = process.env.REPO_PREFIX;
 
-        const config = await getFile(template_owner, repo, "config.json");
-        if (config) {
-          contentOK = true;
-          // fix some config.json fields
-          const newConfig = updateConfig(
-            config.content,
-            req.body.courseName,
-            req.body.oisUrl,
-            user.username,
-            repo,
-          );
+      let oisUrl = req.body.oisUrl;
+      let shortDescription = "";
+      let longDescription = "";
+      let courseName = "";
 
-          // upload modified file
-          updateFile(
-            template_owner,
-            repo,
-            "config.json",
-            { content: newConfig, sha: config.sha },
-            "fix config.json",
-          )
-            .then(() => {
-              console.log("config.json updated");
-            })
-            .catch(() => {
-              error = "config.json loomine ebaõnnestus";
-            });
-        }
-        waitCounter++;
-        timeOut = waitCounter > 20;
+      // figure out what user sent: a) OIS url 2) ainekood
+      try {
+        new URL(oisUrl);
+      } catch (error) {
+        oisUrl = `https://ois2.tlu.ee/tluois/aine/${req.body.oisUrl}`;
+      }
+      const tmpSlug = oisUrl.split("/").slice(-1)[0];
+      // if course exists...
+      const allCourses = await getAllCoursesData("teachers", req);
+      const oisCodeExists = allCourses.find(
+        (course) => course.courseCode === tmpSlug,
+      );
+
+      if (oisCodeExists) {
+        res.status(400).send({ msg: "duplicate", courseCode: tmpSlug });
+        return next;
       }
 
-      // replace readme file
-      getFile(template_owner, repo, "README.md").then((readme) => {
+      // fetch OIS content
+      try {
+        await axios(oisUrl).then((response) => {
+          const { data } = response;
+          if (data.includes(" ei leitud!")) {
+            errorMessage = data;
+          } else {
+            const $ = cheerio.load(data);
+
+            $(".yldaine_r", data).each(function () {
+              const yldaine_c1 = $(this).find("div.yldaine_c1").text();
+              const yldaine_c2 = $(this).find("div.yldaine_c2").text();
+
+              switch (yldaine_c1) {
+                case "Õppeaine nimetus eesti k":
+                  courseName = yldaine_c2;
+                  break;
+                case "Õppeaine eesmärgid":
+                  shortDescription = yldaine_c2;
+                  break;
+                case "Õppeaine sisu lühikirjeldus":
+                  longDescription = yldaine_c2;
+                  break;
+                case "Õppeaine õpiväljundid":
+                  longDescription += yldaine_c2;
+              }
+            });
+          }
+        });
+      } catch (error) {
+        errorMessage = "ÕIS'st ei saanud andmeid: " + oisUrl;
+      }
+      if (!courseName || !longDescription || errorMessage) {
+        errorMessage = "Kontrolli ÕIS`i linki, andmeid ei leitud";
+        res.status(400).send({ msg: errorMessage });
+        return next;
+      }
+
+      // check for repo name availability
+      let repoName = slugify(`${repo_prefix}${courseName}`);
+      const nameExists = cacheTeamCourses
+        .get("allCoursesData+teachers")
+        .data.filter((course) =>
+          course.full_name.startsWith(`${template_owner}/${repoName}`),
+        );
+
+      if (nameExists.length) {
+        // we have matching name, lets add suffix
+        let suffix = 1;
+        while (
+          nameExists.findIndex(
+            (course) =>
+              course.full_name === `${template_owner}/${repoName}_${suffix}`,
+          ) >= 0
+        ) {
+          suffix++;
+        }
+        repoName = `${repoName}_${suffix}`;
+      }
+
+      // create repo
+      const created = await octokit
+        .request(`POST /repos/${template_owner}/${template_repo}/generate`, {
+          owner: template_owner,
+          name: repoName,
+          description: shortDescription
+            .replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, " ")
+            .trim(),
+          include_all_branches: false,
+          private: true,
+          headers: {
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+          errorMessage = "Kursuse loomine ebaõnnestus";
+          res.status(400).send({ msg: errorMessage });
+        });
+
+      if (created.status === 201) {
+        let contentOK = false;
+        let timeOut = false;
+        let waitCounter = 0;
+        // wait for content be available and fetch config.json file
+        while (!contentOK && !timeOut) {
+          await delay(1000);
+
+          const config = await getFile(template_owner, repoName, "config.json");
+          if (config) {
+            contentOK = true;
+            // fix some config.json fields
+            const newConfig = updateConfig(
+              config.content,
+              courseName,
+              oisUrl,
+              user.username,
+              repoName,
+            );
+
+            // upload modified file
+            updateFile(
+              template_owner,
+              repoName,
+              "config.json",
+              { content: newConfig, sha: config.sha },
+              "fix config.json",
+            )
+              .then(() => {
+                console.log("config.json updated");
+              })
+              .catch(() => {
+                errorMessage = "config.json loomine ebaõnnestus";
+              });
+          }
+          waitCounter++;
+          timeOut = waitCounter > 20;
+        }
+
+        // replace readme file
+        const readme = await getFile(template_owner, repoName, "README.md");
         if (readme) {
-          readme.content = req.body.readme;
+          readme.content = longDescription;
           updateFile(
             template_owner,
-            repo,
+            repoName,
             "README.md",
             readme,
             "initial readme",
           ).then(() => console.log("Readme updated"));
         }
-      });
 
-      const tmpSlug = req.body.oisUrl.split("/").slice(-1);
-      console.log(`✅✅  /course/${tmpSlug}/`);
-      cacheTeamCourses.del("allCoursesData+teachers");
-      res.redirect(`/course/${tmpSlug}`);
+        console.log(`✅✅  /course-edit/${tmpSlug}/`);
+        cacheTeamCourses.del("allCoursesData+teachers");
+        res.status(201).send({ msg: "OK", courseCode: tmpSlug });
+        return next;
+      }
     } else {
-      error = "repo loomine ebaõnnestus";
+      errorMessage = "Kontrolli andmeid";
+      res.status(400).send({ msg: errorMessage });
     }
-  } else {
-    error = "kontrolli andmeid";
-  }
-  if (error) {
-    res.send(error);
-  }
-});
+  },
+);
 
 function updateConfig(content, courseName, courseUrl, userName, repoName) {
   const conf = JSON.parse(content);
