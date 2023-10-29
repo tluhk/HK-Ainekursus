@@ -1,9 +1,6 @@
-/* eslint-disable max-len */
-
-import axios from 'axios';
-
-import githubMembersRequests from '../../functions/githubMembersRequests.js';
-import { authToken } from '../../setup/setupGithub.js';
+import axios from "axios";
+import githubMembersRequests from "../../functions/githubMembersRequests.js";
+import { authToken } from "../../setup/setupGithub.js";
 
 const { requestMembers } = githubMembersRequests;
 
@@ -12,18 +9,12 @@ const { requestMembers } = githubMembersRequests;
  */
 const apiRequests = {
   getMembersService: async () => {
-    // const members = await axios.get(requestMembers, authToken);
-
-    // console.log('starting to get members');
-    const membersRaw = await axios.get(requestMembers, authToken).catch((error) => {
-      console.error(error);
-    });
-    // console.log('membersRaw2:', membersRaw);
-
-    const members = membersRaw.data;
-    // console.log('members1:', members);
-
-    return members;
+    const membersRaw = await axios
+      .get(requestMembers, authToken)
+      .catch((error) => {
+        console.error(error);
+      });
+    return membersRaw.data;
   },
 };
 

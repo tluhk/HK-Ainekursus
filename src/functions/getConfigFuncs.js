@@ -1,91 +1,135 @@
-/* eslint-disable max-len */
-import { jsonrepair } from 'jsonrepair';
-import base64 from 'base-64';
-import utf8 from 'utf8';
-
-import { axios, authToken } from '../setup/setupGithub.js';
-
-import { cacheConfig } from '../setup/setupCache.js';
-
-// Import request functions for Axios
-import githubReposRequests from './githubReposRequests.js';
+import { jsonrepair } from "jsonrepair";
+import base64 from "base-64";
+import utf8 from "utf8";
+import { authToken, axios } from "../setup/setupGithub.js";
+import { cacheConfig } from "../setup/setupCache.js";
+import githubReposRequests from "./githubReposRequests.js";
 
 const { requestConfig } = githubReposRequests;
 
 const getRepoResponse = async (selectedCourse, refBranch) => {
-  // console.log('selectedCourse2:', selectedCourse);
-  // console.log('refBranch2:', refBranch);
-  let response = '';
+  let response = "";
   try {
-    response = await axios.get(requestConfig(selectedCourse, refBranch), authToken);
+    response = await axios.get(
+      requestConfig(selectedCourse, refBranch),
+      authToken,
+    );
   } catch (err) {
     // Handle Error Here
-    console.error(err);
+    //console.error(err);
+    console.error(`Fetch config failed: ${selectedCourse}`);
   }
-  // console.log('response2:', response);
   return response;
 };
 
 const validateConfig = (configObj, selectedCourse, refBranch) => {
   /** Validate that config includes all expected keys */
-  const expectedKeys = ['courseUrl', 'teacherUsername', 'active', 'semester', 'docs', 'teacherUsername', 'lessons', 'concepts', 'practices'];
+
+  const expectedKeys =
+    refBranch === "master"
+      ? ["courseUrl", "active", "docs", "lessons", "concepts", "practices"]
+      : [
+          "courseUrl",
+          "active",
+          "semester",
+          "docs",
+          "teacherUsername",
+          "lessons",
+          "concepts",
+          "practices",
+        ];
 
   const objectKeys = Object.keys(configObj);
   const hasAllKeys = expectedKeys.every((key) => objectKeys.includes(key));
 
   if (!hasAllKeys) {
-    console.error(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected keys missing.`);
+    console.error(
+      `Config file of ${selectedCourse}, branch ${refBranch} has one or more expected keys missing.`,
+    );
     return false;
   }
 
   /** Validate that docs, additionalMaterials, lessons, concepts and practices keys have Arrays as values and that each array consists of at least on elem (Arrays are not empty).  */
 
   if (
-    !Array.isArray(configObj.docs) || !configObj.docs.length > 0
-    || !Array.isArray(configObj.additionalMaterials) || !configObj.additionalMaterials.length > 0
-    || !Array.isArray(configObj.lessons) || !configObj.lessons.length > 0
-    || !Array.isArray(configObj.concepts) || !configObj.concepts.length > 0
-    || !Array.isArray(configObj.practices) || !configObj.practices.length > 0
+    !Array.isArray(configObj.docs) ||
+    !configObj.docs.length > 0 ||
+    !Array.isArray(configObj.additionalMaterials) ||
+    !configObj.additionalMaterials.length > 0 ||
+    !Array.isArray(configObj.lessons) ||
+    !configObj.lessons.length > 0 ||
+    !Array.isArray(configObj.concepts) ||
+    !configObj.concepts.length > 0 ||
+    !Array.isArray(configObj.practices) ||
+    !configObj.practices.length > 0
   ) {
-    console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected keys with incorrect type or empty array.`);
+    console.log(
+      `Config file of ${selectedCourse}, branch ${refBranch} has one or more expected keys with incorrect type or empty array.`,
+    );
     return false;
   }
 
-  const expectedKeys2 = ['slug', 'name'];
+  const expectedKeys2 = ["slug", "name"];
   const objectKeysDocs = Object.keys(configObj.docs[0]);
-  const hasAllKeysDocs = expectedKeys2.every((key) => objectKeysDocs.includes(key));
+  const hasAllKeysDocs = expectedKeys2.every((key) =>
+    objectKeysDocs.includes(key),
+  );
 
-  const objectKeysAdditionalMaterials = Object.keys(configObj.additionalMaterials[0]);
-  const hasAllKeysAdditionalMaterials = expectedKeys2.every((key) => objectKeysAdditionalMaterials.includes(key));
+  const objectKeysAdditionalMaterials = Object.keys(
+    configObj.additionalMaterials[0],
+  );
+  const hasAllKeysAdditionalMaterials = expectedKeys2.every((key) =>
+    objectKeysAdditionalMaterials.includes(key),
+  );
 
-  const expectedKeys3 = ['slug', 'name', 'uuid', 'components', 'additionalMaterials'];
+  const expectedKeys3 = [
+    "slug",
+    "name",
+    "uuid",
+    "components",
+    "additionalMaterials",
+  ];
 
   const hasAllKeysLessons = configObj.lessons.every((lesson) => {
     const objectKeysLesson = Object.keys(lesson);
-    const lessonHasAllKeys = expectedKeys3.every((key) => objectKeysLesson.includes(key));
+    const lessonHasAllKeys = expectedKeys3.every((key) =>
+      objectKeysLesson.includes(key),
+    );
     if (!lessonHasAllKeys) {
-      console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson keys missing.`);
+      console.log(
+        `Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson keys missing.`,
+      );
       return false;
     }
-    if (!Array.isArray(lesson.components)
-      || !lesson.components.length > 0
-      || !Array.isArray(lesson.additionalMaterials)
-      || !lesson.additionalMaterials.length > 0) {
-      console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson keys with incorrect type, or empty array.`);
+    if (
+      !Array.isArray(lesson.components) ||
+      !lesson.components.length > 0 ||
+      !Array.isArray(lesson.additionalMaterials) ||
+      !lesson.additionalMaterials.length > 0
+    ) {
+      console.log(
+        `Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson keys with incorrect type, or empty array.`,
+      );
       return false;
     }
-    const lessonKeysAdditionalMaterials = Object.keys(lesson.additionalMaterials[0]);
+    const lessonKeysAdditionalMaterials = Object.keys(
+      lesson.additionalMaterials[0],
+    );
 
     // console.log('lessonKeysAdditionalMaterials1:', lessonKeysAdditionalMaterials);
-    const lessonAddMaterialsHaveKeys = expectedKeys2.every((key) => lessonKeysAdditionalMaterials.includes(key));
+    const lessonAddMaterialsHaveKeys = expectedKeys2.every((key) =>
+      lessonKeysAdditionalMaterials.includes(key),
+    );
     if (!lessonAddMaterialsHaveKeys) {
-      console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson additionalMaterials array with missing keys.`);
+      console.log(
+        `Config file of ${selectedCourse}, branch ${refBranch} has one or more expected lesson additionalMaterials array with missing keys.`,
+      );
       return false;
     }
     return true;
   });
 
-  const expectedKeys4 = ['slug', 'name', 'uuid'];
+  const expectedKeys4 = ["slug", "name", "uuid"];
 
   const hasAllKeysConcepts = configObj.concepts.every((concept) => {
     const objectKeysConcept = Object.keys(concept);
@@ -97,13 +141,16 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
     return expectedKeys4.every((key) => objectKeysPractice.includes(key));
   });
 
-  if (!hasAllKeysDocs
-    || !hasAllKeysAdditionalMaterials
-    || !hasAllKeysLessons
-    || !hasAllKeysConcepts
-    || !hasAllKeysPractices
+  if (
+    !hasAllKeysDocs ||
+    !hasAllKeysAdditionalMaterials ||
+    !hasAllKeysLessons ||
+    !hasAllKeysConcepts ||
+    !hasAllKeysPractices
   ) {
-    console.log(`Config file of ${selectedCourse}, branch ${refBranch} has one or more expected docs, additionalMaterials, lessons, concepts or practices array with missing keys or incorrect type.`);
+    console.log(
+      `Config file of ${selectedCourse}, branch ${refBranch} has one or more expected docs, additionalMaterials, lessons, concepts or practices array with missing keys or incorrect type.`,
+    );
     return false;
   }
   return true;
@@ -114,7 +161,7 @@ const getConfig = async (selectedCourse, refBranch) => {
 
   /** Check if cache already has course branch config.
    * If yes, read config from cache.
-   * If not, make new github request for config and cache it.
+   * If not, make new GitHub request for config and cache it.
    */
   // console.log('selectedCourse1:', selectedCourse);
   // console.log('refBranch1:', refBranch);
@@ -129,7 +176,9 @@ const getConfig = async (selectedCourse, refBranch) => {
     config = cacheConfig.get(routePath);
     console.log(`✅ getConfig FROM CACHE: ${selectedCourse}+${refBranch}`);
   } else {
-    console.log(`❌ getConfig IS NOT from cache: ${selectedCourse}+${refBranch}`);
+    console.log(
+      `❌ getConfig IS NOT from cache: ${selectedCourse}+${refBranch}`,
+    );
     try {
       config = await getRepoResponse(selectedCourse, refBranch);
     } catch (error) {
@@ -144,7 +193,7 @@ const getConfig = async (selectedCourse, refBranch) => {
 
   if (!config.data) return null;
   // console.log('config2:', config);
-  /** Decode Github response with base64 and utf8. Result is a string configDecodedUtf8 that contains the config file content. */
+  /** Decode GitHub response with base64 and utf8. Result is a string configDecodedUtf8 that contains the config file content. */
   const configDecoded = base64.decode(config.data.content);
   const configDecodedUtf8 = utf8.decode(configDecoded);
   // console.log('configDecodedUtf8:', configDecodedUtf8);
@@ -153,13 +202,15 @@ const getConfig = async (selectedCourse, refBranch) => {
   /** Fix broken JSON before parsing it: https://www.npmjs.com/package/jsonrepair .
    * E.g. the config file might be missing a comma, or double quotes here or there.
    * This must be fixed before JSON.parse() command.
-  */
+   */
   let repairedConfigJSON;
   /* Validate that config is object type and in JSON format */
   try {
     repairedConfigJSON = jsonrepair(configDecodedUtf8);
   } catch (error) {
-    console.error(`Config file of ${selectedCourse}, branch ${refBranch} is not object type or does not match JSON format.`);
+    console.error(
+      `Config file of ${selectedCourse}, branch ${refBranch} is not object type or does not match JSON format.`,
+    );
     return null;
   }
   // console.log('repairedConfigJSON8:', repairedConfigJSON);
@@ -176,30 +227,26 @@ const getConfig = async (selectedCourse, refBranch) => {
   configObj.lessons.forEach((lesson, indexLesson) => {
     if (Array.isArray(lesson.components)) {
       const arr = lesson.components;
-      const componentsLowercase = arr.map((item) => item.toLowerCase());
-      configObj.lessons[indexLesson].components = componentsLowercase;
+      configObj.lessons[indexLesson].components = arr.map((item) =>
+        item.toLowerCase(),
+      );
     }
   });
   // console.log('configObj.lessons[0].components10:', configObj.lessons[0].components);
 
   /** Convert all "slug" key values to lowercase */
   Object.keys(configObj).forEach((key) => {
-    // console.log('key9:', key);
     if (Array.isArray(configObj[key])) {
       const arr = configObj[key];
-      // console.log('arr9:', arr);
       arr.forEach((item) => {
-        // console.log('item9:', item);
-        if (item.hasOwnProperty('slug')) {
+        //if (item.hasOwnProperty("slug")) {
+        if (Object.prototype.hasOwnProperty.call(item, "slug")) {
           item.slug = item.slug.toLowerCase();
           // console.log('item10:', item);
         }
       });
     }
   });
-
-  // console.log('configObj9:', configObj);
-
   return configObj;
 };
 
