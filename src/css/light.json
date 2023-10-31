@@ -1,1 +1,1087 @@
-[{"value":"linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)","type":"color"},"name":"active-menu-stroke-on","attributes":{"category":"active-menu-stroke-on"},"path":["active-menu-stroke-on"]},{"value":"#414a58","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#414a58","type":"color"},"name":"text","attributes":{"category":"text"},"path":["text"]},{"value":"#2b313b","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#2b313b","type":"color"},"name":"link","attributes":{"category":"link"},"path":["link"]},{"value":"#5c6470","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#5c6470","type":"color"},"name":"link-idle","attributes":{"category":"link-idle"},"path":["link-idle"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"link-action","attributes":{"category":"link-action"},"path":["link-action"]},{"value":"linear-gradient(194deg, #a57e4322 0%, #4f453622 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(194deg, #a57e4322 0%, #4f453622 100%)","type":"color"},"name":"card-background","attributes":{"category":"card-background"},"path":["card-background"]},{"value":"linear-gradient(194deg, #5d4e39 0%, #a57e43 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(194deg, #5d4e39 0%, #a57e43 100%)","type":"color"},"name":"menu-item-background","attributes":{"category":"menu-item-background"},"path":["menu-item-background"]},{"value":"linear-gradient(232deg, #9e7942 0%, #645b4e 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(232deg, #9e7942 0%, #645b4e 100%)","type":"color"},"name":"menu-background","attributes":{"category":"menu-background"},"path":["menu-background"]},{"value":"linear-gradient(232deg, #9e794222 0%, #645b4e22 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(232deg, #9e794222 0%, #645b4e22 100%)","type":"color"},"name":"menu-card-background","attributes":{"category":"menu-card-background"},"path":["menu-card-background"]},{"value":"linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%)","type":"color"},"name":"menu-card-stroke","attributes":{"category":"menu-card-stroke"},"path":["menu-card-stroke"]},{"value":"linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)","type":"color"},"name":"menu-item-background-stroke","attributes":{"category":"menu-item-background-stroke"},"path":["menu-item-background-stroke"]},{"value":"#4d2e6b","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#4d2e6b","type":"color"},"name":"link-active","attributes":{"category":"link-active"},"path":["link-active"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"link-hover","attributes":{"category":"link-hover"},"path":["link-hover"]},{"value":"#FAFCFF","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#FAFCFF","type":"color"},"name":"page-background","attributes":{"category":"page-background"},"path":["page-background"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"button-default","attributes":{"category":"button","type":"default"},"path":["button","default"]},{"value":"#664d80","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#664d80","type":"color"},"name":"button-hover","attributes":{"category":"button","type":"hover"},"path":["button","hover"]},{"value":"#4d2e6b","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#4d2e6b","type":"color"},"name":"button-active","attributes":{"category":"button","type":"active"},"path":["button","active"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"button-focus","attributes":{"category":"button","type":"focus"},"path":["button","focus"]},{"value":"#abb1ba","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#abb1ba","type":"color"},"name":"button-disabled","attributes":{"category":"button","type":"disabled"},"path":["button","disabled"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"button-secondary-default","attributes":{"category":"button","type":"secondary-default"},"path":["button","secondary-default"]},{"value":"#f2eff5","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#f2eff5","type":"color"},"name":"button-secondary-fill-hover","attributes":{"category":"button","type":"secondary-fill-hover"},"path":["button","secondary-fill-hover"]},{"value":"#e6dfec","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#e6dfec","type":"color"},"name":"button-secondary-fill-active","attributes":{"category":"button","type":"secondary-fill-active"},"path":["button","secondary-fill-active"]},{"value":"#414a58","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#414a58","type":"color"},"name":"button-secondary-label-default","attributes":{"category":"button","type":"secondary-label-default"},"path":["button","secondary-label-default"]},{"value":"#664d80","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#664d80","type":"color"},"name":"button-secondary-hover","attributes":{"category":"button","type":"secondary-hover"},"path":["button","secondary-hover"]},{"value":"#4d2e6b","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#4d2e6b","type":"color"},"name":"button-secondary-active","attributes":{"category":"button","type":"secondary-active"},"path":["button","secondary-active"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"button-secondary-focus","attributes":{"category":"button","type":"secondary-focus"},"path":["button","secondary-focus"]},{"value":"#abb1ba","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#abb1ba","type":"color"},"name":"button-secondary-disabled","attributes":{"category":"button","type":"secondary-disabled"},"path":["button","secondary-disabled"]},{"value":"#4d2e6b","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#4d2e6b","type":"color"},"name":"button-link","attributes":{"category":"button","type":"link"},"path":["button","link"]},{"value":"#664d80","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#664d80","type":"color"},"name":"button-link-hover","attributes":{"category":"button","type":"link-hover"},"path":["button","link-hover"]},{"value":"#80609f","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#80609f","type":"color"},"name":"button-link-active","attributes":{"category":"button","type":"link-active"},"path":["button","link-active"]},{"value":"#FAFCFF","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#FAFCFF","type":"color"},"name":"table-cell","attributes":{"category":"table-cell"},"path":["table-cell"]},{"value":"#e6dfec","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#e6dfec","type":"color"},"name":"table-header-cell","attributes":{"category":"table-header-cell"},"path":["table-header-cell"]},{"value":"#f2eff5","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#f2eff5","type":"color"},"name":"table-hover-cell","attributes":{"category":"table-hover-cell"},"path":["table-hover-cell"]},{"value":"#E2D9CF","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#E2D9CF","type":"color"},"name":"card-stroke","attributes":{"category":"card-stroke"},"path":["card-stroke"]},{"value":0,"type":"x","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"x"},"name":"card-hover-shadow-x","attributes":{"category":"card-hover-shadow","type":"x"},"path":["card-hover-shadow","x"]},{"value":0,"type":"y","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"y"},"name":"card-hover-shadow-y","attributes":{"category":"card-hover-shadow","type":"y"},"path":["card-hover-shadow","y"]},{"value":22,"type":"blur","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":22,"type":"blur"},"name":"card-hover-shadow-blur","attributes":{"category":"card-hover-shadow","type":"blur"},"path":["card-hover-shadow","blur"]},{"value":0,"type":"spread","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"spread"},"name":"card-hover-shadow-spread","attributes":{"category":"card-hover-shadow","type":"spread"},"path":["card-hover-shadow","spread"]},{"value":"#c7cbd1","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#c7cbd1","type":"color"},"name":"card-hover-shadow-color","attributes":{"category":"card-hover-shadow","type":"color"},"path":["card-hover-shadow","color"]},{"value":"dropShadow","type":"type","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"dropShadow","type":"type"},"name":"card-hover-shadow-type","attributes":{"category":"card-hover-shadow","type":"type"},"path":["card-hover-shadow","type"]},{"value":"#E2D9CF","type":"color","description":"Use with 50% opacity","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#E2D9CF","type":"color","description":"Use with 50% opacity"},"name":"stroke","attributes":{"category":"stroke"},"path":["stroke"]},{"value":4,"type":"x","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":4,"type":"x"},"name":"drop-shadow-x","attributes":{"category":"drop-shadow","type":"x"},"path":["drop-shadow","x"]},{"value":4,"type":"y","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":4,"type":"y"},"name":"drop-shadow-y","attributes":{"category":"drop-shadow","type":"y"},"path":["drop-shadow","y"]},{"value":11,"type":"blur","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":11,"type":"blur"},"name":"drop-shadow-blur","attributes":{"category":"drop-shadow","type":"blur"},"path":["drop-shadow","blur"]},{"value":0,"type":"spread","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"spread"},"name":"drop-shadow-spread","attributes":{"category":"drop-shadow","type":"spread"},"path":["drop-shadow","spread"]},{"value":"#05020811","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#05020811","type":"color"},"name":"drop-shadow-color","attributes":{"category":"drop-shadow","type":"color"},"path":["drop-shadow","color"]},{"value":"dropShadow","type":"type","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"dropShadow","type":"type"},"name":"drop-shadow-type","attributes":{"category":"drop-shadow","type":"type"},"path":["drop-shadow","type"]},{"value":0,"type":"x","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"x"},"name":"radio-shadow-x","attributes":{"category":"radio-shadow","type":"x"},"path":["radio-shadow","x"]},{"value":"5px","type":"y","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"5px","type":"y"},"name":"radio-shadow-y","attributes":{"category":"radio-shadow","type":"y"},"path":["radio-shadow","y"]},{"value":"7px","type":"blur","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"7px","type":"blur"},"name":"radio-shadow-blur","attributes":{"category":"radio-shadow","type":"blur"},"path":["radio-shadow","blur"]},{"value":0,"type":"spread","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"spread"},"name":"radio-shadow-spread","attributes":{"category":"radio-shadow","type":"spread"},"path":["radio-shadow","spread"]},{"value":"#2b313b70","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#2b313b70","type":"color"},"name":"radio-shadow-color","attributes":{"category":"radio-shadow","type":"color"},"path":["radio-shadow","color"]},{"value":"innerShadow","type":"type","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"innerShadow","type":"type"},"name":"radio-shadow-type","attributes":{"category":"radio-shadow","type":"type"},"path":["radio-shadow","type"]},{"value":0,"type":"x","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"x"},"name":"radio-shadow-hover-x","attributes":{"category":"radio-shadow-hover","type":"x"},"path":["radio-shadow-hover","x"]},{"value":0,"type":"y","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"y"},"name":"radio-shadow-hover-y","attributes":{"category":"radio-shadow-hover","type":"y"},"path":["radio-shadow-hover","y"]},{"value":"22px","type":"blur","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"22px","type":"blur"},"name":"radio-shadow-hover-blur","attributes":{"category":"radio-shadow-hover","type":"blur"},"path":["radio-shadow-hover","blur"]},{"value":0,"type":"spread","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":0,"type":"spread"},"name":"radio-shadow-hover-spread","attributes":{"category":"radio-shadow-hover","type":"spread"},"path":["radio-shadow-hover","spread"]},{"value":"#8f97a3","type":"color","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"#8f97a3","type":"color"},"name":"radio-shadow-hover-color","attributes":{"category":"radio-shadow-hover","type":"color"},"path":["radio-shadow-hover","color"]},{"value":"dropShadow","type":"type","filePath":"src/tokens/converted-tokens/light.json","isSource":true,"original":{"value":"dropShadow","type":"type"},"name":"radio-shadow-hover-type","attributes":{"category":"radio-shadow-hover","type":"type"},"path":["radio-shadow-hover","type"]}]
+[
+  {
+    "value": "linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+      "type": "color"
+    },
+    "name": "active-menu-stroke-on",
+    "attributes": {
+      "category": "active-menu-stroke-on"
+    },
+    "path": [
+      "active-menu-stroke-on"
+    ]
+  },
+  {
+    "value": "#414a58",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#414a58",
+      "type": "color"
+    },
+    "name": "text",
+    "attributes": {
+      "category": "text"
+    },
+    "path": [
+      "text"
+    ]
+  },
+  {
+    "value": "#2b313b",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#2b313b",
+      "type": "color"
+    },
+    "name": "link",
+    "attributes": {
+      "category": "link"
+    },
+    "path": [
+      "link"
+    ]
+  },
+  {
+    "value": "#5c6470",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#5c6470",
+      "type": "color"
+    },
+    "name": "link-idle",
+    "attributes": {
+      "category": "link-idle"
+    },
+    "path": [
+      "link-idle"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "link-action",
+    "attributes": {
+      "category": "link-action"
+    },
+    "path": [
+      "link-action"
+    ]
+  },
+  {
+    "value": "linear-gradient(194deg, #a57e4322 0%, #4f453622 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(194deg, #a57e4322 0%, #4f453622 100%)",
+      "type": "color"
+    },
+    "name": "card-background",
+    "attributes": {
+      "category": "card-background"
+    },
+    "path": [
+      "card-background"
+    ]
+  },
+  {
+    "value": "linear-gradient(194deg, #5d4e39 0%, #a57e43 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(194deg, #5d4e39 0%, #a57e43 100%)",
+      "type": "color"
+    },
+    "name": "menu-item-background",
+    "attributes": {
+      "category": "menu-item-background"
+    },
+    "path": [
+      "menu-item-background"
+    ]
+  },
+  {
+    "value": "linear-gradient(232deg, #9e7942 0%, #645b4e 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(232deg, #9e7942 0%, #645b4e 100%)",
+      "type": "color"
+    },
+    "name": "menu-background",
+    "attributes": {
+      "category": "menu-background"
+    },
+    "path": [
+      "menu-background"
+    ]
+  },
+  {
+    "value": "linear-gradient(232deg, #9e794222 0%, #645b4e22 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(232deg, #9e794222 0%, #645b4e22 100%)",
+      "type": "color"
+    },
+    "name": "menu-card-background",
+    "attributes": {
+      "category": "menu-card-background"
+    },
+    "path": [
+      "menu-card-background"
+    ]
+  },
+  {
+    "value": "linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(180deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+      "type": "color"
+    },
+    "name": "menu-card-stroke",
+    "attributes": {
+      "category": "menu-card-stroke"
+    },
+    "path": [
+      "menu-card-stroke"
+    ]
+  },
+  {
+    "value": "linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "linear-gradient(204deg, #f2f8fd29 0%, #f2fcfd00 100%)",
+      "type": "color"
+    },
+    "name": "menu-item-background-stroke",
+    "attributes": {
+      "category": "menu-item-background-stroke"
+    },
+    "path": [
+      "menu-item-background-stroke"
+    ]
+  },
+  {
+    "value": "#4d2e6b",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#4d2e6b",
+      "type": "color"
+    },
+    "name": "link-active",
+    "attributes": {
+      "category": "link-active"
+    },
+    "path": [
+      "link-active"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "link-hover",
+    "attributes": {
+      "category": "link-hover"
+    },
+    "path": [
+      "link-hover"
+    ]
+  },
+  {
+    "value": "#FAFCFF",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#FAFCFF",
+      "type": "color"
+    },
+    "name": "page-background",
+    "attributes": {
+      "category": "page-background"
+    },
+    "path": [
+      "page-background"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "button-default",
+    "attributes": {
+      "category": "button",
+      "type": "default"
+    },
+    "path": [
+      "button",
+      "default"
+    ]
+  },
+  {
+    "value": "#664d80",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#664d80",
+      "type": "color"
+    },
+    "name": "button-hover",
+    "attributes": {
+      "category": "button",
+      "type": "hover"
+    },
+    "path": [
+      "button",
+      "hover"
+    ]
+  },
+  {
+    "value": "#4d2e6b",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#4d2e6b",
+      "type": "color"
+    },
+    "name": "button-active",
+    "attributes": {
+      "category": "button",
+      "type": "active"
+    },
+    "path": [
+      "button",
+      "active"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "button-focus",
+    "attributes": {
+      "category": "button",
+      "type": "focus"
+    },
+    "path": [
+      "button",
+      "focus"
+    ]
+  },
+  {
+    "value": "#abb1ba",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#abb1ba",
+      "type": "color"
+    },
+    "name": "button-disabled",
+    "attributes": {
+      "category": "button",
+      "type": "disabled"
+    },
+    "path": [
+      "button",
+      "disabled"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "button-secondary-default",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-default"
+    },
+    "path": [
+      "button",
+      "secondary-default"
+    ]
+  },
+  {
+    "value": "#f2eff5",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#f2eff5",
+      "type": "color"
+    },
+    "name": "button-secondary-fill-hover",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-fill-hover"
+    },
+    "path": [
+      "button",
+      "secondary-fill-hover"
+    ]
+  },
+  {
+    "value": "#e6dfec",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#e6dfec",
+      "type": "color"
+    },
+    "name": "button-secondary-fill-active",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-fill-active"
+    },
+    "path": [
+      "button",
+      "secondary-fill-active"
+    ]
+  },
+  {
+    "value": "#414a58",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#414a58",
+      "type": "color"
+    },
+    "name": "button-secondary-label-default",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-label-default"
+    },
+    "path": [
+      "button",
+      "secondary-label-default"
+    ]
+  },
+  {
+    "value": "#664d80",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#664d80",
+      "type": "color"
+    },
+    "name": "button-secondary-hover",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-hover"
+    },
+    "path": [
+      "button",
+      "secondary-hover"
+    ]
+  },
+  {
+    "value": "#4d2e6b",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#4d2e6b",
+      "type": "color"
+    },
+    "name": "button-secondary-active",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-active"
+    },
+    "path": [
+      "button",
+      "secondary-active"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "button-secondary-focus",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-focus"
+    },
+    "path": [
+      "button",
+      "secondary-focus"
+    ]
+  },
+  {
+    "value": "#abb1ba",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#abb1ba",
+      "type": "color"
+    },
+    "name": "button-secondary-disabled",
+    "attributes": {
+      "category": "button",
+      "type": "secondary-disabled"
+    },
+    "path": [
+      "button",
+      "secondary-disabled"
+    ]
+  },
+  {
+    "value": "#4d2e6b",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#4d2e6b",
+      "type": "color"
+    },
+    "name": "button-link",
+    "attributes": {
+      "category": "button",
+      "type": "link"
+    },
+    "path": [
+      "button",
+      "link"
+    ]
+  },
+  {
+    "value": "#664d80",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#664d80",
+      "type": "color"
+    },
+    "name": "button-link-hover",
+    "attributes": {
+      "category": "button",
+      "type": "link-hover"
+    },
+    "path": [
+      "button",
+      "link-hover"
+    ]
+  },
+  {
+    "value": "#80609f",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#80609f",
+      "type": "color"
+    },
+    "name": "button-link-active",
+    "attributes": {
+      "category": "button",
+      "type": "link-active"
+    },
+    "path": [
+      "button",
+      "link-active"
+    ]
+  },
+  {
+    "value": "#FAFCFF",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#FAFCFF",
+      "type": "color"
+    },
+    "name": "table-cell",
+    "attributes": {
+      "category": "table-cell"
+    },
+    "path": [
+      "table-cell"
+    ]
+  },
+  {
+    "value": "#e6dfec",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#e6dfec",
+      "type": "color"
+    },
+    "name": "table-header-cell",
+    "attributes": {
+      "category": "table-header-cell"
+    },
+    "path": [
+      "table-header-cell"
+    ]
+  },
+  {
+    "value": "#f2eff5",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#f2eff5",
+      "type": "color"
+    },
+    "name": "table-hover-cell",
+    "attributes": {
+      "category": "table-hover-cell"
+    },
+    "path": [
+      "table-hover-cell"
+    ]
+  },
+  {
+    "value": "#E2D9CF",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#E2D9CF",
+      "type": "color"
+    },
+    "name": "card-stroke",
+    "attributes": {
+      "category": "card-stroke"
+    },
+    "path": [
+      "card-stroke"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "x",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "x"
+    },
+    "name": "card-hover-shadow-x",
+    "attributes": {
+      "category": "card-hover-shadow",
+      "type": "x"
+    },
+    "path": [
+      "card-hover-shadow",
+      "x"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "y",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "y"
+    },
+    "name": "card-hover-shadow-y",
+    "attributes": {
+      "category": "card-hover-shadow",
+      "type": "y"
+    },
+    "path": [
+      "card-hover-shadow",
+      "y"
+    ]
+  },
+  {
+    "value": 22,
+    "type": "blur",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 22,
+      "type": "blur"
+    },
+    "name": "card-hover-shadow-blur",
+    "attributes": {
+      "category": "card-hover-shadow",
+      "type": "blur"
+    },
+    "path": [
+      "card-hover-shadow",
+      "blur"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "spread",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "spread"
+    },
+    "name": "card-hover-shadow-spread",
+    "attributes": {
+      "category": "card-hover-shadow",
+      "type": "spread"
+    },
+    "path": [
+      "card-hover-shadow",
+      "spread"
+    ]
+  },
+  {
+    "value": "#c7cbd1",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#c7cbd1",
+      "type": "color"
+    },
+    "name": "card-hover-shadow-color",
+    "attributes": {
+      "category": "card-hover-shadow",
+      "type": "color"
+    },
+    "path": [
+      "card-hover-shadow",
+      "color"
+    ]
+  },
+  {
+    "value": "dropShadow",
+    "type": "type",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "dropShadow",
+      "type": "type"
+    },
+    "name": "card-hover-shadow-type",
+    "attributes": {
+      "category": "card-hover-shadow",
+      "type": "type"
+    },
+    "path": [
+      "card-hover-shadow",
+      "type"
+    ]
+  },
+  {
+    "value": "#E2D9CF",
+    "type": "color",
+    "description": "Use with 50% opacity",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#E2D9CF",
+      "type": "color",
+      "description": "Use with 50% opacity"
+    },
+    "name": "stroke",
+    "attributes": {
+      "category": "stroke"
+    },
+    "path": [
+      "stroke"
+    ]
+  },
+  {
+    "value": 4,
+    "type": "x",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 4,
+      "type": "x"
+    },
+    "name": "drop-shadow-x",
+    "attributes": {
+      "category": "drop-shadow",
+      "type": "x"
+    },
+    "path": [
+      "drop-shadow",
+      "x"
+    ]
+  },
+  {
+    "value": 4,
+    "type": "y",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 4,
+      "type": "y"
+    },
+    "name": "drop-shadow-y",
+    "attributes": {
+      "category": "drop-shadow",
+      "type": "y"
+    },
+    "path": [
+      "drop-shadow",
+      "y"
+    ]
+  },
+  {
+    "value": 11,
+    "type": "blur",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 11,
+      "type": "blur"
+    },
+    "name": "drop-shadow-blur",
+    "attributes": {
+      "category": "drop-shadow",
+      "type": "blur"
+    },
+    "path": [
+      "drop-shadow",
+      "blur"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "spread",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "spread"
+    },
+    "name": "drop-shadow-spread",
+    "attributes": {
+      "category": "drop-shadow",
+      "type": "spread"
+    },
+    "path": [
+      "drop-shadow",
+      "spread"
+    ]
+  },
+  {
+    "value": "#05020811",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#05020811",
+      "type": "color"
+    },
+    "name": "drop-shadow-color",
+    "attributes": {
+      "category": "drop-shadow",
+      "type": "color"
+    },
+    "path": [
+      "drop-shadow",
+      "color"
+    ]
+  },
+  {
+    "value": "dropShadow",
+    "type": "type",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "dropShadow",
+      "type": "type"
+    },
+    "name": "drop-shadow-type",
+    "attributes": {
+      "category": "drop-shadow",
+      "type": "type"
+    },
+    "path": [
+      "drop-shadow",
+      "type"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "x",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "x"
+    },
+    "name": "radio-shadow-x",
+    "attributes": {
+      "category": "radio-shadow",
+      "type": "x"
+    },
+    "path": [
+      "radio-shadow",
+      "x"
+    ]
+  },
+  {
+    "value": "5px",
+    "type": "y",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "5px",
+      "type": "y"
+    },
+    "name": "radio-shadow-y",
+    "attributes": {
+      "category": "radio-shadow",
+      "type": "y"
+    },
+    "path": [
+      "radio-shadow",
+      "y"
+    ]
+  },
+  {
+    "value": "7px",
+    "type": "blur",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "7px",
+      "type": "blur"
+    },
+    "name": "radio-shadow-blur",
+    "attributes": {
+      "category": "radio-shadow",
+      "type": "blur"
+    },
+    "path": [
+      "radio-shadow",
+      "blur"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "spread",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "spread"
+    },
+    "name": "radio-shadow-spread",
+    "attributes": {
+      "category": "radio-shadow",
+      "type": "spread"
+    },
+    "path": [
+      "radio-shadow",
+      "spread"
+    ]
+  },
+  {
+    "value": "#2b313b70",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#2b313b70",
+      "type": "color"
+    },
+    "name": "radio-shadow-color",
+    "attributes": {
+      "category": "radio-shadow",
+      "type": "color"
+    },
+    "path": [
+      "radio-shadow",
+      "color"
+    ]
+  },
+  {
+    "value": "innerShadow",
+    "type": "type",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "innerShadow",
+      "type": "type"
+    },
+    "name": "radio-shadow-type",
+    "attributes": {
+      "category": "radio-shadow",
+      "type": "type"
+    },
+    "path": [
+      "radio-shadow",
+      "type"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "x",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "x"
+    },
+    "name": "radio-shadow-hover-x",
+    "attributes": {
+      "category": "radio-shadow-hover",
+      "type": "x"
+    },
+    "path": [
+      "radio-shadow-hover",
+      "x"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "y",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "y"
+    },
+    "name": "radio-shadow-hover-y",
+    "attributes": {
+      "category": "radio-shadow-hover",
+      "type": "y"
+    },
+    "path": [
+      "radio-shadow-hover",
+      "y"
+    ]
+  },
+  {
+    "value": "22px",
+    "type": "blur",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "22px",
+      "type": "blur"
+    },
+    "name": "radio-shadow-hover-blur",
+    "attributes": {
+      "category": "radio-shadow-hover",
+      "type": "blur"
+    },
+    "path": [
+      "radio-shadow-hover",
+      "blur"
+    ]
+  },
+  {
+    "value": 0,
+    "type": "spread",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": 0,
+      "type": "spread"
+    },
+    "name": "radio-shadow-hover-spread",
+    "attributes": {
+      "category": "radio-shadow-hover",
+      "type": "spread"
+    },
+    "path": [
+      "radio-shadow-hover",
+      "spread"
+    ]
+  },
+  {
+    "value": "#8f97a3",
+    "type": "color",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "#8f97a3",
+      "type": "color"
+    },
+    "name": "radio-shadow-hover-color",
+    "attributes": {
+      "category": "radio-shadow-hover",
+      "type": "color"
+    },
+    "path": [
+      "radio-shadow-hover",
+      "color"
+    ]
+  },
+  {
+    "value": "dropShadow",
+    "type": "type",
+    "filePath": "src/tokens/converted-tokens/light.json",
+    "isSource": true,
+    "original": {
+      "value": "dropShadow",
+      "type": "type"
+    },
+    "name": "radio-shadow-hover-type",
+    "attributes": {
+      "category": "radio-shadow-hover",
+      "type": "type"
+    },
+    "path": [
+      "radio-shadow-hover",
+      "type"
+    ]
+  }
+]

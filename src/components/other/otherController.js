@@ -3,8 +3,8 @@ const otherController = {
    * for unknown routes
    */
   notFound: (req, res) =>
-    res.render("notfound", {
-      user: req.user,
+    res.render('notfound', {
+      user: req.user
     }),
   /**
    * for not authorized not login (GitHub user not part of tluhk organisation)
@@ -12,11 +12,11 @@ const otherController = {
   noAuth: (req, res) => {
     const adminName = process.env.ADMIN_NAME;
     const adminEmail = process.env.ADMIN_EMAIL;
-    res.render("noauth", {
+    res.render('noauth', {
       adminName,
-      adminEmail,
+      adminEmail
     });
-  },
+  }
 };
 
 export default otherController;
