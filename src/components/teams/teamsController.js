@@ -1,6 +1,7 @@
 import pool from '../../../db.js';
 import apiRequests from './teamsService.js';
 import { cacheTeamUsers } from '../../setup/setupCache.js';
+import membersController from '../members/membersController.js';
 
 const teamsController = {
   getAllValidTeams: async () => {
@@ -150,6 +151,10 @@ const teamsController = {
       members = await apiRequests.getTeamMembersService(team.slug);
     }
     return members;
+  },
+  getTeachers: async () => {
+    const allMembers = await membersController.getOrgMembers();
+    return allMembers.filter(m => m.roles.includes('teacher'));
   }
 };
 

@@ -18,14 +18,14 @@ const membersController = {
       console.log(`✅✅ Org Members FROM CACHE`);
       members = cacheOrgMembers.get(cacheName);
     }
-    return { members };
+    return members;
   },
 
   isUserInOrgMembers: async (user) => {
     /**
      * check if given githubUserID is part of tluhk organisation members
      */
-    const { members } = await membersController.getOrgMembers();
+    const members = await membersController.getOrgMembers();
     const userInOrgMembers = members.find((x) => x.usernames.github === user);
 
     if (!userInOrgMembers) {

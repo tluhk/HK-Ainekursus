@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const membersRequests = {
-  requestMembers: `http://localhost:3333/users`,
-  requestGroups: `http://localhost:3333/groups`
+  requestMembers: `${ process.env.USERS_API_URL }users`,
+  requestGroups: `${ process.env.USERS_API_URL }groups`
 };
 
 export default membersRequests;

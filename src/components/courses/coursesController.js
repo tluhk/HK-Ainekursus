@@ -378,14 +378,14 @@ const allCoursesController = {
     const start3 = performance.now();
     const allCourses = await getAllCoursesData(teamSlug, req);
 
-    console.log(allCourses);
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${ end3 - start3 } ms`);
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
 
     /** Save all teachers in a variable, needed for rendering */
     const start4 = performance.now();
-    const allTeachers = await teamsController.getUsersInTeam('teachers');
+    //const allTeachers = await teamsController.getUsersInTeam('teachers');
+    const allTeachers = await teamsController.getTeachers();
     const end4 = performance.now();
     console.log(`Execution time allTeachers: ${ end4 - start4 } ms`);
 
@@ -483,7 +483,7 @@ const allCoursesController = {
           allCoursesActive,
           allTeachers
         );
-
+      //console.log('teachers:', allCoursesActive);
       /** Rendering teacher's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === 'name') {
         return res.render('dashboard-teacher', {
@@ -616,17 +616,17 @@ const allCoursesController = {
 
       /** Test entries for student: */
       /* courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
-                                                                                                                                                                                        courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
-                                                                                                                                                                                        courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
-                                                                                                                                                                                        courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
-                                                                                                                                                                                        // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
-                                                                                                                                                                                        // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
-                                                                                                                                                                                        // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
-                                                                                                                                                                                        courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
-                                                                                                                                                                                        courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
-                                                                                                                                                                                        courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
-                                                                                                                                                                                        courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
-                                                                                                                                                                                        courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
+       courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
+       courses[1].markedAsDoneComponentsUUIDs.push('188625d2-e039-4ea7-9737-2d4396820ec1');
+       courses[1].markedAsDoneComponentsUUIDs.push('c6a0a770-7f11-425d-a748-f0a9fe13f89e');
+       // courses[2].markedAsDoneComponentsUUIDs.push('8425abdd-9690-4bab-92b6-1c6feb5aead9');
+       // courses[2].markedAsDoneComponentsUUIDs.push('138e043e-9aab-4400-85c8-d72d242f670b');
+       // courses[2].markedAsDoneComponentsUUIDs.push('f24f3ffb-199d-4b78-aa00-dce4992f18d9');
+       courses[4].markedAsDoneComponentsUUIDs.push('1bca8c63-7637-4a6f-844d-c0a231cbd397');
+       courses[3].markedAsDoneComponentsUUIDs.push('fbbbf667-ec8b-4287-baad-6975b917f505');
+       courses[3].markedAsDoneComponentsUUIDs.push('ea8b329e-1585-4d13-abcb-60d2c01a4da3');
+       courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
+       courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
 
       // console.log('allTeachers1:', allTeachers);
       /** Rendering student's dashboard if courses are displayed by Name */
@@ -1285,29 +1285,29 @@ const allCoursesController = {
     }
   }
   /*
-                                                        Kursuse muutmine:
-                                                        concepts = [
-                                                            {
-                                                                "slug": "naidis-sisuteema",
-                                                                "name": "Näidis Sisuteema",
-                                                                "uuid": "7cc19837-3dfe-4da7-ac2e-b4f7132fb3a4"
-                                                            }, {
-                                                                "slug": "sisu-loomise-juhend",
-                                                                "name": "Sisu loomise juhend",
-                                                                "uuid": "49b640ef-5c58-41e2-9392-4514f49a9c17"
-                                                            }],
-    
-                                                        kasutaja peab saama "linkida" teistest repodest.
-                                                        Link tähendab, et config.json concepts osas on objekt, mis kuulub tegelikult teise reposse.
-                                                        Kasutaja peab saama otsida concepte (esialgu nime järgi, aga ka sisu järgi),
-                                                        kasutaja peab nägema eelvaadet,
-                                                        kasutaja peab saama muuta concepti - kui on lingitud sisu, siis näeb, kus veel on kasutatud,
-                                                        kui hakkab sisu muutma, siis peaks saama valida, kas muudab originaali kõikjal, või luuakse orig põhjal uus sisu
-    
-                                                        Äkki võiks sama loogika olla ka teiste plokkide kohta (lessons, praktikumid)
-    
-    
-                                                         */
+   Kursuse muutmine:
+   concepts = [
+   {
+   "slug": "naidis-sisuteema",
+   "name": "Näidis Sisuteema",
+   "uuid": "7cc19837-3dfe-4da7-ac2e-b4f7132fb3a4"
+   }, {
+   "slug": "sisu-loomise-juhend",
+   "name": "Sisu loomise juhend",
+   "uuid": "49b640ef-5c58-41e2-9392-4514f49a9c17"
+   }],
+
+   kasutaja peab saama "linkida" teistest repodest.
+   Link tähendab, et config.json concepts osas on objekt, mis kuulub tegelikult teise reposse.
+   Kasutaja peab saama otsida concepte (esialgu nime järgi, aga ka sisu järgi),
+   kasutaja peab nägema eelvaadet,
+   kasutaja peab saama muuta concepti - kui on lingitud sisu, siis näeb, kus veel on kasutatud,
+   kui hakkab sisu muutma, siis peaks saama valida, kas muudab originaali kõikjal, või luuakse orig põhjal uus sisu
+
+   Äkki võiks sama loogika olla ka teiste plokkide kohta (lessons, praktikumid)
+
+
+   */
 };
 export {
   allCoursesController,
