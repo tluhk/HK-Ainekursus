@@ -15,6 +15,6 @@ $('.markdown-iframe').load(function () {
 });
 
 /*
-// https://www.npmjs.com/package/wl-iframe-resizer?activeTab=readme
-$('.markdown-iframe').iFrameResize({ log: true });
-*/
+ // https://www.npmjs.com/package/wl-iframe-resizer?activeTab=readme
+ $('.markdown-iframe').iFrameResize({ log: true });
+ */

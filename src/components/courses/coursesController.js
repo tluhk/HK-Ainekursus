@@ -759,12 +759,18 @@ const allCoursesController = {
     /** Read parameters sent with endpoint */
     const {
       courseSlug,
-      contentSlug,
-      componentSlug
+      contentUUID,
+      componentUUID
     } = req.params;
 
+    console.log(
+      courseSlug,
+      contentUUID, // about
+      componentUUID
+    );
     const { ref } = req.query;
 
+    console.log('piiks');
     /** If user's team is not found, route to /notfound. Only users with valid team are allowed to see course content. This is checked with app.js. */
     if (!req.user.team.slug) {
       return res.redirect('/notfound');
@@ -783,16 +789,11 @@ const allCoursesController = {
     res.locals.selectedVersion = selectedVersion;
     // console.log('selectedVersion1:', selectedVersion);
 
-    /**
-     * Get array of component UUID-s that have been marked as done by the user.
-     * This array is stored in MariaDB.
-     */
-    const markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
+    // console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
+    res.locals.markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
       req.user.id,
       courseSlug
     );
-    // console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
-    res.locals.markedAsDoneComponentsArr = markedAsDoneComponentsArr;
 
     /** Get all available courses for the user. */
     const start7 = performance.now();
@@ -801,7 +802,7 @@ const allCoursesController = {
     console.log(`Execution time allCourses: ${ end7 - start7 } ms`);
 
     const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    await allCoursesActive.sort((a, b) =>
+    allCoursesActive.sort((a, b) =>
       a.courseName.localeCompare(b.courseName)
     );
     // console.log('allCoursesActive2:', allCoursesActive);
@@ -1006,27 +1007,27 @@ const allCoursesController = {
      * Sisulehe content ja componenti UUID lugemine config failist, andmebaasis
      * sisulehe märkimiseks
      */
-    let contentUUID;
-    let componentUUID;
+    let contentSlug;
+    let componentSlug;
 
     config.docs.forEach((x) => {
-      if (x.slug === contentSlug) {
+      if (x.uuid === contentUUID) {
         contentName = x.name;
         githubRequest = 'docsService';
         // console.log('Slug found in config.docs');
       }
     });
     config.additionalMaterials.forEach((x) => {
-      if (x.slug === contentSlug) {
+      if (x.uuid === contentUUID) {
         contentName = x.name;
         githubRequest = 'courseAdditionalMaterialsService';
         // console.log('Slug found in config.additionalMaterials');
       }
     });
     config.lessons.forEach((x) => {
-      if (x.slug === contentSlug) {
+      if (x.uuid === contentUUID) {
         contentName = x.name;
-        contentUUID = x.uuid;
+        contentSlug = x.slug;
         githubRequest = 'lessonsService';
         // console.log('Slug found in config.lessons');
       }
@@ -1041,15 +1042,15 @@ const allCoursesController = {
     let componentType;
 
     config.concepts.forEach((x) => {
-      if (x.slug === componentSlug) {
+      if (x.uuid === componentUUID) {
         const lesson = config.lessons.find((les) =>
-          les.components.includes(componentSlug)
+          les.components.includes(componentUUID)
         );
         // console.log('lesson1:', lesson);
 
-        if (lesson && lesson.slug === contentSlug) {
+        if (lesson && lesson.uuid === contentUUID) {
           componentName = x.name;
-          componentUUID = x.uuid;
+          componentSlug = x.slug;
           componentType = 'concept';
           githubRequest = 'lessonComponentsService';
           // console.log('Slug found in config.concepts');
@@ -1057,15 +1058,15 @@ const allCoursesController = {
       }
     });
     config.practices.forEach((x) => {
-      if (x.slug === componentSlug) {
+      if (x.uuid === componentUUID) {
         const lesson = config.lessons.find((les) =>
-          les.components.includes(componentSlug)
+          les.components.includes(componentUUID)
         );
         // console.log('lesson1:', lesson);
 
-        if (lesson && lesson.slug === contentSlug) {
+        if (lesson && lesson.uuid === contentUUID) {
           componentName = x.name;
-          componentUUID = x.uuid;
+          componentSlug = x.slug;
           componentType = 'practice';
           githubRequest = 'lessonComponentsService';
           // console.log('Slug found in config.concepts');
@@ -1074,8 +1075,8 @@ const allCoursesController = {
     });
     config.lessons.forEach((x) => {
       if (
-        x.additionalMaterials[0].slug === componentSlug &&
-        x.slug === contentSlug
+        x.additionalMaterials[0].uuid === componentUUID &&
+        x.uuid === contentUUID
       ) {
         componentName = x.additionalMaterials[0].name;
         componentType = 'docs';
@@ -1106,8 +1107,8 @@ const allCoursesController = {
      * inconsistencies. Redirect back to homepage!
      */
     if (
-      (contentSlug && !contentName) ||
-      (contentSlug && contentName && componentSlug && !componentName)
+      (contentUUID && !contentName) ||
+      (contentUUID && contentName && componentUUID && !componentName)
     ) {
       console.log('no contentName or componentName found');
       return res.redirect('/notfound');
@@ -1119,11 +1120,11 @@ const allCoursesController = {
      * Back/Forward buttons.
      */
     function getFullPath() {
-      if (componentSlug) {
-        return `${ contentSlug }/${ componentSlug }`;
+      if (componentUUID) {
+        return `${ contentUUID }/${ componentUUID }`;
       }
-      if (contentSlug) {
-        return `${ contentSlug }`;
+      if (contentUUID) {
+        return `${ contentUUID }`;
       }
       return undefined;
     }
@@ -1133,10 +1134,10 @@ const allCoursesController = {
      * you are. This is used to assign correct sidebar icons.
      */
     function getType() {
-      if (componentSlug) {
+      if (componentUUID) {
         return componentType;
       }
-      if (contentSlug) {
+      if (contentUUID) {
         return 'docs';
       }
       return undefined;
@@ -1156,8 +1157,8 @@ const allCoursesController = {
       refBranch,
       contentUUID,
       componentUUID,
-      fullPath: getFullPath(contentSlug, componentSlug),
-      type: getType(contentSlug, componentSlug)
+      fullPath: getFullPath(contentUUID, componentUUID),
+      type: getType(contentUUID, componentUUID)
     };
 
     res.locals.githubRequest = githubRequest;
@@ -1168,6 +1169,7 @@ const allCoursesController = {
     // console.log('res.locals1:', res.locals);
     return next();
   },
+
   /** The function allCoursesActiveWithComponentsData() is used to get info about markedAsDone components for each active course for the given user (githubID).
    * Parameters are list of all active courses + user's githubID whose
    * markedAsDone info is requested.

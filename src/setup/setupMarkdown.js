@@ -100,11 +100,11 @@ markdown.use(anchorToc, {
 markdown.use(blockEmbedPlugin, {
   containerClassName: 'video-embed'
   /* services: {
-            sisuloome: {
-              width: 600,
-              height: 600,
-            },
-          }, */
+   sisuloome: {
+   width: 600,
+   height: 600,
+   },
+   }, */
 });
 
 // Enable embedded code demo environments like JSFiddle and CodePen
