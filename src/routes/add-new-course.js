@@ -13,6 +13,8 @@ import { cacheTeamCourses } from '../setup/setupCache.js';
 import { axios } from '../setup/setupGithub.js';
 import * as cheerio from 'cheerio';
 import getAllCoursesData from '../functions/getAllCoursesData.js';
+import { usersApi } from '../setup/setupUserAPI.js';
+import membersRequests from '../functions/usersHkTluRequests.js';
 
 const router = express.Router();
 router.get('/', ensureAuthenticated, validateTeacher, (req, res) => {
@@ -37,6 +39,9 @@ router.post(
       const repo_prefix = process.env.REPO_PREFIX;
 
       let oisUrl = req.body.oisUrl;
+      let oisCode = '';
+      let oisGrading = '';
+      let oisEAP = '';
       let shortDescription = '';
       let longDescription = '';
       let courseName = '';
@@ -88,6 +93,15 @@ router.post(
                   break;
                 case 'Õppeaine õpiväljundid':
                   longDescription += yldaineC2;
+                  break;
+                case 'Õppeaine kood':
+                  oisCode = yldaineC2;
+                  break;
+                case 'Õppeaine maht EAP':
+                  oisEAP = yldaineC2;
+                  break;
+                case  'Kontrollivorm' :
+                  oisGrading = yldaineC2;
               }
             });
           }
@@ -117,26 +131,27 @@ router.post(
             (course) => course.full_name
               === `${ templateOwner }/${ repoName }_${ suffix }`
           ) >= 0
-        ) {
+          ) {
           suffix++;
         }
         repoName = `${ repoName }_${ suffix }`;
       }
 
       // create repo
-      const created = await octokit.request(`POST /repos/${ templateOwner }/${ templateRepo }/generate`, {
-        owner: templateOwner,
-        name: repoName,
-        description: shortDescription.replace(
-          /(<|&lt;)br\s*\/*(>|&gt;)/g,
-          ' '
-        ).trim(),
-        include_all_branches: false,
-        private: true,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
-        }
-      }).catch((err) => {
+      const created = await octokit.request(
+        `POST /repos/${ templateOwner }/${ templateRepo }/generate`, {
+          owner: templateOwner,
+          name: repoName,
+          description: shortDescription.replace(
+            /(<|&lt;)br\s*\/*(>|&gt;)/g,
+            ' '
+          ).trim(),
+          include_all_branches: false,
+          private: true,
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+          }
+        }).catch((err) => {
         console.log(err);
         errorMessage = 'Kursuse loomine ebaõnnestus';
         res.status(400).send({ msg: errorMessage });
@@ -201,12 +216,24 @@ router.post(
 
         console.log(`✅✅  /course-edit/${ tmpSlug }/`);
         cacheTeamCourses.del('allCoursesData+teachers');
+
+        // add course via users API
+        await usersApi.post(membersRequests.requestGroups, {
+          name: courseName,
+          repository: created.data.html_url,
+          code: oisCode,
+          credits: oisEAP,
+          form: oisGrading
+        }).catch((err) => {
+          console.log('Grupi lisamine ebaõnnestus');
+        }).then();
+
         res.status(201)
           .send({
             msg: 'OK',
             courseCode: tmpSlug
           });
-        return next;
+        return next();
       }
     } else {
       errorMessage = 'Kontrolli andmeid';

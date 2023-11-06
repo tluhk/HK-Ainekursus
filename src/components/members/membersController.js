@@ -4,23 +4,23 @@ import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
 
 const membersController = {
-  getOrgMembers: async () => {
-    /**
-     * Request all members from http://users.hk.tlu.ee:3333/users
-     */
-    const cacheName = 'orgMembers';
-    let members;
+  /*getOrgMembers: async () => {
+   //
+   // Request all members from http://users.hk.tlu.ee:3333/users
+   //
+   const cacheName = 'orgMembers';
+   let members;
 
-    if (!cacheOrgMembers.has(cacheName)) {
-      console.log('❌❌ Org Members IS NOT from cache');
-      members = await apiRequests.getMembersService();
-      cacheOrgMembers.set(cacheName, members);
-    } else {
-      console.log('✅✅ Org Members FROM CACHE');
-      members = cacheOrgMembers.get(cacheName);
-    }
-    return members;
-  },
+   if (!cacheOrgMembers.has(cacheName)) {
+   console.log('❌❌ Org Members IS NOT from cache');
+   members = await apiRequests.getMembersService();
+   cacheOrgMembers.set(cacheName, members);
+   } else {
+   console.log('✅✅ Org Members FROM CACHE');
+   members = cacheOrgMembers.get(cacheName);
+   }
+   return members;
+   },*/
 
   isUserInOrgMembers: async (user) => {
     /**

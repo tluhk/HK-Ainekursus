@@ -121,7 +121,8 @@ const renderPage = async (req, res) => {
   );
 
   /** Add Table of Contents markdown element to Markdown before rendering Markdown */
-  const markdownWithModifiedImgSourcesToc = markdownWithModifiedImgSources.concat('\n\n ${toc} \n');
+  const markdownWithModifiedImgSourcesToc = markdownWithModifiedImgSources.concat(
+    '\n\n ${toc} \n');
 
   /** Render Markdown */
   const start2 = performance.now();
@@ -158,7 +159,7 @@ const renderPage = async (req, res) => {
    */
 
   /** Each sisuleht (concepts, practices) has a sources reference which is stored in sources.json file in GitHub. */
-  // define sources as NULL by default.
+    // define sources as NULL by default.
   let sourcesJSON = null;
 
   // NB! Sources are sent only with "Teemade endpointid" axios call. If
@@ -255,7 +256,7 @@ const renderEditPage = async (req, res) => {
   );
 
   /** Each sisuleht (concepts, practices) has a sources reference which is stored in sources.json file in GitHub. */
-  // define sources as NULL by default.
+    // define sources as NULL by default.
   let sourcesJSON = null;
 
   // NB! Sources are sent only with "Teemade endpointid" axios call. If
@@ -364,28 +365,24 @@ const allCoursesController = {
      * If yes, then get all courses for teacher
      * If not, then get all courses for student
      */
-    let isTeacher = false;
-    if (teamSlug === 'teachers') {
-      isTeacher = true;
-    }
-    res.locals.teamSlug = teamSlug;
+    const isTeacher = req.user.roles.includes('teacher');
 
     const start3 = performance.now();
-    const allCourses = await getAllCoursesData(teamSlug, req);
+    const allCourses = await getAllCoursesData(req);
 
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${ end3 - start3 } ms`);
-    const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+    //const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
 
     /** Save all teachers in a variable, needed for rendering */
-    const start4 = performance.now();
+    //const start4 = performance.now();
     // const allTeachers = await teamsController.getUsersInTeam('teachers');
-    const allTeachers = await teamsController.getTeachers();
-    const end4 = performance.now();
-    console.log(`Execution time allTeachers: ${ end4 - start4 } ms`);
+    //const allTeachers = await teamsController.getTeachers();
+    //const end4 = performance.now();
+    //console.log(`Execution time allTeachers: ${ end4 - start4 } ms`);
 
-    res.locals.allCoursesActive = allCoursesActive;
-    res.locals.allTeacher = allTeachers;
+    res.locals.allCoursesActive = allCourses; // allCoursesActive;
+    //res.locals.allTeacher = allTeachers;
 
     /** By default, courses are displayed on dashboard by their name. Set coursesDisplayBy to 'name'
      * If coursesDisplayBy is provided, use this instead - courses are then
@@ -441,7 +438,8 @@ const allCoursesController = {
       /*
        * Sort allTeacherCourses, these are teacher's own courses
        */
-      allTeacherCourses.sort((a, b) => a.courseName.localeCompare(b.courseName));
+      allTeacherCourses.sort(
+        (a, b) => a.courseName.localeCompare(b.courseName));
       // console.log('allTeacherCourses2:', allTeacherCourses);
 
       /* These are teachers of all other courses.
@@ -462,7 +460,8 @@ const allCoursesController = {
       const sortedCoursesGroupedByTeacher = Object.keys(
         allCoursesGroupedByTeacher
       ).sort().reduce((acc, teacher) => {
-        acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName?.localeCompare(b.courseName));
+        acc[teacher] = allCoursesGroupedByTeacher[teacher].sort(
+          (a, b) => a.courseName?.localeCompare(b.courseName));
         return acc;
       }, {});
 
@@ -509,7 +508,8 @@ const allCoursesController = {
           // If the years are the same, compare the first letter
           return letterB.localeCompare(letterA);
         }).reduce((acc, semester) => {
-          acc[semester] = allCoursesGroupedBySemester[semester].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          acc[semester] = allCoursesGroupedBySemester[semester].sort(
+            (a, b) => a.courseName.localeCompare(b.courseName));
           return acc;
         }, {});
 
@@ -530,7 +530,7 @@ const allCoursesController = {
             const year = semester.substring(1);
             sortedCoursesGroupedBySemesterWithFullNames[
               `${ seasons[season] } ${ year }`
-            ] = sortedCoursesGroupedBySemester[semester];
+              ] = sortedCoursesGroupedBySemester[semester];
           }
         });
         // console.log('sortedCoursesGroupedBySemesterWithFullNames1:',
@@ -554,13 +554,16 @@ const allCoursesController = {
       /*
        * Sort allCoursesActive, these are student's courses
        */
-      allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+      //allCoursesActive.sort((a, b) =>
+      // a.courseName.localeCompare(b.courseName));
 
       /* These are teachers of student's courses.
        * 1) group by teacher name
        * 2) then sort by teacher name and by each teacher's courses
        * */
-      const allCoursesGroupedByTeacher = allCoursesActive.groupBy(
+      console.log(allCourses);
+
+      const allCoursesGroupedByTeacher = allCourses.groupBy(
         ({ teacherUsername }) => teacherUsername
       );
       // console.log('allCoursesGroupedByTeacher1:',
@@ -569,7 +572,8 @@ const allCoursesController = {
       const sortedCoursesGroupedByTeacher = Object.keys(
         allCoursesGroupedByTeacher
       ).sort().reduce((acc, teacher) => {
-        acc[teacher] = allCoursesGroupedByTeacher[teacher].sort((a, b) => a.courseName.localeCompare(b.courseName));
+        acc[teacher] = allCoursesGroupedByTeacher[teacher].sort(
+          (a, b) => a.name.localeCompare(b.name));
         return acc;
       }, {});
       // console.log('allCoursesGroupedByTeacher5:',
@@ -578,20 +582,20 @@ const allCoursesController = {
       /**
        * Get last 7 day notifications for active courses, needed for dashboard
        */
-      const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(
-        allCoursesActive,
-        allTeachers
-      );
+      const { courseUpdates7Days } = [];/*await allNotificationsController.getCoursesUpdates(
+       allCoursesActive,
+       allTeachers
+       );*/
 
       /** Next, you must get all active courses WITH the list of components that have been markedAsDone. Use the allCoursesController.allCoursesActiveWithComponentsData() function that store those courses. */
       let courses;
       if (req.user && req.user.id) {
         courses = await allCoursesController.allCoursesActiveWithComponentsData(
-          allCoursesActive,
+          allCourses,
           req.user.id
         );
       } else {
-        courses = allCoursesActive;
+        courses = allCourses;
       }
 
       // console.log('courses55:', courses);
@@ -623,7 +627,7 @@ const allCoursesController = {
           adminEmail,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
-          teachers: allTeachers,
+          teachers: [],
           courseUpdates7Days
         });
       }
@@ -638,8 +642,10 @@ const allCoursesController = {
         courses.sort((a, b) => {
           const aLength = a.courseBranchComponentsUUIDs.length;
           const bLength = b.courseBranchComponentsUUIDs.length;
-          const aDoneLength = a.markedAsDoneComponentsUUIDs.filter((uuid) => a.courseBranchComponentsUUIDs.includes(uuid)).length;
-          const bDoneLength = b.markedAsDoneComponentsUUIDs.filter((uuid) => b.courseBranchComponentsUUIDs.includes(uuid)).length;
+          const aDoneLength = a.markedAsDoneComponentsUUIDs.filter(
+            (uuid) => a.courseBranchComponentsUUIDs.includes(uuid)).length;
+          const bDoneLength = b.markedAsDoneComponentsUUIDs.filter(
+            (uuid) => b.courseBranchComponentsUUIDs.includes(uuid)).length;
           const aPercentage = aLength > 0 ? aDoneLength / aLength : 0;
           const bPercentage = bLength > 0 ? bDoneLength / bLength : 0;
 
@@ -689,7 +695,8 @@ const allCoursesController = {
           // If the years are the same, compare the first letter
           return letterB.localeCompare(letterA);
         }).reduce((acc, semester) => {
-          acc[semester] = allCoursesGroupedBySemester[semester].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          acc[semester] = allCoursesGroupedBySemester[semester].sort(
+            (a, b) => a.courseName.localeCompare(b.courseName));
           return acc;
         }, {});
 
@@ -710,7 +717,7 @@ const allCoursesController = {
             const year = semester.substring(1);
             sortedCoursesGroupedBySemesterWithFullNames[
               `${ seasons[season] } ${ year }`
-            ] = sortedCoursesGroupedBySemester[semester];
+              ] = sortedCoursesGroupedBySemester[semester];
           }
         });
         // console.log('sortedCoursesGroupedBySemesterWithFullNames1:',
@@ -1018,7 +1025,8 @@ const allCoursesController = {
 
     config.concepts.forEach((x) => {
       if (x.uuid === componentUUID) {
-        const lesson = config.lessons.find((les) => les.components.includes(componentUUID));
+        const lesson = config.lessons.find(
+          (les) => les.components.includes(componentUUID));
         // console.log('lesson1:', lesson);
 
         if (lesson && lesson.uuid === contentUUID) {
@@ -1032,7 +1040,8 @@ const allCoursesController = {
     });
     config.practices.forEach((x) => {
       if (x.uuid === componentUUID) {
-        const lesson = config.lessons.find((les) => les.components.includes(componentUUID));
+        const lesson = config.lessons.find(
+          (les) => les.components.includes(componentUUID));
         // console.log('lesson1:', lesson);
 
         if (lesson && lesson.uuid === contentUUID) {

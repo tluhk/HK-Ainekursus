@@ -1,10 +1,9 @@
 import { performance } from 'perf_hooks';
 import * as cheerio from 'cheerio';
-import { authToken, axios } from '../setup/setupGithub.js';
-import { cacheOisContent, cacheTeamCourses } from '../setup/setupCache.js';
+import { axios } from '../setup/setupGithub.js';
+import { cacheOisContent } from '../setup/setupCache.js';
 import githubReposRequests from './githubReposRequests.js';
 import getConfig from './getConfigFuncs.js';
-import apiRequests from '../components/courses/coursesService.js';
 import dotenv from 'dotenv';
 import membersRequests from './usersHkTluRequests.js';
 import { Octokit } from 'octokit';
@@ -126,38 +125,21 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(
   };
 });
 
-const getAllCoursesData = async (teamSlug, req) => {
+const getAllCoursesData = async (req) => {
   const { user } = req;
-  let courses = { data: [] };
-  const routePath = `allCoursesData+${ teamSlug }`;
 
-  if (!cacheTeamCourses.has(routePath)) {
-    console.log(`❌❌ team courses IS NOT from cache: ${ routePath }`);
+  //const routePath = `allCoursesData+${ teamSlug }`;
 
-    // get all repos from here: http://users.hk.tlu.ee:3333/groups
-    const allGroups = await usersApi.get(requestGroups).catch((error) => {
+  // get all repos from here: http://users.hk.tlu.ee:3333/groups
+  const courses = await usersApi.get(requestGroups + user.userId)
+    .catch((error) => {
       console.error(error);
     });
 
-    //courses.data = allGroups.data?.data.filter(
-    //  c => c.users.find(u => u.usernames.github === user.login));
-
-    console.log(allGroups.data.data, user);
-    /** For TEACHERS get all possible HK_ repos  */
-
-    cacheTeamCourses.set(routePath, courses);
-  } else {
-    console.log(`✅✅ team courses FROM CACHE: ${ routePath }`);
-    courses = cacheTeamCourses.get(routePath);
-    // console.log('Cachecomponents2:', components);
-  }
-
-  if (!courses) {
-    return [];
-  }
-
-  return Promise.all(courses.data)
-    .then((results) => results.filter((item) => Object.keys(item).length > 0));
+  return courses ? courses.data.data : [];
+  //return Promise.all(courses.data)
+  //  .then((results) => results.filter((item) => Object.keys(item).length >
+  // 0));
 };
 
 export default getAllCoursesData;

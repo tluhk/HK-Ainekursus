@@ -237,10 +237,12 @@ passport.use(
         const { email } = _json;
 
         const userData = {
+          userId: userInOrgMembers.id,
           githubID: id,
           username,
           displayName,
-          email
+          email,
+          roles: userInOrgMembers.roles
         };
 
         /**
@@ -249,22 +251,22 @@ passport.use(
          * If user is in DB, read its data. Get displayName and email info from
          * DB. Then store it to user profile.
          */
-        const userDataAfterDB = await userDBFunction(userData);
+        //const userDataAfterDB = await userDBFunction(userData);
 
-        if (userDataAfterDB) {
-          if (
-            userDataAfterDB.displayName &&
-            profile.displayName !== userDataAfterDB.displayName
-          )
-            profile.displayName = userDataAfterDB.displayName;
-          if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
-        }
+        /*if (userDataAfterDB) {
+         if (
+         userDataAfterDB.displayName &&
+         profile.displayName !== userDataAfterDB.displayName
+         )
+         profile.displayName = userDataAfterDB.displayName;
+         if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
+         }*/
 
-        console.log('Logging in...');
+        console.log('Logging in...', userData);
         /**
          * Return user profile with a successful login,
          */
-        return done(null, profile);
+        return done(null, userData);
       });
     }
   )
