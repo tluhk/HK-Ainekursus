@@ -38,37 +38,34 @@ const allNotificationsController = {
          * Then get comments that are linked to those commit SHAs. Save those comments to array. These are your course updates.
          */
         const commitCommentsPromises = commitSHAsWithComments.map(
-          (commitSHA) =>
-            apiRequestsCommits.getCommitComments(
-              activeCourse.coursePathInGithub,
-              commitSHA
-            )
+          (commitSHA) => apiRequestsCommits.getCommitComments(
+            activeCourse.coursePathInGithub,
+            commitSHA
+          )
         );
         const commitCommentsRaw = await Promise.all(commitCommentsPromises);
 
         /**
          * Flatten the comments array to remove empty entries.
          */
-        const commentsArray = commitCommentsRaw.flatMap((item) =>
-          item.data.map((comment) => ({
-            url: comment.url,
-            html_url: comment.html_url,
-            id: comment.id,
-            node_id: comment.node_id,
-            user: allTeachers.find(
-              (user) => user.login === comment.user.login
-            ) || { displayName: comment.user.login },
-            position: comment.position,
-            line: comment.line,
-            path: comment.path,
-            commit_id: comment.commit_id,
-            created_at: comment.created_at,
-            updated_at: comment.updated_at,
-            author_association: comment.author_association,
-            body: comment.body,
-            reactions: comment.reactions
-          }))
-        );
+        const commentsArray = commitCommentsRaw.flatMap((item) => item.data.map((comment) => ({
+          url: comment.url,
+          html_url: comment.html_url,
+          id: comment.id,
+          node_id: comment.node_id,
+          user: allTeachers.find(
+            (user) => user.login === comment.user.login
+          ) || { displayName: comment.user.login },
+          position: comment.position,
+          line: comment.line,
+          path: comment.path,
+          commit_id: comment.commit_id,
+          created_at: comment.created_at,
+          updated_at: comment.updated_at,
+          author_association: comment.author_association,
+          body: comment.body,
+          reactions: comment.reactions
+        })));
         /**
          * Finally, for each comment, add course information.
          */
@@ -88,9 +85,7 @@ const allNotificationsController = {
     const commentsWithCoursesFlattened = commentsWithCourses.flatMap(
       (arr) => arr
     );
-    commentsWithCoursesFlattened.sort((b, a) =>
-      a.created_at > b.created_at ? 1 : b.created_at > a.created_at ? -1 : 0
-    );
+    commentsWithCoursesFlattened.sort((b, a) => a.created_at > b.created_at ? 1 : b.created_at > a.created_at ? -1 : 0);
     /**
      * Limit notifications to max 30 days ago
      */
@@ -161,11 +156,10 @@ const allNotificationsController = {
     const {
       courseUpdates30Days,
       courseUpdates7Days
-    } =
-      await allNotificationsController.getCoursesUpdates(
-        allCoursesActive,
-        allTeachers
-      );
+    } = await allNotificationsController.getCoursesUpdates(
+      allCoursesActive,
+      allTeachers
+    );
 
     return res.render('notifications', {
       courses: allCoursesActive,

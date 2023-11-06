@@ -16,7 +16,7 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
     );
   } catch (err) {
     // Handle Error Here
-    //console.error(err);
+    // console.error(err);
     console.error(`Fetch config failed: ${ selectedCourse }`);
   }
   return response;
@@ -25,19 +25,18 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
 const validateConfig = (configObj, selectedCourse, refBranch) => {
   /** Validate that config includes all expected keys */
 
-  const expectedKeys =
-    refBranch === 'master'
-      ? ['courseUrl', 'active', 'docs', 'lessons', 'concepts', 'practices']
-      : [
-        'courseUrl',
-        'active',
-        'semester',
-        'docs',
-        'teacherUsername',
-        'lessons',
-        'concepts',
-        'practices'
-      ];
+  const expectedKeys = refBranch === 'master'
+    ? ['courseUrl', 'active', 'docs', 'lessons', 'concepts', 'practices']
+    : [
+      'courseUrl',
+      'active',
+      'semester',
+      'docs',
+      'teacherUsername',
+      'lessons',
+      'concepts',
+      'practices'
+    ];
 
   const objectKeys = Object.keys(configObj);
   const hasAllKeys = expectedKeys.every((key) => objectKeys.includes(key));
@@ -52,16 +51,16 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
   /** Validate that docs, additionalMaterials, lessons, concepts and practices keys have Arrays as values and that each array consists of at least on elem (Arrays are not empty).  */
 
   if (
-    !Array.isArray(configObj.docs) ||
-    !configObj.docs.length > 0 ||
-    !Array.isArray(configObj.additionalMaterials) ||
-    !configObj.additionalMaterials.length > 0 ||
-    !Array.isArray(configObj.lessons) ||
-    !configObj.lessons.length > 0 ||
-    !Array.isArray(configObj.concepts) ||
-    !configObj.concepts.length > 0 ||
-    !Array.isArray(configObj.practices) ||
-    !configObj.practices.length > 0
+    !Array.isArray(configObj.docs)
+    || !configObj.docs.length > 0
+    || !Array.isArray(configObj.additionalMaterials)
+    || !configObj.additionalMaterials.length > 0
+    || !Array.isArray(configObj.lessons)
+    || !configObj.lessons.length > 0
+    || !Array.isArray(configObj.concepts)
+    || !configObj.concepts.length > 0
+    || !Array.isArray(configObj.practices)
+    || !configObj.practices.length > 0
   ) {
     console.log(
       `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected keys with incorrect type or empty array.`
@@ -71,16 +70,12 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
   const expectedKeys2 = ['slug', 'name'];
   const objectKeysDocs = Object.keys(configObj.docs[0]);
-  const hasAllKeysDocs = expectedKeys2.every((key) =>
-    objectKeysDocs.includes(key)
-  );
+  const hasAllKeysDocs = expectedKeys2.every((key) => objectKeysDocs.includes(key));
 
   const objectKeysAdditionalMaterials = Object.keys(
     configObj.additionalMaterials[0]
   );
-  const hasAllKeysAdditionalMaterials = expectedKeys2.every((key) =>
-    objectKeysAdditionalMaterials.includes(key)
-  );
+  const hasAllKeysAdditionalMaterials = expectedKeys2.every((key) => objectKeysAdditionalMaterials.includes(key));
 
   const expectedKeys3 = [
     'slug',
@@ -92,9 +87,7 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
   const hasAllKeysLessons = configObj.lessons.every((lesson) => {
     const objectKeysLesson = Object.keys(lesson);
-    const lessonHasAllKeys = expectedKeys3.every((key) =>
-      objectKeysLesson.includes(key)
-    );
+    const lessonHasAllKeys = expectedKeys3.every((key) => objectKeysLesson.includes(key));
     if (!lessonHasAllKeys) {
       console.log(
         `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys missing.`
@@ -102,10 +95,10 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
       return false;
     }
     if (
-      !Array.isArray(lesson.components) ||
-      !lesson.components.length > 0 ||
-      !Array.isArray(lesson.additionalMaterials) ||
-      !lesson.additionalMaterials.length > 0
+      !Array.isArray(lesson.components)
+      || !lesson.components.length > 0
+      || !Array.isArray(lesson.additionalMaterials)
+      || !lesson.additionalMaterials.length > 0
     ) {
       console.log(
         `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys with incorrect type, or empty array.`
@@ -118,9 +111,7 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
     // console.log('lessonKeysAdditionalMaterials1:',
     // lessonKeysAdditionalMaterials);
-    const lessonAddMaterialsHaveKeys = expectedKeys2.every((key) =>
-      lessonKeysAdditionalMaterials.includes(key)
-    );
+    const lessonAddMaterialsHaveKeys = expectedKeys2.every((key) => lessonKeysAdditionalMaterials.includes(key));
     if (!lessonAddMaterialsHaveKeys) {
       console.log(
         `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson additionalMaterials array with missing keys.`
@@ -143,11 +134,11 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
   });
 
   if (
-    !hasAllKeysDocs ||
-    !hasAllKeysAdditionalMaterials ||
-    !hasAllKeysLessons ||
-    !hasAllKeysConcepts ||
-    !hasAllKeysPractices
+    !hasAllKeysDocs
+    || !hasAllKeysAdditionalMaterials
+    || !hasAllKeysLessons
+    || !hasAllKeysConcepts
+    || !hasAllKeysPractices
   ) {
     console.log(
       `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected docs, additionalMaterials, lessons, concepts or practices array with missing keys or incorrect type.`
@@ -164,8 +155,8 @@ const getConfig = async (selectedCourse, refBranch) => {
    * If yes, read config from cache.
    * If not, make new GitHub request for config and cache it.
    */
-    // console.log('selectedCourse1:', selectedCourse);
-    // console.log('refBranch1:', refBranch);
+  // console.log('selectedCourse1:', selectedCourse);
+  // console.log('refBranch1:', refBranch);
 
   const routePath = `getConfig:${ selectedCourse }+${ refBranch }`;
   // console.log('routePath1:', routePath);
@@ -232,9 +223,7 @@ const getConfig = async (selectedCourse, refBranch) => {
   configObj.lessons.forEach((lesson, indexLesson) => {
     if (Array.isArray(lesson.components)) {
       const arr = lesson.components;
-      configObj.lessons[indexLesson].components = arr.map((item) =>
-        item.toLowerCase()
-      );
+      configObj.lessons[indexLesson].components = arr.map((item) => item.toLowerCase());
     }
   });
   // console.log('configObj.lessons[0].components10:',
@@ -245,7 +234,7 @@ const getConfig = async (selectedCourse, refBranch) => {
     if (Array.isArray(configObj[key])) {
       const arr = configObj[key];
       arr.forEach((item) => {
-        //if (item.hasOwnProperty("slug")) {
+        // if (item.hasOwnProperty("slug")) {
         if (Object.prototype.hasOwnProperty.call(item, 'slug')) {
           item.slug = item.slug.toLowerCase();
           // console.log('item10:', item);

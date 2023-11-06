@@ -130,10 +130,12 @@
                     </div>
                 {{/each}}
 
-                {{#if_equal user.team.slug 'teachers'}}
-                    <hr class="my-4">
-                    <a href="/course-edit/{{../path.courseSlug}}/{{this.slug}}about?ref={{../path.refBranch}}"
-                    class="btn btn-primary w-full mt-2">Muuda kursust</a>
+                {{#if_equal ../path.refBranch 'master'}}
+                    {{#if_equal user.team.slug 'teachers'}}
+                        <hr class="my-4">
+                        <a href="/course-edit/{{../path.courseSlug}}/{{this.slug}}about?ref={{../path.refBranch}}"
+                        class="btn btn-primary w-full mt-2">Muuda kursust</a>
+                    {{/if_equal}}
                 {{/if_equal}}
             </div>
         </div>

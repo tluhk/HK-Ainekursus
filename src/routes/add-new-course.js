@@ -32,8 +32,8 @@ router.post(
       });
 
       const { user } = req;
-      const template_owner = process.env.REPO_ORG_NAME;
-      const template_repo = process.env.TEMPLATE_REPO;
+      const templateOwner = process.env.REPO_ORG_NAME;
+      const templateRepo = process.env.TEMPLATE_REPO;
       const repo_prefix = process.env.REPO_PREFIX;
 
       let oisUrl = req.body.oisUrl;
@@ -73,21 +73,21 @@ router.post(
             const $ = cheerio.load(data);
 
             $('.yldaine_r', data).each(function () {
-              const yldaine_c1 = $(this).find('div.yldaine_c1').text();
-              const yldaine_c2 = $(this).find('div.yldaine_c2').text();
+              const yldaineC1 = $(this).find('div.yldaine_c1').text();
+              const yldaineC2 = $(this).find('div.yldaine_c2').text();
 
-              switch (yldaine_c1) {
+              switch (yldaineC1) {
                 case 'Õppeaine nimetus eesti k':
-                  courseName = yldaine_c2;
+                  courseName = yldaineC2;
                   break;
                 case 'Õppeaine eesmärgid':
-                  shortDescription = yldaine_c2;
+                  shortDescription = yldaineC2;
                   break;
                 case 'Õppeaine sisu lühikirjeldus':
-                  longDescription = yldaine_c2;
+                  longDescription = yldaineC2;
                   break;
                 case 'Õppeaine õpiväljundid':
-                  longDescription += yldaine_c2;
+                  longDescription += yldaineC2;
               }
             });
           }
@@ -105,40 +105,38 @@ router.post(
       let repoName = slugify(`${ repo_prefix }${ courseName }`);
       const nameExists = cacheTeamCourses.get('allCoursesData+teachers')
         .data
-        .filter((course) =>
-          course.full_name.startsWith(`${ template_owner }/${ repoName }`)
-        );
+        .filter((course) => course.full_name.startsWith(
+          `${ templateOwner }/${ repoName }`
+        ));
 
       if (nameExists.length) {
         // we have matching name, lets add suffix
         let suffix = 1;
         while (
           nameExists.findIndex(
-            (course) =>
-              course.full_name ===
-              `${ template_owner }/${ repoName }_${ suffix }`
+            (course) => course.full_name
+              === `${ templateOwner }/${ repoName }_${ suffix }`
           ) >= 0
-          ) {
+        ) {
           suffix++;
         }
         repoName = `${ repoName }_${ suffix }`;
       }
 
       // create repo
-      const created = await octokit.request(
-        `POST /repos/${ template_owner }/${ template_repo }/generate`, {
-          owner: template_owner,
-          name: repoName,
-          description: shortDescription.replace(
-            /(<|&lt;)br\s*\/*(>|&gt;)/g,
-            ' '
-          ).trim(),
-          include_all_branches: false,
-          private: true,
-          headers: {
-            'X-GitHub-Api-Version': '2022-11-28'
-          }
-        }).catch((err) => {
+      const created = await octokit.request(`POST /repos/${ templateOwner }/${ templateRepo }/generate`, {
+        owner: templateOwner,
+        name: repoName,
+        description: shortDescription.replace(
+          /(<|&lt;)br\s*\/*(>|&gt;)/g,
+          ' '
+        ).trim(),
+        include_all_branches: false,
+        private: true,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      }).catch((err) => {
         console.log(err);
         errorMessage = 'Kursuse loomine ebaõnnestus';
         res.status(400).send({ msg: errorMessage });
@@ -152,7 +150,9 @@ router.post(
         while (!contentOK && !timeOut) {
           await delay(1000);
 
-          const config = await getFile(template_owner, repoName,
+          const config = await getFile(
+            templateOwner,
+            repoName,
             'config.json'
           );
           if (config) {
@@ -168,7 +168,7 @@ router.post(
 
             // upload modified file
             updateFile(
-              template_owner,
+              templateOwner,
               repoName,
               'config.json',
               {
@@ -187,11 +187,11 @@ router.post(
         }
 
         // replace readme file
-        const readme = await getFile(template_owner, repoName, 'README.md');
+        const readme = await getFile(templateOwner, repoName, 'README.md');
         if (readme) {
           readme.content = longDescription;
           updateFile(
-            template_owner,
+            templateOwner,
             repoName,
             'README.md',
             readme,

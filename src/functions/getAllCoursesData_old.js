@@ -8,7 +8,6 @@ import apiRequests from '../components/courses/coursesService.js';
 import dotenv from 'dotenv';
 import membersRequests from './usersHkTluRequests.js';
 import { Octokit } from 'octokit';
-import { usersApi } from '../setup/setupUserAPI.js';
 
 dotenv.config();
 
@@ -17,8 +16,7 @@ const { requestGroups } = membersRequests;
 const octokit = new Octokit({
   auth: process.env.AUTH
 });
-const coursePromise = (param, refBranch, validBranches) => getConfig(
-  param.full_name, refBranch).then(async (config) => {
+const coursePromise = (param, refBranch, validBranches) => getConfig(param.full_name, refBranch).then(async (config) => {
   if (!config) {
     console.log(`No config found for ${ param.full_name }, ${ refBranch }`);
     return {};
@@ -97,10 +95,12 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(
 
   const allComponentsUUIDs = [
     ...config.concepts.filter(
-      (concept) => allComponentSlugsFlat.includes(concept.slug))
+      (concept) => allComponentSlugsFlat.includes(concept.slug)
+    )
       .map((concept) => concept.uuid),
     ...config.practices.filter(
-      (practice) => allComponentSlugsFlat.includes(practice.slug))
+      (practice) => allComponentSlugsFlat.includes(practice.slug)
+    )
       .map((practice) => practice.uuid)];
 
   // console.log('allComponentsUUIDs5:', allComponentsUUIDs);
@@ -127,7 +127,16 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(
 });
 
 const getAllCoursesData = async (teamSlug, req) => {
+  // console.log('teamSlug4:', teamSlug);
+  /**
+   * Read Course repos only if the user exists, they are in a team and
+   * team.slug exists! Otherwise, load courses array as empty (no courses to
+   * show).
+   */
   const { user } = req;
+
+  // console.log('user55:', user);
+
   let courses = { data: [] };
   const routePath = `allCoursesData+${ teamSlug }`;
 
@@ -135,16 +144,44 @@ const getAllCoursesData = async (teamSlug, req) => {
     console.log(`❌❌ team courses IS NOT from cache: ${ routePath }`);
 
     // get all repos from here: http://users.hk.tlu.ee:3333/groups
-    const allGroups = await usersApi.get(requestGroups).catch((error) => {
+    const allGroups = await axios.get(requestGroups).catch((error) => {
       console.error(error);
     });
 
-    //courses.data = allGroups.data?.data.filter(
-    //  c => c.users.find(u => u.usernames.github === user.login));
-
-    console.log(allGroups.data.data, user);
     /** For TEACHERS get all possible HK_ repos  */
+    if (teamSlug && (teamSlug === 'master' || teamSlug === 'teachers')) {
+      // then fetch data for each from GitHub
+      courses.data = await Promise.all(allGroups.data?.data.map(c => octokit.request(`GET /repos${ c.repository.replace('https://github.com', '') }`, {
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      }).then(response => response.data).catch((err) => {
+        console.log('repot ei leitud: ', c.repository);
+      })));
+      /** For STUDENTS get only HK_ repos where they have access to */
+    }
 
+    if (teamSlug && teamSlug !== 'master' && teamSlug !== 'teachers') {
+      // filter out courses where user is included in users
+
+      courses.data = await Promise.all(
+        allGroups.data?.data.filter(
+          c => c.users.find(user => user.usernames.github === user.login)
+        )
+          .map(c => octokit.request(`GET /repos${ c.repository.replace('https://github.com', '') }`, {
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
+          }).then(response => response.data).catch((err) => {
+            console.log('repot ei leitud: ', c.repository);
+          }))
+      );
+
+      /* courses = await axios.get(requestTeamCourses(teamSlug), authToken)
+       .catch((error) => {
+       console.error(error);
+       }); */
+    }
     cacheTeamCourses.set(routePath, courses);
   } else {
     console.log(`✅✅ team courses FROM CACHE: ${ routePath }`);
@@ -155,8 +192,64 @@ const getAllCoursesData = async (teamSlug, req) => {
   if (!courses) {
     return [];
   }
+  /*
+   * Filter only repos that start with "HK_" prefix.
+   */
+  /* const coursesStartingWithHK = courses.data.filter((x) =>
+   x.name.startsWith(process.env.REPO_PREFIX),
+   ); */ // && x.html_url !==
+  // 'https://github.com/tluhk/HK_Programmeerimine_II');
+  const coursesStartingWithHK = courses.data;
+  /**
+   * Return empty array if tluhk org doesn't have any repos starting with "HK_"
+   */
+  if (!coursesStartingWithHK) {
+    return [];
+  }
 
-  return Promise.all(courses.data)
+  const allCourses = coursesStartingWithHK.map(async (course) => {
+    const validBranches = await apiRequests.validBranchesService(
+      course.full_name
+    );
+
+    let refBranch;
+    if (validBranches && validBranches.includes(teamSlug)) {
+      refBranch = teamSlug;
+    } else if (validBranches.length && teamSlug === 'teachers') {
+      // Siin ei tohi by default [0] määrata! Võib olla, et õpetaja annab rif20
+      // branchi ainet. Pead kontrollima kõiki branche!
+      const branchConfigPromises = validBranches.map(async (branch) => {
+        const config = await getConfig(course.full_name, branch);
+        if (config) {
+          return config;
+        }
+      });
+      const branchConfigs = await Promise.all(branchConfigPromises);
+      const correctBranchIndex = branchConfigs.findIndex(
+        (config) => config.teacherUsername === user.username
+      );
+
+      if (correctBranchIndex > -1) {
+        refBranch = validBranches[correctBranchIndex];
+      } else if (correctBranchIndex <= -1) {
+        const firstActiveBranchIndex = branchConfigs.findIndex(
+          (config) => config.active === true
+        );
+        refBranch = validBranches[firstActiveBranchIndex];
+      } else {
+        refBranch = 'master';
+      }
+    } else {
+      refBranch = 'master';
+    }
+
+    return await coursePromise(course, refBranch, validBranches);
+  });
+
+  /** Filter out and return only course object where the object is not empty.
+   * It's possible that getConfig()
+   */
+  return Promise.all(allCourses)
     .then((results) => results.filter((item) => Object.keys(item).length > 0));
 };
 

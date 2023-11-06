@@ -22,8 +22,7 @@ const getTeamAssignments = async (req, res, next) => {
         console.error(error);
         return res.redirect('/notfound');
       });
-    const getAllTeamAssignments =
-      await teamsController.getAllTeamAssignments(teams);
+    const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
 
     cacheTeamAssignments.set(cacheName, getAllTeamAssignments);
     res.locals[cacheName] = getAllTeamAssignments;

@@ -9,11 +9,17 @@ import validateTeacher from '../middleware/validateTeacher.js';
 import allOverviewController
   from '../components/progress-overview/overviewController.js';
 
-router.get('/', resetSelectedVersion, validateTeacher,
+router.get(
+  '/',
+  resetSelectedVersion,
+  validateTeacher,
   allOverviewController.getOverview
 );
 
-router.get('/:team?/:courseSlug?', resetSelectedVersion, validateTeacher,
+router.get(
+  '/:team?/:courseSlug?',
+  resetSelectedVersion,
+  validateTeacher,
   allOverviewController.getOverview
 );
 
@@ -26,14 +32,16 @@ router.post('/', validateTeacher, (req, res) => {
 
   if (req.body && req.body.selectedTeam && req.body.selectedCourse) {
     return res.redirect(
-      `/progress-overview/${ req.body.selectedTeam }/${ req.body.selectedCourse }`);
+      `/progress-overview/${ req.body.selectedTeam }/${ req.body.selectedCourse }`
+    );
   }
 
   // Store the displayBy in the session
   req.session.displayBy = req.body.displayBy;
 
   return res.redirect(
-    `/progress-overview?displayBy=${ req.session.displayBy }`);
+    `/progress-overview?displayBy=${ req.session.displayBy }`
+  );
 });
 
 export default router;

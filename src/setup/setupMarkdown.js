@@ -22,33 +22,32 @@ import anchorToc from 'markdown-it-toc-done-right';
 import markdownItClass from '@toycode/markdown-it-class';
 
 const markdown = new MarkdownIt({
-    html: true, // Enable HTML tags in source
-    xhtmlOut: true, // Use '/' to close single tags (<br />).
-    linkify: true, // Autoconvert URL-like text to links
-    typographer: true, // Enable some language-neutral replacement + quotes
-    // beautification.e
-    // https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
+  html: true, // Enable HTML tags in source
+  xhtmlOut: true, // Use '/' to close single tags (<br />).
+  linkify: true, // Autoconvert URL-like text to links
+  typographer: true, // Enable some language-neutral replacement + quotes
+  // beautification.e
+  // https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
 
-    // Enable syntax hightlighting:
-    // https://github.com/markdown-it/markdown-it#syntax-highlighting
-    highlight: (str, lang) => {
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          return `<pre class="markdown-pre"><code>${ hljs.highlight(
-            str, {
-              language: lang,
-              ignoreIllegals: true
-            }).value }</code></pre>`;
-        } catch (__) {
-          // do nothing here
-        }
+  // Enable syntax hightlighting:
+  // https://github.com/markdown-it/markdown-it#syntax-highlighting
+  highlight: (str, lang) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return `<pre class="markdown-pre"><code>${ hljs.highlight(str, {
+          language: lang,
+          ignoreIllegals: true
+        }).value }</code></pre>`;
+      } catch (__) {
+        // do nothing here
       }
-
-      return `<pre class="markdown-pre"><code>${ markdown.utils.escapeHtml(
-        str) }</code></pre>`;
     }
+
+    return `<pre class="markdown-pre"><code>${ markdown.utils.escapeHtml(
+      str
+    ) }</code></pre>`;
   }
-).enable('image');
+}).enable('image');
 
 const mapContent = {
   ol: 'markdown',

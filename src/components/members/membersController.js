@@ -1,5 +1,7 @@
 import { cacheOrgMembers } from '../../setup/setupCache.js';
 import apiRequests from './membersService.js';
+import { usersApi } from '../../setup/setupUserAPI.js';
+import membersRequests from '../../functions/usersHkTluRequests.js';
 
 const membersController = {
   getOrgMembers: async () => {
@@ -10,12 +12,11 @@ const membersController = {
     let members;
 
     if (!cacheOrgMembers.has(cacheName)) {
-      console.log(`❌❌ Org Members IS NOT from cache`);
+      console.log('❌❌ Org Members IS NOT from cache');
       members = await apiRequests.getMembersService();
-
       cacheOrgMembers.set(cacheName, members);
     } else {
-      console.log(`✅✅ Org Members FROM CACHE`);
+      console.log('✅✅ Org Members FROM CACHE');
       members = cacheOrgMembers.get(cacheName);
     }
     return members;
@@ -25,13 +26,12 @@ const membersController = {
     /**
      * check if given githubUserID is part of tluhk organisation members
      */
-    const members = await membersController.getOrgMembers();
-    const userInOrgMembers = members.find((x) => x.usernames.github === user);
-
+    const userInOrgMembers = await usersApi.get(membersRequests.getUser + user)
+      .catch(() => console.log('❌❌ no user found'));
     if (!userInOrgMembers) {
       return false;
     }
-    return userInOrgMembers;
+    return userInOrgMembers.data.data;
   }
 };
 

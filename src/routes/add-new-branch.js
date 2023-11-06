@@ -16,11 +16,11 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
   let error = '';
   // 1. validate request
   if (
-    req.body.courseSlug &&
-    req.body.team &&
-    req.body.parentBranch &&
-    req.body.year &&
-    req.body.semester
+    req.body.courseSlug
+    && req.body.team
+    && req.body.parentBranch
+    && req.body.year
+    && req.body.semester
   ) {
     const octokit = new Octokit({
       auth: process.env.AUTH

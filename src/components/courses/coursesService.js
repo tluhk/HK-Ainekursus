@@ -58,9 +58,7 @@ const apiRequests = {
       }, {});
 
       const validBranchesRaw = await Promise.all(
-        Object.entries(branchPromises).map(([key, promise]) =>
-          promise.then((value) => [key, value])
-        )
+        Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value]))
       ).then((resolvedArr) => {
         const resolvedObj = Object.fromEntries(resolvedArr);
         return Object.entries(resolvedObj).filter(

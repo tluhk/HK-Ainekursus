@@ -16,9 +16,9 @@ const getImgResponse = async (coursePathInGithub, path, url, refBranch) => {
    * If not, make request to GitHub and save to cache.
    */
 
-    // console.log('coursePathInGithub1:', coursePathInGithub);
-    // console.log('path1:', path);
-    // console.log('url1:', url);
+  // console.log('coursePathInGithub1:', coursePathInGithub);
+  // console.log('path1:', path);
+  // console.log('url1:', url);
   const routePath = `${ coursePathInGithub }+${ path.componentSlug }+${ url }`;
 
   if (!cacheImages.has(routePath)) {
@@ -123,9 +123,7 @@ const function1 = async (
 
   // for each image, get its used "img src" and needed "download_url" to
   // display image on webapp. Response are Promises, save those in new array
-  const promises = images.map((img) =>
-    function2(coursePathInGithub, path, img, refBranch)
-  );
+  const promises = images.map((img) => function2(coursePathInGithub, path, img, refBranch));
   // solve each Promise in previous array, save results in new array
   const finishedPromises = await Promise.all(promises);
 

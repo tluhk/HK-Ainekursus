@@ -65,16 +65,15 @@ async function updateFile(
   commitMessage,
   branch = 'master'
 ) {
-  return await octokit.request(
-    `PUT /repos/${ owner }/${ repo }/contents/${ path }`, {
-      message: commitMessage,
-      content: base64.encode(file.content),
-      sha: file.sha,
-      branch: branch,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    }).catch((err) => {
+  return await octokit.request(`PUT /repos/${ owner }/${ repo }/contents/${ path }`, {
+    message: commitMessage,
+    content: base64.encode(file.content),
+    sha: file.sha,
+    branch: branch,
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  }).catch((err) => {
     console.log(err);
   });
 }
@@ -87,15 +86,14 @@ async function deleteFile(
   commitMessage,
   branch = 'master'
 ) {
-  return await octokit.request(
-    `DELETE /repos/${ owner }/${ repo }/contents/${ path }`, {
-      message: commitMessage,
-      sha: sha,
-      branch: branch,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    }).catch((err) => {
+  return await octokit.request(`DELETE /repos/${ owner }/${ repo }/contents/${ path }`, {
+    message: commitMessage,
+    sha: sha,
+    branch: branch,
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  }).catch((err) => {
     console.log(err);
   });
 }
@@ -110,15 +108,14 @@ async function uploadFile(
 ) {
   const base64Content = new Buffer.from(file.data).toString('base64');
 
-  return await octokit.request(
-    `PUT /repos/${ owner }/${ repo }/contents/${ path }`, {
-      message: commitMessage,
-      content: base64Content,
-      branch: branch,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    }).catch((err) => {
+  return await octokit.request(`PUT /repos/${ owner }/${ repo }/contents/${ path }`, {
+    message: commitMessage,
+    content: base64Content,
+    branch: branch,
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  }).catch((err) => {
     console.log(err);
   });
 }
@@ -129,4 +126,6 @@ function delay(milliseconds) {
   });
 }
 
-export { getFile, updateFile, deleteFile, delay, getFolder, uploadFile };
+export {
+  getFile, updateFile, deleteFile, delay, getFolder, uploadFile
+};

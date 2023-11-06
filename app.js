@@ -390,18 +390,12 @@ app.post('/login', async (req, res, next) => {
    * If entered value is email, redirect back to log in and show "entering
    * email is not allowed" message
    */
-  // eslint-disable-next-line no-useless-escape
   if (req.body.login.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/)) {
     console.log(`Invalid login – email not allowed`);
     return res.redirect('/login?email=true');
   }
 
-  /** If entered username doesn't exist in GitHub, redirect back to log in and show "invalid username" message */
-  // const userFromGithub = await apiRequests.getUserFromGithub(req.body.login);
-  // if (!userFromGithub) return res.redirect('/login?invalid=true');
-
-  /**  If entered username doesn't exist in GitHub tluhk organisation members, redirect back to log in and show "invalid username" message */
-
+  /**  If entered username doesn't exist in users, redirect back to log in and show "invalid username" message */
   const userInOrgMembers = await membersController.isUserInOrgMembers(
     req.body.login
   );

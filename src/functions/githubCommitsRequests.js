@@ -11,8 +11,7 @@ const githubCommitsRequests = {
     const dateISO = date.toISOString();
     return `${ baseUrl }/repos/${ coursePathInGithub }/commits?per_page=100&sha=${ refBranch }&since=${ dateISO }`;
   },
-  requestCommitComments: (coursePathInGithub, commitSHA) =>
-    `${ baseUrl }/repos/${ coursePathInGithub }/commits/${ commitSHA }/comments`
+  requestCommitComments: (coursePathInGithub, commitSHA) => `${ baseUrl }/repos/${ coursePathInGithub }/commits/${ commitSHA }/comments`
 };
 
 export default githubCommitsRequests;

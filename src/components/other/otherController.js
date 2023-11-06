@@ -2,10 +2,9 @@ const otherController = {
   /**
    * for unknown routes
    */
-  notFound: (req, res) =>
-    res.render('notfound', {
-      user: req.user
-    }),
+  notFound: (req, res) => res.render('notfound', {
+    user: req.user
+  }),
   /**
    * for not authorized not login (GitHub user not part of tluhk organisation)
    */

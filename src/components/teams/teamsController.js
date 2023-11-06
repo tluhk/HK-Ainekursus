@@ -17,11 +17,10 @@ const teamsController = {
      * -- and 'teachers' team
      */
     const teams = allTeams.filter(
-      (x) =>
-        x.slug.match(/^[a-zA-Z]{3}\d{2}$/) || // match team names that consist of 3
+      (x) => x.slug.match(/^[a-zA-Z]{3}\d{2}$/) // match team names that consist of 3
         // alphabetical symbols and 2 letters,
         // e.g. rif20, rif21
-        x.slug === 'teachers' // or match 'teachers' team
+        || x.slug === 'teachers' // or match 'teachers' team
     );
 
     return { teams };
