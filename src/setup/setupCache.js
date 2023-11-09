@@ -70,6 +70,10 @@ const cacheMarkedAsDoneComponents = new NodeCache({
   stdTTL: 86400,
   useClones: false
 });
+const cacheComponentsUUIds = new NodeCache({
+  stdTTL: 86400,
+  useClones: false
+});
 // for Org Members, set cache for 30 minutes.
 const cacheOrgMembers = new NodeCache({
   stdTTL: 1800,
@@ -122,5 +126,6 @@ export {
   cacheMarkedAsDoneComponents,
   cacheOrgMembers,
   cacheConcepts,
-  cacheLessons
+  cacheLessons,
+  cacheComponentsUUIds
 };

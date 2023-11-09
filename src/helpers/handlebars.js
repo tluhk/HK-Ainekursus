@@ -133,7 +133,8 @@ export default function hbsHelpers(hbs) {
       findTeacher: (teacherName, teachers) => {
         // console.log('teacherName2:', teacherName);
         // console.log('teachers2:', teachers);
-        const teacherData = teachers.find((x) => x.login === teacherName);
+        const teacherData = teachers.find(
+          (x) => (x.firstName + ' ' + x.lastName) === teacherName);
         // console.log('teacherData2:', teacherData);
 
         let teacher;
@@ -149,12 +150,12 @@ export default function hbsHelpers(hbs) {
             avatar_url: '/images/anonymous-avatar.png'
           };
         } else {
-          teacher = {
-            login: teacherData.login,
-            displayName: teacherData.displayName,
-            email: teacherData.email,
-            avatar_url: teacherData.avatar_url
-          };
+          teacher = teacherData;/* {
+           login: teacherData.login,
+           displayName: teacherData.displayName,
+           email: teacherData.email,
+           avatar_url: teacherData.avatar_url
+           }*/
         }
         // console.log('teacher1:', teacher);
         return teacher;
@@ -247,7 +248,7 @@ export default function hbsHelpers(hbs) {
         // markedAsDoneComponentsUUIDs);
         // console.log('courseBranchComponentsUUIDs7:',
         // courseBranchComponentsUUIDs);
-        if (markedAsDoneComponentsUUIDs) {
+        if (markedAsDoneComponentsUUIDs && courseBranchComponentsUUIDs) {
           const commonElementsCount = markedAsDoneComponentsUUIDs.filter(
             (item) => courseBranchComponentsUUIDs.includes(item)).length;
           // console.log('percent1:', percent);

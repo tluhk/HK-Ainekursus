@@ -16,10 +16,14 @@ import apiRequests from './coursesService.js';
 import teamsController from '../teams/teamsController.js';
 import allNotificationsController
   from '../notifications/notificationsController.js';
-import getMarkedAsDoneComponents
-  from '../../functions/getListOfDoneComponentUUIDs.js';
+import {
+  getComponentsUUIDs,
+  getMarkedAsDoneComponents
+} from '../../functions/getListOfDoneComponentUUIDs.js';
 import { getFile, getFolder } from '../../functions/githubFileFunctions.js';
 import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
+import { usersApi } from '../../setup/setupUserAPI.js';
+import membersRequests from '../../functions/usersHkTluRequests.js';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -356,15 +360,6 @@ const allCoursesController = {
     const adminName = process.env.ADMIN_NAME;
     const adminEmail = process.env.ADMIN_EMAIL;
 
-    let teamSlug;
-    if (req.user && req.user.team) {
-      teamSlug = req.user.team.slug;
-    }
-    /**
-     * Check if teamSlug is 'teachers'
-     * If yes, then get all courses for teacher
-     * If not, then get all courses for student
-     */
     const isTeacher = req.user.roles.includes('teacher');
 
     const start3 = performance.now();
@@ -403,7 +398,7 @@ const allCoursesController = {
         && req.user.team
         // NB! 'teachers' team doesn't have progress bars on courses, so they
         // can't load courses by Progress:
-        && req.user.team.slug === 'teachers'
+        && isTeacher
         && req.query.coursesDisplayBy
         && req.query.coursesDisplayBy === 'progress')
     ) {
@@ -418,7 +413,7 @@ const allCoursesController = {
         // 'teachers' team doesn't have Progress bars on courses, so check that
         // user's team is NOT 'teachers:
         || (req.query.coursesDisplayBy === 'progress'
-          && req.user.team.slug !== 'teachers'))
+          && !isTeacher))
     ) {
       coursesDisplayBy = req.query.coursesDisplayBy;
       req.session.coursesDisplayBy = req.query.coursesDisplayBy;
@@ -430,7 +425,7 @@ const allCoursesController = {
       /*
        * Filter allCoursesActive where the teacher is logged-in user
        */
-      const allTeacherCourses = allCoursesActive.filter(
+      const allTeacherCourses = allCourses.filter(
         (course) => course.teacherUsername === req.user.username
       );
       // console.log('allTeacherCourses1:', allTeacherCourses);
@@ -543,7 +538,7 @@ const allCoursesController = {
           courses: sortedCoursesGroupedBySemesterWithFullNames,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
-          teachers: allTeachers,
+          teachers: [],
           courseUpdates7Days
         });
       }
@@ -551,23 +546,35 @@ const allCoursesController = {
 
     /** Following describes different DASHBOARD logics for STUDENT, based on given coursesDisplayBy */
     if (!isTeacher) {
-      /*
-       * Sort allCoursesActive, these are student's courses
-       */
-      //allCoursesActive.sort((a, b) =>
-      // a.courseName.localeCompare(b.courseName));
 
       /* These are teachers of student's courses.
        * 1) group by teacher name
        * 2) then sort by teacher name and by each teacher's courses
        * */
-      console.log(allCourses);
+      //console.log(allCourses);
 
-      const allCoursesGroupedByTeacher = allCourses.groupBy(
-        ({ teacherUsername }) => teacherUsername
-      );
-      // console.log('allCoursesGroupedByTeacher1:',
-      // allCoursesGroupedByTeacher);
+      // Create an object to store the grouped data
+      const allCoursesGroupedByTeacher = {};
+
+      const allTeachers = [];
+      // Iterate through the courses in your data
+      allCourses.forEach(course => {
+        // Iterate through the teachers of the current course
+        course.teachers.forEach(teacher => {
+          allTeachers.push(teacher);
+          const displayName = `${ teacher.firstName } ${ teacher.lastName }`;
+          // Check if the teacher's email is already in the grouped data
+          if (allCoursesGroupedByTeacher[displayName]) {
+            // If the teacher is already in the grouped data, push the current
+            // course to their list of courses
+            allCoursesGroupedByTeacher[displayName].push(course);
+          } else {
+            // If the teacher is not in the grouped data, create a new entry
+            // for them
+            allCoursesGroupedByTeacher[displayName] = [course];
+          }
+        });
+      });
 
       const sortedCoursesGroupedByTeacher = Object.keys(
         allCoursesGroupedByTeacher
@@ -576,20 +583,18 @@ const allCoursesController = {
           (a, b) => a.name.localeCompare(b.name));
         return acc;
       }, {});
-      // console.log('allCoursesGroupedByTeacher5:',
-      // allCoursesGroupedByTeacher);
 
       /**
        * Get last 7 day notifications for active courses, needed for dashboard
        */
-      const { courseUpdates7Days } = [];/*await allNotificationsController.getCoursesUpdates(
-       allCoursesActive,
-       allTeachers
-       );*/
+      const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(
+        allCourses,
+        []
+      );
 
       /** Next, you must get all active courses WITH the list of components that have been markedAsDone. Use the allCoursesController.allCoursesActiveWithComponentsData() function that store those courses. */
       let courses;
-      if (req.user && req.user.id) {
+      if (req.user && req.user.userId) {
         courses = await allCoursesController.allCoursesActiveWithComponentsData(
           allCourses,
           req.user.id
@@ -598,11 +603,14 @@ const allCoursesController = {
         courses = allCourses;
       }
 
-      // console.log('courses55:', courses);
+      courses = await allCoursesController.allCoursesActiveWithComponentsUUIDs(
+        courses);
+
+      courses.map((c) => c.teacher = c.teachers[0].firstName + ' ' +
+        c.teachers[0].lastName);
       res.locals.allCoursesActive = courses;
 
-      // console.log('coursesDisplayBy1:', coursesDisplayBy);
-
+      console.log('coursesDisplayBy1:', courses);
       /** Test entries for student: */
       /* courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
        courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
@@ -617,7 +625,7 @@ const allCoursesController = {
        courses[3].markedAsDoneComponentsUUIDs.push('9e552ecd-728c-4556-91e9-d42611393dbe');
        courses[3].markedAsDoneComponentsUUIDs.push('750a3a40-6f2e-4575-b684-79608403642c'); */
 
-      // console.log('allTeachers1:', allTeachers);
+      //console.log('allTeachers1:', allTeachers);
       /** Rendering student's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === 'name') {
         return res.render('dashboard-student', {
@@ -627,7 +635,7 @@ const allCoursesController = {
           adminEmail,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
-          teachers: [],
+          teachers: allTeachers,
           courseUpdates7Days
         });
       }
@@ -669,7 +677,7 @@ const allCoursesController = {
           adminEmail,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
-          teachers: allTeachers,
+          teachers: [], //allTeachers,
           courseUpdates7Days
         });
       }
@@ -696,7 +704,7 @@ const allCoursesController = {
           return letterB.localeCompare(letterA);
         }).reduce((acc, semester) => {
           acc[semester] = allCoursesGroupedBySemester[semester].sort(
-            (a, b) => a.courseName.localeCompare(b.courseName));
+            (a, b) => a.name.localeCompare(b.name));
           return acc;
         }, {});
 
@@ -730,7 +738,7 @@ const allCoursesController = {
           courses: sortedCoursesGroupedBySemesterWithFullNames,
           user: req.user,
           teacherCourses: sortedCoursesGroupedByTeacher,
-          teachers: allTeachers,
+          teachers: [], //allTeachers,
           courseUpdates7Days
         });
       }
@@ -744,26 +752,25 @@ const allCoursesController = {
   getSpecificCourse: async (req, res, next) => {
     /** Read parameters sent with endpoint */
     const {
-      courseSlug,
+      courseId,
       contentUUID,
       componentUUID
     } = req.params;
 
     console.log(
-      courseSlug,
+      courseId,
       contentUUID, // about
       componentUUID
     );
     const { ref } = req.query;
 
-    console.log('piiks');
     /** If user's team is not found, route to /notfound. Only users with valid team are allowed to see course content. This is checked with app.js. */
-    if (!req.user.team.slug) {
-      return res.redirect('/notfound');
-    }
+    /*if (!req.user.team.slug) {
+     return res.redirect('/notfound');
+     }*/
 
-    const teamSlug = req.user.team.slug;
-    res.locals.teamSlug = teamSlug;
+    /*const teamSlug = req.user.team.slug;
+     res.locals.teamSlug = teamSlug;*/
 
     /** selectedVersion variable refers to either:
      * - teacher's selected version on a course page
@@ -776,25 +783,26 @@ const allCoursesController = {
     // console.log('selectedVersion1:', selectedVersion);
 
     // console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
-    res.locals.markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
-      req.user.id,
-      courseSlug
-    );
+    //res.locals.markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
+    //  req.user.id,
+    //  courseSlug
+    //);
 
     /** Get all available courses for the user. */
-    const start7 = performance.now();
-    const allCourses = await getAllCoursesData(teamSlug, req);
-    const end7 = performance.now();
-    console.log(`Execution time allCourses: ${ end7 - start7 } ms`);
+    //const start7 = performance.now();
+    //const allCourses = await getAllCoursesData(req);
+    //const end7 = performance.now();
+    //console.log(`Execution time allCourses: ${ end7 - start7 } ms`);
 
-    const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
-    allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
+    //const allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+    //allCoursesActive.sort((a, b) => a.courseName.localeCompare(b.courseName));
     // console.log('allCoursesActive2:', allCoursesActive);
 
     /** Get the selected course that was accessed with current endpoint  */
-    const course = allCoursesActive.filter(
-      (x) => x.courseIsActive && x.courseSlug === courseSlug
-    )[0];
+    let course = await usersApi.get(membersRequests.getCourse + courseId)
+      .catch((error) => {
+        console.error(error);
+      });
 
     /** If no course is found (meaning that the courseSlug doesn't match any courses in GitHub OR none of the course branches in Github are active), then user tried to manually access an invalid course page. Redirect to /notfound page.
      */
@@ -802,7 +810,10 @@ const allCoursesController = {
     if (!course) {
       return res.redirect('/notfound');
     }
+    course = coursePromise(course.data.data, selectedVersion);
 
+    console.log(course.data.data);
+    return res.send('ok');
     res.locals.course = course;
 
     /** Get all teachers */
@@ -1157,7 +1168,7 @@ const allCoursesController = {
   allCoursesActiveWithComponentsData: async (allCoursesActive, githubID) => {
     /** First, for each course, get a list of component UUIDs that has been marked as done. Save this to allCoursesActiveDoneComponentsArr array. */
     const allCoursesActiveDoneComponentsPromises = allCoursesActive.map(
-      (course) => getMarkedAsDoneComponents(githubID, course.courseSlug)
+      (course) => getMarkedAsDoneComponents(githubID, course.code)
     );
 
     const allCoursesActiveDoneComponentsArr = await Promise.all(
@@ -1176,6 +1187,23 @@ const allCoursesController = {
     return allCoursesActive;
   },
 
+  allCoursesActiveWithComponentsUUIDs: async (allCoursesActive, githubID) => {
+    /** First, for each course, get a list of component UUIDs  */
+    const allCoursesActiveComponentsUUIDsPromises = allCoursesActive.map(
+      (course) => getComponentsUUIDs(course.repository)
+    );
+
+    const allCoursesActiveDoneComponentsUUIDsArr = await Promise.all(
+      allCoursesActiveComponentsUUIDsPromises
+    );
+
+    /** Then, again for each course, add the respective array of done components as a key-value pair: */
+    allCoursesActive.forEach((course, index) => {
+      allCoursesActive[index].courseBranchComponentsUUIDs = allCoursesActiveDoneComponentsUUIDsArr[index];
+    });
+
+    return allCoursesActive;
+  },
   getAllConcepts: async (courses, refBranch) => {
     if (cacheConcepts.has('concepts')) {
       return new Promise((resolve) => {

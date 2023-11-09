@@ -6,7 +6,9 @@ dotenv.config();
 const membersRequests = {
   requestMembers: 'users',
   requestGroups: 'groups/user/',
-  getUser: 'users/github/'
+  getUser: 'users/github/',
+  getCourse: 'groups/',
+  getAllCourses: 'groups'
 };
 
 export default membersRequests;

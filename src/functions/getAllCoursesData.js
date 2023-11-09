@@ -2,24 +2,19 @@ import { performance } from 'perf_hooks';
 import * as cheerio from 'cheerio';
 import { axios } from '../setup/setupGithub.js';
 import { cacheOisContent } from '../setup/setupCache.js';
-import githubReposRequests from './githubReposRequests.js';
 import getConfig from './getConfigFuncs.js';
 import dotenv from 'dotenv';
 import membersRequests from './usersHkTluRequests.js';
-import { Octokit } from 'octokit';
 import { usersApi } from '../setup/setupUserAPI.js';
 
 dotenv.config();
 
-const { requestTeamCourses } = githubReposRequests;
-const { requestGroups } = membersRequests;
-const octokit = new Octokit({
-  auth: process.env.AUTH
-});
+const { requestGroups, getAllCourses } = membersRequests;
+
 const coursePromise = (param, refBranch, validBranches) => getConfig(
-  param.full_name, refBranch).then(async (config) => {
+  param.repository, refBranch).then(async (config) => {
   if (!config) {
-    console.log(`No config found for ${ param.full_name }, ${ refBranch }`);
+    console.log(`No config found for ${ param.repository }, ${ refBranch }`);
     return {};
   }
 
@@ -30,7 +25,7 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(
    */
   let oisContent = {};
 
-  const routePathOisContent = `oisContent+${ param.full_name }+${ refBranch }`;
+  const routePathOisContent = `oisContent+${ param.repository }+${ refBranch }`;
 
   const start6 = performance.now();
 
@@ -128,18 +123,14 @@ const coursePromise = (param, refBranch, validBranches) => getConfig(
 const getAllCoursesData = async (req) => {
   const { user } = req;
 
-  //const routePath = `allCoursesData+${ teamSlug }`;
-
-  // get all repos from here: http://users.hk.tlu.ee:3333/groups
-  const courses = await usersApi.get(requestGroups + user.userId)
+  // if user is set get user specific courses, otherwise get all courses
+  const courses = await usersApi.get(
+    user ? requestGroups + user.userId : getAllCourses)
     .catch((error) => {
       console.error(error);
     });
 
   return courses ? courses.data.data : [];
-  //return Promise.all(courses.data)
-  //  .then((results) => results.filter((item) => Object.keys(item).length >
-  // 0));
 };
 
 export default getAllCoursesData;

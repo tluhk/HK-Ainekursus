@@ -14,10 +14,13 @@ const allNotificationsController = {
         /**
          * For each active course, get commits.
          */
+
+          //repository:
+          // 'https://github.com/tluhk/Sissejuhatus_tarkvaraarendusse',
         const commitsRaw = await apiRequestsCommits.commitsService(
-          activeCourse.coursePathInGithub,
-          activeCourse.refBranch
-        );
+            activeCourse.repository.replace('https://github.com/', ''),
+            'master' //activeCourse.refBranch
+          );
         /**
          * Then filter out commits that have commit_count more than 0. This
          * means teacher has added custom comment that should be displyed on
@@ -48,24 +51,25 @@ const allNotificationsController = {
         /**
          * Flatten the comments array to remove empty entries.
          */
-        const commentsArray = commitCommentsRaw.flatMap((item) => item.data.map((comment) => ({
-          url: comment.url,
-          html_url: comment.html_url,
-          id: comment.id,
-          node_id: comment.node_id,
-          user: allTeachers.find(
-            (user) => user.login === comment.user.login
-          ) || { displayName: comment.user.login },
-          position: comment.position,
-          line: comment.line,
-          path: comment.path,
-          commit_id: comment.commit_id,
-          created_at: comment.created_at,
-          updated_at: comment.updated_at,
-          author_association: comment.author_association,
-          body: comment.body,
-          reactions: comment.reactions
-        })));
+        const commentsArray = commitCommentsRaw.flatMap(
+          (item) => item.data.map((comment) => ({
+            url: comment.url,
+            html_url: comment.html_url,
+            id: comment.id,
+            node_id: comment.node_id,
+            user: allTeachers.find(
+              (user) => user.login === comment.user.login
+            ) || { displayName: comment.user.login },
+            position: comment.position,
+            line: comment.line,
+            path: comment.path,
+            commit_id: comment.commit_id,
+            created_at: comment.created_at,
+            updated_at: comment.updated_at,
+            author_association: comment.author_association,
+            body: comment.body,
+            reactions: comment.reactions
+          })));
         /**
          * Finally, for each comment, add course information.
          */
@@ -85,7 +89,10 @@ const allNotificationsController = {
     const commentsWithCoursesFlattened = commentsWithCourses.flatMap(
       (arr) => arr
     );
-    commentsWithCoursesFlattened.sort((b, a) => a.created_at > b.created_at ? 1 : b.created_at > a.created_at ? -1 : 0);
+    commentsWithCoursesFlattened.sort(
+      (b, a) => a.created_at > b.created_at ? 1 : b.created_at > a.created_at
+        ? -1
+        : 0);
     /**
      * Limit notifications to max 30 days ago
      */

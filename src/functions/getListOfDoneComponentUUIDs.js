@@ -1,7 +1,11 @@
 /* eslint-disable max-len */
 
 import pool from '../../db.js';
-import { cacheMarkedAsDoneComponents } from '../setup/setupCache.js';
+import {
+  cacheComponentsUUIds,
+  cacheMarkedAsDoneComponents
+} from '../setup/setupCache.js';
+import { getFile } from './githubFileFunctions.js';
 
 /** Function to get a list of UUIDs of components that have been markedAsDone by a selected user in a selected course. This data is stored in MariaDB.
  * Parameters are user's githubID and course's slug. E.g. '24424256' and
@@ -83,4 +87,27 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
   return keysArray;
 };
 
-export default getMarkedAsDoneComponents;
+const getComponentsUUIDs = async (repoUrl) => {
+  // fetch courseBranchComponentsUUIDs for each course
+  // get config.json for the repo
+  // from file get: "practices":[{"slug":"praktikum_01","name":"Näidis
+  // Praktikum","uuid":"eb040d98-f24a-43f6-92bb-12af08d2d32c"}]
+  const [owner, repo] = repoUrl.replace('https://github.com/', '').split('/');
+  const cacheName = `componentsUUIDs+${ repo }`;
+  let keysArray = [];
+
+  if (!cacheComponentsUUIds.has(cacheName)) {
+    const configJson = await getFile(owner, repo, 'config.json');
+    if (configJson) {
+      const data = JSON.parse(configJson.content);
+      keysArray = data.practices.map(
+        (p) => p.uuid);
+    }
+    cacheComponentsUUIds.set(cacheName, keysArray);
+  } else {
+    keysArray = cacheComponentsUUIds.get(cacheName);
+  }
+  return keysArray;
+};
+
+export { getMarkedAsDoneComponents, getComponentsUUIDs } ;

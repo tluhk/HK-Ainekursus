@@ -242,7 +242,8 @@ passport.use(
           username,
           displayName,
           email,
-          roles: userInOrgMembers.roles
+          roles: userInOrgMembers.roles,
+          avatar_url: _json.avatar_url
         };
 
         /**
@@ -447,7 +448,7 @@ app.get(
 
 /** Endpoint to load course pages */
 app.get(
-  '/course/:courseSlug/:contentSlug?/:componentSlug?',
+  '/course/:courseId/:contentSlug?/:componentSlug?',
   resetSelectedVersion,
   allCoursesController.getSpecificCourse,
   responseAction,

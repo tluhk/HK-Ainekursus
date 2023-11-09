@@ -20,10 +20,13 @@ const apiRequestsCommits = {
 
     if (!cacheCommits.has(routePath)) {
       console.log(`❌❌ commits IS NOT from cache: ${ routePath }`);
+
       commits = await axios.get(
         requestCommits(coursePathInGithub, refBranch),
         authToken
-      );
+      ).catch((err) => {
+        console.log(err);
+      });
 
       cacheCommits.set(routePath, commits);
     } else {

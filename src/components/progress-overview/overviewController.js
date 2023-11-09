@@ -1,7 +1,8 @@
 import { performance } from 'perf_hooks';
 import getAllCoursesData from '../../functions/getAllCoursesData.js';
-import getMarkedAsDoneComponents
-  from '../../functions/getListOfDoneComponentUUIDs.js';
+import {
+  getMarkedAsDoneComponents
+} from '../../functions/getListOfDoneComponentUUIDs.js';
 import teamsController from '../teams/teamsController.js';
 
 const allOverviewController = {
@@ -33,7 +34,7 @@ const allOverviewController = {
      * provided with req.session. And then render /progress-overview.
      */
 
-    // By default, set displayBy to 'teams'
+      // By default, set displayBy to 'teams'
     const displayBy = req.session.displayBy || 'teams';
     res.locals.displayBy = displayBy;
 
@@ -110,7 +111,8 @@ const allOverviewController = {
       .sort()
       .reduce((acc, team) => {
         if (teamsCourses[team].length > 0) {
-          acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
+          acc[team] = teamsCourses[team].sort(
+            (a, b) => a.courseName.localeCompare(b.courseName));
         }
         return acc;
       }, {});
@@ -134,7 +136,8 @@ const allOverviewController = {
     const teamsUsersSorted = Object.keys(teamsUsers)
       .sort()
       .reduce((acc, team) => {
-        acc[team] = teamsUsers[team].sort((a, b) => a.displayName.localeCompare(b.displayName));
+        acc[team] = teamsUsers[team].sort(
+          (a, b) => a.displayName.localeCompare(b.displayName));
         return acc;
       }, {});
 
@@ -178,7 +181,8 @@ const allOverviewController = {
     const teamsCoursesSorted = Object.keys(teamsCourses)
       .sort()
       .reduce((acc, team) => {
-        acc[team] = teamsCourses[team].sort((a, b) => a.courseName.localeCompare(b.courseName));
+        acc[team] = teamsCourses[team].sort(
+          (a, b) => a.courseName.localeCompare(b.courseName));
         return acc;
       }, {});
 
@@ -229,7 +233,8 @@ const allOverviewController = {
     const teamsUsersSorted = Object.keys(teamsUsers)
       .sort()
       .reduce((acc, team) => {
-        acc[team] = teamsUsers[team].sort((a, b) => a.displayName.localeCompare(b.displayName));
+        acc[team] = teamsUsers[team].sort(
+          (a, b) => a.displayName.localeCompare(b.displayName));
         return acc;
       }, {});
 
@@ -251,7 +256,8 @@ const allOverviewController = {
     console.log('courseSlugData5:', courseSlugData);
 
     const usersInTeam = await teamsController.getUsersInTeam(team);
-    const usersInTeachersTeam = await teamsController.getUsersInTeam('teachers');
+    const usersInTeachersTeam = await teamsController.getUsersInTeam(
+      'teachers');
 
     const usersInTeamAndNotInTeachers = usersInTeam.filter(
       (user) => !usersInTeachersTeam.some((user2) => user.login === user2.login)
