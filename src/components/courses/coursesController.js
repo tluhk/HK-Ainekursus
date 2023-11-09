@@ -24,6 +24,7 @@ import { getFile, getFolder } from '../../functions/githubFileFunctions.js';
 import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
 import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
+import getCourseData from '../../functions/getCourseData.js';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -35,6 +36,7 @@ import membersRequests from '../../functions/usersHkTluRequests.js';
 const responseAction = async (req, res, next) => {
   const { githubRequest } = res.locals;
 
+  console.log('see request on', githubRequest);
   let apiResponse;
   // if (apiRequests.hasOwnProperty(githubRequest)) {
   if (Object.prototype.hasOwnProperty.call(apiRequests, githubRequest)) {
@@ -753,15 +755,10 @@ const allCoursesController = {
     /** Read parameters sent with endpoint */
     const {
       courseId,
-      contentUUID,
-      componentUUID
+      contentSlug,
+      componentSlug
     } = req.params;
 
-    console.log(
-      courseId,
-      contentUUID, // about
-      componentUUID
-    );
     const { ref } = req.query;
 
     /** If user's team is not found, route to /notfound. Only users with valid team are allowed to see course content. This is checked with app.js. */
@@ -810,14 +807,13 @@ const allCoursesController = {
     if (!course) {
       return res.redirect('/notfound');
     }
-    course = coursePromise(course.data.data, selectedVersion);
+    course = course.data.data;
+    const courseConfig = await getCourseData(course, selectedVersion);
+    course = { ...course, ...courseConfig };
 
-    console.log(course.data.data);
-    return res.send('ok');
     res.locals.course = course;
-
     /** Get all teachers */
-    const allTeachers = await teamsController.getUsersInTeam('teachers');
+    const allTeachers = []; //await teamsController.getUsersInTeam('teachers');
     // console.log('allTeachers0:', allTeachers);
     res.locals.teachers = allTeachers;
 
@@ -833,16 +829,16 @@ const allCoursesController = {
 
     /** refBranch variable refers to the repo branch where course data must be read. refBranch is defined on following rows. */
     let refBranch;
-    let validBranches;
+    let validBranches = [];
 
     /** Get all course branches that have config as active:true */
-    try {
-      validBranches = await apiRequests.validBranchesService(
-        course.coursePathInGithub
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    /*try {
+     validBranches = await apiRequests.validBranchesService(
+     course.coursePathInGithub
+     );
+     } catch (error) {
+     console.error(error);
+     }*/
 
     /**
      * KURSUSE ÕIGE VERSIOONI NÄITAMISE LOOGIKA:
@@ -876,82 +872,77 @@ const allCoursesController = {
      */
 
     // 1.
-    if (selectedVersion && validBranches.includes(selectedVersion)) {
-      refBranch = selectedVersion;
-      // 2.
-    } else if (selectedVersion && !validBranches.includes(selectedVersion)) {
-      return res.redirect('/notfound');
-      // 3.
-    } else if (!selectedVersion && validBranches.includes(teamSlug)) {
-      refBranch = teamSlug;
-      // 4.
-    } else if (!selectedVersion && !validBranches.includes(teamSlug)) {
-      const validBranchConfigPromises = validBranches.map(async (branch) => {
-        return await getConfig(course.coursePathInGithub, branch);
-      });
-      const validBranchConfigs = await Promise.all(validBranchConfigPromises);
-      // console.log('validBranchConfigs1:', validBranchConfigs);
+    /*if (selectedVersion && validBranches.includes(selectedVersion)) {
+     refBranch = selectedVersion;
+     // 2.
+     } else if (selectedVersion && !validBranches.includes(selectedVersion)) {
+     return res.redirect('/notfound');
+     // 3.
+     } else if (!selectedVersion && validBranches.includes(teamSlug)) {
+     refBranch = teamSlug;
+     // 4.
+     } else if (!selectedVersion && !validBranches.includes(teamSlug)) {
+     const validBranchConfigPromises = validBranches.map(async (branch) => {
+     return await getConfig(course.coursePathInGithub, branch);
+     });
+     const validBranchConfigs = await Promise.all(validBranchConfigPromises);
+     // console.log('validBranchConfigs1:', validBranchConfigs);
 
-      if (allTeachers.find((teacher) => teacher.login === req.user.username)) {
-        validBranchConfigs.findIndex(
-          (config) => config.teacherUsername === req.user.username
-        );
+     if (allTeachers.find((teacher) => teacher.login === req.user.username)) {
+     validBranchConfigs.findIndex(
+     (config) => config.teacherUsername === req.user.username
+     );
 
-        return res.redirect('/notfound');
-      }
-      // 5.
-      if (validBranches.length >= 0) {
-        const firstActiveBranchIndex = validBranchConfigs.findIndex(
-          (config) => config.active === true
-        );
-        refBranch = validBranches[firstActiveBranchIndex];
-      }
-      // 6.
-    } else {
-      return res.redirect('/notfound');
-    }
+     return res.redirect('/notfound');
+     }
+     // 5.
+     if (validBranches.length >= 0) {
+     const firstActiveBranchIndex = validBranchConfigs.findIndex(
+     (config) => config.active === true
+     );
+     refBranch = validBranches[firstActiveBranchIndex];
+     }
+     // 6.
+     } else {
+     return res.redirect('/notfound');
+     }*/
 
     // console.log('refBranch3:', refBranch);
 
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
-    res.locals.refBranch = refBranch;
+    res.locals.refBranch = 'master'; //refBranch;
     res.locals.branches = validBranches;
-    res.locals.allTeams = (await teamsController.getAllValidTeams()).teams // get all teams names except
-      // for teachers and existing
-      // branches
-      .filter(
-        (team) => team.name !== 'Teachers' && !validBranches.includes(team.name)
-      ).map((team) => team.name);
+    res.locals.allTeams = []; /*(await teamsController.getAllValidTeams()).teams // get all teams names except
+     // for teachers and existing
+     // branches
+     .filter(
+     (team) => team.name !== 'Teachers' && !validBranches.includes(team.name)
+     ).map((team) => team.name);*/
 
     /** Get config file for given course and its correct refBranch */
-    let config;
+    /*let config;
 
-    try {
-      config = await getConfig(course.coursePathInGithub, refBranch);
-    } catch (error) {
-      /**
-       * If config file is not returned with course.coursePathInGithub, the
-       * coursePathInGithub is invalid. User tried to access an invalid URL.
-       * Redirect to /notfound page
-       */
-      console.log(
-        'No config found with getConfig function when loading course page. Rerouting to /notfound.'
-      );
-      return res.redirect('/notfound');
-    }
+     try {
+     config = await getConfig(course.coursePathInGithub, refBranch);
+     } catch (error) {
+     console.log(
+     'No config found with getConfig function when loading course page. Rerouting to /notfound.'
+     );
+     return res.redirect('/notfound');
+     }*/
 
-    console.log(
-      `reading content data for ${ course.coursePathInGithub } from ${ refBranch } branch`
-    );
+    /*console.log(
+     `reading content data for ${ course.coursePathInGithub } from ${ refBranch } branch`
+     );*/
 
     // console.log('config2:', config);
     // console.log('config.lessons2:', config.lessons);
 
     res.locals.course = course;
-    res.locals.config = config;
-    res.locals.allCourses = allCoursesActive;
+    res.locals.config = courseConfig;
+    res.locals.allCourses = []; //allCoursesActive;
 
     /** Get arrays of components where Back and Forward buttons must be displayed.
      * Get arrays of components where "Märgi loetuks" options must be
@@ -959,7 +950,7 @@ const allCoursesController = {
     const {
       backAndForwardPaths,
       markAsDonePaths
-    } = setCourseButtonPaths(config);
+    } = setCourseButtonPaths(courseConfig);
     // console.log('backAndForwardPaths4:', backAndForwardPaths);
     // console.log('markAsDonePaths4:', markAsDonePaths);
     res.locals.backAndForwardPaths = backAndForwardPaths;
@@ -982,11 +973,12 @@ const allCoursesController = {
     /**
      * Collect docs arrays from config under one object array.
      */
-    let docsArray = config.docs.concat(
-      config.additionalMaterials,
-      config.lessons
+
+    let docsArray = courseConfig.config.docs?.concat(
+      courseConfig.config.additionalMaterials,
+      courseConfig.config.lessons
     );
-    config.lessons.forEach((x) => {
+    courseConfig.config.lessons?.forEach((x) => {
       docsArray = docsArray.concat(x.additionalMaterials);
     });
     /**
@@ -1000,27 +992,29 @@ const allCoursesController = {
      * Sisulehe content ja componenti UUID lugemine config failist, andmebaasis
      * sisulehe märkimiseks
      */
-    let contentSlug;
-    let componentSlug;
+    let contentUUId;
+    let componentUUId;
 
-    config.docs.forEach((x) => {
-      if (x.uuid === contentUUID) {
+    //console.log('docs', res.locals.config);
+    courseConfig.config.docs.forEach((x) => {
+      console.log(x, contentSlug);
+      if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'docsService';
-        // console.log('Slug found in config.docs');
+        console.log('Slug found in config.docs');
       }
     });
-    config.additionalMaterials.forEach((x) => {
-      if (x.uuid === contentUUID) {
+    courseConfig.config.additionalMaterials?.forEach((x) => {
+      if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'courseAdditionalMaterialsService';
         // console.log('Slug found in config.additionalMaterials');
       }
     });
-    config.lessons.forEach((x) => {
-      if (x.uuid === contentUUID) {
+    courseConfig.config.lessons?.forEach((x) => {
+      if (x.slug === contentSlug) {
         contentName = x.name;
-        contentSlug = x.slug;
+        contentUUId = x.uuid;
         githubRequest = 'lessonsService';
         // console.log('Slug found in config.lessons');
       }
@@ -1034,40 +1028,40 @@ const allCoursesController = {
     let componentName;
     let componentType;
 
-    config.concepts.forEach((x) => {
-      if (x.uuid === componentUUID) {
-        const lesson = config.lessons.find(
-          (les) => les.components.includes(componentUUID));
+    courseConfig.config.concepts?.forEach((x) => {
+      if (x.slug === componentSlug) {
+        const lesson = courseConfig.config.lessons?.find(
+          (les) => les.components.includes(componentSlug));
         // console.log('lesson1:', lesson);
 
-        if (lesson && lesson.uuid === contentUUID) {
+        if (lesson && lesson.slug === contentSlug) {
           componentName = x.name;
-          componentSlug = x.slug;
+          componentUUId = x.uuid;
           componentType = 'concept';
           githubRequest = 'lessonComponentsService';
           // console.log('Slug found in config.concepts');
         }
       }
     });
-    config.practices.forEach((x) => {
-      if (x.uuid === componentUUID) {
-        const lesson = config.lessons.find(
-          (les) => les.components.includes(componentUUID));
+    courseConfig.config.practices?.forEach((x) => {
+      if (x.slug === componentSlug) {
+        const lesson = courseConfig.config.lessons?.find(
+          (les) => les.components.includes(componentSlug));
         // console.log('lesson1:', lesson);
 
-        if (lesson && lesson.uuid === contentUUID) {
+        if (lesson && lesson.slug === contentSlug) {
           componentName = x.name;
-          componentSlug = x.slug;
+          componentUUId = x.uuid;
           componentType = 'practice';
           githubRequest = 'lessonComponentsService';
           // console.log('Slug found in config.concepts');
         }
       }
     });
-    config.lessons.forEach((x) => {
+    courseConfig.config.lessons?.forEach((x) => {
       if (
-        x.additionalMaterials[0].uuid === componentUUID
-        && x.uuid === contentUUID
+        x.additionalMaterials[0].slug === componentSlug
+        && x.slug === contentSlug
       ) {
         componentName = x.additionalMaterials[0].name;
         componentType = 'docs';
@@ -1098,10 +1092,11 @@ const allCoursesController = {
      * inconsistencies. Redirect back to homepage!
      */
     if (
-      (contentUUID && !contentName)
-      || (contentUUID && contentName && componentUUID && !componentName)
+      (contentSlug && !contentName)
+      || (contentSlug && contentName && componentSlug && !componentName)
     ) {
-      console.log('no contentName or componentName found');
+      console.log(
+        'no contentName or componentName found', contentSlug, componentSlug);
       return res.redirect('/notfound');
     }
 
@@ -1111,11 +1106,11 @@ const allCoursesController = {
      * Back/Forward buttons.
      */
     function getFullPath() {
-      if (componentUUID) {
-        return `${ contentUUID }/${ componentUUID }`;
+      if (componentSlug) {
+        return `${ contentSlug }/${ componentSlug }`;
       }
-      if (contentUUID) {
-        return `${ contentUUID }`;
+      if (contentSlug) {
+        return `${ contentSlug }`;
       }
       return undefined;
     }
@@ -1125,10 +1120,10 @@ const allCoursesController = {
      * you are. This is used to assign correct sidebar icons.
      */
     function getType() {
-      if (componentUUID) {
+      if (componentSlug) {
         return componentType;
       }
-      if (contentUUID) {
+      if (contentSlug) {
         return 'docs';
       }
       return undefined;
@@ -1142,14 +1137,14 @@ const allCoursesController = {
     };
     /** Save all relevant info about current page: slugs, fullPath, menu icons. These are used to render correct info on given page with responseAction() and renderPage() functions. */
     const path = {
-      courseSlug,
+      courseId,
       contentSlug,
       componentSlug,
       refBranch,
-      contentUUID,
-      componentUUID,
-      fullPath: getFullPath(contentUUID, componentUUID),
-      type: getType(contentUUID, componentUUID)
+      contentUUId,
+      componentUUId,
+      fullPath: getFullPath(contentSlug, componentSlug),
+      type: getType(contentSlug, componentSlug)
     };
 
     res.locals.githubRequest = githubRequest;
@@ -1157,7 +1152,7 @@ const allCoursesController = {
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 
-    // console.log('res.locals1:', res.locals);
+    console.log('res.locals1:', res.locals);
     return next();
   },
 

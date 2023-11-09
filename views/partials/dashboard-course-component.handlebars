@@ -1,6 +1,6 @@
 <!-- dashboard-course-component.handlebars -->
 <a class='card cardlink block p-4 !pt-[0.1px] relative'
-   href='/course/{{this.code}}/about?ref=master'
+   href='/course/{{this.id}}/about?ref=master'
 >
     <h3 class='text-lg'>{{this.name}}</h3>
     {{#if_not_equal user.team.slug 'teachers' }}
