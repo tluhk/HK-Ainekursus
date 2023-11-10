@@ -58,7 +58,8 @@ const apiRequests = {
       }, {});
 
       const validBranchesRaw = await Promise.all(
-        Object.entries(branchPromises).map(([key, promise]) => promise.then((value) => [key, value]))
+        Object.entries(branchPromises)
+          .map(([key, promise]) => promise.then((value) => [key, value]))
       ).then((resolvedArr) => {
         const resolvedObj = Object.fromEntries(resolvedArr);
         return Object.entries(resolvedObj).filter(
@@ -83,20 +84,20 @@ const apiRequests = {
     return validBranches;
   },
   docsService: async (req, res) => {
-    const { coursePathInGithub } = res.locals.course;
+    const { repository } = res.locals.course;
     const { refBranch } = res.locals;
-
     const routePath = `${ req.url }+${ refBranch }+components`;
-
+    const coursePathInGithub = repository.replace('https://github.com/', '');
     let components;
 
-    if (!cachePageContent.has(routePath)) {
-      console.log(`❌❌ docs components IS NOT from cache: ${ routePath }`);
+    if (!cachePageContent.has(coursePathInGithub)) {
+      console.log(
+        `❌❌ docs components IS NOT from cache: ${ coursePathInGithub }`);
       components = await axios.get(
         requestDocs(coursePathInGithub, refBranch),
         authToken
-      ).catch(() => {
-        console.log(`❌❌ get docs failed: ${ routePath }`);
+      ).catch((err) => {
+        console.log(`❌❌ get docs failed: ${ coursePathInGithub }`, err);
       });
 
       cachePageContent.set(routePath, components);
@@ -108,7 +109,8 @@ const apiRequests = {
     return { components };
   },
   courseAdditionalMaterialsService: async (req, res) => {
-    const { coursePathInGithub } = res.locals.course;
+    const { repository } = res.locals.course;
+    const coursePathInGithub = repository.replace('https://github.com/', '');
     const { refBranch } = res.locals;
 
     const routePath = `${ req.url }+${ refBranch }+components`;
@@ -166,7 +168,8 @@ const apiRequests = {
     };
   },
   lessonsService: async (req, res) => {
-    const { coursePathInGithub } = res.locals.course;
+    const { repository } = res.locals.course;
+    const coursePathInGithub = repository.replace('https://github.com/', '');
     const {
       path,
       refBranch
@@ -189,7 +192,9 @@ const apiRequests = {
     return { components };
   },
   lessonAdditionalMaterialsService: async (req, res) => {
-    const { coursePathInGithub } = res.locals.course;
+    const { repository } = res.locals.course;
+    const coursePathInGithub = repository.replace('https://github.com/', '');
+
     const {
       path,
       refBranch
@@ -259,7 +264,8 @@ const apiRequests = {
     };
   },
   lessonComponentsService: async (req, res) => {
-    const { coursePathInGithub } = res.locals.course;
+    const { repository } = res.locals.course;
+    const coursePathInGithub = repository.replace('https://github.com/', '');
     const {
       path,
       refBranch

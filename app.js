@@ -41,6 +41,7 @@ import removeAsDone from './src/routes/remove-as-done.js';
 import markAsDone from './src/routes/mark-as-done.js';
 import addNewCourseRoutes from './src/routes/add-new-course.js';
 import addNewBranchRoutes from './src/routes/add-new-branch.js';
+import courseRoutes from './src/components/courses/coursesRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -278,6 +279,7 @@ passport.use(
  * https://stackoverflow.com/a/25687358
  */
 app.use(getTeamAssignments, async (req, res, next) => {
+  return next();
   // console.log('req.user5:', req.user);
   if (req.user && !req.user.team) {
     const { user } = req;
@@ -447,22 +449,22 @@ app.get(
 );
 
 /** Endpoint to load course pages */
-app.get(
-  '/course/:courseId/:contentSlug?/:componentSlug?',
-  resetSelectedVersion,
-  allCoursesController.getSpecificCourse,
-  responseAction,
-  renderPage
-);
+/*app.get(
+ '/course/:courseId/:contentSlug?/:componentSlug?',
+ resetSelectedVersion,
+ allCoursesController.getSpecificCourse,
+ responseAction,
+ renderPage
+ );
 
-app.get(
-  '/course-edit/:courseSlug/:contentSlug?/:componentSlug?',
-  ensureAuthenticated,
-  validateTeacher,
-  allCoursesController.getSpecificCourse,
-  responseAction,
-  renderEditPage
-);
+ app.get(
+ '/course-edit/:courseSlug/:contentSlug?/:componentSlug?',
+ ensureAuthenticated,
+ validateTeacher,
+ allCoursesController.getSpecificCourse,
+ responseAction,
+ renderEditPage
+ );*/
 /** Endpoints to change course version.
  * Only available for teachers.
  */
@@ -513,6 +515,8 @@ app.use('/progress-overview', progressRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/add-course', addNewCourseRoutes);
 app.use('/add-branch', addNewBranchRoutes);
+
+app.use('/course', courseRoutes);
 
 /** Redirect all unknown paths to 404 page */
 app.all('*', resetSelectedVersion, otherController.notFound);

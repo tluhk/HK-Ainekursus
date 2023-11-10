@@ -21,12 +21,13 @@ const allNotificationsController = {
             activeCourse.repository.replace('https://github.com/', ''),
             'master' //activeCourse.refBranch
           );
+
         /**
          * Then filter out commits that have commit_count more than 0. This
-         * means teacher has added custom comment that should be displyed on
+         * means teacher has added custom comment that should be displayed on
          * webapp.
          */
-        const commitsWithComments = commitsRaw.data.filter(
+        const commitsWithComments = commitsRaw.data?.filter(
           (commit) => commit.commit.comment_count > 0
         );
 
@@ -42,12 +43,13 @@ const allNotificationsController = {
          */
         const commitCommentsPromises = commitSHAsWithComments.map(
           (commitSHA) => apiRequestsCommits.getCommitComments(
-            activeCourse.coursePathInGithub,
+            activeCourse.repository.replace('https://github.com/', ''),
             commitSHA
           )
         );
         const commitCommentsRaw = await Promise.all(commitCommentsPromises);
 
+        console.log(commitCommentsRaw);
         /**
          * Flatten the comments array to remove empty entries.
          */
@@ -136,17 +138,17 @@ const allNotificationsController = {
      * If allCoursesActive is not provided, get it manually
      */
     if (!allCoursesActive) {
-      let teamSlug;
-      if (req.user && req.user.team) {
-        teamSlug = req.user.team.slug;
-      }
-      res.locals.teamSlug = teamSlug;
+      /*let teamSlug;
+       if (req.user && req.user.team) {
+       teamSlug = req.user.team.slug;
+       }
+       res.locals.teamSlug = teamSlug;*/
 
       const start3 = performance.now();
-      const allCourses = await getAllCoursesData(teamSlug, req);
+      const allCourses = await getAllCoursesData(req);
       const end3 = performance.now();
       console.log(`Execution time getAllCoursesData: ${ end3 - start3 } ms`);
-      allCoursesActive = allCourses.filter((x) => x.courseIsActive);
+      allCoursesActive = allCourses; //.filter((x) => x.courseIsActive);
     }
 
     /** Save all teachers in a variable, needed for rendering */

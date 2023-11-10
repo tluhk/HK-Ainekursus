@@ -8,23 +8,21 @@ import getAllCoursesData from '../../functions/getAllCoursesData.js';
 import getConfig from '../../functions/getConfigFuncs.js';
 import { function1 } from '../../functions/imgFunctions.js';
 import {
-  returnNextPage,
-  returnPreviousPage,
-  setCourseButtonPaths
+  returnNextPage, returnPreviousPage, setCourseButtonPaths
 } from '../../functions/navButtonFunctions.js';
 import apiRequests from './coursesService.js';
 import teamsController from '../teams/teamsController.js';
 import allNotificationsController
   from '../notifications/notificationsController.js';
 import {
-  getComponentsUUIDs,
-  getMarkedAsDoneComponents
+  getComponentsUUIDs, getMarkedAsDoneComponents
 } from '../../functions/getListOfDoneComponentUUIDs.js';
 import { getFile, getFolder } from '../../functions/githubFileFunctions.js';
 import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
 import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
 import getCourseData from '../../functions/getCourseData.js';
+import { getUserData } from '../../functions/githubUsersFuncs.js';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -36,7 +34,6 @@ import getCourseData from '../../functions/getCourseData.js';
 const responseAction = async (req, res, next) => {
   const { githubRequest } = res.locals;
 
-  console.log('see request on', githubRequest);
   let apiResponse;
   // if (apiRequests.hasOwnProperty(githubRequest)) {
   if (Object.prototype.hasOwnProperty.call(apiRequests, githubRequest)) {
@@ -54,9 +51,7 @@ const responseAction = async (req, res, next) => {
   }
 
   const {
-    components,
-    files,
-    sources
+    components, files, sources
   } = apiResponse;
 
   /** If GitHub API responds with no data for components, sources or files, then save those as empty to res.locals + render an empty page.
@@ -99,10 +94,7 @@ const renderPage = async (req, res) => {
   } = res.locals;
 
   const {
-    resComponents,
-    resFiles,
-    resSources,
-    refBranch
+    resComponents, resFiles, resSources, refBranch
   } = res.locals;
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
@@ -115,16 +107,12 @@ const renderPage = async (req, res) => {
    * https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
   const start1 = performance.now();
-  const markdownWithModifiedImgSources = await function1(
-    coursePathInGithub,
-    path,
-    componentDecodedUtf8,
-    refBranch
+  const markdownWithModifiedImgSources = await function1(coursePathInGithub,
+    path, componentDecodedUtf8, refBranch
   );
   const end1 = performance.now();
   console.log(
-    `Execution time markdownWithModifiedImgSources: ${ end1 - start1 } ms`
-  );
+    `Execution time markdownWithModifiedImgSources: ${ end1 - start1 } ms`);
 
   /** Add Table of Contents markdown element to Markdown before rendering Markdown */
   const markdownWithModifiedImgSourcesToc = markdownWithModifiedImgSources.concat(
@@ -133,8 +121,7 @@ const renderPage = async (req, res) => {
   /** Render Markdown */
   const start2 = performance.now();
   const componentMarkdown = await markdown.render(
-    markdownWithModifiedImgSourcesToc
-  );
+    markdownWithModifiedImgSourcesToc);
   const end2 = performance.now();
   console.log(`Execution time componentMarkdown: ${ end2 - start2 } ms`);
 
@@ -142,8 +129,7 @@ const renderPage = async (req, res) => {
   const componentMarkdownWithoutTOC = componentMarkdown.substring(
     0,
     componentMarkdown.indexOf(
-      '<nav class="table-of-contents-from-markdown-123">'
-    )
+      '<nav class="table-of-contents-from-markdown-123">')
   );
 
   /** Select Table of Contents from rendered Markdown, but exclude preceding html. */
@@ -152,10 +138,8 @@ const renderPage = async (req, res) => {
     return result[1];
   }
 
-  const componentMarkdownOnlyTOCWithoutNav = getStringBetween(
-    componentMarkdown,
-    '<nav class="table-of-contents-from-markdown-123">',
-    '</nav>'
+  const componentMarkdownOnlyTOCWithoutNav = getStringBetween(componentMarkdown,
+    '<nav class="table-of-contents-from-markdown-123">', '</nav>'
   );
   const componentMarkdownOnlyTOC = `<nav class="table-of-contents">${ componentMarkdownOnlyTOCWithoutNav }</nav>`;
 
@@ -172,12 +156,8 @@ const renderPage = async (req, res) => {
   // sourcesJSON stays NULL (is false), then content.handlebars does not
   // display "Allikad" div. If sourcesJSON gets filled (is true), then
   // "Allikad" div is displayed.
-  if (
-    resSources
-    && resSources.data
-    && resSources.data.content
-    && resSources.data.content !== ''
-  ) {
+  if (resSources && resSources.data && resSources.data.content &&
+    resSources.data.content !== '') {
     const sources = resSources.data;
     const sourcesDecoded = base64.decode(sources.content);
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
@@ -234,10 +214,7 @@ const renderEditPage = async (req, res) => {
   } = res.locals;
 
   const {
-    resComponents,
-    resFiles,
-    resSources,
-    refBranch
+    resComponents, resFiles, resSources, refBranch
   } = res.locals;
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
@@ -250,16 +227,12 @@ const renderEditPage = async (req, res) => {
    * https://www.npmjs.com/package/modify-image-url-md?activeTab=explore
    */
   const start1 = performance.now();
-  const markdownWithModifiedImgSources = await function1(
-    coursePathInGithub,
-    path,
-    componentDecodedUtf8,
-    refBranch
+  const markdownWithModifiedImgSources = await function1(coursePathInGithub,
+    path, componentDecodedUtf8, refBranch
   );
   const end1 = performance.now();
   console.log(
-    `Execution time markdownWithModifiedImgSources: ${ end1 - start1 } ms`
-  );
+    `Execution time markdownWithModifiedImgSources: ${ end1 - start1 } ms`);
 
   /** Each sisuleht (concepts, practices) has a sources reference which is stored in sources.json file in GitHub. */
     // define sources as NULL by default.
@@ -269,12 +242,8 @@ const renderEditPage = async (req, res) => {
   // sourcesJSON stays NULL (is false), then content.handlebars does not
   // display "Allikad" div. If sourcesJSON gets filled (is true), then
   // "Allikad" div is displayed.
-  if (
-    resSources
-    && resSources.data
-    && resSources.data.content
-    && resSources.data.content !== ''
-  ) {
+  if (resSources && resSources.data && resSources.data.content &&
+    resSources.data.content !== '') {
     const sources = resSources.data;
     const sourcesDecoded = base64.decode(sources.content);
     const sourcesDecodedUtf8 = utf8.decode(sourcesDecoded);
@@ -290,30 +259,22 @@ const renderEditPage = async (req, res) => {
   // get docs/lisamaterjalid.md
   const repoPath = coursePathInGithub.split('/').pop();
 
-  const additionalMaterials = await getFile(
-    process.env.REPO_ORG_NAME,
-    repoPath,
-    'docs/lisamaterjalid.md',
-    refBranch
+  const additionalMaterials = await getFile(process.env.REPO_ORG_NAME, repoPath,
+    'docs/lisamaterjalid.md', refBranch
   );
 
   // for each lessons get README and lisamaterjalid.md
   for await (const _m of config.lessons.map((lesson) => {
-    getFile(
-      process.env.REPO_ORG_NAME,
-      repoPath,
-      `lessons/${ lesson.slug }/lisamaterjalid.md`,
-      refBranch
+    getFile(process.env.REPO_ORG_NAME, repoPath,
+      `lessons/${ lesson.slug }/lisamaterjalid.md`, refBranch
     ).then((material) => (lesson.additionalMaterials = material));
   })) {
     // console.log(material);
   }
-  for await (const about of config.lessons.map((lesson) => getFile(
-    process.env.REPO_ORG_NAME,
-    repoPath,
-    `lessons/${ lesson.slug }/README.md`,
-    refBranch
-  ).then((about) => (lesson.content = about)))) {
+  for await (const about of config.lessons.map(
+    (lesson) => getFile(process.env.REPO_ORG_NAME, repoPath,
+      `lessons/${ lesson.slug }/README.md`, refBranch
+    ).then((about) => (lesson.content = about)))) {
     // console.log(material);
   }
 
@@ -391,32 +352,23 @@ const allCoursesController = {
 
     /** For INVALID coursesDisplayBy parameters, OR if teacher tries to load courses by Progress, redirect back to /dashboard page.
      * coursesDisplayBy is defaulted to 'name'  */
-    if (
-      (req.query.coursesDisplayBy
-        && req.query.coursesDisplayBy !== 'name'
-        && req.query.coursesDisplayBy !== 'progress'
-        && req.query.coursesDisplayBy !== 'semester')
-      || (req.user
-        && req.user.team
-        // NB! 'teachers' team doesn't have progress bars on courses, so they
-        // can't load courses by Progress:
-        && isTeacher
-        && req.query.coursesDisplayBy
-        && req.query.coursesDisplayBy === 'progress')
-    ) {
+    if ((req.query.coursesDisplayBy && req.query.coursesDisplayBy !== 'name' &&
+      req.query.coursesDisplayBy !== 'progress' &&
+      req.query.coursesDisplayBy !== 'semester') || (req.user && req.user.team
+      // NB! 'teachers' team doesn't have progress bars on courses, so they
+      // can't load courses by Progress:
+      && isTeacher && req.query.coursesDisplayBy &&
+      req.query.coursesDisplayBy === 'progress')) {
       return res.redirect('/dashboard');
     }
 
     /** For VALID coursesDisplayBy parameters, save req.session.coursesDisplayBy to the given coursesDisplayBy. On Dashboard, courses will be successfully displayed by either Name, Progress or Semester. */
-    if (
-      req.query.coursesDisplayBy
-      && (req.query.coursesDisplayBy === 'name'
-        || req.query.coursesDisplayBy === 'semester'
+    if (req.query.coursesDisplayBy &&
+      (req.query.coursesDisplayBy === 'name' || req.query.coursesDisplayBy ===
+        'semester'
         // 'teachers' team doesn't have Progress bars on courses, so check that
         // user's team is NOT 'teachers:
-        || (req.query.coursesDisplayBy === 'progress'
-          && !isTeacher))
-    ) {
+        || (req.query.coursesDisplayBy === 'progress' && !isTeacher))) {
       coursesDisplayBy = req.query.coursesDisplayBy;
       req.session.coursesDisplayBy = req.query.coursesDisplayBy;
     }
@@ -427,16 +379,15 @@ const allCoursesController = {
       /*
        * Filter allCoursesActive where the teacher is logged-in user
        */
-      const allTeacherCourses = allCourses.filter(
-        (course) => course.teacherUsername === req.user.username
-      );
+      //const allTeacherCourses = allCourses.filter(
+      //  (course) => course.teacherUsername === req.user.username);
       // console.log('allTeacherCourses1:', allTeacherCourses);
 
       /*
        * Sort allTeacherCourses, these are teacher's own courses
        */
-      allTeacherCourses.sort(
-        (a, b) => a.courseName.localeCompare(b.courseName));
+      allCourses.sort(
+        (a, b) => a.name.localeCompare(b.name));
       // console.log('allTeacherCourses2:', allTeacherCourses);
 
       /* These are teachers of all other courses.
@@ -444,31 +395,28 @@ const allCoursesController = {
        * 2) remove logged in user from the list
        * 3) then sort by teacher name and by each teacher's courses
        * */
-      const allCoursesGroupedByTeacher = allCoursesActive.groupBy(
-        ({ teacherUsername }) => teacherUsername
-      );
-      // console.log('allCoursesGroupedByTeacher1:',
-      // allCoursesGroupedByTeacher);
+      /*const allCoursesGroupedByTeacher = allCoursesActive.groupBy(
+       ({ teacherUsername }) => teacherUsername);
+       // console.log('allCoursesGroupedByTeacher1:',
+       // allCoursesGroupedByTeacher);
 
-      delete allCoursesGroupedByTeacher[req.user.username];
-      // console.log('allCoursesGroupedByTeacher2:',
-      // allCoursesGroupedByTeacher);
+       delete allCoursesGroupedByTeacher[req.user.username];
+       // console.log('allCoursesGroupedByTeacher2:',
+       // allCoursesGroupedByTeacher);
 
-      const sortedCoursesGroupedByTeacher = Object.keys(
-        allCoursesGroupedByTeacher
-      ).sort().reduce((acc, teacher) => {
-        acc[teacher] = allCoursesGroupedByTeacher[teacher].sort(
-          (a, b) => a.courseName?.localeCompare(b.courseName));
-        return acc;
-      }, {});
+       const sortedCoursesGroupedByTeacher = Object.keys(
+       allCoursesGroupedByTeacher).sort().reduce((acc, teacher) => {
+       acc[teacher] = allCoursesGroupedByTeacher[teacher].sort(
+       (a, b) => a.courseName?.localeCompare(b.courseName));
+       return acc;
+       }, {});*/
 
       /**
        * Get last 7 day notifications for active courses, needed for dashboard
        */
+      const allTeachers = [];
       const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(
-        allCoursesActive,
-        allTeachers
-      );
+        allCourses, allTeachers);
       // console.log('teachers:', allCoursesActive);
       /** Rendering teacher's dashboard if courses are displayed by Name */
       if (coursesDisplayBy === 'name') {
@@ -476,62 +424,42 @@ const allCoursesController = {
           adminName,
           adminEmail,
           coursesDisplayBy,
-          courses: allTeacherCourses,
+          courses: allCourses,
           user: req.user,
-          teacherCourses: sortedCoursesGroupedByTeacher,
+          teacherCourses: [], //sortedCoursesGroupedByTeacher,
           teachers: allTeachers,
           courseUpdates7Days
         });
       }
       /** Rendering teacher's dashboard if courses are displayed by Semester */
       if (coursesDisplayBy === 'semester') {
-        const allCoursesGroupedBySemester = allTeacherCourses.groupBy(
-          ({ courseSemester }) => courseSemester
-        );
-        // console.log('allCoursesGroupedByTeacher1:',
-        // allCoursesGroupedByTeacher);
+        const allCoursesGroupedBySemester = allCourses.groupBy(
+          ({ semester }) => semester);
+
         const sortedCoursesGroupedBySemester = Object.keys(
-          allCoursesGroupedBySemester
-        ).sort((a, b) => {
+          allCoursesGroupedBySemester).sort((a, b) => {
           // Extract the year and first letter of each element
-          const yearA = a.slice(1);
-          const yearB = b.slice(1);
-          const letterA = a[0];
-          const letterB = b[0];
+          const [yearA, seasonA] = a.split(' ');
+          const [yearB, seasonB] = b.split(' ');
           // Compare the years first
           if (yearA !== yearB) {
             return yearB - yearA;
           }
           // If the years are the same, compare the first letter
-          return letterB.localeCompare(letterA);
+          return seasonB[0].localeCompare(seasonA[0]);
         }).reduce((acc, semester) => {
           acc[semester] = allCoursesGroupedBySemester[semester].sort(
-            (a, b) => a.courseName.localeCompare(b.courseName));
+            (a, b) => a.name.localeCompare(b.name));
           return acc;
         }, {});
 
-        const seasons = {
-          K: 'Kevad',
-          S: 'Sügis'
-        };
         const sortedCoursesGroupedBySemesterWithFullNames = {};
-
         Object.keys(sortedCoursesGroupedBySemester).forEach((semester) => {
-          if (
-            Object.prototype.hasOwnProperty.call(
-              sortedCoursesGroupedBySemester,
-              semester
-            )
-          ) {
-            const season = semester.substring(0, 1);
-            const year = semester.substring(1);
-            sortedCoursesGroupedBySemesterWithFullNames[
-              `${ seasons[season] } ${ year }`
-              ] = sortedCoursesGroupedBySemester[semester];
+          if (Object.prototype.hasOwnProperty.call(
+            sortedCoursesGroupedBySemester, semester)) {
+            sortedCoursesGroupedBySemesterWithFullNames[`${ semester }`] = sortedCoursesGroupedBySemester[semester];
           }
         });
-        // console.log('sortedCoursesGroupedBySemesterWithFullNames1:',
-        // sortedCoursesGroupedBySemesterWithFullNames);
 
         return res.render('dashboard-teacher', {
           adminName,
@@ -539,7 +467,7 @@ const allCoursesController = {
           coursesDisplayBy,
           courses: sortedCoursesGroupedBySemesterWithFullNames,
           user: req.user,
-          teacherCourses: sortedCoursesGroupedByTeacher,
+          teacherCourses: [], //sortedCoursesGroupedByTeacher,
           teachers: [],
           courseUpdates7Days
         });
@@ -563,7 +491,6 @@ const allCoursesController = {
       allCourses.forEach(course => {
         // Iterate through the teachers of the current course
         course.teachers.forEach(teacher => {
-          allTeachers.push(teacher);
           const displayName = `${ teacher.firstName } ${ teacher.lastName }`;
           // Check if the teacher's email is already in the grouped data
           if (allCoursesGroupedByTeacher[displayName]) {
@@ -573,14 +500,18 @@ const allCoursesController = {
           } else {
             // If the teacher is not in the grouped data, create a new entry
             // for them
+            // fetch teacher avatar_url from github
+            getUserData('mrtrvl').then((gitUserData) => {
+              teacher.avatar_url = gitUserData.data.avatar_url;
+            });
             allCoursesGroupedByTeacher[displayName] = [course];
           }
+          allTeachers.push(teacher);
         });
       });
 
       const sortedCoursesGroupedByTeacher = Object.keys(
-        allCoursesGroupedByTeacher
-      ).sort().reduce((acc, teacher) => {
+        allCoursesGroupedByTeacher).sort().reduce((acc, teacher) => {
         acc[teacher] = allCoursesGroupedByTeacher[teacher].sort(
           (a, b) => a.name.localeCompare(b.name));
         return acc;
@@ -590,17 +521,13 @@ const allCoursesController = {
        * Get last 7 day notifications for active courses, needed for dashboard
        */
       const { courseUpdates7Days } = await allNotificationsController.getCoursesUpdates(
-        allCourses,
-        []
-      );
+        allCourses, []);
 
       /** Next, you must get all active courses WITH the list of components that have been markedAsDone. Use the allCoursesController.allCoursesActiveWithComponentsData() function that store those courses. */
       let courses;
       if (req.user && req.user.userId) {
         courses = await allCoursesController.allCoursesActiveWithComponentsData(
-          allCourses,
-          req.user.id
-        );
+          allCourses, req.user.id);
       } else {
         courses = allCourses;
       }
@@ -612,7 +539,7 @@ const allCoursesController = {
         c.teachers[0].lastName);
       res.locals.allCoursesActive = courses;
 
-      console.log('coursesDisplayBy1:', courses);
+      //console.log('coursesDisplayBy1:', courses);
       /** Test entries for student: */
       /* courses[0].markedAsDoneComponentsUUIDs.push('9f953cdc-4d0d-4700-b5d0-90857cc039b9');
        courses[1].markedAsDoneComponentsUUIDs.push('73deac36-adf9-4205-9e69-dba0bc7976f1');
@@ -660,7 +587,7 @@ const allCoursesController = {
           const bPercentage = bLength > 0 ? bDoneLength / bLength : 0;
 
           if (aPercentage === bPercentage) {
-            return a.courseName.localeCompare(b.courseName);
+            return a.name.localeCompare(b.name);
           }
           if (aPercentage === 0) {
             return 1;
@@ -686,48 +613,30 @@ const allCoursesController = {
       /** Rendering student's dashboard if courses are displayed by Semester */
       if (coursesDisplayBy === 'semester') {
         const allCoursesGroupedBySemester = courses.groupBy(
-          ({ courseSemester }) => courseSemester
-        );
-        // console.log('allCoursesGroupedByTeacher1:',
-        // allCoursesGroupedByTeacher);
+          ({ semester }) => semester);
+
         const sortedCoursesGroupedBySemester = Object.keys(
-          allCoursesGroupedBySemester
-        ).sort((a, b) => {
+          allCoursesGroupedBySemester).sort((a, b) => {
           // Extract the year and first letter of each element
-          const yearA = a.slice(1);
-          const yearB = b.slice(1);
-          const letterA = a[0];
-          const letterB = b[0];
+          const [yearA, seasonA] = a.split(' ');
+          const [yearB, seasonB] = b.split(' ');
           // Compare the years first
           if (yearA !== yearB) {
             return yearB - yearA;
           }
           // If the years are the same, compare the first letter
-          return letterB.localeCompare(letterA);
+          return seasonB[0].localeCompare(seasonA[0]);
         }).reduce((acc, semester) => {
           acc[semester] = allCoursesGroupedBySemester[semester].sort(
             (a, b) => a.name.localeCompare(b.name));
           return acc;
         }, {});
 
-        const seasons = {
-          K: 'Kevad',
-          S: 'Sügis'
-        };
         const sortedCoursesGroupedBySemesterWithFullNames = {};
-
         Object.keys(sortedCoursesGroupedBySemester).forEach((semester) => {
-          if (
-            Object.prototype.hasOwnProperty.call(
-              sortedCoursesGroupedBySemester,
-              semester
-            )
-          ) {
-            const season = semester.substring(0, 1);
-            const year = semester.substring(1);
-            sortedCoursesGroupedBySemesterWithFullNames[
-              `${ seasons[season] } ${ year }`
-              ] = sortedCoursesGroupedBySemester[semester];
+          if (Object.prototype.hasOwnProperty.call(
+            sortedCoursesGroupedBySemester, semester)) {
+            sortedCoursesGroupedBySemesterWithFullNames[`${ semester }`] = sortedCoursesGroupedBySemester[semester];
           }
         });
         // console.log('sortedCoursesGroupedBySemesterWithFullNames1:',
@@ -749,14 +658,11 @@ const allCoursesController = {
     /** If isTeacher is somehow neither true/false, redirect back to /dashboard. */
     console.log('isTeacher is neither true/false');
     return res.redirect('/dashboard');
-  },
-  /** For '/course/:courseSlug/:contentSlug?/:componentSlug?' route */
+  }, /** For '/course/:courseSlug/:contentSlug?/:componentSlug?' route */
   getSpecificCourse: async (req, res, next) => {
     /** Read parameters sent with endpoint */
     const {
-      courseId,
-      contentSlug,
-      componentSlug
+      courseId, contentSlug, componentSlug
     } = req.params;
 
     const { ref } = req.query;
@@ -808,6 +714,7 @@ const allCoursesController = {
       return res.redirect('/notfound');
     }
     course = course.data.data;
+
     const courseConfig = await getCourseData(course, selectedVersion);
     course = { ...course, ...courseConfig };
 
@@ -948,8 +855,7 @@ const allCoursesController = {
      * Get arrays of components where "Märgi loetuks" options must be
      * displayed. */
     const {
-      backAndForwardPaths,
-      markAsDonePaths
+      backAndForwardPaths, markAsDonePaths
     } = setCourseButtonPaths(courseConfig);
     // console.log('backAndForwardPaths4:', backAndForwardPaths);
     // console.log('markAsDonePaths4:', markAsDonePaths);
@@ -974,11 +880,9 @@ const allCoursesController = {
      * Collect docs arrays from config under one object array.
      */
 
-    let docsArray = courseConfig.config.docs?.concat(
-      courseConfig.config.additionalMaterials,
-      courseConfig.config.lessons
-    );
-    courseConfig.config.lessons?.forEach((x) => {
+    let docsArray = courseConfig.config?.docs?.concat(
+      courseConfig.config.additionalMaterials, courseConfig.config.lessons);
+    courseConfig.config?.lessons?.forEach((x) => {
       docsArray = docsArray.concat(x.additionalMaterials);
     });
     /**
@@ -995,23 +899,20 @@ const allCoursesController = {
     let contentUUId;
     let componentUUId;
 
-    //console.log('docs', res.locals.config);
-    courseConfig.config.docs.forEach((x) => {
-      console.log(x, contentSlug);
+    courseConfig.config?.docs?.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'docsService';
-        console.log('Slug found in config.docs');
       }
     });
-    courseConfig.config.additionalMaterials?.forEach((x) => {
+    courseConfig.config?.additionalMaterials?.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         githubRequest = 'courseAdditionalMaterialsService';
         // console.log('Slug found in config.additionalMaterials');
       }
     });
-    courseConfig.config.lessons?.forEach((x) => {
+    courseConfig.config?.lessons?.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
         contentUUId = x.uuid;
@@ -1028,7 +929,7 @@ const allCoursesController = {
     let componentName;
     let componentType;
 
-    courseConfig.config.concepts?.forEach((x) => {
+    courseConfig.config?.concepts?.forEach((x) => {
       if (x.slug === componentSlug) {
         const lesson = courseConfig.config.lessons?.find(
           (les) => les.components.includes(componentSlug));
@@ -1043,9 +944,9 @@ const allCoursesController = {
         }
       }
     });
-    courseConfig.config.practices?.forEach((x) => {
+    courseConfig.config?.practices?.forEach((x) => {
       if (x.slug === componentSlug) {
-        const lesson = courseConfig.config.lessons?.find(
+        const lesson = courseConfig.config?.lessons?.find(
           (les) => les.components.includes(componentSlug));
         // console.log('lesson1:', lesson);
 
@@ -1058,11 +959,9 @@ const allCoursesController = {
         }
       }
     });
-    courseConfig.config.lessons?.forEach((x) => {
-      if (
-        x.additionalMaterials[0].slug === componentSlug
-        && x.slug === contentSlug
-      ) {
+    courseConfig.config?.lessons?.forEach((x) => {
+      if (x.additionalMaterials[0].slug === componentSlug && x.slug ===
+        contentSlug) {
         componentName = x.additionalMaterials[0].name;
         componentType = 'docs';
         githubRequest = 'lessonAdditionalMaterialsService';
@@ -1091,10 +990,8 @@ const allCoursesController = {
      * with concepts or practices arrays). Config file MUST BE checked for any
      * inconsistencies. Redirect back to homepage!
      */
-    if (
-      (contentSlug && !contentName)
-      || (contentSlug && contentName && componentSlug && !componentName)
-    ) {
+    if ((contentSlug && !contentName) ||
+      (contentSlug && contentName && componentSlug && !componentName)) {
       console.log(
         'no contentName or componentName found', contentSlug, componentSlug);
       return res.redirect('/notfound');
@@ -1131,9 +1028,7 @@ const allCoursesController = {
 
     /**  Save page names for breadcrumbs. */
     const breadcrumbNames = {
-      courseName: course.courseName,
-      contentName,
-      componentName
+      courseName: course.courseName, contentName, componentName
     };
     /** Save all relevant info about current page: slugs, fullPath, menu icons. These are used to render correct info on given page with responseAction() and renderPage() functions. */
     const path = {
@@ -1152,7 +1047,6 @@ const allCoursesController = {
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 
-    console.log('res.locals1:', res.locals);
     return next();
   },
 
@@ -1163,12 +1057,10 @@ const allCoursesController = {
   allCoursesActiveWithComponentsData: async (allCoursesActive, githubID) => {
     /** First, for each course, get a list of component UUIDs that has been marked as done. Save this to allCoursesActiveDoneComponentsArr array. */
     const allCoursesActiveDoneComponentsPromises = allCoursesActive.map(
-      (course) => getMarkedAsDoneComponents(githubID, course.code)
-    );
+      (course) => getMarkedAsDoneComponents(githubID, course.code));
 
     const allCoursesActiveDoneComponentsArr = await Promise.all(
-      allCoursesActiveDoneComponentsPromises
-    );
+      allCoursesActiveDoneComponentsPromises);
     // console.log('allCoursesActiveDoneComponentsArr1:',
     // allCoursesActiveDoneComponentsArr);
 
@@ -1185,12 +1077,10 @@ const allCoursesController = {
   allCoursesActiveWithComponentsUUIDs: async (allCoursesActive, githubID) => {
     /** First, for each course, get a list of component UUIDs  */
     const allCoursesActiveComponentsUUIDsPromises = allCoursesActive.map(
-      (course) => getComponentsUUIDs(course.repository)
-    );
+      (course) => getComponentsUUIDs(course.repository));
 
     const allCoursesActiveDoneComponentsUUIDsArr = await Promise.all(
-      allCoursesActiveComponentsUUIDsPromises
-    );
+      allCoursesActiveComponentsUUIDsPromises);
 
     /** Then, again for each course, add the respective array of done components as a key-value pair: */
     allCoursesActive.forEach((course, index) => {
@@ -1198,8 +1088,7 @@ const allCoursesController = {
     });
 
     return allCoursesActive;
-  },
-  getAllConcepts: async (courses, refBranch) => {
+  }, getAllConcepts: async (courses, refBranch) => {
     if (cacheConcepts.has('concepts')) {
       return new Promise((resolve) => {
         console.log('✅✅  concepts IS from cache');
@@ -1208,53 +1097,40 @@ const allCoursesController = {
     }
     console.log('❌❌ concepts IS NOT from cache');
     const allConcepts = [];
-    await Promise.all(
-      courses.map(async (course) => {
-        const folderContent = await getFolder(
-          process.env.REPO_ORG_NAME,
-          course.courseSlugInGithub,
-          'concepts',
-          refBranch
-        );
-        course.config.concepts.forEach((concept) => {
-          // find where is concept defined
-          if (folderContent.filter((f) => f.name === concept.slug).length) {
-            concept.course = course.courseSlugInGithub;
-          }
-          // vaata kas sama uuid'ga on juba kirje, kui on, siis lisa sellele
-          // usedIn
-          const isDefined = allConcepts.find(
-            (c) => c.uuid === concept.uuid
-          );
-          if (isDefined) {
-            if (Array.isArray(isDefined.usedIn)) {
-              isDefined.usedIn.push(course.courseSlugInGithub);
-            } else {
-              isDefined.usedIn = [course.courseSlugInGithub];
-            }
+    await Promise.all(courses.map(async (course) => {
+      const folderContent = await getFolder(process.env.REPO_ORG_NAME,
+        course.courseSlugInGithub, 'concepts', refBranch
+      );
+      course.config.concepts.forEach((concept) => {
+        // find where is concept defined
+        if (folderContent.filter((f) => f.name === concept.slug).length) {
+          concept.course = course.courseSlugInGithub;
+        }
+        // vaata kas sama uuid'ga on juba kirje, kui on, siis lisa sellele
+        // usedIn
+        const isDefined = allConcepts.find((c) => c.uuid === concept.uuid);
+        if (isDefined) {
+          if (Array.isArray(isDefined.usedIn)) {
+            isDefined.usedIn.push(course.courseSlugInGithub);
           } else {
-            concept.course = course.courseSlugInGithub;
-            if (Array.isArray(concept.usedIn)) {
-              concept.usedIn.push(course.courseSlugInGithub);
-            } else {
-              concept.usedIn = [course.courseSlugInGithub];
-            }
-            allConcepts.push(concept);
+            isDefined.usedIn = [course.courseSlugInGithub];
           }
-        });
-      })
-    );
+        } else {
+          concept.course = course.courseSlugInGithub;
+          if (Array.isArray(concept.usedIn)) {
+            concept.usedIn.push(course.courseSlugInGithub);
+          } else {
+            concept.usedIn = [course.courseSlugInGithub];
+          }
+          allConcepts.push(concept);
+        }
+      });
+    }));
     cacheConcepts.set('concepts', allConcepts);
 
-    return allConcepts.filter((c) => !!c.course).sort((a, b) => a.name > b.name
-      ? 1
-      : b.name > a.name
-        ? -1
-        : a.course > b.course
-          ? 1
-          : b.course > a.course
-            ? -1
-            : 0);
+    return allConcepts.filter((c) => !!c.course)
+      .sort((a, b) => a.name > b.name ? 1 : b.name > a.name ? -1 : a.course >
+      b.course ? 1 : b.course > a.course ? -1 : 0);
   },
 
   getAllLessons: async (searchTerm, courses, refBranch) => {
@@ -1266,22 +1142,17 @@ const allCoursesController = {
     }
     console.log('❌❌ lessons IS NOT from cache');
     const allLessons = [];
-    await Promise.all(
-      courses.map(async (course) => {
-        const folderContent = await getFolder(
-          process.env.REPO_ORG_NAME,
-          course.courseSlugInGithub,
-          'lessons',
-          refBranch
-        );
-        course.config.lessons.forEach((lesson) => {
-          if (folderContent.filter((f) => f.name === lesson.slug).length) {
-            lesson.course = course.courseSlugInGithub;
-            allLessons.push(lesson);
-          }
-        });
-      })
-    );
+    await Promise.all(courses.map(async (course) => {
+      const folderContent = await getFolder(process.env.REPO_ORG_NAME,
+        course.courseSlugInGithub, 'lessons', refBranch
+      );
+      course.config.lessons.forEach((lesson) => {
+        if (folderContent.filter((f) => f.name === lesson.slug).length) {
+          lesson.course = course.courseSlugInGithub;
+          allLessons.push(lesson);
+        }
+      });
+    }));
     cacheLessons.set('lessons', allLessons);
     return allLessons;
   }
