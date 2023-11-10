@@ -5,6 +5,7 @@ import teamsController from '../components/teams/teamsController.js';
  * Save teamAssignments into res.locals
  */
 const getTeamAssignments = async (req, res, next) => {
+  return next();
   /** If teamAssignments is already stored in res.local, then continue with next() */
   if (res.locals.teamAssignments) {
     return next();
@@ -22,7 +23,8 @@ const getTeamAssignments = async (req, res, next) => {
         console.error(error);
         return res.redirect('/notfound');
       });
-    const getAllTeamAssignments = await teamsController.getAllTeamAssignments(teams);
+    const getAllTeamAssignments = await teamsController.getAllTeamAssignments(
+      teams);
 
     cacheTeamAssignments.set(cacheName, getAllTeamAssignments);
     res.locals[cacheName] = getAllTeamAssignments;

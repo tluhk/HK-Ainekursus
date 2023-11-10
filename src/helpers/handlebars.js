@@ -98,37 +98,40 @@ export default function hbsHelpers(hbs) {
         }
       },
       showComponentType: (component, concepts, practices) => {
+        console.log(component, concepts, practices);
         // https://stackoverflow.com/a/50909930
         const checkMatch = (obj) => obj.slug === component;
-        if (concepts.some(checkMatch)) {
+        if (concepts?.some(checkMatch)) {
           return 'sticky_note_2';
         }
-        if (practices.some(checkMatch)) {
+        if (practices?.some(checkMatch)) {
           return 'build';
         }
         return 'attach_file';
       },
       showComponentName: (componentUppercase, concepts, practices) => {
         const component = componentUppercase.toLowerCase();
-        const components = concepts.concat(practices);
+        const components = concepts?.concat(practices);
         // console.log('component5:', component);
         // console.log('components5:', components);
 
-        const comp = components.find((x) => x.slug.toLowerCase() === component);
+        const comp = components?.find(
+          (x) => x.slug.toLowerCase() === component);
         // console.log('comp.name5:', comp.name);
-        return comp.name;
+        return comp ? comp.name : 'ei leia :(';
       },
       showComponentUUID: (componentUppercase, concepts, practices) => {
         const component = componentUppercase.toLowerCase();
-        const components = concepts.concat(practices);
+        const components = concepts?.concat(practices);
         // console.log('components6:', components);
 
-        const comp = components.find((x) => x.slug.toLowerCase() === component);
+        const comp = components?.find(
+          (x) => x.slug.toLowerCase() === component);
         // console.log('comp.uuid6:', comp.uuid);
-        return comp.uuid;
+        return comp ? comp.uuid : 'ei leia :(';
       },
-      capitalize: (aString) => aString.charAt(0).toUpperCase() +
-        aString.slice(1),
+      capitalize: (aString) => aString?.charAt(0).toUpperCase() +
+        aString?.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       isTeacher: (user) => {
         return user.roles?.includes('teacher');
@@ -136,7 +139,7 @@ export default function hbsHelpers(hbs) {
       findTeacher: (teacherName, teachers) => {
         // console.log('teacherName2:', teacherName);
         // console.log('teachers2:', teachers);
-        const teacherData = teachers.find(
+        const teacherData = teachers?.find(
           (x) => (x.firstName + ' ' + x.lastName) === teacherName);
         // console.log('teacherData2:', teacherData);
 

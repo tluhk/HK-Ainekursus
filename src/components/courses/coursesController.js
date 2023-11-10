@@ -848,6 +848,7 @@ const allCoursesController = {
     // console.log('config.lessons2:', config.lessons);
 
     res.locals.course = course;
+    //res.locals.courses = [course];
     res.locals.config = courseConfig;
     res.locals.allCourses = []; //allCoursesActive;
 
@@ -1035,7 +1036,7 @@ const allCoursesController = {
       courseId,
       contentSlug,
       componentSlug,
-      refBranch,
+      refBranch: 'master',
       contentUUId,
       componentUUId,
       fullPath: getFullPath(contentSlug, componentSlug),
@@ -1047,6 +1048,7 @@ const allCoursesController = {
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 
+    console.log(res.locals);
     return next();
   },
 

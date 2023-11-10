@@ -9,62 +9,60 @@
 
             <div class="!no-underline mb-4 pr-4">
                 <!-- Topic name and code -->
-                {{#each courses}}
-                    {{#if_equal this.id ../path.courseSlug}}
-                        <a href="/course/{{../../path.id}}/{{../../docs.[0].slug}}?ref={{../../path.refBranch}}"
-                        class="!no-underline">
-                        <div class="mb-2 w-[22rem] max-w-full">
-                            <div class="card-header mb-2 flex justify-between hover:ml-[-10px] hover:pl-[8px] hover:border-l-2 hover:border-link-action">{{../this.courseName}}
-                                <span class="material-symbols-outlined pt-[0.1rem]">refresh</span></div>
+                {{#with course}}
+                    <a href="/course/{{../path.courseId}}/{{../docs.[0].slug}}?ref={{../path.refBranch}}"
+                    class="!no-underline">
+                    <div class="mb-2 w-[22rem] max-w-full">
+                        <div class="card-header mb-2 flex justify-between hover:ml-[-10px] hover:pl-[8px] hover:border-l-2 hover:border-link-action">
+                            {{this.name}}
+                            <span class="material-symbols-outlined pt-[0.1rem]">refresh</span>
                         </div>
+                    </div>
+                    </a>
+                <div class="flex flex-row justify-between flex-wrap flex-end">
+                    <div class="flex flex-col gap-y-0">
+                        <a href="{{../config.courseUrl}}" target="_blank"
+                           class="hover:ml-[-10px] hover:pl-[8px] hover:border-l-2 hover:border-link-action">
+                            <p class="flex flex-end whitespace-nowrap items-center gap-2 m-0 p-0"><span
+                                    class="material-symbols-outlined !text-base">open_in_new</span>{{this.code}}
+                            </p>
                         </a>
-                    <div class="flex flex-row justify-between flex-wrap flex-end">
-                        <div class="flex flex-col gap-y-0">
-                            <a href="{{../../config.courseUrl}}" target="_blank"
-                               class="hover:ml-[-10px] hover:pl-[8px] hover:border-l-2 hover:border-link-action">
-                                <p class="flex flex-end whitespace-nowrap items-center gap-2 m-0 p-0"><span
-                                        class="material-symbols-outlined !text-base">open_in_new</span>{{../this.courseCode}}
-                                </p>
-                            </a>
-                            <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
-                                <p class="flex whitespace-nowrap items-start gap-2 m-0 p-0"><span
-                                        class="material-symbols-outlined !text-base">confirmation_number</span><span>{{../this.courseEAP}}
-                                    EAP</span></p>
-                                <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span
-                                        class="material-symbols-outlined !text-base">grading</span>{{capitalize
-                                        ../this.courseGrading}}</p>
-                            </div>
-                            <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
-                                <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span
-                                        class="material-symbols-outlined !text-base">calendar_month</span>{{../../config.semester}}
-                                </p>
-                                <p class="flex flex-nowrap items-start gap-2 m-0 p-0"><span
-                                        class="material-symbols-outlined !text-base">person</span>{{#with
-                                        (findTeacher ../../config.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}
-                                </p>
-                            </div>
+                        <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
+                            <p class="flex whitespace-nowrap items-start gap-2 m-0 p-0">
+                                <span class="material-symbols-outlined !text-base">confirmation_number</span>
+                                <span>{{this.credits}} EAP</span>
+                            </p>
+                            <p class="flex flex-nowrap items-start gap-2 m-0 p-0">
+                                <span class="material-symbols-outlined !text-base">grading</span>
+                                {{capitalize this.form}}
+                            </p>
                         </div>
-
-                    {{/if_equal}}
-                {{/each}}
+                        <div class="flex flex-nowrap justify-start gap-x-4 items-center py-1 text-sm">
+                            <p class="flex flex-nowrap items-start gap-2 m-0 p-0">
+                                <span class="material-symbols-outlined !text-base">calendar_month</span>
+                                {{this.semester}}
+                            </p>
+                            <p class="flex flex-nowrap items-start gap-2 m-0 p-0">
+                                <span class="material-symbols-outlined !text-base">person</span>
+                                {{#with
+                                        (findTeacher ../../config.teacherUsername ../../teachers)}}{{this.displayName}}{{/with }}
+                            </p>
+                        </div>
+                    </div>
+                {{/with}}
             </div>
             </div>
 
             <div class="tabs">
-
                 <!-- Lessons links -->
-                {{#each lessons}}
-                    <div class="tab
-            {{#if_equal this.slug ../path.contentSlug }} 
-              active-tab
-            {{/if_equal }}
-          ">
+                {{#each this.config.config.lessons}}
+                    <div class="tab {{#if_equal this.slug ../path.contentSlug }}active-tab{{/if_equal }}">
                         <input type="checkbox" id="chck{{@index}}">
                         <!-- @index reads every element index in "loengud" arrays. result: unique ID-s chck0, chck1, chck2 jne -->
                         <label class="tab-label" for="chck{{@index}}">
                             <div class="flex gap-2 w-full">
                                 <a class="grow py-3 !no-underline"
-                                   href="/course/{{../path.courseSlug}}/{{this.slug}}?ref={{../path.refBranch}}
+                                   href="/course/{{../path.courseId}}/{{this.slug}}?ref={{../path.refBranch}}
                                 ">{{this.name}}
                                 </a>
                             </div>
@@ -72,18 +70,15 @@
 
                         <!-- Themes links -->
                         {{#each this.components}}
-                            <div class="tab-content flex gap-2
-                {{#if_equal (concatActivePath ../this.slug this) ../../path.fullPath }}
-                  active-tab-content menu-card
-                {{/if_equal }}
-              ">
+                            <div class="tab-content flex gap-2 {{#if_equal (concatActivePath ../this.slug this)
+                                                                           ../../path.fullPath }}active-tab-content menu-card{{/if_equal }}">
                                 <a class="flex flex-row justify-between grow py-3 !no-underline"
                                    href="/course/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}?ref={{../../path.refBranch}}
                                 ">
-                                <div class="flex gap-2">
-                      <span class="material-symbols-outlined">
-                          {{{showComponentType this ../../concepts ../../practices}}}
-                      </span>
+                                <div class="flex gap-2">###
+                                    <span class="material-symbols-outlined">
+                                        {{{showComponentType this ../concepts ../practices}}}
+                                    </span>
                                     {{{showComponentName this ../../concepts ../../practices}}}
                                 </div>
                                 {{#if_not_equal ../../user.team.slug 'teachers' }}
@@ -100,16 +95,12 @@
                         {{/each}}
 
                         <!-- Lesson extra material -->
-                        {{#each this.additionalMaterials}}
-                            <div class="tab-content flex gap-2
-                {{#if_equal (concatActivePath ../this.slug this.slug) ../../path.fullPath }} 
-                  active-tab-content
-                {{/if_equal }}
-              ">
+                        {{#each this.config.config.additionalMaterials}}
+                            <div class="tab-content flex gap-2 {{#if_equal (concatActivePath ../this.slug this.slug)
+                                                                           ../../path.fullPath }}active-tab-content{{/if_equal }}">
                                 <a class="py-3 w-full !no-underline"
-                                   href="/course/{{../../path.courseSlug}}/{{../this.slug}}/{{this.slug}}?ref={{../../path.refBranch}}
+                                   href="/course/{{../../path.courseId}}/{{../this.slug}}/{{this.slug}}?ref={{../../path.refBranch}}
                                 ">{{this.name}}</a>
-
                             </div>
                         {{/each}}
 
@@ -118,11 +109,7 @@
 
                 <!-- Topic extra material link -->
                 {{#each additionalMaterials}}
-                    <div class="tab
-            {{#if_equal this.slug ../path.fullPath }} 
-              active-tab
-            {{/if_equal }}
-          ">
+                    <div class="tab {{#if_equal this.slug ../path.fullPath }}active-tab{{/if_equal }}">
                         <label class="no-tab-label">
                             <a class="py-3 w-full !no-underline"
                                href="/course/{{../path.courseSlug}}/{{this.slug}}?ref={{../path.refBranch}}
