@@ -73,13 +73,15 @@
                             <div class="tab-content flex gap-2 {{#if_equal (concatActivePath ../this.slug this)
                                                                            ../../path.fullPath }}active-tab-content menu-card{{/if_equal }}">
                                 <a class="flex flex-row justify-between grow py-3 !no-underline"
-                                   href="/course/{{../../path.courseSlug}}/{{../this.slug}}/{{this}}?ref={{../../path.refBranch}}
+                                   href="/course/{{../../path.courseId}}/{{../this.slug}}/{{this}}?ref={{../../path.refBranch}}
                                 ">
-                                <div class="flex gap-2">###
+                                <div class="flex gap-2">
                                     <span class="material-symbols-outlined">
-                                        {{{showComponentType this ../concepts ../practices}}}
+                                        {{{showComponentType this ../../course.config.concepts
+                                                             ../../course.config.practices }}}
                                     </span>
-                                    {{{showComponentName this ../../concepts ../../practices}}}
+                                    {{{showComponentName this ../../course.config.concepts
+                                                         ../../course.config.practices}}}
                                 </div>
                                 {{#if_not_equal ../../user.team.slug 'teachers' }}
                                     {{#ifInMarkedComponents
@@ -108,7 +110,7 @@
                 {{/each}}
 
                 <!-- Topic extra material link -->
-                {{#each additionalMaterials}}
+                {{#each this.config.config.additionalMaterials}}
                     <div class="tab {{#if_equal this.slug ../path.fullPath }}active-tab{{/if_equal }}">
                         <label class="no-tab-label">
                             <a class="py-3 w-full !no-underline"

@@ -294,7 +294,9 @@ const apiRequests = {
               refBranch
             ),
             authToken
-          );
+          ).catch(() => {
+            console.log('unable to fetch ' + path.componentSlug);
+          });
         } catch (error) {
           console.log('Unable to get componentsRaw');
           console.error(error);
@@ -307,7 +309,9 @@ const apiRequests = {
               refBranch
             ),
             authToken
-          );
+          ).catch(() => {
+            console.log('unable to fetch ' + path.componentSlug);
+          });
         } catch (error) {
           console.log('Unable to get sourcesRaw');
           console.error(error);
@@ -338,7 +342,9 @@ const apiRequests = {
             refBranch
           ),
           authToken
-        );
+        ).catch(() => {
+          console.log('unable to fetch practice components');
+        });
         cachePageContent.set(routePath, components);
       } else {
         console.log(`✅✅ practice components FROM CACHE: ${ routePath }`);

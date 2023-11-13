@@ -98,7 +98,6 @@ export default function hbsHelpers(hbs) {
         }
       },
       showComponentType: (component, concepts, practices) => {
-        console.log(component, concepts, practices);
         // https://stackoverflow.com/a/50909930
         const checkMatch = (obj) => obj.slug === component;
         if (concepts?.some(checkMatch)) {

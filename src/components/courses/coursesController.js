@@ -5,13 +5,11 @@ import markdown from '../../setup/setupMarkdown.js';
 import base64 from 'base-64';
 import utf8 from 'utf8';
 import getAllCoursesData from '../../functions/getAllCoursesData.js';
-import getConfig from '../../functions/getConfigFuncs.js';
 import { function1 } from '../../functions/imgFunctions.js';
 import {
   returnNextPage, returnPreviousPage, setCourseButtonPaths
 } from '../../functions/navButtonFunctions.js';
 import apiRequests from './coursesService.js';
-import teamsController from '../teams/teamsController.js';
 import allNotificationsController
   from '../notifications/notificationsController.js';
 import {
@@ -33,7 +31,6 @@ import { getUserData } from '../../functions/githubUsersFuncs.js';
  */
 const responseAction = async (req, res, next) => {
   const { githubRequest } = res.locals;
-
   let apiResponse;
   // if (apiRequests.hasOwnProperty(githubRequest)) {
   if (Object.prototype.hasOwnProperty.call(apiRequests, githubRequest)) {
@@ -64,7 +61,9 @@ const responseAction = async (req, res, next) => {
    * validate that folder names are all in lowercase, and if not, then change
    * to lowercase from GitHub's side.
    */
-  res.locals.resComponents = components || { data: { content: '' } };
+  res.locals.resComponents = components
+    ? components
+    : { data: { content: '' } };
   res.locals.resFiles = files || [];
   res.locals.resSources = sources || { data: { content: '' } };
 
@@ -716,6 +715,7 @@ const allCoursesController = {
     course = course.data.data;
 
     const courseConfig = await getCourseData(course, selectedVersion);
+
     course = { ...course, ...courseConfig };
 
     res.locals.course = course;
@@ -1048,7 +1048,6 @@ const allCoursesController = {
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 
-    console.log(res.locals);
     return next();
   },
 
