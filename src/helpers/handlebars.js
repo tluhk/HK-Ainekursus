@@ -133,12 +133,10 @@ export default function hbsHelpers(hbs) {
         aString?.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       isTeacher: (user) => {
-        console.log('T', user);
         return user?.roles?.includes('teacher');
       },
       findTeacher: (teacherName, teachers) => {
-        // console.log('teacherName2:', teacherName);
-        // console.log('teachers2:', teachers);
+
         const teacherData = teachers?.find(
           (x) => (x.firstName + ' ' + x.lastName) === teacherName);
         // console.log('teacherData2:', teacherData);

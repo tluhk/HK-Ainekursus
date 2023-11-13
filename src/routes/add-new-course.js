@@ -117,12 +117,12 @@ router.post(
 
       // check for repo name availability
       let repoName = slugify(`${ repo_prefix }${ courseName }`);
-      const nameExists = cacheTeamCourses.get('allCoursesData+teachers')
-        .data
-        .filter((course) => course.full_name.startsWith(
+      const nameExists = cacheTeamCourses.get('allCoursesData+teachers');
+      if (nameExists) {
+        nameExists.data?.filter((course) => course.full_name.startsWith(
           `${ templateOwner }/${ repoName }`
         ));
-
+      }
       if (nameExists.length) {
         // we have matching name, lets add suffix
         let suffix = 1;
