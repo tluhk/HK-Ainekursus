@@ -211,8 +211,8 @@ const allOverviewController = {
 
     coursesWithTeams.sort((a, b) => a.courseName.localeCompare(b.courseName));
 
-    console.log(coursesWithTeams);
-    console.log('coursesWithTeams3:', coursesWithTeams);
+    //console.log(coursesWithTeams);
+    //console.log('coursesWithTeams3:', coursesWithTeams);
 
     /**
      *  Get all users in each team.
@@ -253,7 +253,7 @@ const allOverviewController = {
       courseSlug,
       courseSlugData
     } = res.locals;
-    console.log('courseSlugData5:', courseSlugData);
+    //console.log('courseSlugData5:', courseSlugData);
 
     const usersInTeam = await teamsController.getUsersInTeam(team);
     const usersInTeachersTeam = await teamsController.getUsersInTeam(

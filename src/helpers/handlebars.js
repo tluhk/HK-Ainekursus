@@ -133,7 +133,8 @@ export default function hbsHelpers(hbs) {
         aString?.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       isTeacher: (user) => {
-        return user.roles?.includes('teacher');
+        console.log('T', user);
+        return user?.roles?.includes('teacher');
       },
       findTeacher: (teacherName, teachers) => {
         // console.log('teacherName2:', teacherName);
@@ -197,7 +198,7 @@ export default function hbsHelpers(hbs) {
         }
         if (
           !selectedVersion
-          && !branches.includes(refBranch)
+          && !branches?.includes(refBranch)
           && branchSlug === 'master'
         ) {
           return 'checked';

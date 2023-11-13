@@ -49,7 +49,7 @@ const allNotificationsController = {
         );
         const commitCommentsRaw = await Promise.all(commitCommentsPromises);
 
-        console.log(commitCommentsRaw);
+        //console.log(commitCommentsRaw);
         /**
          * Flatten the comments array to remove empty entries.
          */

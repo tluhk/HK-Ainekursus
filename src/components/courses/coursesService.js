@@ -7,6 +7,7 @@ import {
 import githubReposRequests from '../../functions/githubReposRequests.js';
 import { authToken } from '../../setup/setupGithub.js';
 import getConfig from '../../functions/getConfigFuncs.js';
+import { Octokit } from 'octokit';
 
 const {
   requestDocs,
@@ -26,6 +27,9 @@ const {
  */
 const ignoreFiles = ['.DS_Store', '.gitkeep'];
 
+const octokit = new Octokit({
+  auth: process.env.AUTH
+});
 /**
  * Define all API requests that are done to GitHub API
  */
@@ -356,6 +360,43 @@ const apiRequests = {
       components,
       sources
     };
+  },
+  async createNewBranch(repo, from, to) {
+    const parent = await octokit.request(
+      `GET /repos/${ repo }/git/ref/heads/${ from }`,
+      {
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      }
+    );
+    const parentSha = parent.data.object.sha;
+    console.log('sha', parentSha);
+
+    // 4. create new branch/ref
+    return await octokit.request(
+      `POST /repos/${ repo }/git/refs`,
+      {
+        ref: `refs/heads/${ to }`,
+        sha: parentSha,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      }
+    );
+  },
+  async listBranches(repo) {
+    const resp = await octokit.request(
+      `GET /repos/${ repo }/branches?per_page=100`, {
+        owner: 'OWNER',
+        repo: 'REPO',
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      }).catch(() => {
+      console.log('Unable to fetch brnaches');
+    });
+    return resp.data ? resp.data : [];
   }
 };
 

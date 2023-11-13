@@ -1,10 +1,11 @@
 import express from 'express';
 import ensureAuthenticated from '../../middleware/ensureAuthenticated.js';
 import {
-  allCoursesController,
+  allCoursesController, renderEditPage,
   renderPage,
   responseAction
 } from './coursesController.js';
+import validateTeacher from '../../middleware/validateTeacher.js';
 
 const router = express.Router();
 
@@ -13,9 +14,10 @@ const router = express.Router();
  */
 router.get(
   '/:courseId/:contentSlug?/:componentSlug?',
-  ensureAuthenticated,
+  //ensureAuthenticated,
   allCoursesController.getSpecificCourse,
-  responseAction, renderPage
+  responseAction,
+  renderPage
 );
 
 export default router;

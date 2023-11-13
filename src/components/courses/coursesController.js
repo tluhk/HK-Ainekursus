@@ -89,7 +89,8 @@ const renderPage = async (req, res) => {
     branches,
     selectedVersion,
     markedAsDoneComponentsArr,
-    allTeams
+    allTeams,
+    user
   } = res.locals;
 
   const {
@@ -166,8 +167,6 @@ const renderPage = async (req, res) => {
   }
 
   // used for adding new branch
-  const curYear = new Date().getFullYear();
-  const years = [curYear, curYear + 1, curYear + 2];
 
   /** Finally you can render the course view with all correct information you've collected from GitHub, and with all correctly rendered Markdown content! */
   res.render('course', {
@@ -187,7 +186,7 @@ const renderPage = async (req, res) => {
     returnNextPage,
     config,
     files: resFiles,
-    user: req.user,
+    user,
     ToC: componentMarkdownOnlyTOC,
     teachers,
     branches,
@@ -195,8 +194,7 @@ const renderPage = async (req, res) => {
     refBranch,
     currentPath: req.body.currentPath,
     markedAsDoneComponentsArr,
-    allTeams,
-    years
+    allTeams
   });
 };
 
@@ -263,14 +261,14 @@ const renderEditPage = async (req, res) => {
   );
 
   // for each lessons get README and lisamaterjalid.md
-  for await (const _m of config.lessons.map((lesson) => {
+  for await (const _m of config.config.lessons.map((lesson) => {
     getFile(process.env.REPO_ORG_NAME, repoPath,
       `lessons/${ lesson.slug }/lisamaterjalid.md`, refBranch
     ).then((material) => (lesson.additionalMaterials = material));
   })) {
     // console.log(material);
   }
-  for await (const about of config.lessons.map(
+  for await (const about of config.config.lessons.map(
     (lesson) => getFile(process.env.REPO_ORG_NAME, repoPath,
       `lessons/${ lesson.slug }/README.md`, refBranch
     ).then((about) => (lesson.content = about)))) {
@@ -283,7 +281,7 @@ const renderEditPage = async (req, res) => {
   );
 
   // replace each lesson.component slug with object
-  config.lessons.map((l) => {
+  config.config.lessons.map((l) => {
     l.components.map((slug) => {
       const def = allConcepts.find((concept) => concept.slug === slug);
       return def || null;
@@ -293,15 +291,15 @@ const renderEditPage = async (req, res) => {
   /** Finally you can render the course view with all correct information you've collected from GitHub, and with all correctly rendered Markdown content! */
   const viewVars = {
     component: markdownWithModifiedImgSources,
-    docs: config.docs,
+    docs: config.config.docs,
     additionalMaterials: additionalMaterials,
-    concepts: config.concepts,
-    practices: config.practices,
-    lessons: config.lessons,
+    concepts: config.config.concepts,
+    practices: config.config.practices,
+    lessons: config.config.lessons,
     sources: sourcesJSON,
     path,
     courses: allCourses,
-    config,
+    config: config.config,
     files: resFiles,
     user: req.user,
     teachers,
@@ -385,8 +383,7 @@ const allCoursesController = {
       /*
        * Sort allTeacherCourses, these are teacher's own courses
        */
-      allCourses.sort(
-        (a, b) => a.name.localeCompare(b.name));
+      allCourses.sort((a, b) => a.name.localeCompare(b.name));
       // console.log('allTeacherCourses2:', allTeacherCourses);
 
       /* These are teachers of all other courses.
@@ -664,7 +661,9 @@ const allCoursesController = {
       courseId, contentSlug, componentSlug
     } = req.params;
 
+    res.locals.user = req.user;
     const { ref } = req.query;
+    const isTeacher = req.user.roles.includes('teacher');
 
     /** If user's team is not found, route to /notfound. Only users with valid team are allowed to see course content. This is checked with app.js. */
     /*if (!req.user.team.slug) {
@@ -682,7 +681,7 @@ const allCoursesController = {
      */
     const selectedVersion = req.session.selectedVersion || ref || null;
     res.locals.selectedVersion = selectedVersion;
-    // console.log('selectedVersion1:', selectedVersion);
+    //console.log('selectedVersion1:', selectedVersion);
 
     // console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
     //res.locals.markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
@@ -715,6 +714,22 @@ const allCoursesController = {
     course = course.data.data;
 
     const courseConfig = await getCourseData(course, selectedVersion);
+    // if selectedVersion='draft', check if branch exists, if not create it
+    // from master
+
+    if (!courseConfig.config && selectedVersion === 'draft' && isTeacher) {
+      const newBranch = await apiRequests.createNewBranch(
+        course.repository.replace('https://github.com/', ''), 'master',
+        'draft'
+      );
+      setTimeout(async () => {
+        const courseConfig = await getCourseData(course, selectedVersion);
+      }, 5000);
+      console.log(courseConfig);
+
+      return res.send('ok');
+
+    }
 
     course = { ...course, ...courseConfig };
 
@@ -735,9 +750,15 @@ const allCoursesController = {
      */
 
     /** refBranch variable refers to the repo branch where course data must be read. refBranch is defined on following rows. */
-    let refBranch;
-    let validBranches = [];
 
+    let validBranches = [];
+    // id edit mode get all versions
+    if (isTeacher) {
+      validBranches = await apiRequests.listBranches(
+        course.repository.replace('https://github.com/', ''));
+
+      validBranches = validBranches.map((b) => b.name);
+    }
     /** Get all course branches that have config as active:true */
     /*try {
      validBranches = await apiRequests.validBranchesService(
@@ -819,7 +840,7 @@ const allCoursesController = {
     /**
      * Save refBranch to res.locals. This is used by coursesService.js file.
      */
-    res.locals.refBranch = 'master'; //refBranch;
+    res.locals.refBranch = ref;
     res.locals.branches = validBranches;
     res.locals.allTeams = []; /*(await teamsController.getAllValidTeams()).teams // get all teams names except
      // for teachers and existing
@@ -1044,7 +1065,8 @@ const allCoursesController = {
     };
 
     res.locals.githubRequest = githubRequest;
-    res.locals.coursePathInGithub = course.coursePathInGithub;
+    res.locals.coursePathInGithub = course.repository.replace(
+      'https://github.com/', '');
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 

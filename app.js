@@ -274,94 +274,6 @@ passport.use(
   )
 );
 
-/** Endpoint to get team assignments from tluhk GitHub account when app is running.
- * Used as middleware to add user's team info to session's profile.
- * https://stackoverflow.com/a/25687358
- */
-app.use(getTeamAssignments, async (req, res, next) => {
-  return next();
-  // console.log('req.user5:', req.user);
-  if (req.user && !req.user.team) {
-    const { user } = req;
-    // console.log('user1:', user);
-    // console.log('userTeam1:', userTeam);
-    req.user.team = await teamsController.getUserTeam(
-      user.id,
-      res.locals.teamAssignments
-    );
-    // eslint-disable-next-line brace-style
-  } /* else {
-   /**
-   * TO ALLOW LOGGING IN WITH ANY USER, COMMENT OUT FOLLOWING else STATEMENT!
-   * FOR TESTING, THE APP IS BY DEFAULT LOGGED IN AS seppkh IN TEAM rif20
-   *
-   * IF YOU WANT TO LOG IN AS seppkh AND USE ITS TRUE GITHUB TEAM:
-   * 1. ENABLE FULL else STATEMENT
-   * 2. COMMENT OUT team: {} KEY.
-   * 3. THEN ENABLE FOLLOWING if (req.user && !req.user.team) {} CONDITION */
-  // else {
-  /*req.user = {
-   id: "62253084",
-   nodeId: "MDQ6VXNlcjYyMjUzMDg0",
-   displayName: null,
-   username: "seppkh",
-   profileUrl: "https://github.com/seppkh",
-   provider: "github",
-   _json: {
-   avatar_url: "https://avatars.githubusercontent.com/u/62253084?v=4",
-   type: "User",
-   },
-   team: {
-   name: "rif20",
-   id: 6514564,
-   node_id: "T_kwDOBqxQ5c4AY2eE",
-   slug: "rif20",
-   },
-   };
-
-   if (req.user && !req.user.team) {
-   const { user } = req;
-   const userTeam = await teamsController.getUserTeam(
-   user.id,
-   res.locals.teamAssignments,
-   );
-   // console.log('user1:', user);
-   // console.log('userTeam1:', userTeam);
-   req.user.team = userTeam;
-   }*/
-
-  /*req.user = {
-   id: "132268493",
-   nodeId: "U_kgDOB-JBzQ=",
-   displayName: null,
-   username: "vile-ja-kell",
-   profileUrl: "https://github.com/vile-ja-kell",
-   provider: "github",
-   _json: {
-   avatar_url: "https://avatars.githubusercontent.com/u/132268493?v=4",
-   type: "User",
-   },
-   team: {
-   name: "rif20",
-   id: 6514564,
-   node_id: "T_kwDOBqxQ5c4AY2eE",
-   slug: "rif20",
-   },
-   };
-   if (req.user && !req.user.team) {
-   const { user } = req;
-   const userTeam = await teamsController.getUserTeam(
-   user.id,
-   res.locals.teamAssignments,
-   );
-   // console.log('user1:', user);
-   // console.log('userTeam1:', userTeam);
-   req.user.team = userTeam;
-   }*/
-
-  next();
-});
-
 /** Endpoints for logging in
  //   Use passport.authenticate() as route middleware to authenticate the
  //   request. The first step in GitHub authentication will involve redirecting
@@ -436,7 +348,6 @@ app.use(ensureAuthenticated);
 app.get(
   '/',
   resetSelectedVersion,
-  ensureAuthenticated,
   allCoursesController.getAllCourses
 );
 
@@ -444,27 +355,16 @@ app.get(
 app.get(
   '/dashboard',
   resetSelectedVersion,
-  ensureAuthenticated,
   allCoursesController.getAllCourses
 );
 
-/** Endpoint to load course pages */
-/*app.get(
- '/course/:courseId/:contentSlug?/:componentSlug?',
- resetSelectedVersion,
- allCoursesController.getSpecificCourse,
- responseAction,
- renderPage
- );
-
- app.get(
- '/course-edit/:courseSlug/:contentSlug?/:componentSlug?',
- ensureAuthenticated,
- validateTeacher,
- allCoursesController.getSpecificCourse,
- responseAction,
- renderEditPage
- );*/
+app.get(
+  '/course-edit/:courseId/:contentSlug?/:componentSlug?',
+  validateTeacher,
+  allCoursesController.getSpecificCourse,
+  responseAction,
+  renderEditPage
+);
 /** Endpoints to change course version.
  * Only available for teachers.
  */
