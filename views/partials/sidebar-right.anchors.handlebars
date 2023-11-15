@@ -23,13 +23,13 @@
 
                 {{/each }}
                 <hr class="my-4">
-                <form action="/add-branch" method="post">
+                <form action="/add-version" method="post">
                     <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}">
                     <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
-                    <label for="team" class="ml-2 mb-2 text-base font-bold">Lisa versioon: </label>
-                    <input type="text" name="team" id="team" class="input-single h-8" required
-                           placeholder="versiooni nimi"/>
-                    <button type="submit" class="btn btn-primary w-full mt-2 min-h-min">Lisa versioon</button>
+
+                    <input type="text" name="version" id="version" class="input-single h-8" required
+                           placeholder="arhiivi nimi"/>
+                    <button type="submit" class="btn btn-primary w-full mt-2 min-h-min">Arhiveeri</button>
                 </form>
                 <hr class="my-4">
             </div>

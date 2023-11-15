@@ -12,18 +12,18 @@
     </div>
 </div>
 <script>
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContent = document.querySelectorAll(".tab-pane");
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContent = document.querySelectorAll('.tab-pane');
 
     tabButtons.forEach((button, index) => {
-        button.addEventListener("click", () => {
+        button.addEventListener('click', () => {
             // Remove the 'active' class from all buttons and content
-            tabButtons.forEach((btn) => btn.classList.remove("active"));
-            tabContent.forEach((content) => content.classList.add("hidden"));
+            tabButtons.forEach((btn) => btn.classList.remove('active'));
+            tabContent.forEach((content) => content.classList.add('hidden'));
 
             // Add the 'active' class to the clicked button and show the corresponding content
-            button.classList.add("active");
-            tabContent[index].classList.remove("hidden");
+            button.classList.add('active');
+            tabContent[index].classList.remove('hidden');
         });
     });
 
@@ -31,10 +31,10 @@
     tabButtons[0].click();
 
     // markdown
-    const tinyMDE1 = new TinyMDE.Editor({textarea: 'component'});
-    const commandBar1 = new TinyMDE.CommandBar({element: 'tinymde_commandbar', editor: tinyMDE1});
-    const tinyMDE2 = new TinyMDE.Editor({textarea: 'additionalMaterials[content]'});
-    const commandBar2 = new TinyMDE.CommandBar({element: 'tinymde_commandbar2', editor: tinyMDE2});
+    const tinyMDE1 = new TinyMDE.Editor({ textarea: 'component' });
+    const commandBar1 = new TinyMDE.CommandBar({ element: 'tinymde_commandbar', editor: tinyMDE1 });
+    const tinyMDE2 = new TinyMDE.Editor({ textarea: 'additionalMaterials[content]' });
+    const commandBar2 = new TinyMDE.CommandBar({ element: 'tinymde_commandbar2', editor: tinyMDE2 });
 
     // accordion
     const lessons = document.querySelectorAll('.lesson');
@@ -44,12 +44,32 @@
             const content = title.nextElementSibling;
             content.classList.toggle('hidden');
         });
-        const tinyMDE = new TinyMDE.Editor({textarea: 'lessons_content_'+index});
-        const cm = new TinyMDE.CommandBar({element: 'tinymde_commandbar_lessons_content_'+index, editor: tinyMDE});
+        const tinyMDE = new TinyMDE.Editor({ textarea: 'lessons_content_' + index });
+        const cm = new TinyMDE.CommandBar({ element: 'tinymde_commandbar_lessons_content_' + index, editor: tinyMDE });
 
-        const tinyMDE2 = new TinyMDE.Editor({textarea: 'lessons_add_'+index});
-        const cm2 = new  TinyMDE.CommandBar({element: 'tinymde_commandbar_lessons_add_'+index, editor: tinyMDE2});
+        const tinyMDE2 = new TinyMDE.Editor({ textarea: 'lessons_add_' + index });
+        const cm2 = new TinyMDE.CommandBar({ element: 'tinymde_commandbar_lessons_add_' + index, editor: tinyMDE2 });
     });
 
+    // sync ois content
+    const oisSyncButton = document.getElementById('sync');
+    oisSyncButton.addEventListener('click', () => {
+        fetch('http://localhost:3000/get-ois-content?courseId=1', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if (res.ok) {
+                return res.json();
+            }
+            return Promise.reject(res); // 2. reject instead of throw
+        }).then((res) => {
+            tinyMDE1.setContent(res.data);
+            document.getElementById('component').value = res.data;
+        }).catch((e) => {
+            console.log(e);
+        });
+    });
 
 </script>

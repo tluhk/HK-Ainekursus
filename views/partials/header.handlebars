@@ -39,12 +39,12 @@
                 <a href="/" class="!text-white !no-underline hover:!underline">Avaleht</a>
                 {{!-- <a href="/" class="!text-white !no-underline hover:!underline">Kursused</a> --}}
                 <a href="/notifications" class="!text-white !no-underline hover:!underline">Teated</a>
-                {{#if_equal user.team.slug 'teachers'}}
+                {{#if (isTeacher user)}}
                     <a href="/progress-overview" class="!text-white !no-underline hover:!underline">Ülevaade</a>
-                {{/if_equal }}
+                    <a href="/course/others" class="!text-white !no-underline hover:!underline">Teised õppeained</a>
+                {{/if }}
             </div>
-        {{/if}}
-        {{#if user}}
+
             <!-- user preferences -->
             <div class="mr-8 md:mr-0 flex flex-col md:flex-row items-end group md:items-center">
                 <div class="flex items-center gap-4">

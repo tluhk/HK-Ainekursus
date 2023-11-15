@@ -40,7 +40,7 @@ import saveDisplayNameRoutes from './src/routes/save-username.js';
 import removeAsDone from './src/routes/remove-as-done.js';
 import markAsDone from './src/routes/mark-as-done.js';
 import addNewCourseRoutes from './src/routes/add-new-course.js';
-import addNewBranchRoutes from './src/routes/add-new-branch.js';
+import addNewVersionRoutes from './src/routes/add-new-version.js';
 import courseRoutes from './src/components/courses/coursesRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -414,9 +414,11 @@ app.use('/save-email', saveEmailRoutes);
 app.use('/progress-overview', progressRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/add-course', addNewCourseRoutes);
-app.use('/add-branch', addNewBranchRoutes);
+app.use('/add-version', addNewVersionRoutes);
 
 app.use('/course', courseRoutes);
+
+app.get('/get-ois-content', allCoursesController.getOisContent);
 
 /** Redirect all unknown paths to 404 page */
 app.all('*', resetSelectedVersion, otherController.notFound);

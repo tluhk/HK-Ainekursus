@@ -9,6 +9,13 @@ import validateTeacher from '../../middleware/validateTeacher.js';
 
 const router = express.Router();
 
+router.get(
+  '/others',
+
+  allCoursesController.getOtherTeachersCourses,
+  (req, res) => { return res.send('ok');}
+);
+
 /**
  * Get single course by Id
  */

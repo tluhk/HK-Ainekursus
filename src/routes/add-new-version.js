@@ -17,10 +17,8 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
   // 1. validate request
   if (
     req.body.courseSlug
-    && req.body.team
+    && req.body.version
     && req.body.parentBranch
-    && req.body.year
-    && req.body.semester
   ) {
     const octokit = new Octokit({
       auth: process.env.AUTH
@@ -48,46 +46,13 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
     const newBranch = await octokit.request(
       `POST /repos/${ template_owner }/${ repoName }/git/refs`,
       {
-        ref: 'refs/heads/' + req.body.team,
+        ref: 'refs/heads/' + req.body.version,
         sha: parentSha,
         headers: {
           'X-GitHub-Api-Version': '2022-11-28'
         }
       }
     );
-    // 5. update new branch config.json (set semester)
-    let contentOK = false;
-    let timeOut = false;
-    let waitCounter = 0;
-    while (!contentOK && !timeOut) {
-      await delay(1000);
-      const branchConfig = await getFile(
-        template_owner,
-        repoName,
-        'config.json',
-        req.body.team
-      );
-
-      if (branchConfig && branchConfig.content) {
-        contentOK = true;
-        // 6. fix config.json semester field
-        const conf = JSON.parse(branchConfig.content);
-        conf.semester = `${ req.body.semester }${ req.body.year }`;
-        await updateFile(
-          template_owner,
-          repoName,
-          'config.json',
-          {
-            content: JSON.stringify(conf),
-            sha: branchConfig.sha
-          },
-          'add semester',
-          req.body.team
-        );
-      }
-      waitCounter++;
-      timeOut = waitCounter > 20;
-    }
 
     // 7. get status=201, redirect back to the course page
     cacheBranches.del(`${ template_owner }/${ repoName }+branches`);
@@ -95,7 +60,7 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
       const backURL = req.header('Referer') || '/';
       res.redirect(backURL);
     } else {
-      error = 'Uut haru ei saanud luua';
+      error = 'Uut versiooni ei saanud luua';
       res.send(error);
     }
   } else {

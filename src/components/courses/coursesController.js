@@ -7,13 +7,16 @@ import utf8 from 'utf8';
 import getAllCoursesData from '../../functions/getAllCoursesData.js';
 import { function1 } from '../../functions/imgFunctions.js';
 import {
-  returnNextPage, returnPreviousPage, setCourseButtonPaths
+  returnNextPage,
+  returnPreviousPage,
+  setCourseButtonPaths
 } from '../../functions/navButtonFunctions.js';
 import apiRequests from './coursesService.js';
 import allNotificationsController
   from '../notifications/notificationsController.js';
 import {
-  getComponentsUUIDs, getMarkedAsDoneComponents
+  getComponentsUUIDs,
+  getMarkedAsDoneComponents
 } from '../../functions/getListOfDoneComponentUUIDs.js';
 import { getFile, getFolder } from '../../functions/githubFileFunctions.js';
 import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
@@ -21,6 +24,8 @@ import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
 import getCourseData from '../../functions/getCourseData.js';
 import { getUserData } from '../../functions/githubUsersFuncs.js';
+import { axios } from '../../setup/setupGithub.js';
+import * as cheerio from 'cheerio';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -1156,6 +1161,67 @@ const allCoursesController = {
       b.course ? 1 : b.course > a.course ? -1 : 0);
   },
 
+  getOtherTeachersCourses: async (req, res, next) => {
+    const user = req.user;
+
+    let allCourses = await apiRequests.getAllCourses();
+
+    //console.log(allCourses.data);
+    if (!allCourses.data.data.length > 0) {
+      res.redirect('/');
+    }
+
+    allCourses.data.data.forEach((c) => c.teachers = JSON.parse(c.teachers));
+
+    allCourses = allCourses.data.data.filter(
+      course => !course.teachers.some(teacher => user.userId === teacher.id)
+    );
+
+    console.log(user, allCourses);
+    return res.render('other-teachers', {
+      allCourses,
+      user
+    });
+    //return res.send('ok');
+  },
+  getOisContent: async (req, res) => {
+    let longDescription = '';
+    let course = await usersApi.get(
+      membersRequests.getCourse + req.query.courseId)
+      .catch((error) => {
+        console.error(error);
+      });
+
+    if (course) {
+      course = course.data.data;
+      await axios('https://ois2.tlu.ee/tluois/aine/' + course.code)
+        .then((response) => {
+          const { data } = response;
+          const $ = cheerio.load(data);
+
+          $('.yldaine_r', data).each(function () {
+            const yldaineC1 = $(this).find('div.yldaine_c1').text();
+            const yldaineC2 = $(this).find('div.yldaine_c2').text();
+
+            switch (yldaineC1) {
+              case 'Õppeaine sisu lühikirjeldus':
+                longDescription = yldaineC2;
+                break;
+              case 'Õppeaine õpiväljundid':
+                longDescription += '\n\n ' + yldaineC2;
+                break;
+            }
+          });
+
+          return res.json(conf);
+        })
+        .catch(() => {
+          console.log('ois fetch error');
+        });
+    }
+
+    return res.json({ data: longDescription });
+  },
   getAllLessons: async (searchTerm, courses, refBranch) => {
     if (cacheLessons.has('lessons')) {
       return new Promise((resolve) => {

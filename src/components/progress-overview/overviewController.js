@@ -12,11 +12,7 @@ const allOverviewController = {
      * If not, then reroute to "/notfound" page
      * If yes, then continue to get overview info
      */
-    let teamSlug;
-    if (req.user && req.user.team) {
-      teamSlug = req.user.team.slug;
-    }
-    if (teamSlug !== 'teachers') {
+    if (!req.user.roles.includes('teacher')) {
       return res.redirect('/notfound');
     }
 

@@ -1830,6 +1830,9 @@ input:checked ~ .tab-content {
 .-left-4{
   left: -1rem;
 }
+.-top-16{
+  top: -4rem;
+}
 .-top-6{
   top: -1.5rem;
 }
@@ -1841,6 +1844,9 @@ input:checked ~ .tab-content {
 }
 .right-0{
   right: 0px;
+}
+.right-4{
+  right: 1rem;
 }
 .right-8{
   right: 2rem;

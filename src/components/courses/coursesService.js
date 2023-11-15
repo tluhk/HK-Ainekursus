@@ -8,6 +8,8 @@ import githubReposRequests from '../../functions/githubReposRequests.js';
 import { authToken } from '../../setup/setupGithub.js';
 import getConfig from '../../functions/getConfigFuncs.js';
 import { Octokit } from 'octokit';
+import { usersApi } from '../../setup/setupUserAPI.js';
+import membersRequests from '../../functions/usersHkTluRequests.js';
 
 const {
   requestDocs,
@@ -394,9 +396,16 @@ const apiRequests = {
           'X-GitHub-Api-Version': '2022-11-28'
         }
       }).catch(() => {
-      console.log('Unable to fetch brnaches');
+      console.log('Unable to fetch branches');
     });
     return resp.data ? resp.data : [];
+  },
+  getAllCourses: async () => {
+    return await usersApi.get(membersRequests.getAllCourses)
+      .catch((error) => {
+        console.error(error);
+      });
+
   }
 };
 
