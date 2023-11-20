@@ -17,7 +17,7 @@ async function getFile(owner, repo, path, ref = null) {
       }
     }
   ).catch((err) => {
-    console.log('err');
+    console.log('github get file error: ', path);
   });
 
   if (content && content.status === 200) {

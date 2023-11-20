@@ -501,7 +501,7 @@ const allCoursesController = {
           } else {
             // If the teacher is not in the grouped data, create a new entry
             // for them
-            // fetch teacher avatar_url from github
+            // todo fetch teacher avatar_url from github
             getUserData('mrtrvl').then((gitUserData) => {
               teacher.avatar_url = gitUserData.data.avatar_url;
             });
@@ -1116,7 +1116,8 @@ const allCoursesController = {
     });
 
     return allCoursesActive;
-  }, getAllConcepts: async (courses, refBranch) => {
+  },
+  getAllConcepts: async (courses, refBranch) => {
     if (cacheConcepts.has('concepts')) {
       return new Promise((resolve) => {
         console.log('✅✅  concepts IS from cache');

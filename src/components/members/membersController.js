@@ -27,10 +27,11 @@ const membersController = {
      * check if given githubUserID is part of tluhk organisation members
      */
     const userInOrgMembers = await usersApi.get(membersRequests.getUser + user)
-      .catch(() => console.log('❌❌ no user found'));
+      .catch((e) => console.log('❌❌ no user found', e));
     if (!userInOrgMembers) {
       return false;
     }
+    console.log(userInOrgMembers.data);
     return userInOrgMembers.data.data;
   }
 };

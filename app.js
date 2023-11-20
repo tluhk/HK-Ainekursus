@@ -151,7 +151,6 @@ passport.deserializeUser((obj, done) => {
  */
 async function userDBFunction(userData) {
   const { githubID, username, displayName, email } = userData;
-
   let conn;
   try {
     conn = await pool.getConnection();
@@ -253,16 +252,15 @@ passport.use(
          * If user is in DB, read its data. Get displayName and email info from
          * DB. Then store it to user profile.
          */
-        //const userDataAfterDB = await userDBFunction(userData);
+        const userDataAfterDB = await userDBFunction(userData);
 
-        /*if (userDataAfterDB) {
-         if (
-         userDataAfterDB.displayName &&
-         profile.displayName !== userDataAfterDB.displayName
-         )
-         profile.displayName = userDataAfterDB.displayName;
-         if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
-         }*/
+        if (userDataAfterDB &&
+          userDataAfterDB.displayName &&
+          profile.displayName !== userDataAfterDB.displayName
+        ) {
+          profile.displayName = userDataAfterDB.displayName;
+          if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
+        }
 
         console.log('Logging in...', userData);
         /**
@@ -320,7 +318,6 @@ app.post('/login', async (req, res, next) => {
     console.log(`Invalid login – entered username is not in tluhk org members`);
     return res.redirect('/login?invalid=true');
   }
-
   return passport.authenticate('github', {
     login: req.body.login
   })(req, res, next);

@@ -133,11 +133,10 @@ export default function hbsHelpers(hbs) {
         aString?.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       isTeacher: (user) => {
-        console.log('T', user);
+        //console.log('T', user);
         return user?.roles?.includes('teacher');
       },
       findTeacher: (teacherName, teachers) => {
-
         const teacherData = teachers?.find(
           (x) => (x.firstName + ' ' + x.lastName) === teacherName);
         // console.log('teacherData2:', teacherData);
@@ -236,10 +235,14 @@ export default function hbsHelpers(hbs) {
         markedAsDoneComponentsUUIDs,
         courseBranchComponentsUUIDs
       ) => {
-        // console.log('markedAsDoneComponentsUUIDs7:',
-        // markedAsDoneComponentsUUIDs);
-        // console.log('courseBranchComponentsUUIDs7:',
-        // courseBranchComponentsUUIDs);
+        /*console.log(
+         'markedAsDoneComponentsUUIDs7:',
+         markedAsDoneComponentsUUIDs
+         );
+         console.log(
+         'courseBranchComponentsUUIDs7:',
+         courseBranchComponentsUUIDs
+         );*/
         if (markedAsDoneComponentsUUIDs) {
           return markedAsDoneComponentsUUIDs.filter(
             (item) => courseBranchComponentsUUIDs.includes(item)).length;

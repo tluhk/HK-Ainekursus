@@ -154,6 +154,7 @@ const allNotificationsController = {
     /** Save all teachers in a variable, needed for rendering */
     if (!allTeachers) {
       const start4 = performance.now();
+      // todo replace with new API call
       allTeachers = await teamsController.getUsersInTeam('teachers');
       const end4 = performance.now();
       console.log(`Execution time allTeachers: ${ end4 - start4 } ms`);
