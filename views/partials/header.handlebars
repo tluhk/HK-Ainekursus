@@ -65,9 +65,10 @@
 
                     <ul class="md:hidden md:absolute md:group-hover:block md:h-screen md:top-[-4rem] md:pt-[6rem] md:-right-40 md:px-[2.5rem] md:pr-[12.5rem] bg-page-background z-49 list-none md:p-4 md:text-end w-max md:w-[41rem]">
 
-                        <li class="py-2"><a href="/save-displayName" class="underline text-text"><span
-                                class="material-symbols-rounded">Muuda nime</span></a></li>
+                        <!--li class="py-2"><a href="/save-displayName" class="underline text-text"><span
+                                class="material-symbols-rounded">Muuda nime</span></a></li!-->
 
+                        <!--
                         {{#if_equal user.team.slug 'teachers'}}
                             {{#if ../user.email}}
                                 <li class="py-2">Email: {{ ../../user.email }} <a href="/save-email"
@@ -77,11 +78,12 @@
                                 <li class="py-2"><a href="/save-email" class="underline text-text">Lisa email</a></li>
                             {{/if }}
                         {{/if_equal}}
+                        !-->
 
                         {{!-- <li  class="py-2">GitHubi ID: {{ user.id }}</li> --}}
                         <li class="py-2">GitHubi konto: <a href="{{ user.profileUrl }}" target="_blank"
                                                            class="underline !text-white">{{ user.username }}</a></li>
-                        <li>GitHubi tiim: {{ user.team.name }}</li>
+                        <!--li>GitHubi tiim: {{ user.team.name }}</li!-->
 
                         <li class="py-8"><a href="/logout" class="underline text-text">Logi välja</a></li>
 

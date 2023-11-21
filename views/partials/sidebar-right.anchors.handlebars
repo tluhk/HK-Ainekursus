@@ -5,7 +5,7 @@
     <!-- Branch (version) selection menu. Only visible to 'teachers' team -->
 
     {{#if_equal path.refBranch 'master'}}
-        {{#unless (isTeacher user)}}
+        {{#if (isTeacher user)}}
 
             <div class="card-header m-0">Versioonid:</div>
             <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
@@ -15,7 +15,7 @@
                     <div class="radio flex items-center">
                         <input {{setDefaultChecked this ../../refBranch ../../selectedVersion ../../branches }}
                                 id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio"
-                                onclick="handleRadioClick('{{this}}')">
+                                onclick="handleRadioClick('{{this}}')"/>
                         <label for="default-radio-{{@index}}" class="radio-label w-full ml-2 text-sm font-medium"
                                onclick="handleRadioClick('{{this}}')"> {{this }}</label><span
                             class="radio-check"></span>
@@ -24,8 +24,8 @@
                 {{/each }}
                 <hr class="my-4">
                 <form action="/add-version" method="post">
-                    <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}">
-                    <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
+                    <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}"/>
+                    <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}"/>
 
                     <input type="text" name="version" id="version" class="input-single h-8" required
                            placeholder="arhiivi nimi"/>
@@ -33,19 +33,18 @@
                 </form>
                 <hr class="my-4">
             </div>
-        {{/unless}}
+        {{/if}}
     {{/if_equal}}
 
     <!-- Table of contents -->
 
     <!-- sidebar sticky behavior beginning from lg size -->
-    <div class="">
+    <div>
         <div class="card-header m-0">Lehekülje teemad:</div>
         <div class="pl-2 mt-2 lg:max-h-screen drop-shadow-2xl w-full text-sm">
             {{{ ToC }}}
         </div>
     </div>
-
 
 </nav>
 
