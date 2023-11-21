@@ -49,17 +49,17 @@ export default function hbsHelpers(hbs) {
         return options.inverse(this);
       },
       ifInMarkedComponents: (elem, list, options) => {
-        // console.log('elem:', elem);
-        // console.log('list:', list);
+        //console.log('elem:', elem);
+        //console.log('list:', list);
         if (list === undefined) {
           // console.log('list is undefined');
           return options.inverse(this);
         }
         if (list.includes(elem)) {
-          // console.log('elem in list');
+          console.log('elem in list');
           return options.fn(this);
         }
-        // console.log('elem not in list');
+        console.log('elem not in list');
 
         return options.inverse(this);
       },
@@ -133,8 +133,7 @@ export default function hbsHelpers(hbs) {
         aString?.slice(1),
       uppercase: (aString) => aString.toUpperCase(),
       isTeacher: (user) => {
-        //console.log('T', user);
-        return user?.roles?.includes('teacher');
+        return user?.roles?.includes('teacher') || false;
       },
       findTeacher: (teacherName, teachers) => {
         const teacherData = teachers?.find(

@@ -7,30 +7,30 @@ import express from 'express';
 const router = express.Router();
 router.post('/', ensureAuthenticated, async (req, res) => {
   const {
-    courseSlug,
+    courseId,
     componentSlug,
-    componentUUID
+    componentUUId
   } = req.body;
 
-  const githubID = req.user.id;
+  const githubID = req.user.userId;
 
-  if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
+  if (!githubID || !courseId || !componentSlug || !componentUUId) {
     return res.redirect('/notfound');
   }
 
-  if (githubID && courseSlug && componentSlug && componentUUID) {
+  if (githubID && courseId && componentSlug && componentUUId) {
     let conn;
     try {
       conn = await pool.getConnection();
       const res6 = await conn.query(
         'SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;',
-        [githubID, courseSlug]
+        [githubID, courseId]
       );
 
       if (res6[0]) {
         await conn.query(
-          'UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, CONCAT(\'$.\', ?)) WHERE githubID = ? AND courseCode = ?;',
-          [componentUUID, githubID, courseSlug]
+          'UPDATE users_progress SET markedAsDoneComponents = JSON_REMOVE(markedAsDoneComponents, ?) WHERE githubID = ? AND courseCode = ?;',
+          [`$."${ componentUUId }"`, githubID, courseId]
         );
       }
 
@@ -38,10 +38,10 @@ router.post('/', ensureAuthenticated, async (req, res) => {
        * If yes, delete cache for markedAsDoneComponents when user removes a
        * done component from given course */
       if (cacheMarkedAsDoneComponents.has(
-        `markedAsDoneComponents+${ githubID }+${ courseSlug }`
+        `markedAsDoneComponents+${ githubID }+${ courseId }`
       )) {
         cacheMarkedAsDoneComponents.del(
-          `markedAsDoneComponents+${ githubID }+${ courseSlug }`
+          `markedAsDoneComponents+${ githubID }+${ courseId }`
         );
       }
     } catch (err) {

@@ -11,7 +11,8 @@ const returnPreviousPage = (currentPath, paths) => {
   return currentPath;
 };
 const returnNextPage = (currentPath, paths) => {
-  const currentIndex = paths.findIndex((object) => object.path === currentPath);
+  const currentIndex = paths.findIndex(
+    (object) => object.path === currentPath);
   if (currentIndex !== paths.lenght - 1) {
     return paths[currentIndex + 1].path;
   }

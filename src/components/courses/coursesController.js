@@ -689,10 +689,13 @@ const allCoursesController = {
     //console.log('selectedVersion1:', selectedVersion);
 
     // console.log('markedAsDoneComponentsArr10:', markedAsDoneComponentsArr);
-    //res.locals.markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
-    //  req.user.id,
-    //  courseSlug
-    //);
+    res.locals.markedAsDoneComponentsArr = await getMarkedAsDoneComponents(
+      req.user.userId,
+      courseId
+    );
+
+    //console.log(
+    //  'markedAsDoneComponentsArr10:', res.locals.markedAsDoneComponentsArr);
 
     /** Get all available courses for the user. */
     //const start7 = performance.now();
@@ -923,8 +926,10 @@ const allCoursesController = {
      * Sisulehe content ja componenti UUID lugemine config failist, andmebaasis
      * sisulehe märkimiseks
      */
-    let contentUUId;
-    let componentUUId;
+    let contentUUId = '';
+    let componentUUId = '';
+    let componentName = '';
+    let componentType = '';
 
     courseConfig.config?.docs?.forEach((x) => {
       if (x.slug === contentSlug) {
@@ -953,8 +958,6 @@ const allCoursesController = {
      * additionalMaterials arrays. If a match, get the componentName,
      * componentUUID and set componentType.
      */
-    let componentName;
-    let componentType;
 
     courseConfig.config?.concepts?.forEach((x) => {
       if (x.slug === componentSlug) {
@@ -1005,7 +1008,7 @@ const allCoursesController = {
     // console.log('contentUUID1:', contentUUID);
     // console.log('componentSlug1:', componentSlug);
     // console.log('componentName1:', componentName);
-    // console.log('componentUUID1:', componentUUID);
+    //console.log('componentUUID1:', componentUUId);
     // console.log('githubRequest1:', githubRequest);
 
     /**

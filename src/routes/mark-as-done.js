@@ -7,38 +7,39 @@ import { cacheMarkedAsDoneComponents } from '../setup/setupCache.js';
 const router = express.Router();
 router.post('/', ensureAuthenticated, async (req, res) => {
   const {
-    courseSlug,
+    courseId,
     componentSlug,
-    componentUUID,
+    componentUUId,
     nextPagePath
   } = req.body;
 
-  const githubID = req.user.id;
+  const githubID = req.user.userId;
 
-  if (!githubID || !courseSlug || !componentSlug || !componentUUID) {
+  if (!githubID || !courseId || !componentSlug || !componentUUId) {
+    console.log(githubID, courseId, componentSlug, componentUUId);
     return res.redirect('/notfound');
   }
 
-  if (githubID && courseSlug && componentSlug && componentUUID) {
+  if (githubID && courseId && componentSlug && componentUUId) {
     let conn;
     try {
       conn = await pool.getConnection();
       const res1 = await conn.query(
         'SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;',
-        [githubID, courseSlug]
+        [githubID, courseId]
       );
 
       if (!res1[0]) {
         const keyValue = {};
-        keyValue[componentUUID] = componentSlug;
+        keyValue[componentUUId] = componentSlug;
         await conn.query(
           'INSERT INTO users_progress (githubID, courseCode, markedAsDoneComponents) VALUES (?, ?, ?);',
-          [githubID, courseSlug, keyValue]
+          [githubID, courseId, keyValue]
         );
       } else {
         await conn.query(
-          'UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, CONCAT(\'$.\', ?), ?) WHERE githubID = ? AND courseCode = ?;',
-          [componentUUID, componentSlug, githubID, courseSlug]
+          'UPDATE users_progress SET markedAsDoneComponents = JSON_SET(markedAsDoneComponents, ?, ?) WHERE githubID = ? AND courseCode = ?;',
+          [`$."${ componentUUId }"`, componentSlug, githubID, courseId]
         );
       }
 
@@ -47,11 +48,11 @@ router.post('/', ensureAuthenticated, async (req, res) => {
        * component from given course */
       if (
         cacheMarkedAsDoneComponents.has(
-          `markedAsDoneComponents+${ githubID }+${ courseSlug }`
+          `markedAsDoneComponents+${ githubID }+${ courseId }`
         )
       ) {
         cacheMarkedAsDoneComponents.del(
-          `markedAsDoneComponents+${ githubID }+${ courseSlug }`
+          `markedAsDoneComponents+${ githubID }+${ courseId }`
         );
       }
     } catch (err) {

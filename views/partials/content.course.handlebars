@@ -119,31 +119,36 @@ open_in_new
 
 
         {{#ifInPaths path.fullPath markAsDonePaths }}
-            {{#if_not_equal ../user.team.slug 'teachers'}}
-                {{#ifInMarkedComponents ../path.componentUUID ../markedAsDoneComponentsArr }}
+            {{#unless (isTeacher user)}}
+                {{#ifInMarkedComponents ../../path.componentUUId ../../markedAsDoneComponentsArr }}
                     <form method="POST" action="/remove-component-as-done" name="removeComponentAsDone"
                           id="removeComponentAsDone">
                         <!-- Hidden form inputs to send req.body values -->
-                        <input type="hidden" name="courseId" id="courseId" value="{{../path.courseId}}">
-                        <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}">
-                        <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}">
+                        <input type="hidden" name="courseId" id="courseId" value="{{../../../path.courseId}}">
+                        <input type="hidden" name="componentSlug" id="componentSlug"
+                               value="{{../../../path.componentSlug}}">
+                        <input type="hidden" name="componentUUId" id="componentUUId"
+                               value="{{../../../path.componentUUId}}">
                         <button name="markAsDone" class="btn btn-secondary">Eemalda märge</button>
                     </form>
                 {{else }}
                     <form method="POST" action="/mark-component-as-done" name="markComponentAsDone"
                           id="markComponentAsDone">
                         <!-- Hidden form inputs to send req.body values -->
-                        <input type="hidden" name="courseId" id="courseId" value="{{../path.courseId}}">
-                        <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}">
-                        <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}">
+                        <input type="hidden" name="courseId" id="courseId" value="{{../../../path.courseId}}">
+                        <input type="hidden" name="componentSlug" id="componentSlug"
+                               value="{{../../../path.componentSlug}}">
+                        <input type="hidden" name="componentUUId" id="componentUUId"
+                               value="{{../../../path.componentUUId}}">
                         <input type="hidden" name="nextPagePath" id="nextPagePath"
-                               value="/course/{{../path.courseId}}/{{../returnNextPage ../path.fullPath
-                                                                                       ../backAndForwardPaths}}?ref={{../path.refBranch}}
+                               value="/course/{{../../../path.courseId}}/{{../../../returnNextPage
+                                       ../../../path.fullPath
+                                       ../../../backAndForwardPaths}}?ref={{../../../path.refBranch}}
                         " >
                         <button name="markAsDone" class="btn btn-primary">Märgi tehtuks ja edasi</button>
                     </form>
                 {{/ifInMarkedComponents }}
-            {{/if_not_equal }}
+            {{/unless }}
         {{/ifInPaths }}
 
     </div>
