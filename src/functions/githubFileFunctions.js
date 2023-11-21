@@ -1,6 +1,7 @@
 import base64 from 'base-64';
 import { Octokit } from 'octokit';
 import utf8 from 'utf8';
+import { v4 as uuidv4 } from 'uuid';
 
 const octokit = new Octokit({
   auth: process.env.AUTH
@@ -54,6 +55,59 @@ async function getFolder(owner, repo, path, ref = null) {
         };
       });
   }
+  return false;
+}
+
+async function getTree(repo, branch = 'master') {
+  const branchData = await getBranch(repo, branch);
+
+  const content = await octokit.request(
+    `GET /repos/${ repo }/git/trees/${ branchData.commit.sha }?recursive=1`, {
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    }).catch((err) => {
+    console.log('get tree error');
+  });
+
+  const tree = {};
+  content.data.tree.filter(
+    (t) => (t.path.includes('/') && t.type === 'blob')).forEach((item) => {
+      const pathParts = item.path.split('/');
+      const contentName = pathParts[0];
+      if (!tree[contentName]) {
+        // todo get name from about.md or readme.md
+        tree[contentName] = [
+          {
+            slug: pathParts[1],
+            name: pathParts[1],
+            uuid: uuidv4()
+          }];
+      }
+
+      let obj = tree[contentName].find(o => o.slug === pathParts[1]);
+      if (!obj) {
+        // todo get name from about.md or readme.md
+        tree[contentName].push(
+          {
+            slug: pathParts[1],
+            name: pathParts[1],
+            uuid: uuidv4()
+          });
+        obj = tree[contentName].find(o => o.slug === pathParts[1]);
+      }
+
+      if (pathParts.length === 4) {
+        if (!obj[pathParts[2]]) {
+          obj[pathParts[2]] = [pathParts[3]];
+        } else {
+          obj[pathParts[2]].push(pathParts[3]);
+        }
+      }
+
+    }
+  );
+  console.log(JSON.stringify(tree, null, 2));
   return false;
 }
 
@@ -123,6 +177,22 @@ async function uploadFile(
   });
 }
 
+async function getBranch(repo, branch = 'master') {
+  const content = await octokit.request(
+    `GET /repos/${ repo }/branches/${ branch }`, {
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    }).catch((err) => {
+    console.log('get tree error');
+  });
+
+  if (content && content.status === 200) {
+    return content.data;
+  }
+  return false;
+}
+
 function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
@@ -130,5 +200,12 @@ function delay(milliseconds) {
 }
 
 export {
-  getFile, updateFile, deleteFile, delay, getFolder, uploadFile
+  getFile,
+  updateFile,
+  deleteFile,
+  delay,
+  getFolder,
+  uploadFile,
+  getTree,
+  getBranch
 };

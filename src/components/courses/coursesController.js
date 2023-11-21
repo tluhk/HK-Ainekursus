@@ -883,9 +883,9 @@ const allCoursesController = {
      * displayed. */
     const {
       backAndForwardPaths, markAsDonePaths
-    } = setCourseButtonPaths(courseConfig);
-    // console.log('backAndForwardPaths4:', backAndForwardPaths);
-    // console.log('markAsDonePaths4:', markAsDonePaths);
+    } = setCourseButtonPaths(courseConfig.config);
+    //console.log('backAndForwardPaths4:', backAndForwardPaths);
+    //console.log('markAsDonePaths4:', markAsDonePaths);
     res.locals.backAndForwardPaths = backAndForwardPaths;
     res.locals.markAsDonePaths = markAsDonePaths;
 

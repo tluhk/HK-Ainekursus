@@ -4,6 +4,7 @@ import utf8 from 'utf8';
 import { authToken, axios } from '../setup/setupGithub.js';
 import { cacheConfig } from '../setup/setupCache.js';
 import githubReposRequests from './githubReposRequests.js';
+import { getTree } from './githubFileFunctions.js';
 
 const { requestConfig } = githubReposRequests;
 
@@ -70,12 +71,14 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
   const expectedKeys2 = ['slug', 'name'];
   const objectKeysDocs = Object.keys(configObj.docs[0]);
-  const hasAllKeysDocs = expectedKeys2.every((key) => objectKeysDocs.includes(key));
+  const hasAllKeysDocs = expectedKeys2.every(
+    (key) => objectKeysDocs.includes(key));
 
   const objectKeysAdditionalMaterials = Object.keys(
     configObj.additionalMaterials[0]
   );
-  const hasAllKeysAdditionalMaterials = expectedKeys2.every((key) => objectKeysAdditionalMaterials.includes(key));
+  const hasAllKeysAdditionalMaterials = expectedKeys2.every(
+    (key) => objectKeysAdditionalMaterials.includes(key));
 
   const expectedKeys3 = [
     'slug',
@@ -87,7 +90,8 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
   const hasAllKeysLessons = configObj.lessons.every((lesson) => {
     const objectKeysLesson = Object.keys(lesson);
-    const lessonHasAllKeys = expectedKeys3.every((key) => objectKeysLesson.includes(key));
+    const lessonHasAllKeys = expectedKeys3.every(
+      (key) => objectKeysLesson.includes(key));
     if (!lessonHasAllKeys) {
       console.log(
         `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys missing.`
@@ -111,7 +115,8 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
 
     // console.log('lessonKeysAdditionalMaterials1:',
     // lessonKeysAdditionalMaterials);
-    const lessonAddMaterialsHaveKeys = expectedKeys2.every((key) => lessonKeysAdditionalMaterials.includes(key));
+    const lessonAddMaterialsHaveKeys = expectedKeys2.every(
+      (key) => lessonKeysAdditionalMaterials.includes(key));
     if (!lessonAddMaterialsHaveKeys) {
       console.log(
         `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson additionalMaterials array with missing keys.`
@@ -155,8 +160,8 @@ const getConfig = async (selectedCourse, refBranch) => {
    * If yes, read config from cache.
    * If not, make new GitHub request for config and cache it.
    */
-  // console.log('selectedCourse1:', selectedCourse);
-  // console.log('refBranch1:', refBranch);
+    // console.log('selectedCourse1:', selectedCourse);
+    // console.log('refBranch1:', refBranch);
 
   const routePath = `getConfig:${ selectedCourse }+${ refBranch }`;
   // console.log('routePath1:', routePath);
@@ -176,6 +181,22 @@ const getConfig = async (selectedCourse, refBranch) => {
     } catch (error) {
       console.error(error);
     }
+    if (!config) {
+      // todo create config.json
+      //const conf = getTree(selectedCourse, refBranch);
+      // tee uus json...
+
+      const conf = {
+        'courseName': 'Kursuse näide',
+        'courseUrl': 'https://ois2.tlu.ee/tluois/aine/HKI5080.HK',
+        'teacherUsername': 'seppkh',
+        'active': true,
+        'semester': 'S2019'
+
+      };
+
+    }
+
     cacheConfig.set(routePath, config);
     // console.log('config from api');
   }
@@ -223,7 +244,8 @@ const getConfig = async (selectedCourse, refBranch) => {
   configObj.lessons.forEach((lesson, indexLesson) => {
     if (Array.isArray(lesson.components)) {
       const arr = lesson.components;
-      configObj.lessons[indexLesson].components = arr.map((item) => item.toLowerCase());
+      configObj.lessons[indexLesson].components = arr.map(
+        (item) => item.toLowerCase());
     }
   });
   // console.log('configObj.lessons[0].components10:',
