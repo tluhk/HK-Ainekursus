@@ -104,18 +104,16 @@ open_in_new
     <div class='flex flex-wrap gap-4'>
         {{#ifInPaths path.fullPath backAndForwardPaths }}
             {{#if_not_equal ../path.fullPath ../backAndForwardPaths.[0].path }}
-                <input type="button" class="btn btn-secondary"
-                       onclick="location.href='/course/{{../path.courseSlug}}/{{../returnPreviousPage ../path.fullPath
-                                                                                                      ../backAndForwardPaths}}?ref={{../path.refBranch}}
-                ';"
-                value="Eelmine" />
+                <a class="btn btn-secondary" href="/course/{{../path.courseId}}/{{../returnPreviousPage ../path.fullPath
+                                                                                                        ../backAndForwardPaths}}?ref={{../path.refBranch}}
+                ">Eelmine</a>
             {{/if_not_equal }}
 
             {{#if_not_equal ../path.fullPath (last ../backAndForwardPaths) }}
-                <input type="button" class="btn btn-primary"
-                       onclick="location.href='/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath
-                                                                                                  ../backAndForwardPaths}}?ref={{../path.refBranch}}
-                ';" value="Järgmine" />
+                <a class="btn btn-primary"
+                   href="/course/{{../path.courseId}}/{{../returnNextPage ../path.fullPath
+                                                                          ../backAndForwardPaths}}?ref={{../path.refBranch}}
+                ">Järgmine</a>
             {{/if_not_equal }}
         {{/ifInPaths }}
 
@@ -126,7 +124,7 @@ open_in_new
                     <form method="POST" action="/remove-component-as-done" name="removeComponentAsDone"
                           id="removeComponentAsDone">
                         <!-- Hidden form inputs to send req.body values -->
-                        <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
+                        <input type="hidden" name="courseId" id="courseId" value="{{../path.courseId}}">
                         <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}">
                         <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}">
                         <button name="markAsDone" class="btn btn-secondary">Eemalda märge</button>
@@ -135,12 +133,12 @@ open_in_new
                     <form method="POST" action="/mark-component-as-done" name="markComponentAsDone"
                           id="markComponentAsDone">
                         <!-- Hidden form inputs to send req.body values -->
-                        <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}">
+                        <input type="hidden" name="courseId" id="courseId" value="{{../path.courseId}}">
                         <input type="hidden" name="componentSlug" id="componentSlug" value="{{../path.componentSlug}}">
                         <input type="hidden" name="componentUUID" id="componentUUID" value="{{../path.componentUUID}}">
                         <input type="hidden" name="nextPagePath" id="nextPagePath"
-                               value="/course/{{../path.courseSlug}}/{{../returnNextPage ../path.fullPath
-                                                                                         ../backAndForwardPaths}}?ref={{../path.refBranch}}
+                               value="/course/{{../path.courseId}}/{{../returnNextPage ../path.fullPath
+                                                                                       ../backAndForwardPaths}}?ref={{../path.refBranch}}
                         " >
                         <button name="markAsDone" class="btn btn-primary">Märgi tehtuks ja edasi</button>
                     </form>

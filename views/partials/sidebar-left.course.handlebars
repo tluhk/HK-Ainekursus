@@ -120,11 +120,11 @@
                 {{/each}}
 
                 {{#if_equal path.refBranch 'master'}}
-                    {{#unless (isTeacher user)}}
+                    {{#if (isTeacher ../user)}}
                         <hr class="my-4">
                         <a href="/course-edit/{{../../path.courseId}}/{{../../docs.[0].slug}}about?ref=draft"
                            class="btn btn-primary w-full mt-2">Muuda kursust</a>
-                    {{/unless}}
+                    {{/if}}
                 {{/if_equal}}
             </div>
         </div>
