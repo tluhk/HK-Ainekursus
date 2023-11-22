@@ -493,7 +493,7 @@ const allCoursesController = {
         // Iterate through the teachers of the current course
         course.teachers.forEach(teacher => {
           const displayName = `${ teacher.firstName } ${ teacher.lastName }`;
-          // Check if the teacher's email is already in the grouped data
+          // Check if the teacher's name is already in the grouped data
           if (allCoursesGroupedByTeacher[displayName]) {
             // If the teacher is already in the grouped data, push the current
             // course to their list of courses
@@ -722,9 +722,9 @@ const allCoursesController = {
     course = course.data.data;
 
     const courseConfig = await getCourseData(course, selectedVersion);
+
     // if selectedVersion='draft', check if branch exists, if not create it
     // from master
-
     if (!courseConfig.config && selectedVersion === 'draft' && isTeacher) {
       const newBranch = await apiRequests.createNewBranch(
         course.repository.replace('https://github.com/', ''), 'master',
@@ -733,7 +733,7 @@ const allCoursesController = {
       setTimeout(async () => {
         const courseConfig = await getCourseData(course, selectedVersion);
       }, 5000);
-      console.log(courseConfig);
+      //console.log(courseConfig);
 
       return res.send('ok');
 
@@ -1078,6 +1078,7 @@ const allCoursesController = {
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 
+    console.log(course);
     return next();
   },
 

@@ -17,49 +17,50 @@ const allOverviewController = {
     }
 
     const {
-      team,
-      courseSlug
+      //team,
+      courseId
     } = req.params;
     let { courseSlugData } = req.session;
 
+    console.log(courseId, courseSlugData);
     /**
-     * Check if team, courseSlug params and courseSlugData from req.session are
-     * provided If team, courseSlug params and courseSlugData from req.session
+     * Check if team, courseId params and courseSlugData from req.session are
+     * provided If team, courseId params and courseSlugData from req.session
      * ARE NOT provided, then user is requesting to load /progress-overview
      * page to see all team/course options. Then you will check if displayBy is
      * provided with req.session. And then render /progress-overview.
      */
 
-      // By default, set displayBy to 'teams'
-    const displayBy = req.session.displayBy || 'teams';
-    res.locals.displayBy = displayBy;
+    // By default, set displayBy to 'teams'
+    /*const displayBy = req.session.displayBy || 'teams';
+     res.locals.displayBy = displayBy;
 
-    if (displayBy && team && !courseSlug) {
-      return res.redirect('/progress-overview');
-    }
-    if (displayBy === 'teams' && !team && !courseSlug) {
-      return allOverviewController.getOverviewByTeams(req, res);
-    }
-    if (displayBy === 'courses' && !team && !courseSlug) {
-      return allOverviewController.getOverviewByCourses(req, res);
-    }
+     if (displayBy && team && !courseId) {
+     return res.redirect('/progress-overview');
+     }
+     if (displayBy === 'teams' && !team && !courseId) {
+     return allOverviewController.getOverviewByTeams(req, res);
+     }
+     if (displayBy === 'courses' && !team && !courseId) {
+     return allOverviewController.getOverviewByCourses(req, res);
+     }*/
 
     /**
-     * If team, courseSlug ARE provided, but courseSlugData from req.session IS
+     * If team, courseId ARE provided, but courseSlugData from req.session IS
      * NOT, then user approached directly from URL, without sending req.session
      * data. Then get courseSlugData separately. Once courseSlugData is
      * provided, then continue to render team-course overview page
-     * /progress-overview/:team/:courseSlug.
+     * /progress-overview/:team/:courseId.
      */
-    if (team && courseSlug) {
+    if (courseId) {
       if (!courseSlugData || courseSlugData === '') {
-        const teamCoursesPromises = await getAllCoursesData(team, req);
+        const teamCoursesPromises = await getAllCoursesData(req);
         await Promise.all(teamCoursesPromises);
         const courseSlugDataRequested = teamCoursesPromises.find(
-          (course) => course.courseSlug === courseSlug
+          (course) => course.courseId === courseId
         );
-        /* If courseSlugDataRequested is not found, then user accessed /('/progress-overview/:team/:courseSlug with invalid team or courseSlug params. Route back to 7progress-overview page.
-         * Else save courseSlugDataRequested to courseSlugData and load /progress-overview/:team/:courseSlug page.
+        /* If courseSlugDataRequested is not found, then user accessed /('/progress-overview/:team/:courseId with invalid team or courseId params. Route back to 7progress-overview page.
+         * Else save courseSlugDataRequested to courseSlugData and load /progress-overview/:team/:courseId page.
          */
         if (!courseSlugDataRequested) {
           return res.redirect('/progress-overview');
@@ -68,8 +69,8 @@ const allOverviewController = {
       }
     }
     res.locals = {
-      team,
-      courseSlug,
+      //team,
+      courseId,
       courseSlugData
     };
 
@@ -198,7 +199,7 @@ const allOverviewController = {
             courseUrl: course.courseUrl,
             courseName: course.courseName,
             courseCode: course.courseCode,
-            courseSlug: course.courseSlug,
+            courseId: course.courseId,
             courseConfigByTeam: { [team]: course }
           });
         }
@@ -245,31 +246,31 @@ const allOverviewController = {
   },
   showProgress: async (req, res) => {
     const {
-      team,
-      courseSlug,
+      //team,
+      courseId,
       courseSlugData
     } = res.locals;
     //console.log('courseSlugData5:', courseSlugData);
 
-    const usersInTeam = await teamsController.getUsersInTeam(team);
-    const usersInTeachersTeam = await teamsController.getUsersInTeam(
-      'teachers');
+    /*const usersInTeam = await teamsController.getUsersInTeam(team);
+     const usersInTeachersTeam = await teamsController.getUsersInTeam(
+     'teachers');
 
-    const usersInTeamAndNotInTeachers = usersInTeam.filter(
-      (user) => !usersInTeachersTeam.some((user2) => user.login === user2.login)
-    );
-    const usersGithubIDsArray = usersInTeamAndNotInTeachers.map(
-      (user) => `${ user.id }`
-    );
+     const usersInTeamAndNotInTeachers = usersInTeam.filter(
+     (user) => !usersInTeachersTeam.some((user2) => user.login === user2.login)
+     );
+     const usersGithubIDsArray = usersInTeamAndNotInTeachers.map(
+     (user) => `${ user.id }`
+     );*/
 
     let usersDataPromises;
-    if (courseSlug && usersGithubIDsArray.length > 0) {
+    if (courseId && usersGithubIDsArray.length > 0) {
       usersDataPromises = usersInTeamAndNotInTeachers.map(
         async (user, index) => {
           // Connects to DB again for each user
           const markedAsDoneComponents = await getMarkedAsDoneComponents(
             user.id,
-            courseSlug
+            courseId
           );
           usersInTeamAndNotInTeachers[index].markedAsDoneComponents = markedAsDoneComponents;
           return usersInTeamAndNotInTeachers[index];
@@ -288,7 +289,7 @@ const allOverviewController = {
     return res.render('overview-stats', {
       user: req.user,
       courseData: courseSlugData,
-      team,
+      //team,
       usersData,
       teachers: usersInTeachersTeam
     });

@@ -230,18 +230,15 @@ passport.use(
           console.log('No user in tluhk org');
           return done(null, null);
         }
-        console.log('User exists in tluhk org');
 
-        // console.log('profile1:', profile);
-        const { id, username, displayName, _json } = profile;
-        const { email } = _json;
+        const { id, username, _json } = profile;
 
         const userData = {
           userId: userInOrgMembers.id,
           githubID: id,
           username,
-          displayName,
-          email,
+          displayName: `${ userInOrgMembers.firstName } ${ userInOrgMembers.lastName }`,
+          email: userInOrgMembers.email,
           roles: userInOrgMembers.roles,
           avatar_url: _json.avatar_url
         };
@@ -252,15 +249,15 @@ passport.use(
          * If user is in DB, read its data. Get displayName and email info from
          * DB. Then store it to user profile.
          */
-        const userDataAfterDB = await userDBFunction(userData);
+        /*const userDataAfterDB = await userDBFunction(userData);
 
-        if (userDataAfterDB &&
-          userDataAfterDB.displayName &&
-          profile.displayName !== userDataAfterDB.displayName
-        ) {
-          profile.displayName = userDataAfterDB.displayName;
-          if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
-        }
+         if (userDataAfterDB &&
+         userDataAfterDB.displayName &&
+         profile.displayName !== userDataAfterDB.displayName
+         ) {
+         profile.displayName = userDataAfterDB.displayName;
+         if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
+         }*/
 
         console.log('Logging in...', userData);
         /**
@@ -406,8 +403,8 @@ app.get('/notfound', resetSelectedVersion, otherController.notFound);
 /** Page for not authorized login attempt (GitHub user not part of tluhk organisation) */
 app.get('/noauth', otherController.noAuth);
 
-app.use('/save-displayName', saveDisplayNameRoutes);
-app.use('/save-email', saveEmailRoutes);
+//app.use('/save-displayName', saveDisplayNameRoutes);
+//app.use('/save-email', saveEmailRoutes);
 app.use('/progress-overview', progressRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/add-course', addNewCourseRoutes);
