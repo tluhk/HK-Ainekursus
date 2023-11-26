@@ -708,18 +708,12 @@ const allCoursesController = {
     // console.log('allCoursesActive2:', allCoursesActive);
 
     /** Get the selected course that was accessed with current endpoint  */
-    let course = await usersApi.get(membersRequests.getCourse + courseId)
-      .catch((error) => {
-        console.error(error);
-      });
+    let course = await apiRequests.getCourseById(courseId);
 
-    /** If no course is found (meaning that the courseSlug doesn't match any courses in GitHub OR none of the course branches in Github are active), then user tried to manually access an invalid course page. Redirect to /notfound page.
-     */
-    // console.log('course1:', course);
     if (!course) {
       return res.redirect('/notfound');
     }
-    course = course.data.data;
+    //course = course.data.data;
 
     const courseConfig = await getCourseData(course, selectedVersion);
 
@@ -1089,12 +1083,14 @@ const allCoursesController = {
   allCoursesActiveWithComponentsData: async (allCoursesActive, githubID) => {
     /** First, for each course, get a list of component UUIDs that has been marked as done. Save this to allCoursesActiveDoneComponentsArr array. */
     const allCoursesActiveDoneComponentsPromises = allCoursesActive.map(
-      (course) => getMarkedAsDoneComponents(githubID, course.code));
+      (course) => getMarkedAsDoneComponents(githubID, course.id));
 
     const allCoursesActiveDoneComponentsArr = await Promise.all(
       allCoursesActiveDoneComponentsPromises);
-    // console.log('allCoursesActiveDoneComponentsArr1:',
-    // allCoursesActiveDoneComponentsArr);
+    console.log(
+      'allCoursesActiveDoneComponentsArr1:',
+      allCoursesActiveDoneComponentsArr
+    );
 
     /** Then, again for each course, add the respective array of done components as a key-value pair: */
     allCoursesActive.forEach((course, index) => {
@@ -1106,7 +1102,7 @@ const allCoursesController = {
     return allCoursesActive;
   },
 
-  allCoursesActiveWithComponentsUUIDs: async (allCoursesActive, githubID) => {
+  allCoursesActiveWithComponentsUUIDs: async (allCoursesActive) => {
     /** First, for each course, get a list of component UUIDs  */
     const allCoursesActiveComponentsUUIDsPromises = allCoursesActive.map(
       (course) => getComponentsUUIDs(course.repository));

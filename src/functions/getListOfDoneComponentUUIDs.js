@@ -11,11 +11,11 @@ import { getFile } from './githubFileFunctions.js';
  * Parameters are user's githubID and course's slug. E.g. '24424256' and
  * 'HKI6001.HK'.
  */
-const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
+const getMarkedAsDoneComponents = async (githubID, courseId) => {
   let res10;
   let keysArray = [];
 
-  const cacheName = `markedAsDoneComponents+${ githubID }+${ courseSlug }`;
+  const cacheName = `markedAsDoneComponents+${ githubID }+${ courseId }`;
 
   /** Check if Cache has markedAsDoneComponents array for given user and for given course.
    * This Cache is flushed whenever user adds or removes a component from given
@@ -23,21 +23,22 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
    */
   if (!cacheMarkedAsDoneComponents.has(cacheName)) {
     console.log(
-      `❌❌ markedAsDoneComponents for ${ githubID } in ${ courseSlug } IS NOT from cache`
+      `❌❌ markedAsDoneComponents for ${ githubID } in ${ courseId } IS NOT from cache`
     );
 
     // read markedAsDoneComponents value from database
-    if (githubID && courseSlug) {
+    if (githubID && courseId) {
       let conn;
       try {
         conn = await pool.getConnection();
-        // console.log('Connected to MariaDB 5!');
+        //console.log('Connected to MariaDB 5!');
 
-        res10 = await conn.query(
+        let fields;
+        [res10, fields] = await conn.query(
           'SELECT markedAsDoneComponents FROM users_progress WHERE githubID = ? AND courseCode = ?;',
-          [githubID, courseSlug]
+          [githubID, courseId]
         );
-        // console.log('res10:', res10);
+        //console.log('res10:', res10);
       } catch (err) {
         console.log('Unable to get marked as done components');
         console.error(err);
@@ -78,7 +79,7 @@ const getMarkedAsDoneComponents = async (githubID, courseSlug) => {
     cacheMarkedAsDoneComponents.set(cacheName, keysArray);
   } else {
     console.log(
-      `✅✅ markedAsDoneComponents for ${ githubID } in ${ courseSlug } FROM CACHE`
+      `✅✅ markedAsDoneComponents for ${ githubID } in ${ courseId } FROM CACHE`
     );
     keysArray = cacheMarkedAsDoneComponents.get(cacheName);
   }
@@ -110,4 +111,91 @@ const getComponentsUUIDs = async (repoUrl) => {
   return keysArray;
 };
 
-export { getMarkedAsDoneComponents, getComponentsUUIDs } ;
+const ttlMarkedAsDone = async (courseId) => {
+  const cacheName = `ttlMarkedAsDone+${ courseId }`;
+  if (!cacheMarkedAsDoneComponents.has(cacheName)) {
+    console.log(
+      `❌❌ ttlMarkedAsDone for ${ courseId } IS NOT from cache`
+    );
+
+    let res10;
+    let conn;
+    if (courseId) {
+      try {
+        conn = await pool.getConnection();
+
+        [res10] = await conn.query(
+          'SELECT count(githubID) as done FROM users_progress WHERE courseCode = ?;',
+          [courseId]
+        );
+        //console.log('res10:', res10);
+      } catch (err) {
+        console.log('Unable to get marked as done components');
+        console.error(err);
+      } finally {
+        if (conn) {
+          conn.release();
+        } // release to pool
+      }
+      cacheMarkedAsDoneComponents.set(cacheName, res10[0].done);
+      return res10[0].done;
+    } else {
+      console.log(
+        `✅✅ ttlMarkedAsDone for ${ courseId } FROM CACHE`
+      );
+      return cacheMarkedAsDoneComponents.get(cacheName);
+    }
+  }
+};
+
+const markedAsDone = async (courseId) => {
+  const cacheName = `markedAsDone+${ courseId }`;
+  if (!cacheMarkedAsDoneComponents.has(cacheName)) {
+    console.log(
+      `❌❌ markedAsDone for ${ courseId } IS NOT from cache`
+    );
+
+    let res10;
+    let conn;
+    if (courseId) {
+      try {
+        conn = await pool.getConnection();
+
+        [res10] = await conn.query(
+          'select githubID, JSON_EXTRACT(JSON_KEYS(markedAsDoneComponents), "$[0]") as uuid from users_progress where courseCode = ?',
+          [courseId]
+        );
+        //console.log('res10:', res10);
+      } catch (err) {
+        console.log('Unable to get marked as done components');
+        console.error(err);
+      } finally {
+        if (conn) {
+          conn.release();
+        } // release to pool
+      }
+
+      const groupedArray = Object.values(
+        res10.reduce((acc, { githubID, uuid }) => {
+          acc[githubID] = acc[githubID] || { githubID, uuid: [] };
+          acc[githubID].uuid.push(uuid);
+          return acc;
+        }, {}));
+
+      cacheMarkedAsDoneComponents.set(cacheName, groupedArray);
+      return groupedArray;
+    } else {
+      console.log(
+        `✅✅ ttlMarkedAsDone for ${ courseId } FROM CACHE`
+      );
+      return cacheMarkedAsDoneComponents.get(cacheName);
+    }
+  }
+};
+
+export {
+  getMarkedAsDoneComponents,
+  getComponentsUUIDs,
+  ttlMarkedAsDone,
+  markedAsDone
+} ;

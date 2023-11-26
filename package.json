@@ -85,6 +85,7 @@
     "md-block": "^0.0.1",
     "modify-image-url-md": "^0.0.1",
     "moment": "^2.29.4",
+    "mysql2": "^3.6.5",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.7",
     "node-html-parser": "^6.1.5",

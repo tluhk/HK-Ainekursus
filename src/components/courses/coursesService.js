@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {
   cacheBranches,
-  cacheFiles,
-  cachePageContent
+  cacheFiles, cacheMarkedAsDoneComponents,
+  cachePageContent, cacheTeamCourses
 } from '../../setup/setupCache.js';
 import githubReposRequests from '../../functions/githubReposRequests.js';
 import { authToken } from '../../setup/setupGithub.js';
@@ -406,6 +406,26 @@ const apiRequests = {
         console.error(error);
       });
 
+  },
+  getCourseById: async (courseId) => {
+    const cacheName = `course+${ courseId }`;
+    if (!cacheTeamCourses.has(cacheName)) {
+      console.log(
+        `❌❌ course ${ courseId } IS NOT from cache`
+      );
+
+      const course = await usersApi.get(membersRequests.getCourse + courseId)
+        .catch((error) => {
+          console.error(error);
+        });
+      cacheTeamCourses.set(cacheName, course?.data?.data);
+      return course?.data?.data;
+    } else {
+      console.log(
+        `✅✅ course for ${ courseId } FROM CACHE`
+      );
+      return cacheTeamCourses.get(cacheName);
+    }
   }
 };
 

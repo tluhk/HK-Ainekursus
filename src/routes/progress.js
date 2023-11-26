@@ -17,7 +17,7 @@ router.get(
 );
 
 router.get(
-  '/:team?/:courseSlug?',
+  '/:courseId?',
   resetSelectedVersion,
   validateTeacher,
   allOverviewController.getOverview
