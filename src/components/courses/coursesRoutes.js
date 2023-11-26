@@ -1,5 +1,4 @@
 import express from 'express';
-import ensureAuthenticated from '../../middleware/ensureAuthenticated.js';
 import {
   allCoursesController, renderEditPage,
   renderPage,
@@ -11,7 +10,7 @@ const router = express.Router();
 
 router.get(
   '/others',
-
+  validateTeacher,
   allCoursesController.getOtherTeachersCourses,
   (req, res) => { return res.send('ok');}
 );

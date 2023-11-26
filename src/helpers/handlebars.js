@@ -49,8 +49,8 @@ export default function hbsHelpers(hbs) {
         return options.inverse(this);
       },
       ifInMarkedComponents: (elem, list, options) => {
-        console.log('elem:', elem);
-        console.log('list:', list);
+        //console.log('elem:', elem);
+        //console.log('list:', list);
         if (list === undefined) {
           // console.log('list is undefined');
           return options.inverse(this);

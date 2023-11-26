@@ -1,33 +1,25 @@
 <!-- content.course.handlebars -->
 <div class="reading_content">
-
     <div class='breadcrumb'>
       <span class="material-symbols-outlined">
-        <a class='hover:underline' href='/'>
-        home
-        </a>
+        <a class='hover:underline' href='/'>home</a>
       </span>
         >
         {{#if breadcrumb.courseName}}
-            <a
-                    class='hover:underline'
-                    href='/course/{{path.id}}/about?ref={{path.refBranch}}'
-            >{{breadcrumb.courseName}}</a>
+            <a class='hover:underline'
+               href='/course/{{path.id}}/about?ref={{path.refBranch}}'>{{breadcrumb.courseName}}</a>
         {{/if}}
         {{#if_not_equal path.contentSlug 'about'}}
             {{#if ../breadcrumb.contentName }}
                 >
-                <a
-                        class='hover:underline'
-                        href='/course/{{../../path.id}}/{{../../path.contentSlug}}?ref={{../../path.refBranch}}'
-                >{{../../breadcrumb.contentName}}</a>
+                <a class='hover:underline'
+                   href='/course/{{../../path.id}}/{{../../path.contentSlug}}?ref={{../../path.refBranch}}'>{{../../breadcrumb.contentName}}</a>
             {{/if}}
         {{/if_not_equal }}
         {{#if breadcrumb.componentName}}
             >
-            <a
-                    class='hover:underline'
-                    href='/course/{{path.code}}/{{path.contentSlug}}/{{path.componentSlug}}?ref={{path.refBranch}}'
+            <a class='hover:underline'
+               href='/course/{{path.code}}/{{path.contentSlug}}/{{path.componentSlug}}?ref={{path.refBranch}}'
             >{{breadcrumb.componentName}}</a>
         {{/if}}
     </div>
@@ -50,26 +42,25 @@
             <ul class="markdown">
                 {{#each sources}}
                     <li>
-                        <a
-                                href='{{this.url}}'
-                                class="markdown"
-                                target='_blank'
+                        <a href='{{this.url}}'
+                           class="markdown"
+                           target='_blank'
                         >{{this.description}}</a>
                     </li>
                 {{/each}}
             </ul>
         </div>
-    {{/if
-    }}
+    {{/if}}
 
     <!-- NB! The course syllabus link from the config.json file is only displayed on the "about" / Course Information page. -->
 
     {{#if_equal path.contentSlug 'about'}}
-        <div class=""><b>Ainekava: </b><a class="flex items-center hover:text-link-action"
-                                          href='{{../course.courseUrl}}' target='_blank'>{{../course.courseName}}
-            ({{../course.courseCode}})<span class="material-symbols-outlined">
-open_in_new
-</span></a></div>
+        <div class=""><b>Ainekava: </b>
+            <a class="flex items-center hover:text-link-action"
+               href='{{../course.courseUrl}}' target='_blank'>{{../course.courseName}}
+                ({{../course.courseCode}})<span class="material-symbols-outlined">open_in_new</span>
+            </a>
+        </div>
     {{/if_equal}}
 
     <!-- NB! Files are only displayed on the Additional Materials pages.
@@ -83,11 +74,10 @@ open_in_new
             <ul class="markdown">
                 {{#each files}}
                     <li>
-                        <a
-                                href="#"
-                                class="markdown"
-                                onclick="window.open(
-                                        '{{this.download_url}}','_blank');"
+                        <a href="#"
+                           class="markdown"
+                           onclick="window.open(
+                                   '{{this.download_url}}','_blank');"
                         >{{this.name}}</a>
                     </li>
                 {{/each}}
@@ -102,6 +92,7 @@ open_in_new
   -->
 
     <div class='flex flex-wrap gap-4'>
+
         {{#ifInPaths path.fullPath backAndForwardPaths }}
             {{#if_not_equal ../path.fullPath ../backAndForwardPaths.[0].path }}
                 <a class="btn btn-secondary" href="/course/{{../path.courseId}}/{{../returnPreviousPage ../path.fullPath
@@ -117,9 +108,8 @@ open_in_new
             {{/if_not_equal }}
         {{/ifInPaths }}
 
-
         {{#ifInPaths path.fullPath markAsDonePaths }}
-            {{#unless (isTeacher user)}}
+            {{#unless (isTeacher ../user)}}
                 {{#ifInMarkedComponents ../../path.componentUUId ../../markedAsDoneComponentsArr }}
                     <form method="POST" action="/remove-component-as-done" name="removeComponentAsDone"
                           id="removeComponentAsDone">

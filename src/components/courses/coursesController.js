@@ -95,12 +95,13 @@ const renderPage = async (req, res) => {
     selectedVersion,
     markedAsDoneComponentsArr,
     allTeams,
-    user
+    user,
+    resComponents,
+    resFiles,
+    resSources,
+    refBranch
   } = res.locals;
 
-  const {
-    resComponents, resFiles, resSources, refBranch
-  } = res.locals;
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
   const componentDecoded = base64.decode(resComponentsContent);
