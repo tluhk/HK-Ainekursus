@@ -93,6 +93,7 @@ const getComponentsUUIDs = async (repoUrl) => {
   // get config.json for the repo
   // from file get: "practices":[{"slug":"praktikum_01","name":"Näidis
   // Praktikum","uuid":"eb040d98-f24a-43f6-92bb-12af08d2d32c"}]
+
   const [owner, repo] = repoUrl.replace('https://github.com/', '').split('/');
   const cacheName = `componentsUUIDs+${ repo }`;
   let keysArray = [];
@@ -100,9 +101,27 @@ const getComponentsUUIDs = async (repoUrl) => {
   if (!cacheComponentsUUIds.has(cacheName)) {
     const configJson = await getFile(owner, repo, 'config.json');
     if (configJson) {
-      const data = JSON.parse(configJson.content);
-      keysArray = data.practices.map(
-        (p) => p.uuid);
+      const config = JSON.parse(configJson.content);
+
+      const allComponentSlugs = [];
+
+      config.lessons.forEach((lesson) => {
+        allComponentSlugs.push(lesson.components);
+      });
+
+      const allComponentSlugsFlat = [].concat(...allComponentSlugs);
+      // console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
+
+      keysArray = [
+        ...config.concepts
+          .filter((concept) => allComponentSlugsFlat.includes(concept.slug))
+          .map((concept) => concept.uuid),
+        ...config.practices
+          .filter((practice) => allComponentSlugsFlat.includes(practice.slug))
+          .map((practice) => practice.uuid)
+      ];
+      //keysArray = data.practices.map(
+      //  (p) => p.uuid);
     }
     cacheComponentsUUIds.set(cacheName, keysArray);
   } else {

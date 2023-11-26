@@ -28,18 +28,17 @@
                 </div>
 
                 <div class="block">
-
                     <div class="headers">
                         <div class="scroller syncscroll">
                             <div class="flex bg-table-header-cell mx-auto"
-                                 style="width:calc(12rem + 12rem * {{courseData.config.lessons.length }})">
+                                 style="width:calc(12rem + 12rem * {{courseData.courseBranchComponentsUUIDs.length }})">
                                 <div class="sticky left-0 basis-48 grow-0 shrink-0 bg-table-header-cell border-r border-r-neutral-200"></div>
                                 <div class="flex w-full">
                                     {{#each courseData.config.lessons }}
                                         <div class="cell bg-table-header-cell p-3 font-bold text-center flex-shrink-0 flex-grow-0"
                                              style="flex-basis:calc(12rem * {{this.components.length}})"><a
-                                                href="/course/{{../courseData.id}}/{{this.slug}}?ref={{../courseData.refBranch}}
-                                            ">{{this.name}}</a></div>
+                                                href="/course/{{../courseData.id}}/{{this.slug}}?ref=master">{{this.name}}</a>
+                                        </div>
                                     {{/each }}
                                 </div>
                             </div>
@@ -54,8 +53,7 @@
                                             <div class="cell bg-table-header-cell text-center basis-48 flex-shrink-0 flex-grow-0">
                                                 {{#with
                                                         (showComponentName this ../../courseData.config.concepts ../../courseData.config.practices)}}
-                                                    <a href="/course/{{../../../courseData.courseSlug}}/{{../../this.slug}}/{{../this}}?ref={{../../../courseData.refBranch}}
-                                                    ">{{this}}</a>
+                                                    <a href="/course/{{../../../courseData.id}}/{{../../this.slug}}/{{../this}}?ref=master">{{this}}</a>
                                                 {{/with}}
                                             </div>
                                         {{/each }}
@@ -76,7 +74,7 @@
                                         {{#each this.components}}
                                             {{#ifInMarkedComponents
                                                     (showComponentUUID this ../../../courseData.config.concepts ../../../courseData.config.practices)
-                                                    ../../this.markedAsDoneComponents}}
+                                                    ../../this.uuids}}
                                                 <div class="cell p-1 basis-48 flex-shrink-0 flex-grow-0"><span
                                                         class="material-symbols-outlined">task_alt</span></div>
                                             {{else}}

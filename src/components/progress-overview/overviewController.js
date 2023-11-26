@@ -33,22 +33,22 @@ const allOverviewController = {
       course.users = course.users.map((user) => {
         let uuids = done.filter(
           courses => courses.githubID === user.id.toString())[0]?.uuid || [];
-        uuids = uuids.map(
-          u => courseBranchComponentsUUIDs.find(c => c.uuid === u).name);
+        //uuids = uuids.map(
+        //  u => courseBranchComponentsUUIDs.find(c => c.uuid === u).name);
         const displayName = user.firstName + ' ' + user.lastName;
 
         return { userId: user.id, uuids, displayName };
       });
 
-      const asjad = await allCoursesController.allCoursesActiveWithComponentsUUIDs(
-        [course]);
-      console.log(course);
+      course.courseBranchComponentsUUIDs = await getComponentsUUIDs(
+        course.repository);
+
       course.components = courseBranchComponentsUUIDs.map(c => c.name);
       // joonista tabel
       // 1. head -> ' ' + foreach components
       // 2. body -> users.foreach
       // 2.1 user.displayName + components.foreach -> user.uuids.includes(comp)
-      //console.log(course);
+      console.log(course);
       return res.render('overview-stats', {
         user: req.user,
         courseData: course
