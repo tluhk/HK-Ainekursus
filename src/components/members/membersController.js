@@ -31,8 +31,16 @@ const membersController = {
     if (!userInOrgMembers) {
       return false;
     }
-    console.log(userInOrgMembers.data);
+
     return userInOrgMembers.data.data;
+  },
+  getUserData: async (userId) => {
+    const userData = await usersApi.get(membersRequests.requestMembers + userId)
+      .catch((e) => console.log('❌❌ no user found', e));
+    if (!userData) {
+      return false;
+    }
+    return userData.data.data;
   }
 };
 

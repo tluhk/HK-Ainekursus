@@ -136,6 +136,7 @@ export default function hbsHelpers(hbs) {
         return user?.roles?.includes('teacher') || false;
       },
       findTeacher: (teacherName, teachers) => {
+        console.log(teacherName, teachers);
         const teacherData = teachers?.find(
           (x) => (x.firstName + ' ' + x.lastName) === teacherName);
         // console.log('teacherData2:', teacherData);

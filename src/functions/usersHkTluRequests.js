@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const membersRequests = {
-  requestMembers: 'users',
+  requestMembers: 'users/',
   requestGroups: 'groups/user/',
   getUser: 'users/github/',
   getCourse: 'groups/',

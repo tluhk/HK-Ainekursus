@@ -1,11 +1,13 @@
 <!-- dashboard-teacher.teacherCourses.handlebars -->
 <div>
     <h2>Teised õppejõud</h2>
-    <p>Siin näed infot teiste õppejõudude ja nende kursuste kohta.</p>
+
     <div class="flex flex-col gap-2 pt-4 pb-4">
-        {{#each teacherCourses }}
-            <div class="py-2">
-                {{#with (findTeacher @key ../teachers)}}
+        {{#if teacherCourses.length}}
+            <p>Siin näed infot teiste õppejõudude ja nende kursuste kohta.</p>
+            {{#each teacherCourses }}
+                <div class="py-2">
+
                     <div class="flex flex-row gap-4 items-center">
                         <div>
                             <img src="{{ this.avatar_url }}" alt="Avatar" class="w-16 rounded-full">
@@ -19,15 +21,18 @@
                             {{/if}}
                         </div>
                     </div>
-                {{/with }}
-                <ul class="list-none mt-2">
-                    {{#each this }}
-                        <li><a class="text-lg font-bold" href="/course/{{this.courseSlug}}/about?ref={{this.refBranch}}
-                            ">{{this.courseName}}</a>
-                        </li>
-                    {{/each }}
-                </ul>
-            </div>
-        {{/each }}
+
+                    <ul class="list-none mt-2">
+                        {{#each this.courses}}
+                            <li><a class="text-lg font-bold"
+                                   href="/course/{{this.id}}/about?ref=master">{{this.name}}</a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{/each }}
+        {{else}}
+            <p>Teiste õppejõudude kursused puuduvad...</p>
+        {{/if}}
     </div>
 </div>

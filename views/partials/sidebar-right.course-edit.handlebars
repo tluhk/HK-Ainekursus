@@ -6,8 +6,32 @@
 
     {{#if_equal path.refBranch 'master'}}
         {{#unless (isTeacher user)}}
+            <div class="card-header m-0">Ainekursuse versioonid:</div>
+            <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
+                <!-- Radio buttons -->
+                {{#each ../../branches }}
 
-            <div class="card-header m-0">Versioonid:</div>
+                    <div class="radio flex items-center">
+                        <input {{setDefaultChecked this ../../refBranch ../../selectedVersion ../../branches }}
+                                id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio"
+                                onclick="handleRadioClick('{{this}}')"/>
+                        <label for="default-radio-{{@index}}" class="radio-label w-full ml-2 text-sm font-medium"
+                               onclick="handleRadioClick('{{this}}')"> {{this }}</label><span
+                            class="radio-check"></span>
+                    </div>
+
+                {{/each }}
+                <hr class="my-4">
+                <form action="/add-version" method="post">
+                    <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}"/>
+                    <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}"/>
+
+                    <input type="text" name="version" id="version" class="input-single h-8" required
+                           placeholder="arhiivi nimi"/>
+                    <button type="submit" class="btn btn-primary w-full mt-2 min-h-min">Arhiveeri</button>
+                </form>
+                <hr class="my-4">
+            </div>
             <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
                 <button class="btn btn-primary my-4">Avalda</button>
                 <button class="btn btn-primary my-4">Salvesta</button>

@@ -23,7 +23,7 @@ import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
 import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
 import getCourseData from '../../functions/getCourseData.js';
-import { getUserData } from '../../functions/githubUsersFuncs.js';
+import { getCombinedUserData } from '../../functions/githubUsersFuncs.js';
 import { axios } from '../../setup/setupGithub.js';
 import * as cheerio from 'cheerio';
 
@@ -329,7 +329,7 @@ const allCoursesController = {
     const isTeacher = req.user.roles.includes('teacher');
 
     const start3 = performance.now();
-    const allCourses = await getAllCoursesData(req);
+    let allCourses = await getAllCoursesData(req);
 
     const end3 = performance.now();
     console.log(`Execution time getAllCoursesData: ${ end3 - start3 } ms`);
@@ -382,9 +382,10 @@ const allCoursesController = {
       /*
        * Filter allCoursesActive where the teacher is logged-in user
        */
-      //const allTeacherCourses = allCourses.filter(
-      //  (course) => course.teacherUsername === req.user.username);
-      // console.log('allTeacherCourses1:', allTeacherCourses);
+      allCourses = allCourses.filter(
+        (course) => course.teachers.some(t => t.id === req.user.userId));
+
+      //console.log('allTeacherCourses1:', allTeacherCourses);
 
       /*
        * Sort allTeacherCourses, these are teacher's own courses
@@ -479,11 +480,11 @@ const allCoursesController = {
     /** Following describes different DASHBOARD logics for STUDENT, based on given coursesDisplayBy */
     if (!isTeacher) {
 
-      /* These are teachers of student's courses.
-       * 1) group by teacher name
-       * 2) then sort by teacher name and by each teacher's courses
-       * */
-      //console.log(allCourses);
+      /*
+       * Filter allCoursesActive where the user is logged-in user
+       */
+      allCourses = allCourses.filter(
+        (course) => course.users.some(t => t.id === req.user.userId));
 
       // Create an object to store the grouped data
       const allCoursesGroupedByTeacher = {};
@@ -503,7 +504,7 @@ const allCoursesController = {
             // If the teacher is not in the grouped data, create a new entry
             // for them
             // todo fetch teacher avatar_url from github
-            getUserData('mrtrvl').then((gitUserData) => {
+            getUserData(teacher.id).then((gitUserData) => {
               teacher.avatar_url = gitUserData.data.avatar_url;
             });
             allCoursesGroupedByTeacher[displayName] = [course];
@@ -1166,25 +1167,49 @@ const allCoursesController = {
   getOtherTeachersCourses: async (req, res, next) => {
     const user = req.user;
 
-    let allCourses = await apiRequests.getAllCourses();
+    const allCourses = await apiRequests.getAllCourses();
 
-    //console.log(allCourses.data);
     if (!allCourses.data.data.length > 0) {
       res.redirect('/');
     }
 
-    allCourses.data.data.forEach((c) => c.teachers = JSON.parse(c.teachers));
-
-    allCourses = allCourses.data.data.filter(
+    let teacherCourses = allCourses.data.data.filter(
       course => !course.teachers.some(teacher => user.userId === teacher.id)
     );
 
-    console.log(user, allCourses);
+    // Flatten the array
+    let flatArray = await Promise.all(
+      teacherCourses.flatMap(
+        async course => {
+          return await Promise.all(course.teachers.map(
+            async teacher => {
+              const teacherData = await getCombinedUserData(teacher.id);
+              teacher.displayName = teacher.firstName + ' ' +
+                teacher.lastName;
+              teacher.avatar_url = teacherData.github.avatar_url;
+              delete course.teachers;
+              delete course.users;
+              return { ...teacher, course: course };
+            }));
+        }));
+
+    //Sort by teacher name
+    let sortedArray = flatArray.flat().sort(
+      (a, b) => a.displayName.localeCompare(b.displayName));
+
+    //const result = [];
+    teacherCourses = Object.values(
+      sortedArray.reduce((acc, { course, ...x }) => {
+        acc[x.id] = acc[x.id] || { ...x, courses: [] };
+        acc[x.id].courses.push(course);
+        return acc;
+      }, {}));
+
     return res.render('other-teachers', {
-      allCourses,
+      teacherCourses,
       user
     });
-    //return res.send('ok');
+
   },
   getOisContent: async (req, res) => {
     let longDescription = '';

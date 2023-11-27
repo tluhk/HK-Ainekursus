@@ -27,7 +27,9 @@ const allOverviewController = {
       const course = await apiRequests.getCourseById(courseId);
       const courseConfig = await getCourseData(course, 'master');
       course.config = courseConfig.config;
-      let courseBranchComponentsUUIDs = courseConfig.config.practices;
+      let courseBranchComponentsUUIDs = courseConfig.config.practices
+        ? courseConfig.config.practices
+        : [];
       const done = await markedAsDone(courseId);
 
       course.users = course.users.map((user) => {
@@ -56,6 +58,12 @@ const allOverviewController = {
     } else {
       // 1. leia kõik õpetaja kursused
       let allCourses = await getAllCoursesData(req);
+      /*
+       * Filter allCoursesActive where the teacher is logged-in user
+       */
+      allCourses = allCourses.filter(
+        (course) => course.teachers.some(t => t.id === req.user.userId));
+
       // 2. leia kõik mida saab märkida tehtuks
       const withComponentsUUIDs = await
         allCoursesController.allCoursesActiveWithComponentsUUIDs(allCourses);
