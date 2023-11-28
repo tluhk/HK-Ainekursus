@@ -88,7 +88,7 @@
 
     function confirmAction() {
         // Handle the OK button action
-        window.location.href = 'http://localhost:3000/course-edit/' + courseCode + '/about?ref=master';
+        window.location.href = window.location.origin + '/course-edit/' + courseCode + '/about?ref=master';
         hideModal();
     }
 
@@ -105,7 +105,7 @@
         document.getElementById('submitForm').disabled = true;
         document.getElementById('loading').style.display = 'flex';
         // handle submit
-        fetch('http://localhost:3000/add-course', {
+        fetch(window.location.origin + '/add-course', {
             method: 'post',
             body: JSON.stringify({ oisUrl: document.getElementById('oisUrl').value }),
             headers: {
