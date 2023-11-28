@@ -17,12 +17,10 @@ import pool from './db.js';
 import {
   allCoursesController,
   renderEditPage,
-  renderPage,
   responseAction
 } from './src/components/courses/coursesController.js';
 import otherController from './src/components/other/otherController.js';
 import membersController from './src/components/members/membersController.js';
-import teamsController from './src/components/teams/teamsController.js';
 import allNotificationsController
   from './src/components/notifications/notificationsController.js';
 /** Import handlebars helpers: https://stackoverflow.com/a/32707476 */
@@ -31,17 +29,15 @@ import handlebarsFactory from './src/helpers/handlebars.js';
 import resetSelectedVersion from './src/middleware/resetSelectedVersion.js';
 import ensureAuthenticated from './src/middleware/ensureAuthenticated.js';
 import validateTeacher from './src/middleware/validateTeacher.js';
-import getTeamAssignments from './src/middleware/getTeamAssignments.js';
 /** Import routes */
 import logoutRoutes from './src/routes/logout.js';
 import progressRoutes from './src/routes/progress.js';
-import saveEmailRoutes from './src/routes/save-email.js';
-import saveDisplayNameRoutes from './src/routes/save-username.js';
 import removeAsDone from './src/routes/remove-as-done.js';
 import markAsDone from './src/routes/mark-as-done.js';
 import addNewCourseRoutes from './src/routes/add-new-course.js';
 import addNewVersionRoutes from './src/routes/add-new-version.js';
 import courseRoutes from './src/components/courses/coursesRoutes.js';
+import roleRoutes from './src/components/role-select/role-select.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -243,23 +239,7 @@ passport.use(
           avatar_url: _json.avatar_url
         };
 
-        /**
-         * Read user data from DB.
-         * If user NOT in DB, insert user data.
-         * If user is in DB, read its data. Get displayName and email info from
-         * DB. Then store it to user profile.
-         */
-        /*const userDataAfterDB = await userDBFunction(userData);
-
-         if (userDataAfterDB &&
-         userDataAfterDB.displayName &&
-         profile.displayName !== userDataAfterDB.displayName
-         ) {
-         profile.displayName = userDataAfterDB.displayName;
-         if (userDataAfterDB.email) profile.email = userDataAfterDB.email;
-         }*/
-
-        console.log('Logging in...', userData);
+        //console.log('Logging in...', userData);
         /**
          * Return user profile with a successful login,
          */
@@ -311,10 +291,12 @@ app.post('/login', async (req, res, next) => {
   const userInOrgMembers = await membersController.isUserInOrgMembers(
     req.body.login
   );
+
   if (!userInOrgMembers) {
     console.log(`Invalid login – entered username is not in tluhk org members`);
     return res.redirect('/login?invalid=true');
   }
+
   return passport.authenticate('github', {
     login: req.body.login
   })(req, res, next);
@@ -334,6 +316,8 @@ app.get(
     scope: ['user']
   })
 );
+
+app.use('/role-select', roleRoutes);
 
 /** From here on, following endpoints are available only with successful login and authentication */
 app.use(ensureAuthenticated);

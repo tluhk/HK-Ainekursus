@@ -483,8 +483,9 @@ const allCoursesController = {
       /*
        * Filter allCoursesActive where the user is logged-in user
        */
-      allCourses = allCourses.filter(
-        (course) => course.users.some(t => t.id === req.user.userId));
+      console.log(allCourses);
+      allCourses = allCourses?.filter(
+        (course) => course?.students.some(t => t.id === req.user.userId));
 
       // Create an object to store the grouped data
       const allCoursesGroupedByTeacher = {};
@@ -503,9 +504,8 @@ const allCoursesController = {
           } else {
             // If the teacher is not in the grouped data, create a new entry
             // for them
-            // todo fetch teacher avatar_url from github
-            getUserData(teacher.id).then((gitUserData) => {
-              teacher.avatar_url = gitUserData.data.avatar_url;
+            getCombinedUserData(teacher.id).then((gitUserData) => {
+              teacher.avatar_url = gitUserData.github.avatar_url;
             });
             allCoursesGroupedByTeacher[displayName] = [course];
           }

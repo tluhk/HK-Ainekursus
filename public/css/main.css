@@ -2127,9 +2127,6 @@ input:checked ~ .tab-content {
 .content-center{
   align-content: center;
 }
-.content-end{
-  align-content: flex-end;
-}
 .items-start{
   align-items: flex-start;
 }
