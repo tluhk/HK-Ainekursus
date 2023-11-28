@@ -738,10 +738,9 @@ const allCoursesController = {
     course = { ...course, ...courseConfig };
 
     res.locals.course = course;
-    /** Get all teachers */
-    const allTeachers = []; //await teamsController.getUsersInTeam('teachers');
+     //await teamsController.getUsersInTeam('teachers');
     // console.log('allTeachers0:', allTeachers);
-    res.locals.teachers = allTeachers;
+    res.locals.teachers = [];
 
     /** Check if course Repo has a branch that matches user team's slug.
      * -- If yes, then all GitHub requests must refer to this branch. In the
@@ -1074,7 +1073,6 @@ const allCoursesController = {
     res.locals.breadcrumbNames = breadcrumbNames;
     res.locals.path = path;
 
-    console.log(course);
     return next();
   },
 
@@ -1089,10 +1087,10 @@ const allCoursesController = {
 
     const allCoursesActiveDoneComponentsArr = await Promise.all(
       allCoursesActiveDoneComponentsPromises);
-    console.log(
-      'allCoursesActiveDoneComponentsArr1:',
-      allCoursesActiveDoneComponentsArr
-    );
+    /*console.log(
+     'allCoursesActiveDoneComponentsArr1:',
+     allCoursesActiveDoneComponentsArr
+     );*/
 
     /** Then, again for each course, add the respective array of done components as a key-value pair: */
     allCoursesActive.forEach((course, index) => {
@@ -1164,7 +1162,7 @@ const allCoursesController = {
       b.course ? 1 : b.course > a.course ? -1 : 0);
   },
 
-  getOtherTeachersCourses: async (req, res, next) => {
+  getOtherTeachersCourses: async (req, res) => {
     const user = req.user;
 
     const allCourses = await apiRequests.getAllCourses();
