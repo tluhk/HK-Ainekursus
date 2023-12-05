@@ -213,12 +213,11 @@ const renderEditPage = async (req, res) => {
     teachers,
     branches,
     selectedVersion,
-    allTeams
-  } = res.locals;
-
-  const {
+    allTeams,
     resComponents, resFiles, resSources, refBranch
   } = res.locals;
+
+  //console.log(res.locals);
   /** Sisulehe sisu lugemine */
   const resComponentsContent = resComponents.data.content;
   const componentDecoded = base64.decode(resComponentsContent);
@@ -313,8 +312,8 @@ const renderEditPage = async (req, res) => {
     selectedVersion,
     refBranch,
     currentPath: req.body.currentPath,
-    allTeams,
-    years,
+    //allTeams,
+    //years,
     allConcepts
   };
 
@@ -738,7 +737,7 @@ const allCoursesController = {
     course = { ...course, ...courseConfig };
 
     res.locals.course = course;
-     //await teamsController.getUsersInTeam('teachers');
+    //await teamsController.getUsersInTeam('teachers');
     // console.log('allTeachers0:', allTeachers);
     res.locals.teachers = [];
 
@@ -1186,7 +1185,7 @@ const allCoursesController = {
                 teacher.lastName;
               teacher.avatar_url = teacherData.github.avatar_url;
               delete course.teachers;
-              delete course.users;
+              delete course.students;
               return { ...teacher, course: course };
             }));
         }));

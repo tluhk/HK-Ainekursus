@@ -24,7 +24,7 @@
                     <p class="flex items-start gap-2 m-0 p-0"><span
                             class="material-symbols-outlined">calendar_month</span>{{courseData.semester}}</p>
                     <p class="flex items-start gap-2 m-0 p-0"><span
-                            class="material-symbols-outlined">person</span>{{courseData.users.length}}</p>
+                            class="material-symbols-outlined">person</span>{{courseData.students.length}}</p>
                 </div>
 
                 <div class="block">
@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="tracks syncscroll"> <!-- body part -->
-                        {{#each courseData.users}}
+                        {{#each courseData.students}}
                             <div class="hoverrow mx-auto flex hover:bg-table-hover-cell"
                                  style="width:calc(12rem + 12rem * {{../courseData.courseBranchComponentsUUIDs.length }})">
                                 <div class="hoverrowchild bg-table-header-cell hover:bg-table-hover-cell cell p-1 basis-48 sticky left-0">{{this.displayName}}{{!-- comp: {{this.markedAsDoneComponents}} --}}</div>

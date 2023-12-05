@@ -32,7 +32,7 @@ const allOverviewController = {
         : [];
       const done = await markedAsDone(courseId);
 
-      course.users = course.users.map((user) => {
+      course.students = course.students.map((user) => {
         let uuids = done.filter(
           courses => courses.githubID === user.id.toString())[0]?.uuid || [];
         //uuids = uuids.map(

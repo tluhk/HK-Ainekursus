@@ -72,4 +72,35 @@
         });
     });
 
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
+    // Select the form
+    const form = document.getElementById('general-form');
+
+    // Add event listener for input changes
+    form.addEventListener('input', debounce(function () {
+        const formData = new FormData(form);
+
+        // add file
+        const filesInput = document.querySelector('input[type="file"]');
+        formData.append('file', filesInput.files[0]);
+
+        // Send a POST request
+        fetch('/course-edit', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+                .then(data => console.log(data))
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+    }, 500));  // 500ms delay
+
 </script>
