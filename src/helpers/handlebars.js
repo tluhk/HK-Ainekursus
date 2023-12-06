@@ -183,7 +183,8 @@ export default function hbsHelpers(hbs) {
         // console.log('branchSlug5:', branchSlug);
         // console.log('refBranch5:', refBranch);
         // console.log('selectedVersion5:', selectedVersion);
-        // console.log('branches5:', branches);
+        //console.log('branches5:', branchSlug, refBranch, selectedVersion,
+        // branches);
 
         /**
          * For students
@@ -191,7 +192,7 @@ export default function hbsHelpers(hbs) {
         if (selectedVersion && branchSlug === selectedVersion) {
           return 'checked';
         }
-        if (!selectedVersion && branchSlug === refBranch) {
+        if (!selectedVersion && (branchSlug === refBranch)) {
           return 'checked';
         }
         if (

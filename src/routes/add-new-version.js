@@ -16,7 +16,7 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
   let error = '';
   // 1. validate request
   if (
-    req.body.courseSlug
+    req.body.courseId
     && req.body.version
     && req.body.parentBranch
   ) {
@@ -24,16 +24,15 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
       auth: process.env.AUTH
     });
 
-    const template_owner = process.env.REPO_ORG_NAME;
     const ref = req.body.parentBranch;
     // 2. get repo from courseSlug
-    const repoName = (await getAllCoursesData('teachers', req)).find(
-      (course) => course.courseSlug === req.body.courseSlug
-    ).courseSlugInGithub;
+    const repoName = (await getAllCoursesData(req)).find(
+      (course) => course.id == req.body.courseId
+    ).repository.replace('https://github.com/', '');
 
     // 3. get parent branch sha
     const parent = await octokit.request(
-      `GET /repos/${ template_owner }/${ repoName }/git/ref/heads/${ ref }`,
+      `GET /repos/${ repoName }/git/ref/heads/${ ref }`,
       {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28'
@@ -44,7 +43,7 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
 
     // 4. create new branch/ref
     const newBranch = await octokit.request(
-      `POST /repos/${ template_owner }/${ repoName }/git/refs`,
+      `POST /repos/${ repoName }/git/refs`,
       {
         ref: 'refs/heads/' + req.body.version,
         sha: parentSha,
@@ -55,16 +54,16 @@ router.post('/', ensureAuthenticated, validateTeacher, async (req, res) => {
     );
 
     // 7. get status=201, redirect back to the course page
-    cacheBranches.del(`${ template_owner }/${ repoName }+branches`);
+    cacheBranches.del(`${ repoName }+branches`);
     if (newBranch.status === 201) {
       const backURL = req.header('Referer') || '/';
-      res.redirect(backURL);
+      return res.redirect(backURL);
     } else {
       error = 'Uut versiooni ei saanud luua';
-      res.send(error);
+      return res.send(error);
     }
   } else {
-    res.send('invalid data');
+    return res.send('invalid data');
   }
 });
 

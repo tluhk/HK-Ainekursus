@@ -4,36 +4,36 @@
 
     <!-- Branch (version) selection menu. Only visible to 'teachers' team -->
 
-    {{#if_equal path.refBranch 'master'}}
-        {{#if (isTeacher ../user)}}
-            <div class="card-header m-0">Ainekursuse versioonid:</div>
-            <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
-                <!-- Radio buttons -->
-                {{#each ../../branches }}
 
-                    <div class="radio flex items-center">
-                        <input {{setDefaultChecked this ../../refBranch ../../selectedVersion ../../branches }}
-                                id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio"
-                                onclick="handleRadioClick('{{this}}')"/>
-                        <label for="default-radio-{{@index}}" class="radio-label w-full ml-2 text-sm font-medium"
-                               onclick="handleRadioClick('{{this}}')"> {{this }}</label><span
-                            class="radio-check"></span>
-                    </div>
-
-                {{/each }}
-                <hr class="my-4">
-                <form action="/add-version" method="post">
-                    <input type="hidden" name="parentBranch" id="currentPath" value="{{../refBranch}}"/>
-                    <input type="hidden" name="courseSlug" id="courseSlug" value="{{../path.courseSlug}}"/>
-
+    {{#if (isTeacher user)}}
+        <div class="card-header m-0">Ainekursuse versioonid:</div>
+        <div class="pl-2 pb-4 mt-4 space-y-1 text-sm flex flex-col gap-2">
+            <!-- Radio buttons -->
+            {{#each branches }}
+                <div class="radio flex items-center">
+                    <input {{setDefaultChecked this ../path.refBranch ../selectedVersion ../branches }}
+                            id="default-radio-{{@index}}" type="radio" value="{{this}}" name="default-radio"
+                            onclick="handleRadioClick('{{this}}')"/>
+                    <label for="default-radio-{{@index}}" class="radio-label w-full ml-2 text-sm font-medium"
+                           onclick="handleRadioClick('{{this}}')"> {{this }}</label><span
+                        class="radio-check"></span>
+                </div>
+            {{/each }}
+            <hr class="my-4">
+            <form action="/add-version" method="post">
+                <input type="hidden" name="parentBranch" id="parentBranch" value="{{refBranch}}"/>
+                <input type="hidden" name="courseId" id="courseId" value="{{path.courseId}}"/>
+                {{#if_equal selectedVersion 'master'}}
                     <input type="text" name="version" id="version" class="input-single h-8" required
                            placeholder="arhiivi nimi"/>
                     <button type="submit" class="btn btn-primary w-full mt-2 min-h-min">Arhiveeri</button>
-                </form>
-                <hr class="my-4">
-            </div>
-        {{/if}}
-    {{/if_equal}}
+                    <hr class="my-4">
+                {{/if_equal}}
+            </form>
+
+        </div>
+    {{/if}}
+
 
     <!-- Table of contents -->
 
