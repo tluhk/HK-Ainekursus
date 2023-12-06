@@ -60,12 +60,11 @@ router.post(
       );
 
       if (oisCodeExists) {
-        res.status(400)
+        return res.status(400)
           .send({
             msg: 'duplicate',
             courseCode: tmpSlug
           });
-        return next;
       }
 
       // fetch OIS content
@@ -111,19 +110,19 @@ router.post(
       }
       if (!courseName || !longDescription || errorMessage) {
         errorMessage = 'Kontrolli ÕIS`i linki, andmeid ei leitud';
-        res.status(400).send({ msg: errorMessage });
-        return next;
+        return res.status(400).send({ msg: errorMessage });
       }
 
       // check for repo name availability
       let repoName = slugify(`${ repo_prefix }${ courseName }`);
       const nameExists = cacheTeamCourses.get('allCoursesData+teachers');
+      //console.log(nameExists);
       if (nameExists) {
         nameExists.data?.filter((course) => course.full_name.startsWith(
           `${ templateOwner }/${ repoName }`
         ));
       }
-      if (nameExists.length) {
+      if (nameExists && nameExists.length) {
         // we have matching name, lets add suffix
         let suffix = 1;
         while (
@@ -152,9 +151,9 @@ router.post(
             'X-GitHub-Api-Version': '2022-11-28'
           }
         }).catch((err) => {
-        console.log(err);
+        //console.log(err);
         errorMessage = 'Kursuse loomine ebaõnnestus';
-        res.status(400).send({ msg: errorMessage });
+        return res.status(400).send({ msg: errorMessage });
       });
 
       if (created.status === 201) {
@@ -214,30 +213,30 @@ router.post(
           ).then(() => console.log('Readme updated'));
         }
 
-        console.log(`✅✅  /course-edit/${ tmpSlug }/`);
+        //console.log(`✅✅  /course-edit/${ tmpSlug }/`);
         cacheTeamCourses.del('allCoursesData+teachers');
-
         // add course via users API
-        await usersApi.post(membersRequests.requestGroups, {
+        await usersApi.post(membersRequests.getAllCourses, {
           name: courseName,
           repository: created.data.html_url,
           code: oisCode,
           credits: oisEAP,
-          form: oisGrading
+          form: oisGrading,
+          userId: user.userId
         }).catch((err) => {
-          console.log('Grupi lisamine ebaõnnestus');
-        }).then();
+          console.log('Grupi lisamine ebaõnnestus:', err.response.statusText);
+        }).then((apiResponse) => {
+          return res.status(201)
+            .send({
+              msg: 'Kursus lisatud',
+              courseCode: tmpSlug,
+              courseId: apiResponse.data.data.id
+            });
+        });
 
-        res.status(201)
-          .send({
-            msg: 'OK',
-            courseCode: tmpSlug
-          });
-        return next();
       }
     } else {
-      errorMessage = 'Kontrolli andmeid';
-      res.status(400).send({ msg: errorMessage });
+      return res.status(400).send({ msg: 'Kontrolli andmeid' });
     }
   }
 );

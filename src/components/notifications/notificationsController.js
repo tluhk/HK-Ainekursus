@@ -20,23 +20,23 @@ const allNotificationsController = {
         const commitsRaw = await apiRequestsCommits.commitsService(
             activeCourse.repository.replace('https://github.com/', ''),
             'master' //activeCourse.refBranch
-          );
+          ) || [];
 
         /**
          * Then filter out commits that have commit_count more than 0. This
          * means teacher has added custom comment that should be displayed on
          * webapp.
          */
-        const commitsWithComments = commitsRaw.data?.filter(
+        const commitsWithComments = commitsRaw?.data?.filter(
           (commit) => commit.commit.comment_count > 0
         );
 
         /**
          * For such commits, get commit SHAs.
          */
-        const commitSHAsWithComments = commitsWithComments.map(
+        const commitSHAsWithComments = commitsWithComments?.map(
           (commit) => commit.sha
-        );
+        ) || [];
 
         /*
          * Then get comments that are linked to those commit SHAs. Save those comments to array. These are your course updates.
