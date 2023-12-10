@@ -1,3 +1,12 @@
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked.
+ *
+ * @param {Function} func - The function to debounce.
+ * @param {number} wait - The number of milliseconds to delay.
+ * @return {Function} - Returns the debounced function.
+ */
 function debounce(func, wait) {
   let timeout;
   return function (...args) {
@@ -7,12 +16,32 @@ function debounce(func, wait) {
   };
 }
 
+/**
+ * Retrieves the value of the courseId element.
+ *
+ * @returns {string} The value of the courseId element.
+ */
 const courseId = document.getElementById('courseId').value;
 
+/**
+ * Handles the change event of a Markdown editor.
+ *
+ * @param {any} data - The updated Markdown data.
+ * @param {string} element - The name of the editor element.
+ *
+ * @return {void}
+ */
 function handleMDChange(data, element) {
   submitInput({ name: element, value: data });
 }
 
+/**
+ * Submits the changed input value to the server for saving.
+ *
+ * @param {{name: string, value: *}} input - The input element that has been
+ *   changed.
+ * @return {void}
+ */
 function submitInput(input) {
   const formData = new FormData();
   formData.append('courseId', courseId);
@@ -49,6 +78,12 @@ function submitInput(input) {
     .catch((e) => console.log('viga:', e));
 }
 
+/**
+ * Handles input change event and submits the input if its value has changed.
+ *
+ * @param {HTMLInputElement} input - The input element to handle.
+ * @return {void}
+ */
 function handleInputChange(input) {
   input.dataset.initialValue = input.value;
   input.addEventListener('input', debounce(function () {
