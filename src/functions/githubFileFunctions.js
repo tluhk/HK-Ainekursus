@@ -71,7 +71,7 @@ async function getTree(repo, branch = 'master') {
   });
 
   const tree = {};
-  content.data.tree.filter(
+  content.data?.tree?.filter(
     (t) => (t.path.includes('/') && t.type === 'blob')).forEach((item) => {
       const pathParts = item.path.split('/');
       const contentName = pathParts[0];
@@ -79,7 +79,9 @@ async function getTree(repo, branch = 'master') {
         // todo get name from about.md or readme.md
         tree[contentName] = [
           {
-            slug: pathParts[1],
+            slug: pathParts[1].endsWith('.md')
+              ? pathParts[1].slice(0, -3)
+              : pathParts[1],
             name: pathParts[1],
             uuid: uuidv4()
           }];
@@ -90,7 +92,9 @@ async function getTree(repo, branch = 'master') {
         // todo get name from about.md or readme.md
         tree[contentName].push(
           {
-            slug: pathParts[1],
+            slug: pathParts[1].endsWith('.md')
+              ? pathParts[1].slice(0, -3)
+              : pathParts[1],
             name: pathParts[1],
             uuid: uuidv4()
           });
@@ -107,8 +111,8 @@ async function getTree(repo, branch = 'master') {
 
     }
   );
-  console.log(JSON.stringify(tree, null, 2));
-  return false;
+  //console.log(JSON.stringify(tree, null, 2));
+  return tree;
 }
 
 async function updateFile(
@@ -162,7 +166,8 @@ async function uploadFile(
   commitMessage,
   branch = 'master'
 ) {
-  const base64Content = new Buffer.from(file.data).toString('base64');
+  const base64Content = (file instanceof ArrayBuffer) ? new Buffer.from(
+    file.data).toString('base64') : base64.encode(file);
 
   return await octokit.request(
     `PUT /repos/${ owner }/${ repo }/contents/${ path }`, {

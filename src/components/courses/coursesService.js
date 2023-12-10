@@ -6,7 +6,7 @@ import {
 } from '../../setup/setupCache.js';
 import githubReposRequests from '../../functions/githubReposRequests.js';
 import { authToken } from '../../setup/setupGithub.js';
-import getConfig from '../../functions/getConfigFuncs.js';
+import { getConfig } from '../../functions/getConfigFuncs.js';
 import { Octokit } from 'octokit';
 import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
@@ -373,7 +373,7 @@ const apiRequests = {
       }
     );
     const parentSha = parent.data.object.sha;
-    console.log('sha', parentSha);
+    //console.log('sha', parentSha);
 
     // 4. create new branch/ref
     return await octokit.request(
@@ -398,7 +398,7 @@ const apiRequests = {
       }).catch(() => {
       console.log('Unable to fetch branches');
     });
-    return resp.data ? resp.data : [];
+    return (resp && resp.data) ? resp.data : [];
   },
   getAllCourses: async () => {
     return await usersApi.get(membersRequests.getAllCourses)

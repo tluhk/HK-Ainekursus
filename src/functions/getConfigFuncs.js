@@ -4,7 +4,7 @@ import utf8 from 'utf8';
 import { authToken, axios } from '../setup/setupGithub.js';
 import { cacheConfig } from '../setup/setupCache.js';
 import githubReposRequests from './githubReposRequests.js';
-import { getTree } from './githubFileFunctions.js';
+import { getTree, uploadFile } from './githubFileFunctions.js';
 
 const { requestConfig } = githubReposRequests;
 
@@ -26,8 +26,14 @@ const getRepoResponse = async (selectedCourse, refBranch) => {
 const validateConfig = (configObj, selectedCourse, refBranch) => {
   /** Validate that config includes all expected keys */
 
-  const expectedKeys = refBranch === 'master'
-    ? ['courseUrl', 'active', 'docs', 'lessons', 'concepts', 'practices']
+  const expectedKeys = refBranch === 'master' ? [
+      'courseUrl',
+      'active',
+      'docs',
+      'lessons',
+      'concepts',
+      'practices'
+    ]
     : [
       'courseUrl',
       'active',
@@ -36,36 +42,29 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
       'teacherUsername',
       'lessons',
       'concepts',
-      'practices'
-    ];
+      'practices'];
 
   const objectKeys = Object.keys(configObj);
   const hasAllKeys = expectedKeys.every((key) => objectKeys.includes(key));
 
   if (!hasAllKeys) {
     console.error(
-      `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected keys missing.`
-    );
+      `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected keys missing.`);
     return false;
   }
 
   /** Validate that docs, additionalMaterials, lessons, concepts and practices keys have Arrays as values and that each array consists of at least on elem (Arrays are not empty).  */
 
-  if (
-    !Array.isArray(configObj.docs)
-    || !configObj.docs.length > 0
-    || !Array.isArray(configObj.additionalMaterials)
-    || !configObj.additionalMaterials.length > 0
-    || !Array.isArray(configObj.lessons)
-    || !configObj.lessons.length > 0
-    || !Array.isArray(configObj.concepts)
-    || !configObj.concepts.length > 0
+  if (!Array.isArray(configObj.docs) || !configObj.docs.length > 0 ||
+    !Array.isArray(configObj.additionalMaterials) ||
+    !configObj.additionalMaterials.length > 0 ||
+    !Array.isArray(configObj.lessons) || !configObj.lessons.length > 0 ||
+    !Array.isArray(configObj.concepts) || !configObj.concepts.length > 0
     || !Array.isArray(configObj.practices)
     || !configObj.practices.length > 0
   ) {
     console.log(
-      `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected keys with incorrect type or empty array.`
-    );
+      `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected keys with incorrect type or empty array.`);
     return false;
   }
 
@@ -75,18 +74,12 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
     (key) => objectKeysDocs.includes(key));
 
   const objectKeysAdditionalMaterials = Object.keys(
-    configObj.additionalMaterials[0]
-  );
+    configObj.additionalMaterials[0]);
   const hasAllKeysAdditionalMaterials = expectedKeys2.every(
     (key) => objectKeysAdditionalMaterials.includes(key));
 
   const expectedKeys3 = [
-    'slug',
-    'name',
-    'uuid',
-    'components',
-    'additionalMaterials'
-  ];
+    'slug', 'name', 'uuid', 'components', 'additionalMaterials'];
 
   const hasAllKeysLessons = configObj.lessons.every((lesson) => {
     const objectKeysLesson = Object.keys(lesson);
@@ -94,24 +87,18 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
       (key) => objectKeysLesson.includes(key));
     if (!lessonHasAllKeys) {
       console.log(
-        `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys missing.`
-      );
+        `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys missing.`);
       return false;
     }
-    if (
-      !Array.isArray(lesson.components)
-      || !lesson.components.length > 0
-      || !Array.isArray(lesson.additionalMaterials)
-      || !lesson.additionalMaterials.length > 0
-    ) {
+    if (!Array.isArray(lesson.components) || !lesson.components.length > 0 ||
+      !Array.isArray(lesson.additionalMaterials) ||
+      !lesson.additionalMaterials.length > 0) {
       console.log(
-        `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys with incorrect type, or empty array.`
-      );
+        `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson keys with incorrect type, or empty array.`);
       return false;
     }
     const lessonKeysAdditionalMaterials = Object.keys(
-      lesson.additionalMaterials[0]
-    );
+      lesson.additionalMaterials[0]);
 
     // console.log('lessonKeysAdditionalMaterials1:',
     // lessonKeysAdditionalMaterials);
@@ -119,8 +106,7 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
       (key) => lessonKeysAdditionalMaterials.includes(key));
     if (!lessonAddMaterialsHaveKeys) {
       console.log(
-        `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson additionalMaterials array with missing keys.`
-      );
+        `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected lesson additionalMaterials array with missing keys.`);
       return false;
     }
     return true;
@@ -138,16 +124,10 @@ const validateConfig = (configObj, selectedCourse, refBranch) => {
     return expectedKeys4.every((key) => objectKeysPractice.includes(key));
   });
 
-  if (
-    !hasAllKeysDocs
-    || !hasAllKeysAdditionalMaterials
-    || !hasAllKeysLessons
-    || !hasAllKeysConcepts
-    || !hasAllKeysPractices
-  ) {
+  if (!hasAllKeysDocs || !hasAllKeysAdditionalMaterials || !hasAllKeysLessons ||
+    !hasAllKeysConcepts || !hasAllKeysPractices) {
     console.log(
-      `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected docs, additionalMaterials, lessons, concepts or practices array with missing keys or incorrect type.`
-    );
+      `Config file of ${ selectedCourse }, branch ${ refBranch } has one or more expected docs, additionalMaterials, lessons, concepts or practices array with missing keys or incorrect type.`);
     return false;
   }
   return true;
@@ -174,27 +154,11 @@ const getConfig = async (selectedCourse, refBranch) => {
     console.log(`✅ getConfig FROM CACHE: ${ selectedCourse }+${ refBranch }`);
   } else {
     console.log(
-      `❌ getConfig IS NOT from cache: ${ selectedCourse }+${ refBranch }`
-    );
+      `❌ getConfig IS NOT from cache: ${ selectedCourse }+${ refBranch }`);
     try {
       config = await getRepoResponse(selectedCourse, refBranch);
     } catch (error) {
       console.error(error);
-    }
-    if (!config) {
-      // todo create config.json
-      //const conf = getTree(selectedCourse, refBranch);
-      // tee uus json...
-
-      const conf = {
-        'courseName': 'Kursuse näide',
-        'courseUrl': 'https://ois2.tlu.ee/tluois/aine/HKI5080.HK',
-        'teacherUsername': 'seppkh',
-        'active': true,
-        'semester': 'S2019'
-
-      };
-
     }
 
     cacheConfig.set(routePath, config);
@@ -224,8 +188,7 @@ const getConfig = async (selectedCourse, refBranch) => {
     repairedConfigJSON = jsonrepair(configDecodedUtf8);
   } catch (error) {
     console.error(
-      `Config file of ${ selectedCourse }, branch ${ refBranch } is not object type or does not match JSON format.`
-    );
+      `Config file of ${ selectedCourse }, branch ${ refBranch } is not object type or does not match JSON format.`);
     return null;
   }
   // console.log('repairedConfigJSON8:', repairedConfigJSON);
@@ -267,4 +230,58 @@ const getConfig = async (selectedCourse, refBranch) => {
   return configObj;
 };
 
-export default getConfig;
+const createConfig = async (course, refBranch) => {
+  // todo create config.json
+
+  const conf = {
+    courseName: course.name,
+    courseUrl: 'https://ois2.tlu.ee/tluois/aine/' + course.code,
+    teacherUsername: course.teachers[0].firstName + ' ' +
+      course.teachers[0].lastName,
+    active: true,
+    semester: course.semester
+  };
+
+  const gitPath = course.repository.replace('https://github.com/', '');
+  const tree = await getTree(gitPath, refBranch);
+
+  // fix tree
+  // add missing parts
+  if (!tree.additionalMaterials) tree.additionalMaterials = [
+    {
+      slug: 'lisamaterjalid', name: 'Aine lisamaterjalid'
+    }];
+  if (!tree.practices) tree.practices = [
+    {
+      slug: 'praktikum_01',
+      name: 'Näidis Praktikum',
+      uuid: 'eb040d98-f24a-43f6-92bb-12af08d2d32c'
+    }];
+
+  tree.docs.push({
+    slug: 'about',
+    name: 'Aine info'
+  });
+
+  // fix lessons
+  tree.lessons.forEach(lesson => {
+    if (!lesson.components) {
+      lesson.components = ['naidis-sisuteema'];
+    }
+    if (!lesson.additionalMaterials) {
+      lesson.additionalMaterials = [
+        {
+          'slug': 'lisamaterjalid', 'name': 'Loengu lisamaterjalid'
+        }];
+    }
+  });
+
+  const [owner, repo] = gitPath.split('/');
+  await uploadFile(owner, repo, 'config.json',
+    JSON.stringify({ ...conf, ...tree }), 'config.json lisamine'
+  );
+
+  return { ...conf, ...tree };
+};
+
+export { getConfig, createConfig };

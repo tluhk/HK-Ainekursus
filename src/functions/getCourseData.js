@@ -1,4 +1,4 @@
-import getConfig from './getConfigFuncs.js';
+import { getConfig } from './getConfigFuncs.js';
 import { performance } from 'perf_hooks';
 import { cacheOisContent } from '../setup/setupCache.js';
 import { axios } from '../setup/setupGithub.js';
@@ -9,7 +9,7 @@ const getCourseData = (course, refBranch, validBranches) => getConfig(
   .then(async (config) => {
     if (!config) {
       console.log(`No config found for ${ course.name }, ${ refBranch }`);
-      return {};
+      return;
     }
 
     /** Read course information from ÕIS Ainekaart using the courseUrl value from config file.

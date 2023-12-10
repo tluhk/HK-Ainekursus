@@ -2,7 +2,7 @@ import { performance } from 'perf_hooks';
 import * as cheerio from 'cheerio';
 import { axios } from '../setup/setupGithub.js';
 import { cacheOisContent } from '../setup/setupCache.js';
-import getConfig from './getConfigFuncs.js';
+import { getConfig } from './getConfigFuncs.js';
 import dotenv from 'dotenv';
 import membersRequests from './usersHkTluRequests.js';
 import { usersApi } from '../setup/setupUserAPI.js';

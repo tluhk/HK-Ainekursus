@@ -12,7 +12,7 @@
  */
 const ensureAuthenticated = (req, res, next) => {
   // console.log('req.isAuthenticated1:', req.isAuthenticated);
-  console.log('req.user1:', req.user);
+  //console.log('req.user1:', req.user);
   if (req.isAuthenticated()) {
     // console.log('req.session1:', req.session);
     // console.log('req.session.passport.user.id1:',

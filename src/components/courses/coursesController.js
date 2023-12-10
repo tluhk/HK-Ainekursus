@@ -26,6 +26,7 @@ import getCourseData from '../../functions/getCourseData.js';
 import { getCombinedUserData } from '../../functions/githubUsersFuncs.js';
 import { axios } from '../../setup/setupGithub.js';
 import * as cheerio from 'cheerio';
+import { createConfig } from '../../functions/getConfigFuncs.js';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -482,7 +483,6 @@ const allCoursesController = {
       /*
        * Filter allCoursesActive where the user is logged-in user
        */
-      console.log(allCourses);
       allCourses = allCourses?.filter(
         (course) => course?.students.some(t => t.id === req.user.userId));
 
@@ -667,6 +667,7 @@ const allCoursesController = {
       courseId, contentSlug, componentSlug
     } = req.params;
 
+    //return res.send(`${ courseId }, ${ contentSlug }, ${ componentSlug }`);
     res.locals.user = req.user;
     const { ref } = req.query;
     const isTeacher = req.user.roles.includes('teacher');
@@ -685,7 +686,7 @@ const allCoursesController = {
      * selectedVersion variable is used down below to get correct course
      * version from GitHub.
      */
-    const selectedVersion = req.session.selectedVersion || ref || null;
+    const selectedVersion = ref || null;
     res.locals.selectedVersion = selectedVersion;
     //console.log('selectedVersion1:', selectedVersion);
 
@@ -717,10 +718,16 @@ const allCoursesController = {
     //course = course.data.data;
 
     const courseConfig = await getCourseData(course, selectedVersion);
+    // if we are missing config file, create it...
+    if (!courseConfig || !courseConfig.config) {
+      const test = await createConfig(course, selectedVersion);
+      //console.log(test);
+      //return res.send('missing config');
+    }
 
     // if selectedVersion='draft', check if branch exists, if not create it
     // from master
-    if (!courseConfig.config && selectedVersion === 'draft' && isTeacher) {
+    if (selectedVersion === 'draft' && isTeacher) {
       const newBranch = await apiRequests.createNewBranch(
         course.repository.replace('https://github.com/', ''), 'master',
         'draft'
@@ -754,7 +761,7 @@ const allCoursesController = {
     /** refBranch variable refers to the repo branch where course data must be read. refBranch is defined on following rows. */
 
     let validBranches = [];
-    // id edit mode get all versions
+    // in edit mode get all versions
     if (isTeacher) {
       validBranches = await apiRequests.listBranches(
         course.repository.replace('https://github.com/', ''));
@@ -925,6 +932,8 @@ const allCoursesController = {
     let componentName = '';
     let componentType = '';
 
+    //console.log(courseConfig.config);
+    //return res.send(courseConfig.config);
     courseConfig.config?.docs?.forEach((x) => {
       if (x.slug === contentSlug) {
         contentName = x.name;
@@ -1017,7 +1026,9 @@ const allCoursesController = {
     if ((contentSlug && !contentName) ||
       (contentSlug && contentName && componentSlug && !componentName)) {
       console.log(
-        'no contentName or componentName found', contentSlug, componentSlug);
+        'no contentName or componentName found', contentSlug, contentName,
+        componentSlug, componentName
+      );
       return res.redirect('/notfound');
     }
 

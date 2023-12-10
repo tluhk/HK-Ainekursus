@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import pool from '../../db.js';
 import {
   cacheComponentsUUIds,
@@ -102,27 +100,29 @@ const getComponentsUUIDs = async (repoUrl) => {
     const configJson = await getFile(owner, repo, 'config.json');
     if (configJson) {
       const config = JSON.parse(configJson.content);
-
       const allComponentSlugs = [];
 
-      config.lessons.forEach((lesson) => {
+      config.lessons.filter(lesson => lesson.components).forEach((lesson) => {
         allComponentSlugs.push(lesson.components);
       });
 
-      const allComponentSlugsFlat = [].concat(...allComponentSlugs);
-      // console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
+      if (allComponentSlugs.length) {
+        const allComponentSlugsFlat = [].concat(...allComponentSlugs);
+        console.log('allComponentSlugsFlat5:', allComponentSlugsFlat);
 
-      keysArray = [
-        ...config.concepts
-          .filter((concept) => allComponentSlugsFlat.includes(concept.slug))
-          .map((concept) => concept.uuid),
-        ...config.practices
-          .filter((practice) => allComponentSlugsFlat.includes(practice.slug))
-          .map((practice) => practice.uuid)
-      ];
+        keysArray = [
+          ...config.concepts?.filter(
+            (concept) => allComponentSlugsFlat.includes(concept.slug))
+            .map((concept) => concept.uuid),
+          ...config.practices?.filter(
+            (practice) => allComponentSlugsFlat.includes(practice.slug))
+            .map((practice) => practice.uuid)
+        ];
+      }
       //keysArray = data.practices.map(
       //  (p) => p.uuid);
     }
+
     cacheComponentsUUIds.set(cacheName, keysArray);
   } else {
     keysArray = cacheComponentsUUIds.get(cacheName);
