@@ -2,105 +2,19 @@
 <div class="reading_content">
     <div class="mx-auto mt-10">
         <div class="tab-content h-auto">
-            <!-- general -->
-            {{> course-edit.general}}
-            <!-- general -->
-            {{> course-edit.lessons}}
-            <div class="tab-pane text-white">Content for Tab 3</div>
-            <div class="tab-pane text-white">Content for Tab 4</div>
+            <form method="post" id="general-form" enctype="multipart/form-data" action="/course-edit">
+                <input type="hidden" name="courseId" id="courseId" value="{{path.courseId}}">
+                <!-- general -->
+                {{> course-edit.general}}
+                <!-- general -->
+                {{> course-edit.lessons}}
+                <div class="tab-pane text-white">Content for Tab 3</div>
+                <div class="tab-pane text-white">Content for Tab 4</div>
+            </form>
         </div>
     </div>
 </div>
-<script>
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContent = document.querySelectorAll('.tab-pane');
-
-    tabButtons.forEach((button, index) => {
-        button.addEventListener('click', () => {
-            // Remove the 'active' class from all buttons and content
-            tabButtons.forEach((btn) => btn.classList.remove('active'));
-            tabContent.forEach((content) => content.classList.add('hidden'));
-
-            // Add the 'active' class to the clicked button and show the corresponding content
-            button.classList.add('active');
-            tabContent[index].classList.remove('hidden');
-        });
-    });
-
-    // Activate the first tab by default
-    tabButtons[0].click();
-
-    // markdown
-    const tinyMDE1 = new TinyMDE.Editor({ textarea: 'component' });
-    const commandBar1 = new TinyMDE.CommandBar({ element: 'tinymde_commandbar', editor: tinyMDE1 });
-    const tinyMDE2 = new TinyMDE.Editor({ textarea: 'additionalMaterials[content]' });
-    const commandBar2 = new TinyMDE.CommandBar({ element: 'tinymde_commandbar2', editor: tinyMDE2 });
-
-    // accordion
-    const lessons = document.querySelectorAll('.lesson');
-
-    lessons.forEach((title, index) => {
-        title.addEventListener('click', () => {
-            const content = title.nextElementSibling;
-            content.classList.toggle('hidden');
-        });
-        const tinyMDE = new TinyMDE.Editor({ textarea: 'lessons_content_' + index });
-        const cm = new TinyMDE.CommandBar({ element: 'tinymde_commandbar_lessons_content_' + index, editor: tinyMDE });
-
-        const tinyMDE2 = new TinyMDE.Editor({ textarea: 'lessons_add_' + index });
-        const cm2 = new TinyMDE.CommandBar({ element: 'tinymde_commandbar_lessons_add_' + index, editor: tinyMDE2 });
-    });
-
-    // sync ois content
-    const oisSyncButton = document.getElementById('sync');
-    oisSyncButton.addEventListener('click', () => {
-        fetch(window.location.origin + '/get-ois-content?courseId=1', {
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(res); // 2. reject instead of throw
-        }).then((res) => {
-            tinyMDE1.setContent(res.data);
-            document.getElementById('component').value = res.data;
-        }).catch((e) => {
-            console.log(e);
-        });
-    });
-
-    function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-            const context = this;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
-
-    // Select the form
-    const form = document.getElementById('general-form');
-
-    // Add event listener for input changes
-    form.addEventListener('input', debounce(function () {
-        const formData = new FormData(form);
-
-        // add file
-        const filesInput = document.querySelector('input[type="file"]');
-        formData.append('file', filesInput.files[0]);
-
-        // Send a POST request
-        fetch('/course-edit', {
-            method: 'POST',
-            body: formData
-        }).then(response => response.json())
-                .then(data => console.log(data))
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-    }, 500));  // 500ms delay
-
-</script>
+<script type="application/javascript" src="/js/editor-tabs.js"></script>
+<script type="application/javascript" src="/js/md-editors.js"></script>
+<script type="application/javascript" src="/js/sync-ois.js"></script>
+<script type="application/javascript" src="/js/submit-edit.js"></script>

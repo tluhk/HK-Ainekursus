@@ -727,19 +727,19 @@ const allCoursesController = {
 
     // if selectedVersion='draft', check if branch exists, if not create it
     // from master
-    if (selectedVersion === 'draft' && isTeacher) {
-      const newBranch = await apiRequests.createNewBranch(
-        course.repository.replace('https://github.com/', ''), 'master',
-        'draft'
-      );
-      setTimeout(async () => {
-        const courseConfig = await getCourseData(course, selectedVersion);
-      }, 5000);
-      //console.log(courseConfig);
+    /*if (selectedVersion === 'draft' && isTeacher) {
+     const newBranch = await apiRequests.createNewBranch(
+     course.repository.replace('https://github.com/', ''), 'master',
+     'draft'
+     );
+     setTimeout(async () => {
+     const courseConfig = await getCourseData(course, selectedVersion);
+     }, 5000);
+     //console.log(courseConfig);
 
-      return res.send('ok');
+     return res.send('ok');
 
-    }
+     }*/
 
     course = { ...course, ...courseConfig };
 
@@ -1279,6 +1279,24 @@ const allCoursesController = {
     }));
     cacheLessons.set('lessons', allLessons);
     return allLessons;
+  },
+  updateCourseData: async (req, res) => {
+    const body = req.body;
+    const keys = Object.keys(body);
+    const values = Object.values(body);
+    const response = {};
+    const courseId = req.body.courseId;
+
+    if (courseId) {
+      // courseId is always there, so we start from index 1
+      for (let i = 1; i < keys.length; i++) {
+        response[keys[i]] = values[i] + 'XXX';
+        console.log(`Key: ${ keys[i] }, Value: ${ values[i] }`);
+      }
+
+      return res.json(response);
+    }
+    return res.status(500).send('error');
   }
   /*
    Kursuse muutmine:

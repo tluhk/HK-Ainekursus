@@ -1,48 +1,45 @@
 <div class="tab-pane">
-    <form method="post" id="general-form" enctype="multipart/form-data">
-        <input type="hidden" name="courseId" value="{{path.courseId}}">
-        <label class="text-lg font-bold">
+    <label class="text-lg font-bold">
         <span class="flex items-center">
             <i class="material-symbols-outlined mr-2">home</i>
             Kursuse nimi
         </span>
-            <span class="input-w-button">
+        <span class="input-w-button">
             <input type="text" name="courseName" class="input-single" required value="{{config.courseName}}">
-                <!--button class="btn btn-primary" type="submit" value="Sisene">
-                    <i class="material-symbols-outlined">save</i>
-                </button!-->
+            <!--button class="btn btn-primary" type="submit" value="Sisene">
+                <i class="material-symbols-outlined">save</i>
+            </button!-->
         </span>
-        </label>
+    </label>
 
-        <label class="text-lg font-bold mt-4">
+    <label class="text-lg font-bold mt-4">
         <span class="flex items-center">
             <i class="material-symbols-outlined mr-2">link</i> Kursuse link
         </span>
-            <input type="text" name="courseUrl" id="oisUrl" class="input-single" required value="{{config.courseUrl}}">
-        </label>
-        <hr class="my-4">
+        <input type="text" name="courseUrl" id="oisUrl" class="input-single" required value="{{config.courseUrl}}">
+    </label>
+    <hr class="my-4">
 
-        <div class="block mb-4">
-            <label for="component">Üldinfo</label>
-            <div id="tinymde_commandbar"></div>
-            <div class="txtcontainer w-full relative">
-                <button class="btn btn-primary absolute -top-16 right-4" id="sync" title="Uuenda õisist">
-                    <i class="material-symbols-outlined">sync</i>
-                </button>
-                <textarea id="component" cols="30" rows="30" name="component">{{component}}</textarea>
-            </div>
+    <div class="block mb-4">
+        <label for="component">Üldinfo</label>
+        <div id="tinymde_commandbar"></div>
+        <div class="txtcontainer w-full relative">
+            <button class="btn btn-primary absolute -top-16 right-4" id="sync" title="Uuenda õisist">
+                <i class="material-symbols-outlined">sync</i>
+            </button>
+            <textarea id="component" cols="30" rows="30" name="component">{{component}}</textarea>
         </div>
+    </div>
 
-        <div class="block mb-4">
-            <label>Lisamaterjalid:</label>
-            <input type="hidden" name="additionalMaterials[sha]" value="{{additionalMaterials.sha}}">
-            <div id="tinymde_commandbar2"></div>
-            <div class="txtcontainer w-full">
+    <div class="block mb-4">
+        <label>Lisamaterjalid:</label>
+        <input type="hidden" name="additionalMaterials[sha]" value="{{additionalMaterials.sha}}">
+        <div id="tinymde_commandbar2"></div>
+        <div class="txtcontainer w-full">
             <textarea id="additionalMaterials[content]" cols="30" rows="30"
                       name="additionalMaterials[content]">{{additionalMaterials.content}}</textarea>
-            </div>
-
         </div>
-        {{> files-input files=files prefix="general"}}
-    </form>
+
+    </div>
+    {{> files-input files=files prefix="general"}}
 </div>

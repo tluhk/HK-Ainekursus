@@ -15,9 +15,7 @@ import pkg from 'body-parser';
 import { fileURLToPath } from 'url';
 import pool from './db.js';
 import {
-  allCoursesController,
-  renderEditPage,
-  responseAction
+  allCoursesController
 } from './src/components/courses/coursesController.js';
 import otherController from './src/components/other/otherController.js';
 import membersController from './src/components/members/membersController.js';
@@ -37,6 +35,7 @@ import markAsDone from './src/routes/mark-as-done.js';
 import addNewCourseRoutes from './src/routes/add-new-course.js';
 import addNewVersionRoutes from './src/routes/add-new-version.js';
 import courseRoutes from './src/components/courses/coursesRoutes.js';
+import courseEditRoutes from './src/components/courses/courseEditRoutes.js';
 import roleRoutes from './src/components/role-select/role-select.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -142,59 +141,6 @@ passport.deserializeUser((obj, done) => {
  * -- if yes, read user's displayName and/or email info from Database.
  * Everything else about the user is read from GitHub.
  */
-
-/** Function to check if user exists in DB and insert/update/read user's displayName and email from DB.
- */
-async function userDBFunction(userData) {
-  const { githubID, username, displayName, email } = userData;
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    /**
-     * If user exists in DB, don't insert new user. Check if DB data matches
-     * with BE data. If not, get users' displayName and email data from DB. If
-     * user doesn't exist in DB, insert it to DB based on values in GitHub. If
-     * displayName doesn't exist, use username to save this to DB. Return same
-     * GitHub values you insert to DB.
-     */
-
-    const user = await conn.query('SELECT * FROM users WHERE githubID = ?', [
-      githubID
-    ]);
-
-    if (user[0]) {
-      if (user[0].displayName && displayName !== user[0].displayName) {
-        userData.displayName = user[0].displayName;
-      }
-      if (user[0].email && email !== user[0].email) {
-        userData.email = user[0].email;
-      }
-      return userData;
-    }
-
-    if (!user[0]) {
-      if (displayName) {
-        await conn.query(
-          'INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)',
-          [githubID, username, displayName, email]
-        );
-        return userData;
-      }
-      await conn.query(
-        'INSERT INTO users (githubID, username, displayName, email) VALUES (?, ?, ?, ?)',
-        [githubID, username, username, email]
-      );
-      userData.displayName = username;
-      return userData;
-    }
-  } catch (err) {
-    console.log('Unable read or update user data from database');
-    console.error(err);
-  } finally {
-    if (conn) conn.release(); // release to pool
-  }
-  return true;
-}
 
 // Use the GitHubStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
@@ -336,13 +282,6 @@ app.get(
   allCoursesController.getAllCourses
 );
 
-app.get(
-  '/course-edit/:courseId/:contentSlug?/:componentSlug?',
-  validateTeacher,
-  allCoursesController.getSpecificCourse,
-  responseAction,
-  renderEditPage
-);
 /** Endpoints to change course version.
  * Only available for teachers.
  */
@@ -387,14 +326,13 @@ app.get('/notfound', resetSelectedVersion, otherController.notFound);
 /** Page for not authorized login attempt (GitHub user not part of tluhk organisation) */
 app.get('/noauth', otherController.noAuth);
 
-//app.use('/save-displayName', saveDisplayNameRoutes);
-//app.use('/save-email', saveEmailRoutes);
 app.use('/progress-overview', progressRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/add-course', addNewCourseRoutes);
 app.use('/add-version', addNewVersionRoutes);
 
 app.use('/course', courseRoutes);
+app.use('/course-edit', courseEditRoutes);
 
 app.get('/get-ois-content', allCoursesController.getOisContent);
 
