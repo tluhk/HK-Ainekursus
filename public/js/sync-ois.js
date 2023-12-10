@@ -1,9 +1,8 @@
 // sync ois content
 const oisSyncButton = document.getElementById('sync');
 oisSyncButton.addEventListener('click', () => {
-  fetch(window.location.origin + '/get-ois-content?courseId=1', {
-    method: 'get',
-    headers: {
+  fetch('/get-ois-content?courseId=1', {
+    method: 'get', headers: {
       'Content-Type': 'application/json'
     }
   }).then((res) => {
