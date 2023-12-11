@@ -426,6 +426,24 @@ const apiRequests = {
       );
       return cacheTeamCourses.get(cacheName);
     }
+  },
+  async mergeMasterWithDraft(repo, message) {
+    return await octokit.request(`POST /repos/${ repo }/merges`, {
+      base: 'master',
+      head: 'draft',
+      commit_message: message,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+  },
+  async deleteBranch(repo, branch) {
+    return await octokit.request(
+      `DELETE /repos/${ repo }/git/refs/${ branch }`, {
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      });
   }
 };
 

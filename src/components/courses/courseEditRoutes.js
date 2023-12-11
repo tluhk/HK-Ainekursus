@@ -4,8 +4,27 @@ import {
   responseAction
 } from './coursesController.js';
 import validateTeacher from '../../middleware/validateTeacher.js';
+import apiRequests from './coursesService.js';
 
 const router = express.Router();
+
+router.get(
+  '/publish/:courseId',
+  validateTeacher,
+  async (req, res, next) => {
+    try {
+      const courseId = req.params.courseId;
+      const course = await apiRequests.getCourseById(courseId);
+      if (!course) {
+        return res.redirect('/notfound');
+      }
+      const result = await allCoursesController.publishCourse(course);
+      return res.redirect(`/courses/${ courseId }`);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   '/:courseId/:contentSlug?/:componentSlug?',

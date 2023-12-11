@@ -1293,11 +1293,13 @@ const allCoursesController = {
         response[keys[i]] = values[i] + 'XXX';
         console.log(`Key: ${ keys[i] }, Value: ${ values[i] }`);
       }
-
+      // todo update config.json file and/or content in other file
+      // sisse tulev key on kujul /path/path/path/file.name
+      // siis app teab täpselt milline fail on muutunud
       return res.json(response);
     }
     return res.status(500).send('error');
-  }
+  },
   /*
    Kursuse muutmine:
    concepts = [
@@ -1321,6 +1323,19 @@ const allCoursesController = {
    Äkki võiks sama loogika olla ka teiste plokkide kohta (lessons, praktikumid)
 
    */
+  async publishCourse(course) {
+    const response = apiRequests.mergeMasterWithDraft(
+      course.repository.replace('https://github.com/', ''),
+      'Shipped cool_feature!'
+    );
+    if (response.status === 204 || response.status === 201) { // delete draft branch
+      return await apiRequests.deleteBranch(
+        course.repository.replace('https://github.com/', ''),
+        'draft'
+      );
+    }
+    return false;
+  }
 };
 export {
   allCoursesController,
