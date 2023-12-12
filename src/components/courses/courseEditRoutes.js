@@ -18,8 +18,8 @@ router.get(
       if (!course) {
         return res.redirect('/notfound');
       }
-      const result = await allCoursesController.publishCourse(course);
-      return res.redirect(`/courses/${ courseId }`);
+      await allCoursesController.publishCourse(course);
+      return res.redirect(`/course/${ courseId }/about?ref=master`);
     } catch (error) {
       next(error);
     }

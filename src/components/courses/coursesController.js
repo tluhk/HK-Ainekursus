@@ -1324,11 +1324,11 @@ const allCoursesController = {
 
    */
   async publishCourse(course) {
-    const response = apiRequests.mergeMasterWithDraft(
+    const mergeResponse = await apiRequests.mergeMasterWithDraft(
       course.repository.replace('https://github.com/', ''),
       'Shipped cool_feature!'
     );
-    if (response.status === 204 || response.status === 201) { // delete draft branch
+    if (mergeResponse.status === 204 || mergeResponse.status === 201) { // delete draft branch
       return await apiRequests.deleteBranch(
         course.repository.replace('https://github.com/', ''),
         'draft'

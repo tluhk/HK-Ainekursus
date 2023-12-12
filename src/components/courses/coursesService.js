@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   cacheBranches,
-  cacheFiles, cacheMarkedAsDoneComponents,
+  cacheFiles,
   cachePageContent, cacheTeamCourses
 } from '../../setup/setupCache.js';
 import githubReposRequests from '../../functions/githubReposRequests.js';
@@ -439,7 +439,7 @@ const apiRequests = {
   },
   async deleteBranch(repo, branch) {
     return await octokit.request(
-      `DELETE /repos/${ repo }/git/refs/${ branch }`, {
+      `DELETE /repos/${ repo }/git/refs/heads/${ branch }`, {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28'
         }
