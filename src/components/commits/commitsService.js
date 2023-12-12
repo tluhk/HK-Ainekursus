@@ -25,7 +25,7 @@ const apiRequestsCommits = {
         requestCommits(coursePathInGithub, refBranch),
         authToken
       ).catch((err) => {
-        console.log(err);
+        console.log('commits not found for course: ', coursePathInGithub);
       });
 
       cacheCommits.set(routePath, commits);

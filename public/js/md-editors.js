@@ -32,51 +32,21 @@
  */
 const tinyMDE1 = new TinyMDE.Editor({ textarea: 'component' }).addEventListener(
   'change', debounce((eventData, xxx) => {
-    handleMDChange(eventData.content, 'component');
+    handleMDChange(eventData.content, 'docs/about.md');
   }, 500));
-/**
- * Represents the command bar for the TinyMDE editor.
- *
- * @class
- * @constructor
- * @param {Object} options - The options for the command bar.
- * @param {string} options.element - The ID of the DOM element to use as the
- *   command bar.
- * @param {TinyMDE.Editor} options.editor - The TinyMDE editor instance.
- */
+
 const commandBar1 = new TinyMDE.CommandBar(
   { element: 'tinymde_commandbar', editor: tinyMDE1 });
-/**
- * Represents an instance of the TinyMDE2 editor.
- * @constructor
- * @param {Object} options - The options for the editor.
- * @param {string} options.textarea - The ID of the textarea element to bind
- *   the editor to.
- */
+
 const tinyMDE2 = new TinyMDE.Editor(
   { textarea: 'additionalMaterials[content]' }).addEventListener(
   'change', debounce((eventData, xxx) => {
-    handleMDChange(eventData.content, 'additionalMaterials[content]');
+    handleMDChange(eventData.content, 'docs/lisamaterjalid.md');
   }, 500));
-/**
- * Represents a CommandBar object for TinyMDE.
- *
- * @class
- * @constructor
- * @param {Object} options - The configuration options for the CommandBar.
- * @param {string} options.element - The ID of the HTML element that represents
- *   the CommandBar.
- * @param {Object} options.editor - The instance of the TinyMDE editor
- *   associated with the CommandBar.
- */
+
 const commandBar2 = new TinyMDE.CommandBar(
   { element: 'tinymde_commandbar2', editor: tinyMDE2 });
 
-/**
- * Retrieves all lesson elements from the document.
- *
- * @returns {NodeList} A NodeList containing all lesson elements.
- */
 const lessons = document.querySelectorAll('.lesson');
 
 lessons.forEach((title, index) => {

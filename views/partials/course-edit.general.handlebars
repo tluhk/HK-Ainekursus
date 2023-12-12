@@ -5,7 +5,7 @@
             Kursuse nimi
         </span>
         <span class="input-w-button">
-            <input type="text" name="courseName" class="input-single" required value="{{config.courseName}}">
+            <input type="text" name="config/courseName" class="input-single" required value="{{config.courseName}}">
             <!--button class="btn btn-primary" type="submit" value="Sisene">
                 <i class="material-symbols-outlined">save</i>
             </button!-->
@@ -16,7 +16,8 @@
         <span class="flex items-center">
             <i class="material-symbols-outlined mr-2">link</i> Kursuse link
         </span>
-        <input type="text" name="courseUrl" id="oisUrl" class="input-single" required value="{{config.courseUrl}}">
+        <input type="text" name="config/courseUrl" id="oisUrl" class="input-single" required
+               value="{{config.courseUrl}}">
     </label>
     <hr class="my-4">
 
@@ -27,7 +28,7 @@
             <button class="btn btn-primary absolute -top-16 right-4" id="sync" title="Uuenda õisist" type="button">
                 <i class="material-symbols-outlined">sync</i>
             </button>
-            <textarea id="component" cols="30" rows="30" name="component">{{component}}</textarea>
+            <textarea id="component" cols="30" rows="30" name="docs/about.md">{{component}}</textarea>
         </div>
     </div>
 
@@ -37,7 +38,7 @@
         <div id="tinymde_commandbar2"></div>
         <div class="txtcontainer w-full">
             <textarea id="additionalMaterials[content]" cols="30" rows="30"
-                      name="additionalMaterials[content]">{{additionalMaterials.content}}</textarea>
+                      name="docs/lisamaterjalid.md">{{additionalMaterials.content}}</textarea>
         </div>
 
     </div>

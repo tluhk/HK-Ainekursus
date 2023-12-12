@@ -717,6 +717,24 @@ const allCoursesController = {
     }
     //course = course.data.data;
 
+    let validBranches = [];
+    // in edit mode get all versions
+    if (isTeacher) {
+      validBranches = await apiRequests.listBranches(
+        course.repository.replace('https://github.com/', ''));
+
+      validBranches = validBranches.map((b) => b.name);
+    }
+
+    // if selectedVersion='draft', check if branch exists, if not create it
+    // from master
+    if (selectedVersion === 'draft' && !validBranches.includes('draft')) {
+      const newBranch = await apiRequests.createNewBranch(
+        course.repository.replace('https://github.com/', ''), 'master',
+        'draft'
+      );
+    }
+
     const courseConfig = await getCourseData(course, selectedVersion);
     // if we are missing config file, create it...
     if (!courseConfig || !courseConfig.config) {
@@ -724,22 +742,6 @@ const allCoursesController = {
       //console.log(test);
       //return res.send('missing config');
     }
-
-    // if selectedVersion='draft', check if branch exists, if not create it
-    // from master
-    /*if (selectedVersion === 'draft' && isTeacher) {
-     const newBranch = await apiRequests.createNewBranch(
-     course.repository.replace('https://github.com/', ''), 'master',
-     'draft'
-     );
-     setTimeout(async () => {
-     const courseConfig = await getCourseData(course, selectedVersion);
-     }, 5000);
-     //console.log(courseConfig);
-
-     return res.send('ok');
-
-     }*/
 
     course = { ...course, ...courseConfig };
 
@@ -760,14 +762,6 @@ const allCoursesController = {
 
     /** refBranch variable refers to the repo branch where course data must be read. refBranch is defined on following rows. */
 
-    let validBranches = [];
-    // in edit mode get all versions
-    if (isTeacher) {
-      validBranches = await apiRequests.listBranches(
-        course.repository.replace('https://github.com/', ''));
-
-      validBranches = validBranches.map((b) => b.name);
-    }
     /** Get all course branches that have config as active:true */
     /*try {
      validBranches = await apiRequests.validBranchesService(
