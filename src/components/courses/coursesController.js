@@ -18,7 +18,11 @@ import {
   getComponentsUUIDs,
   getMarkedAsDoneComponents
 } from '../../functions/getListOfDoneComponentUUIDs.js';
-import { getFile, getFolder } from '../../functions/githubFileFunctions.js';
+import {
+  getFile,
+  getFolder,
+  updateFile
+} from '../../functions/githubFileFunctions.js';
 import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
 import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
@@ -26,7 +30,8 @@ import getCourseData from '../../functions/getCourseData.js';
 import { getCombinedUserData } from '../../functions/githubUsersFuncs.js';
 import { axios } from '../../setup/setupGithub.js';
 import * as cheerio from 'cheerio';
-import { createConfig } from '../../functions/getConfigFuncs.js';
+import { createConfig, getConfig } from '../../functions/getConfigFuncs.js';
+import { updateConfigFile } from './courseEditService.js';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -1283,9 +1288,24 @@ const allCoursesController = {
 
     if (courseId) {
       // courseId is always there, so we start from index 1
+      const course = await apiRequests.getCourseById(courseId);
       for (let i = 1; i < keys.length; i++) {
         response[keys[i]] = values[i] + 'XXX';
         console.log(`Key: ${ keys[i] }, Value: ${ values[i] }`);
+        if (keys[i].startsWith('config/')) {
+          // key = config/courseName
+          // update config file
+          const repoName = course.repository.replace('https://github.com/', '');
+          const config = await getConfig(repoName, 'draft');
+          const updatedConfig = updateConfigFile(keys[i], values[i], config);
+          const [owner, repo] = repoName.split('/');
+          await updateFile(
+            owner, repo, 'config.json',
+            { content: JSON.stringify(updatedConfig), sha: updatedConfig.sha },
+            'course edit', 'draft'
+          );
+          console.log(updatedConfig);
+        }
       }
       // todo update config.json file and/or content in other file
       // sisse tulev key on kujul /path/path/path/file.name

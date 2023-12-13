@@ -174,6 +174,7 @@ const getConfig = async (selectedCourse, refBranch) => {
   // console.log('config2:', config);
   /** Decode GitHub response with base64 and utf8. Result is a string configDecodedUtf8 that contains the config file content. */
   const configDecoded = base64.decode(config.data.content);
+
   const configDecodedUtf8 = utf8.decode(configDecoded);
   // console.log('configDecodedUtf8:', configDecodedUtf8);
   // console.log('typeof configDecodedUtf8:', typeof configDecodedUtf8);
@@ -196,6 +197,7 @@ const getConfig = async (selectedCourse, refBranch) => {
 
   /** Parse string into object */
   const configObj = JSON.parse(repairedConfigJSON);
+  configObj.sha = config.data.sha;
   // console.log('configObj8:', configObj);
 
   /** Validate that config file has correct structure */
