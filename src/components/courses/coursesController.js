@@ -21,9 +21,13 @@ import {
 import {
   getFile,
   getFolder,
-  updateFile
+  updateFile, uploadFile
 } from '../../functions/githubFileFunctions.js';
-import { cacheConcepts, cacheLessons } from '../../setup/setupCache.js';
+import {
+  cacheConcepts,
+  cacheConfig,
+  cacheLessons
+} from '../../setup/setupCache.js';
 import { usersApi } from '../../setup/setupUserAPI.js';
 import membersRequests from '../../functions/usersHkTluRequests.js';
 import getCourseData from '../../functions/getCourseData.js';
@@ -32,6 +36,7 @@ import { axios } from '../../setup/setupGithub.js';
 import * as cheerio from 'cheerio';
 import { createConfig, getConfig } from '../../functions/getConfigFuncs.js';
 import { updateConfigFile } from './courseEditService.js';
+import fs from 'fs';
 
 /** responseAction function defines what to do after info about courses and current course page is received.
  * This step gets the data from GitHub, by doing Axios requests via
@@ -1285,31 +1290,48 @@ const allCoursesController = {
     const values = Object.values(body);
     const response = {};
     const courseId = req.body.courseId;
-
     if (courseId) {
-      // courseId is always there, so we start from index 1
       const course = await apiRequests.getCourseById(courseId);
+      const repoName = course.repository.replace('https://github.com/', '');
+      const [owner, repo] = repoName.split('/');
+
+      // handle file uploads
+      if (req.files) {
+        const fileKey = Object.keys(req.files)[0];
+        const path = fileKey + req.files[fileKey].name;
+        const content = req.files[fileKey].data.toString('base64');
+        await uploadFile(
+          owner, repo, path, content, 'file added: ' + path,
+          'draft',
+          true
+        );
+        // todo update files data
+      }
+      // courseId is always there, so we start from index 1
       for (let i = 1; i < keys.length; i++) {
-        response[keys[i]] = values[i] + 'XXX';
-        console.log(`Key: ${ keys[i] }, Value: ${ values[i] }`);
-        if (keys[i].startsWith('config/')) {
+        response[keys[i]] = values[i];
+        if (keys[i].startsWith('config/')) { // update config file
           // key = config/courseName
-          // update config file
-          const repoName = course.repository.replace('https://github.com/', '');
           const config = await getConfig(repoName, 'draft');
           const updatedConfig = updateConfigFile(keys[i], values[i], config);
-          const [owner, repo] = repoName.split('/');
           await updateFile(
             owner, repo, 'config.json',
             { content: JSON.stringify(updatedConfig), sha: updatedConfig.sha },
             'course edit', 'draft'
           );
-          console.log(updatedConfig);
+          cacheConfig.set(`getConfig:${ repoName }+draft`, updatedConfig);
+        } else if (keys[i].endsWith('.md')) { // update file in folder
+          // get file sha
+          const oldFile = await getFile(owner, repo, keys[i], 'draft');
+          await updateFile(
+            owner, repo, keys[i],
+            { content: values[i], sha: oldFile.sha },
+            'file edit: ' + keys[i], 'draft'
+          );
+        } else {
+          console.log(`Key: ${ keys[i] }, Value: ${ values[i] }`);
         }
       }
-      // todo update config.json file and/or content in other file
-      // sisse tulev key on kujul /path/path/path/file.name
-      // siis app teab täpselt milline fail on muutunud
       return res.json(response);
     }
     return res.status(500).send('error');

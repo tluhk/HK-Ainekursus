@@ -32,8 +32,8 @@
  */
 const tinyMDE1 = new TinyMDE.Editor({ textarea: 'component' }).addEventListener(
   'change', debounce((eventData, xxx) => {
-    handleMDChange(eventData.content, 'docs/about.md');
-  }, 500));
+    handleMDChange(eventData.content, 'docs/README.md');
+  }, 1000));
 
 const commandBar1 = new TinyMDE.CommandBar(
   { element: 'tinymde_commandbar', editor: tinyMDE1 });
@@ -42,7 +42,7 @@ const tinyMDE2 = new TinyMDE.Editor(
   { textarea: 'additionalMaterials[content]' }).addEventListener(
   'change', debounce((eventData, xxx) => {
     handleMDChange(eventData.content, 'docs/lisamaterjalid.md');
-  }, 500));
+  }, 1000));
 
 const commandBar2 = new TinyMDE.CommandBar(
   { element: 'tinymde_commandbar2', editor: tinyMDE2 });
@@ -58,7 +58,7 @@ lessons.forEach((title, index) => {
     { textarea: 'lessons_content_' + index }).addEventListener(
     'change', debounce((eventData, xxx) => {
       handleMDChange(eventData.content, 'lessons_content_' + index);
-    }, 500));
+    }, 1000));
   const cm = new TinyMDE.CommandBar({
     element: 'tinymde_commandbar_lessons_content_' + index, editor: tinyMDE
   });
@@ -67,7 +67,7 @@ lessons.forEach((title, index) => {
     { textarea: 'lessons_add_' + index }).addEventListener(
     'change', debounce((eventData, xxx) => {
       handleMDChange(eventData.content, 'lessons_add_' + index);
-    }, 500));
+    }, 1000));
   const cm2 = new TinyMDE.CommandBar(
     { element: 'tinymde_commandbar_lessons_add_' + index, editor: tinyMDE2 });
 });

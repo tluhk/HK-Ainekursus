@@ -7,6 +7,21 @@ const octokit = new Octokit({
   auth: process.env.AUTH
 });
 
+// From
+// https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem.
+function base64ToBytes(base64) {
+  const binString = atob(base64);
+  return Uint8Array.from(binString, (m) => m.codePointAt(0));
+}
+
+// From
+// https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem.
+function bytesToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  const binString = String.fromCodePoint(...bytes);
+  return btoa(binString);
+}
+
 async function getFile(owner, repo, path, ref = null) {
   const content = await octokit.request(
     `GET /repos/${ owner }/${ repo }/contents/${ path }${ ref
@@ -126,7 +141,7 @@ async function updateFile(
   return await octokit.request(
     `PUT /repos/${ owner }/${ repo }/contents/${ path }`, {
       message: commitMessage,
-      content: base64.encode(file.content),
+      content: bytesToBase64(file.content),
       sha: file.sha,
       branch: branch,
       headers: {
@@ -164,10 +179,13 @@ async function uploadFile(
   path, // folder + new filename
   file, // req.files.file
   commitMessage,
-  branch = 'master'
+  branch = 'master',
+  encoded = false
 ) {
-  const base64Content = (file instanceof ArrayBuffer) ? new Buffer.from(
-    file.data).toString('base64') : base64.encode(file);
+  const base64Content = encoded ? file : (file instanceof ArrayBuffer)
+    ? new Buffer.from(
+      file.data).toString('base64')
+    : bytesToBase64(file);
 
   return await octokit.request(
     `PUT /repos/${ owner }/${ repo }/contents/${ path }`, {
