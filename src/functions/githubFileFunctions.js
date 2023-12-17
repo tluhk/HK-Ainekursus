@@ -75,7 +75,7 @@ async function getFolder(owner, repo, path, ref = null) {
 
 async function getTree(repo, branch = 'master') {
   const branchData = await getBranch(repo, branch);
-
+  if (!branchData) return false;
   const content = await octokit.request(
     `GET /repos/${ repo }/git/trees/${ branchData.commit.sha }?recursive=1`, {
       headers: {
@@ -83,6 +83,7 @@ async function getTree(repo, branch = 'master') {
       }
     }).catch((err) => {
     console.log('get tree error');
+
   });
 
   const tree = {};

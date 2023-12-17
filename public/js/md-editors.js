@@ -57,7 +57,11 @@ lessons.forEach((title, index) => {
   const tinyMDE = new TinyMDE.Editor(
     { textarea: 'lessons_content_' + index }).addEventListener(
     'change', debounce((eventData, xxx) => {
-      handleMDChange(eventData.content, 'lessons_content_' + index);
+      handleMDChange(
+        eventData.content,
+        'lessons/loeng_' + (index + 1).toString().padStart(2, '0') +
+        '/README.md'
+      );
     }, 1000));
   const cm = new TinyMDE.CommandBar({
     element: 'tinymde_commandbar_lessons_content_' + index, editor: tinyMDE

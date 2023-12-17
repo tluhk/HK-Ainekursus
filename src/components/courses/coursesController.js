@@ -736,6 +736,10 @@ const allCoursesController = {
       validBranches = validBranches.map((b) => b.name);
     }
 
+    if (validBranches.length === 0) { // repo not found
+      return res.redirect('/notfound');
+    }
+
     // if selectedVersion='draft', check if branch exists, if not create it
     // from master
     if (selectedVersion === 'draft' && !validBranches.includes('draft')) {
@@ -1310,6 +1314,7 @@ const allCoursesController = {
       // courseId is always there, so we start from index 1
       for (let i = 1; i < keys.length; i++) {
         response[keys[i]] = values[i];
+        console.log(`Key: ${ keys[i] }, Value: ${ values[i] }`);
         if (keys[i].startsWith('config/')) { // update config file
           // key = config/courseName
           const config = await getConfig(repoName, 'draft');
