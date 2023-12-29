@@ -749,10 +749,11 @@ const allCoursesController = {
       );
     }
 
-    const courseConfig = await getCourseData(course, selectedVersion);
+    let courseConfig = await getCourseData(course, selectedVersion);
     // if we are missing config file, create it...
     if (!courseConfig || !courseConfig.config) {
-      const test = await createConfig(course, selectedVersion);
+      courseConfig = { config: null };
+      courseConfig.config = await createConfig(course, selectedVersion);
       //console.log(test);
       //return res.send('missing config');
     }

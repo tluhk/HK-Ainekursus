@@ -233,7 +233,6 @@ const getConfig = async (selectedCourse, refBranch) => {
 };
 
 const createConfig = async (course, refBranch) => {
-  // todo create config.json
 
   const conf = {
     courseName: course.name,

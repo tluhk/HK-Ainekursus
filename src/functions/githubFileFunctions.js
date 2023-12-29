@@ -90,44 +90,44 @@ async function getTree(repo, branch = 'master') {
   content.data?.tree?.filter(
     (t) => (t.path.includes('/') && t.type === 'blob')).forEach((item) => {
       const pathParts = item.path.split('/');
-      const contentName = pathParts[0];
-      if (!tree[contentName]) {
-        // todo get name from about.md or readme.md
-        tree[contentName] = [
-          {
-            slug: pathParts[1].endsWith('.md')
-              ? pathParts[1].slice(0, -3)
-              : pathParts[1],
-            name: pathParts[1],
-            uuid: uuidv4()
-          }];
-      }
+      if (pathParts[1] !== '.DS_Store') {
+        const contentName = pathParts[0];
+        if (!tree[contentName]) {
+          // todo get name from about.md or readme.md
+          tree[contentName] = [
+            {
+              slug: pathParts[1].endsWith('.md')
+                ? pathParts[1].slice(0, -3)
+                : pathParts[1],
+              name: pathParts[1],
+              uuid: uuidv4()
+            }];
+        }
 
-      let obj = tree[contentName].find(o => o.slug === pathParts[1]);
-      if (!obj) {
-        // todo get name from about.md or readme.md
-        tree[contentName].push(
-          {
-            slug: pathParts[1].endsWith('.md')
-              ? pathParts[1].slice(0, -3)
-              : pathParts[1],
-            name: pathParts[1],
-            uuid: uuidv4()
-          });
-        obj = tree[contentName].find(o => o.slug === pathParts[1]);
-      }
+        let obj = tree[contentName].find(o => o.name === pathParts[1]);
+        if (!obj) {
+          // todo get name from about.md or readme.md
+          tree[contentName].push(
+            {
+              slug: pathParts[1].endsWith('.md')
+                ? pathParts[1].slice(0, -3)
+                : pathParts[1],
+              name: pathParts[1],
+              uuid: uuidv4()
+            });
+          obj = tree[contentName].find(o => o.slug === pathParts[1]);
+        }
 
-      if (pathParts.length === 4) {
-        if (!obj[pathParts[2]]) {
-          obj[pathParts[2]] = [pathParts[3]];
-        } else {
-          obj[pathParts[2]].push(pathParts[3]);
+        if (pathParts.length === 4) {
+          if (!obj[pathParts[2]]) {
+            obj[pathParts[2]] = [pathParts[3]];
+          } else {
+            obj[pathParts[2]].push(pathParts[3]);
+          }
         }
       }
-
     }
   );
-  //console.log(JSON.stringify(tree, null, 2));
   return tree;
 }
 
