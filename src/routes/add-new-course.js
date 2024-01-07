@@ -213,8 +213,8 @@ router.post(
           ).then(() => console.log('Readme updated'));
         }
 
-        //console.log(`✅✅  /course-edit/${ tmpSlug }/`);
         cacheTeamCourses.del('allCoursesData+teachers');
+
         // add course via users API
         await usersApi.post(membersRequests.getAllCourses, {
           name: courseName,

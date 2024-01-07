@@ -1,11 +1,7 @@
-import { performance } from 'perf_hooks';
 import getAllCoursesData from '../../functions/getAllCoursesData.js';
 import {
-  getComponentsUUIDs,
-  getMarkedAsDoneComponents, markedAsDone,
-  ttlMarkedAsDone
+  getComponentsUUIDs, markedAsDone, ttlMarkedAsDone
 } from '../../functions/getListOfDoneComponentUUIDs.js';
-import teamsController from '../teams/teamsController.js';
 import { allCoursesController } from '../courses/coursesController.js';
 import apiRequests from '../courses/coursesService.js';
 import getCourseData from '../../functions/getCourseData.js';
@@ -46,27 +42,19 @@ const allOverviewController = {
         course.repository);
 
       course.components = courseBranchComponentsUUIDs.map(c => c.name);
-      // joonista tabel
-      // 1. head -> ' ' + foreach components
-      // 2. body -> users.foreach
-      // 2.1 user.displayName + components.foreach -> user.uuids.includes(comp)
-      console.log(course);
       return res.render('overview-stats', {
-        user: req.user,
-        courseData: course
+        user: req.user, courseData: course
       });
     } else {
       // 1. leia kõik õpetaja kursused
       let allCourses = await getAllCoursesData(req);
-      /*
-       * Filter allCoursesActive where the teacher is logged-in user
-       */
+
       allCourses = allCourses.filter(
         (course) => course.teachers.some(t => t.id === req.user.userId));
 
       // 2. leia kõik mida saab märkida tehtuks
-      const withComponentsUUIDs = await
-        allCoursesController.allCoursesActiveWithComponentsUUIDs(allCourses);
+      const withComponentsUUIDs = await allCoursesController.allCoursesActiveWithComponentsUUIDs(
+        allCourses);
 
       /* 3. leia summaarne tehtud % selle kuruse kohta, selleks:
        3.1 - mitu õpilast meil kuulab kursust? (S)
@@ -78,7 +66,7 @@ const allOverviewController = {
       async function addTTLMarkedAsDone(course) {
         const result = await ttlMarkedAsDone(course.id);
         const UUIDLength = course.courseBranchComponentsUUIDs.length *
-          course.students.length;
+          (course.students ? course.students.length : 0);
         return {
           ...course,
           ttlMarkedAsDoneCount: result,
@@ -95,8 +83,7 @@ const allOverviewController = {
       allCourses = await updateArray(withComponentsUUIDs);
 
       return res.render('overview-courses', {
-        user: req.user,
-        coursesWithTeams: allCourses
+        user: req.user, coursesWithTeams: allCourses
       });
     }
   }
