@@ -1,0 +1,46 @@
+<div class="tab-pane">
+    <label class="text-lg font-bold">
+        <span class="flex items-center">
+            <i class="material-symbols-outlined mr-2">home</i>
+            Kursuse nimi
+        </span>
+        <span class="input-w-button">
+            <input type="text" name="config/courseName" class="input-single" required value="{{config.courseName}}">
+            <!--button class="btn btn-primary" type="submit" value="Sisene">
+                <i class="material-symbols-outlined">save</i>
+            </button!-->
+        </span>
+    </label>
+
+    <label class="text-lg font-bold mt-4">
+        <span class="flex items-center">
+            <i class="material-symbols-outlined mr-2">link</i> Kursuse link
+        </span>
+        <input type="text" name="config/courseUrl" id="oisUrl" class="input-single" required
+               value="{{config.courseUrl}}">
+    </label>
+    <hr class="my-4">
+
+    <div class="block mb-4">
+        <label for="component">Üldinfo</label>
+        <div id="tinymde_commandbar"></div>
+        <div class="txtcontainer w-full relative">
+            <button class="btn btn-primary absolute -top-16 right-4" id="sync" title="Uuenda õisist" type="button">
+                <i class="material-symbols-outlined">sync</i>
+            </button>
+            <textarea id="component" cols="30" rows="30" name="docs/README.md">{{component}}</textarea>
+        </div>
+    </div>
+
+    <div class="block mb-4">
+        <label>Lisamaterjalid:</label>
+        <input type="hidden" name="additionalMaterials[sha]" value="{{additionalMaterials.sha}}">
+        <div id="tinymde_commandbar2"></div>
+        <div class="txtcontainer w-full">
+            <textarea id="additionalMaterials[content]" cols="30" rows="30"
+                      name="docs/lisamaterjalid.md">{{additionalMaterials.content}}</textarea>
+        </div>
+
+    </div>
+    {{> files-input files=files prefix="docs"}}
+</div>

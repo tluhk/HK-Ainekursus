@@ -51,14 +51,14 @@
 
 ## Skeemid
 
-- [Kasutaja autentimine ja autoriseerimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/authProcess.drawio.svg)
-- [Andmebaasi struktuur](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/database.drawio.svg)
-- [Kõigi ainekursuste andmete pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getAllCoursesData.drawio.svg)
-- [Kõigi ainekursuste andmete kuvamine kasutajale](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getAllCourses.drawio.svg)
-- [Valitud ainekursuse aktiivsete harude pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/activeBranchesService.drawio.svg)
-- [Valitud ainekursuse sisu pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getSpecificCourse.drawio.svg)
-- [Kõigi ainekursuste teadete pärimine](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/getCoursesUpdates.drawio.svg)
-- [Kasutaja suunamine ainekursuse õige versiooni materjalideni](https://github.com/tluhk/rif20-valikpraktika-1/blob/main/docs/content/backend/refBranch.drawio.svg)
+- [Kasutaja autentimine ja autoriseerimine](./authProcess.drawio.svg)
+- [Andmebaasi struktuur](./database.drawio.svg)
+- [Kõigi ainekursuste andmete pärimine](./getAllCoursesData.drawio.svg)
+- [Kõigi ainekursuste andmete kuvamine kasutajale](./getAllCourses.drawio.svg)
+- [Valitud ainekursuse aktiivsete harude pärimine](./activeBranchesService.drawio.svg)
+- [Valitud ainekursuse sisu pärimine](./getSpecificCourse.drawio.svg)
+- [Kõigi ainekursuste teadete pärimine](./getCoursesUpdates.drawio.svg)
+- [Kasutaja suunamine ainekursuse õige versiooni materjalideni](./refBranch.drawio.svg)
 
 
 [<Tagasi](../../README.md)

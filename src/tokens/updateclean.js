@@ -1,7 +1,7 @@
-// this file removes all lines what consist [object Object] from the global.css file
-// Import the required modules
-const fs = require('fs');
-const path = require('path');
+// this file removes all lines what consist [object Object] from the global.css
+// file Import the required modules
+import fs from 'fs';
+import path from 'path';
 
 function updateGlobalCSS(outputDirPath) {
   // Define the path to the global.css file
@@ -11,8 +11,7 @@ function updateGlobalCSS(outputDirPath) {
   const fileContents = fs.readFileSync(globalCSSPath, 'utf8');
 
   // Remove any lines that contain "[object Object];"
-  const newFileContents = fileContents
-    .split('\n')
+  const newFileContents = fileContents.split('\n')
     .filter((line) => !line.includes('[object Object];'))
     .join('\n');
 
